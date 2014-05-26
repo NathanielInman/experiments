@@ -15,3 +15,4 @@ Holds all programming experiments that are stand-alone. The To-Do List holds the
 - [ ] **Map Generation Prototype Variant**
 - [X] **Object Collision using a mapper**
 - [X] **Object Collision using entity iteration**
+- [ ] **Map Generation Asynchonicity**
