@@ -12,8 +12,9 @@ Holds all programming experiments that are stand-alone. The To-Do List holds the
   - [ ] **Research Self Patterns**
   - [ ] **Create a mock-up Design**
 - [X] **Map Generation Basics**
-- [ ] **Map Generation Prototype Variant**
+- [X] **Map Generation Prototype Variant**
 - [X] **Object Collision using a mapper**
 - [X] **Object Collision using entity iteration**
 - [ ] **Map Generation Asynchonicity**
 - [ ] **Marvel Database**
+- [ ] **Migrate Javascript Code from boilerplate**
