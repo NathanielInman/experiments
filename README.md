@@ -15,6 +15,6 @@ Holds all programming experiments that are stand-alone. The To-Do List holds the
 - [X] **Map Generation Prototype Variant**
 - [X] **Object Collision using a mapper**
 - [X] **Object Collision using entity iteration**
-- [ ] **Map Generation Asynchonicity**
+- [X] **Map Generation Asynchonicity**
 - [X] **Marvel Database**
 - [X] **Migrate Javascript Code from boilerplate**
