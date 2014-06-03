@@ -17,4 +17,3 @@ Holds all programming experiments that are stand-alone. The To-Do List holds the
 - [X] **Object Collision using entity iteration**
 - [X] **Map Generation Asynchonicity**
 - [X] **Marvel Database**
-- [X] **Migrate Javascript Code from boilerplate**
