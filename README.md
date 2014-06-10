@@ -19,3 +19,5 @@ Holds all programming experiments that are stand-alone. The To-Do List holds the
 - [X] **Marvel Database**
 - [X] **Regular Expressions**
 - [X] **Langtons Ant**
+- [ ] **Voronoi Diagram**
+  - [X] **Part One - Research and First Attempt**
