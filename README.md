@@ -21,3 +21,4 @@ Holds all programming experiments that are stand-alone. The To-Do List holds the
 - [X] **Langtons Ant**
 - [ ] **Voronoi Diagram**
   - [X] **Part One - Research and First Attempt**
+  - [X] **Part Two - Attempt to draw circles instead of lines**
