@@ -9,7 +9,7 @@ Holds all programming experiments that are stand-alone. The To-Do List holds the
 - [X] **Grammar Purposing**
 - [ ] **Machine Identity of Self**
   - [X] **Research Identity Patterns**
-  - [ ] **Research Self Patterns**
+  - [X] **Research Self Patterns**
   - [ ] **Create a mock-up Design**
 - [X] **Map Generation Basics**
 - [X] **Map Generation Prototype Variant**
