@@ -24,3 +24,9 @@ Holds all programming experiments that are stand-alone. The To-Do List holds the
   - [X] **Part Two - Attempt to draw circles instead of lines**
   - [X] **Part Three - Use the Voronoi Diagram with moving points**
   - [X] **Part Four - Attempt to use the diagram to simulate lava**
+- [X] **Non-coupled Map Lattice**
+- [X] **Coupled Map Lattice**
+- [ ] **Cantor Set**
+- [ ] **Discrete Time Dynamical System**
+- [ ] **Barnsley Fern**
+- [ ] **Mandelbrot**
