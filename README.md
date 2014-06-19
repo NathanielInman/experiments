@@ -26,7 +26,7 @@ Holds all programming experiments that are stand-alone. The To-Do List holds the
   - [X] **Part Four - Attempt to use the diagram to simulate lava**
 - [X] **Non-coupled Map Lattice**
 - [X] **Coupled Map Lattice**
-- [ ] **Cantor Set**
+- [X] **Cantor Set**
 - [ ] **Discrete Time Dynamical System**
 - [ ] **Barnsley Fern**
 - [ ] **Mandelbrot**
