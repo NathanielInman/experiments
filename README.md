@@ -27,6 +27,7 @@ Holds all programming experiments that are stand-alone. The To-Do List holds the
 - [X] **Non-coupled Map Lattice**
 - [X] **Coupled Map Lattice**
 - [X] **Cantor Set**
-- [ ] **Discrete Time Dynamical System**
-- [ ] **Barnsley Fern**
-- [ ] **Mandelbrot**
+- [X] **Discrete Time Dynamical System**
+- [X] **Barnsley Fern**
+- [X] **Mandelbrot**
+- [ ] **Begin new projects with Coffeescript**
