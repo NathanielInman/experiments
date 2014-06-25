@@ -30,4 +30,4 @@ Holds all programming experiments that are stand-alone. The To-Do List holds the
 - [X] **Discrete Time Dynamical System**
 - [X] **Barnsley Fern**
 - [X] **Mandelbrot**
-- [ ] **Begin new projects with Coffeescript**
+- [X] **Begin new projects with Coffeescript**
