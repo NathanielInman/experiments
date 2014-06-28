@@ -1,0 +1,11 @@
+<!doctype html><head><title>Creature Generation</title></head><body><canvas id='canvas'
+style='position:absolute;left:0;top:0;'>Your browser isn't supported.</canvas><script>
+var D=document,v,w=function(){var e=window,a='inner';if(!(e.innerWidth)){a='client';e=D.documentElement||D.body;}return {w:e[a+'Width'],h:e[a+'Height']};},v=w();
+var $=function(o){return D.getElementById(o);},sa=function(o,a){for(var i=0;i<a.length;i++){$(o).setAttribute(a[i][0],a[i][1]);}};
+var ctx,u=function(){ctx=$('canvas').getContext("2d");},q=function(){sa('canvas',[['width',v.w+'px'],['height',v.h+'px']]);};q();u();
+window.onresize=function(){v=w();u();q();ctx.fillStyle='#000';ctx.fillRect(0,0,v.w,v.h);window.main.displayAssociated();};
+var M=Math,r=function(m,n,i){n=n||0,i==i||true;n=M.random()*(n-m);n=n<0?M.random()*n:n+m;return i==false?M.floor(n):n}
+</script><script type='text/typescript' src='CreatureGenerator.ts'>
+</script><script type='text/javascript' src='libs/typescript.js'>
+</script><script type='text/javascript' src='libs/typescript.compile.js'>
+</script></body></html>
