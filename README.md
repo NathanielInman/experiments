@@ -13,7 +13,7 @@ Holds all programming experiments that are stand-alone. The To-Do List holds the
 
 ## Done List
 
-* Complex Math
+* **Complex Math**
   * Diffusion Limited Aggregation
   * Dynamical System: Discrete Time
   * Voronoi Diagram, Fortune's Algorithm, Lloyds Algorithm, Delaunay Triangulation
@@ -21,15 +21,15 @@ Holds all programming experiments that are stand-alone. The To-Do List holds the
   * L System (Lindenmayer) : Cantor Set, Barnsley Fern, Dragon Curve, Sierpinski's Triangle
   * Fractals : Mandelbrot
   * Langtons Ant
-* Artificial Intelligence
+* **Artificial Intelligence**
   * Grammar: Processing, Purposing
   * Machine Learning
   * Self-Identity
-* New Languages
+* **New Languages**
   * Compile to JS: Coffeescript, TypeScript
-* Programming Concepts
+* **Programming Concepts**
   * Regular Expressions
   * Object Collision: Using Mapper, Using Entity Iteration
   * Map Generation: Basics, Prototype Variant, Asynchronicity
-* Random
+* **Random**
   * Marvel Database
