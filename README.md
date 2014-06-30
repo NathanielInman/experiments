@@ -4,30 +4,32 @@ Holds all programming experiments that are stand-alone. The To-Do List holds the
 
 ## To-Do List
  
-- [X] **Machine Learning**
-- [X] **Grammar Processing**
-- [X] **Grammar Purposing**
-- [ ] **Machine Identity of Self**
-  - [X] **Research Identity Patterns**
-  - [X] **Research Self Patterns**
-  - [ ] **Create a mock-up Design**
-- [X] **Map Generation Basics**
-- [X] **Map Generation Prototype Variant**
-- [X] **Object Collision using a mapper**
-- [X] **Object Collision using entity iteration**
-- [X] **Map Generation Asynchonicity**
-- [X] **Marvel Database**
-- [X] **Regular Expressions**
-- [X] **Langtons Ant**
-- [X] **Voronoi Diagram**
-  - [X] **Part One - Research and First Attempt**
-  - [X] **Part Two - Attempt to draw circles instead of lines**
-  - [X] **Part Three - Use the Voronoi Diagram with moving points**
-  - [X] **Part Four - Attempt to use the diagram to simulate lava**
-- [X] **Non-coupled Map Lattice**
-- [X] **Coupled Map Lattice**
-- [X] **Cantor Set**
-- [X] **Discrete Time Dynamical System**
-- [X] **Barnsley Fern**
-- [X] **Mandelbrot**
-- [X] **Begin new projects with Coffeescript**
+- [ ] **Learn some more complex TypeScript uses**
+- [ ] **Begin LiveScript**
+- [ ] **Begin Dart**
+- [ ] **Begin Ruby**
+- [ ] **Begin LUA**
+- [ ] **Begin Python**
+
+## Done List
+
+* Complex Math
+  * Diffusion Limited Aggregation
+  * Dynamical System: Discrete Time
+  * Voronoi Diagram, Fortune's Algorithm, Lloyds Algorithm, Delaunay Triangulation
+  * CML : Coupled Map Lattice, Non-coupled Map Lattice
+  * L System (Lindenmayer) : Cantor Set, Barnsley Fern, Dragon Curve, Sierpinski's Triangle
+  * Fractals : Mandelbrot
+  * Langtons Ant
+* Artificial Intelligence
+  * Grammar: Processing, Purposing
+  * Machine Learning
+  * Self-Identity
+* New Languages
+  * Compile to JS: Coffeescript, TypeScript
+* Programming Concepts
+  * Regular Expressions
+  * Object Collision: Using Mapper, Using Entity Iteration
+  * Map Generation: Basics, Prototype Variant, Asynchronicity
+* Random
+  * Marvel Database
