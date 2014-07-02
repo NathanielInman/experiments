@@ -7,7 +7,7 @@ Holds all programming experiments that are stand-alone. The To-Do List holds the
 - [ ] **Learn some more complex TypeScript uses**
 - [ ] **Begin LiveScript**
 - [ ] **Begin Dart**
-- [ ] **Begin Ruby**
+- [X] **Begin Ruby**
 - [ ] **Begin LUA**
 - [ ] **Begin Python**
 
@@ -26,7 +26,7 @@ Holds all programming experiments that are stand-alone. The To-Do List holds the
   * Machine Learning
   * Self-Identity
 * **New Languages**
-  * Compile to JS: Coffeescript, TypeScript
+  * Compile to JS: Coffeescript, TypeScript, Ruby
 * **Programming Concepts**
   * Regular Expressions
   * Object Collision: Using Mapper, Using Entity Iteration
