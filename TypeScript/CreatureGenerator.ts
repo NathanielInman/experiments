@@ -38,9 +38,11 @@ class Entry implements Serializable<Entry> {
 		description: String;
 	deserialize(input){
 		this.name = input.name;
-		this.type.pet = input.type.pet;
-		this.type.mount = input.type.mount;
-		this.type.description = input.type.description;
+		this.type={
+			pet:input.type.pet,
+			mount:input.type.mount,
+			description:input.type.description
+		}
 		this.description = input.description;
 		return this;
 	}
@@ -48,25 +50,53 @@ class Entry implements Serializable<Entry> {
 
 /* The main class */
 class CreatureGenerator implements Serializable<CreatureGenerator>{
-	mainId: number;
-	firstMember: Entry;
-	secondMember: Entry;
+	member: number;
 	creature: any;
-	constructor(){
-		this.draw();
+	constructor(list){
 		this.creature=[];
+		this.deserialize(list);
+		easel.redraw=()=>this.draw();
 	}
 	deserialize(list){
 		for(creature in list){
 			this.creature.push(new Entry().deserialize(list[creature]));
 		}
-		return this;
+		this.update();
 	}
 	draw(){
+		ctx.font='24px Courier New';
+		ctx.textAlign='center';
 		ctx.fillStyle='#000';
 		ctx.fillRect(0,0,v.w,v.h);
+		ctx.fillStyle='#333';
+		ctx.fillRect(0,0,v.w,48);
+		ctx.fillStyle='#08F';
+		ctx.fillRect(0,48,v.w,2);
+		ctx.fillStyle='#112';
+		ctx.fillRect(0,v.h/8+v.h/10,v.w,v.h/10);
+		ctx.fillRect(0,v.h/8+v.h/10*3,v.w,v.h/10);
+		ctx.fillRect(0,v.h/8+v.h/10*5,v.w,v.h/10);
+		ctx.fillRect(0,v.h/8+v.h/10*7,v.w,v.h/10);
+		ctx.fillStyle='#04A';
+		ctx.fillRect(0,v.h/8+v.h/10,v.w,2);
+		ctx.fillRect(0,v.h/8+v.h/10*2,v.w,2);
+		ctx.fillRect(0,v.h/8+v.h/10*3,v.w,2);
+		ctx.fillRect(0,v.h/8+v.h/10*4,v.w,2);
+		ctx.fillRect(0,v.h/8+v.h/10*5,v.w,2);
+		ctx.fillRect(0,v.h/8+v.h/10*6,v.w,2);
+		ctx.fillRect(0,v.h/8+v.h/10*7,v.w,2);
+		ctx.fillRect(0,v.h/8+v.h/10*8,v.w,2);
 		ctx.fillStyle='#FFF';
-		ctx.fillText("YAY!",100,100);
+		ctx.fillText(this.creature[this.member].name,v.w/2,30);
+		ctx.fillText(this.creature[this.member].type.pet?'This creature is a pet.':'This creature is NOT a pet.',v.w/2,v.h/8+v.h/10+v.h/20+6);
+		ctx.fillText(this.creature[this.member].type.mount?'This creature is a mount.':'This creature is NOT a mount.',v.w/2,v.h/8+v.h/10*3+v.h/20+6);
+		ctx.fillText(this.creature[this.member].type.description,v.w/2,v.h/8+v.h/10*5+v.h/20+6);
+		ctx.fillText(this.creature[this.member].description,v.w/2,v.h/8+v.h/10*7+v.h/20+6);
+	}
+	update(){
+		this.member=r(0,this.creature.length,false);
+		this.draw();
+		setTimeout(() => this.update(),1000);
 	}
 }
 
@@ -2749,6 +2779,4 @@ var data = [
 	}
 ];
 
-var main = new CreatureGenerator().deserialize(data);
-console.log(main);
-	
+var main = new CreatureGenerator(data);
