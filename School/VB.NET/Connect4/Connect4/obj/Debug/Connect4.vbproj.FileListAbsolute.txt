@@ -1,0 +1,10 @@
+E:\Station\Programming\School\Connect4\Connect4\bin\Debug\Connect4.exe.config
+E:\Station\Programming\School\Connect4\Connect4\bin\Debug\Connect4.exe
+E:\Station\Programming\School\Connect4\Connect4\bin\Debug\Connect4.pdb
+E:\Station\Programming\School\Connect4\Connect4\bin\Debug\Connect4.xml
+E:\Station\Programming\School\Connect4\Connect4\obj\Debug\Connect4.Main.resources
+E:\Station\Programming\School\Connect4\Connect4\obj\Debug\Connect4.Resources.resources
+E:\Station\Programming\School\Connect4\Connect4\obj\Debug\Connect4.vbproj.GenerateResource.Cache
+E:\Station\Programming\School\Connect4\Connect4\obj\Debug\Connect4.exe
+E:\Station\Programming\School\Connect4\Connect4\obj\Debug\Connect4.xml
+E:\Station\Programming\School\Connect4\Connect4\obj\Debug\Connect4.pdb

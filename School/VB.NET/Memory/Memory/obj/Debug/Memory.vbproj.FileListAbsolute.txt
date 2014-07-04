@@ -1,0 +1,10 @@
+E:\Station\Programming\School\Memory\Memory\bin\Debug\Memory.exe.config
+E:\Station\Programming\School\Memory\Memory\bin\Debug\Memory.exe
+E:\Station\Programming\School\Memory\Memory\bin\Debug\Memory.pdb
+E:\Station\Programming\School\Memory\Memory\bin\Debug\Memory.xml
+E:\Station\Programming\School\Memory\Memory\obj\Debug\Memory.Form1.resources
+E:\Station\Programming\School\Memory\Memory\obj\Debug\Memory.Resources.resources
+E:\Station\Programming\School\Memory\Memory\obj\Debug\Memory.vbproj.GenerateResource.Cache
+E:\Station\Programming\School\Memory\Memory\obj\Debug\Memory.exe
+E:\Station\Programming\School\Memory\Memory\obj\Debug\Memory.xml
+E:\Station\Programming\School\Memory\Memory\obj\Debug\Memory.pdb
