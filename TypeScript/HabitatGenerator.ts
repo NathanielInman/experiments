@@ -29,7 +29,7 @@
 |************************************************************************************|
 	
 	There are 5 population degrees~1:Vacant,2:Sparse,3:Even,4:Dense,5:Full
-	Vacant is completely empty and packed is completely full, and the other
+	Vacant is completely empty and packed is completely Full, and the other
 	options are the most common. 1 and 5 are used predominately for
 	debugging purposes.
 
@@ -116,35 +116,126 @@ interface Serializable<T>{
 
 /* Identifies the entries */
 class Entry implements Serializable<Entry> {
-		name: String;
-		type: Object;
-		description: String;
+	name: string;
+	reqLevel: string;
+	maxLevel: string;
+	population: string;
+	environments: number[];
+	spawns: string[];
+	loot: string[];
 	deserialize(input){
 		this.name = input.name;
-		this.type={
-			pet:input.type.pet,
-			mount:input.type.mount,
-			description:input.type.description
-		}
-		this.description = input.description;
+		this.reqLevel = input.reqLevel;
+		this.maxLevel = input.maxLevel;
+		this.population = input.population;
+		this.environments = input.environments;
+		this.spawns = input.spawns;
+		this.loot=input.loot;
 		return this;
 	}
 }
 
 /* The main class */
-class CreatureGenerator implements Serializable<CreatureGenerator>{
-	member: number;
-	creature: any;
+class HabitatGenerator implements Serializable<HabitatGenerator>{
+	entry: number;
+	habitat: any;
+	environment: string[];
+	creatures: string[];
+	races: string[];
+	armor: string[];
 	constructor(list){
-		this.creature=[];
+		this.habitat=[];
+				this.environment=['Inside','Mountain','Canyon','Anchihaline Cave','Talus Cave','Fracture Cave',
+				'Glacier Cave','Erosional Cave','Sea Cave','Primary Cave','Cavern','Surface Mine','Sub-surface Mine',
+				'Graveyard','Cemetary','Crypt','Mausoleum','Catacomb','Ossuary','Charnel House','Arctic Tundra',
+				'Antarctic Tundra','Alpine Tundra','Fellfield Tundra','Park Tundra','Closed Forest Taiga',
+				'Lichen Woodland Taiga','Boreal Forest','Montane Grassland','Montane Shrubland','Carpathian Forest',
+				'Giant Sequoia Forest','Coastal Redwood Forest','Douglas-fir Forest','Sitka Spruce Forest',
+				'Alerce Forest','Kauri Forest','Tropical Forest','Subtropical Forest','Temperate Forest',
+				'Mediterranean Forest','Mediterranean Woodland','Mediterranean Savanna','Mediterranean Shrubland',
+				'Mediterranean Grassland','Tropical Broadleaf Forest','Subtropical Broadleaf Forest','Bayou',
+				'Wetland Fen','Valley Bog','Raised Bog','Blanket Bog','Freshwater Swamp Forest','Peat Swamp Forest',
+				'Dambo Swamp','Mangrove Swamp','Bosque','Riparian Forest','Bolster Heathland','Chalk Heathland',
+				'Chaparral Heathland','Fynbos','Garrigue Hills','Moorland','Shrubland','Maquis Shrubland',
+				'Coastal Plain','Highland Plateau','Prairie','Water Meadow','Veldt','Machair','Cerrado Savanna',
+				'Xeric Shrubland','Cactus Shrubland','Hamada Desert','Regs Desert','Ergs Desert','Sagebrush Steppe',
+				'Badlands','Fissure Vent','Shield Volcano','Lava Dome','Cryptodome','Mud Volcano','Hot Spring Geyser',
+				'Hot Spring','Pond','Rocky Shoreline','Mudflat Shoreline','Shingle Beach','Sandy Beach','Shoal',
+				'Estuary','River Delta','Neritic Zone','Kelp Forest','Coral Reef','Hydrothermal Vent',
+				'Benthic Zone','Nothing','Player'];
+				this.creatures=['Abada','Abaddon','Adar Llwch Gwin','Adlet','Addonexus','Afanc','Agloolik','Agta',
+				'Alerion','Ahuizhotl','Akki','Alphyn','Amphisbaena','Amphithere','Ankou','Aspis','Asrai','Aswang',
+				'Bai Ze','Balam','Balrog','Banshee','Barbegazi','Barghest','Basilisk','Bastet','Baykok','Black Annis',
+				'Blurr','Bunyip','Caladrius','Calygreyhound','Campacti','Canaima','Catoblepas','Centaur','Cerastes',
+				'Cerberus','Charybdis','Chimaera','Cinnamologus','Clurichaun','Cyclops','Dip','Dobhar-chu',
+				'Doppelganger','Dullahan','Drake','Drekavac','Dromedary','Echeneis','Faun','Fei Lian','Fury',
+				'Gashadokuro','Grant','Gobriks','Golem','Griffin','Harpy','Hercinia','Hydra','Incubus','Ifrit',
+				'Imp','Kampe','Krakkan','Leucrota','Llamhigyn Y Dwr','Manticore','Marid','Minotaur','Monocerus',
+				'Muldjewangk','Muscaliet','Myrmecoleon','Nymph','Ogre','Onocentaur','Parandrus','Pegasus','Perytons',
+				'Phoenix','Quanlier','Roc','Satyr','Scarab','Sceadugenga','Schilla','Serpent','Shishi','Siren',
+				'Succubus','Svagin','Tarasque','Thunderbird','Tikbalang','Tikoloshe','Tiyanak','Tlatecuhtli',
+				'Unicorn','Undines','Wendigo',"Will'o'Wisp",'Wyvern','Xolotl','Yale','Yara-ma-yha-who','Yeti','Ziz'];
+				this.races=['Human','Dwarf','Gnome','Elf','Half-elf','Halfling','Goblin','Troll','Orc','Half-orc',
+				'Quickling','Pixie','Sprite','Kobold'];
+				this.armor=['Armor','Crown','Chapeau','Chaplet','Coif','Coronet','Cowl','Spectacles','Tiara','Eyeglasses',
+				'Monocle','Wreath','Circlet','Mask','Headdress','Hood','Cap','Helm','Full Helm','Horned Helm','Skull Cap',
+				'Face Guard','Face Plate','Armet','Barbute','Bascinet','Burgonet','Sallet','Hounskull','Nasal Helm',
+				'Spagenhelm','Full Sallet','Kippah','Klobuk','Kolpik','Kufi','Mitre','Gorget','Amulet','Choker','Locket',
+				'Medallion','Neckband','Necklace','Mark','Pendant','Icon','Talisman','Amice','Pauldrons','Mantle',
+				'Studded Mantle','Shoulder Pads','Spaulders','Scaled Shoulders','Splint Shoulders','Half-plate Shoulders',
+				'Plate Shoulders','Armlets','Armband','Arm-guards','Arm Wraps','Cuffs','Wristband','Bracers','Bracelet',
+				'Shackles','Bindings','Gloves','Mittens','Handwraps','Handguards','Gauntlets','Chainmail Gauntlets',
+				'Scalemail Gauntlets','Platemail Gauntlets','Platemail','Ringmail','Chain Cuirass','Half-plate',
+				'Chestplate','Chestguard','Scalemail','Splintmail','Studded Tunic','Tunic','Vestment','Hauberk',
+				'Field Plate','Banded Mail','Brigandine Armor','Robe','Raiment','Tabard','Doublet','Chemise',
+				'Lorica Segmentata','Lamellar','Shawl','Cape','Capelet','Cloak','Heavy Cloak','Battle Cloak',
+				'Royal Cloak','Girdle','Belt','Cord','Waistwrap','Sash','Genouillere','Bloomers','Breeches','Trousers',
+				'Leggings','Legguards','Skirt','Split Skirt','Tights','Pantaloons','Scale Leggings','Splint Leggings',
+				'Helf-Plate Leggings','Plate Leggings','Chainmail Leggings','Greaves','Slippers','Sandals','Stalkers',
+				'Footguards','Scale Boots','Splint Boots','Half-plate Boots','Plate Boots','Anklet','Boots',
+				'Long Boots','Footguards','Ring','Band','Thumb Ring','Wedding Ring','Engagement Ring','Signet Ring',
+				'Blood Ring','Aegis','Scutum','Targe','Roundel','Buckler','Disc Shield','Heater Shield','Bulwark Shield',
+				'Tower Shield','Kite Shield'];
 		this.deserialize(list);
 		easel.redraw=()=>this.draw();
 	}
 	deserialize(list){
-		for(creature in list){
-			this.creature.push(new Entry().deserialize(list[creature]));
+		for(habitat in list){
+			this.habitat.push(new Entry().deserialize(list[habitat]));
 		}
 		this.update();
+	}
+	getEnvironments(environmentArray):string[]{
+		for(index in environmentArray){
+			if(typeof this.environment[environmentArray[index]]=='undefined')continue; //make sure not to update entries already updated
+			environmentArray[index]=this.environment[environmentArray[index]];
+		} //end for
+		return environmentArray.join(', ');
+	}
+	printMob(mobObject):string{
+		var archetype=mobObject.archetype.replace('Standard','');
+		var rank=(' ['+mobObject.rank+']').replace(' [Regular]','');
+		var name=(archetype.length==0?'':" ")+'Unknown';
+		if(mobObject.type=='Magical Creature'){
+			name=this.creatures[mobObject.id];
+		}else if(mobObject.type=='Race'){
+			name=this.races[mobObject.id];
+		} //end if
+		return archetype+name+rank+' ('+mobObject.chance+'%)';
+	}
+	printItem(itemObject):string{
+		var name="Unknown";
+		if(itemObject.type=='?'){
+			name="Random Item"
+		}else if(itemObject.id=='?'){
+			name="Random "+itemObject.type
+		}else{
+			if(itemObject.type=='Armor'){
+				name="Random "+this.armor[itemObject.id];
+			}else if(itemObject.type=='Weapon'){
+			} //end if
+		} //end if
+		return name+' ('+itemObject.chance+'%)';
 	}
 	draw(){
 		ctx.font='24px Courier New';
@@ -153,2713 +244,767 @@ class CreatureGenerator implements Serializable<CreatureGenerator>{
 		ctx.fillRect(0,0,v.w,v.h);
 		ctx.fillStyle='#333';
 		ctx.fillRect(0,0,v.w,48);
-		ctx.fillStyle='#08F';
+		ctx.fillStyle='#222';
+		ctx.fillRect(0,v.h/10*2+52,v.w,48);
+		ctx.fillStyle='#F80';
 		ctx.fillRect(0,48,v.w,2);
-		ctx.fillStyle='#112';
-		ctx.fillRect(0,v.h/8+v.h/10,v.w,v.h/10);
-		ctx.fillRect(0,v.h/8+v.h/10*3,v.w,v.h/10);
-		ctx.fillRect(0,v.h/8+v.h/10*5,v.w,v.h/10);
-		ctx.fillRect(0,v.h/8+v.h/10*7,v.w,v.h/10);
-		ctx.fillStyle='#04A';
-		ctx.fillRect(0,v.h/8+v.h/10,v.w,2);
-		ctx.fillRect(0,v.h/8+v.h/10*2,v.w,2);
-		ctx.fillRect(0,v.h/8+v.h/10*3,v.w,2);
-		ctx.fillRect(0,v.h/8+v.h/10*4,v.w,2);
-		ctx.fillRect(0,v.h/8+v.h/10*5,v.w,2);
-		ctx.fillRect(0,v.h/8+v.h/10*6,v.w,2);
-		ctx.fillRect(0,v.h/8+v.h/10*7,v.w,2);
-		ctx.fillRect(0,v.h/8+v.h/10*8,v.w,2);
+		ctx.fillText(this.habitat[this.entry].name+" (LVL "+this.habitat[this.entry].reqLevel+" - "+this.habitat[this.entry].maxLevel+")",v.w/2,30);
+		if(this.habitat[this.entry].population=='Vacant'){ctx.fillStyle='#200';
+		}else if(this.habitat[this.entry].population=='Sparse'){ctx.fillStyle='#420';
+		}else if(this.habitat[this.entry].population=='Even'){ctx.fillStyle='#630';
+		}else if(this.habitat[this.entry].population=='Dense'){ctx.fillStyle='#840';
+		}else if(this.habitat[this.entry].population=='Full'){ctx.fillStyle='#A50';}else{ctx.fillStyle='#88F';}
+		ctx.fillRect(0,50,v.w,v.h/10);ctx.fillStyle='#FFF';
+		ctx.fillText("Population density: "+this.habitat[this.entry].population,v.w/2,v.h/20+56);
+		ctx.fillStyle='#F80';
+		ctx.fillRect(0,v.h/10+50,v.w,2); 
+		ctx.fillStyle='#111';
+		ctx.fillRect(0,v.h/10*2+100,v.w/2,v.h);
+		ctx.fillRect(v.w/2,v.h/10*2+100,v.w/2,v.h);
+		ctx.fillStyle='#777';
+		ctx.fillRect(0,v.h/10*2+50,v.w,2); 
+		ctx.fillRect(v.w/2,v.h/10*2+50,2,v.h); //center dividor
+		ctx.fillRect(0,v.h/10*2+100,v.w,2); //center dividor title
 		ctx.fillStyle='#FFF';
-		ctx.fillText(this.creature[this.member].name,v.w/2,30);
-		ctx.fillText(this.creature[this.member].type.pet?'This creature is a pet.':'This creature is NOT a pet.',v.w/2,v.h/8+v.h/10+v.h/20+6);
-		ctx.fillText(this.creature[this.member].type.mount?'This creature is a mount.':'This creature is NOT a mount.',v.w/2,v.h/8+v.h/10*3+v.h/20+6);
-		ctx.fillText(this.creature[this.member].type.description,v.w/2,v.h/8+v.h/10*5+v.h/20+6);
-		ctx.fillText(this.creature[this.member].description,v.w/2,v.h/8+v.h/10*7+v.h/20+6);
+		ctx.fillText(this.getEnvironments(this.habitat[this.entry].environments),v.w/2,v.h/10+v.h/20+56);
+		ctx.fillText("Mobiles",v.w/4,v.h/10+(v.h/20+42)*2);
+		ctx.fillText("Loot",v.w/4*3,v.h/10+(v.h/20+42)*2);
+		var mobNum=0;
+		for(;mobNum<this.habitat[this.entry].spawns.length;mobNum++){
+			ctx.fillText(this.printMob(this.habitat[this.entry].spawns[mobNum]),v.w/4,100+v.h/10*2+(28)*(1+mobNum));
+		} //end for
+		var itemNum=0;
+		for(;itemNum<this.habitat[this.entry].loot.length;itemNum++){
+			ctx.fillText(this.printItem(this.habitat[this.entry].loot[itemNum]),v.w/4*3,100+v.h/10*2+(28)*(1+itemNum));
+		} //end for
 	}
 	update(){
-		this.member=r(0,this.creature.length,false);
+		this.entry=r(0,this.habitat.length,false);
 		this.draw();
-		setTimeout(() => this.update(),1000);
+		setTimeout(() => this.update(),2000);
 	}
 }
 
 /* Initialization */
 var data = [
-	{
-		name:"Westphalian",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Hanoverian",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Aegidienberger",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Andalusian",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Percheron",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Trakehner",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Zemaitukas",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal, desert animal",
-		},		description:"A horse."
-	},{
-		name:"Pottok",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal, desert animal",
-		},		description:"A horse."
-	},{
-		name:"Eriskay",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal, desert animal",
-		},		description:"A horse."
-	},{
-		name:"Paso Fino",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Freiberger",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Lusitano",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Murgese",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Oldenburg",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Dulmen",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Connemara",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Chincoteague",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal, desert animal",
-		},		description:"A horse."
-	},{
-		name:"Cypriot",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal, desert animal",
-		},		description:"A horse."
-	},{
-		name:"Mule",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Kiang",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal, desert animal",
-		},		description:"A horse."
-	},{
-		name:"Standardbred",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Thoroughbred",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Azteca",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Appaloosa",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Dartmoor",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal, desert animal",
-		},		description:"A horse."
-	},{
-		name:"Ladruber",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Knabstrup",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Karabakh",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Ardennes",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Belgian",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Clydesdale",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"A horse."
-	},{
-		name:"Fell",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal, desert animal",
-		},		description:"A horse."
-	},{
-		name:"Faroe",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal, desert animal",
-		},		description:"A horse."
-	},{
-		name:"Poitou",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal, desert animal",
-		},		description:"A horse."
-	},{
-		name:"Akita Inu",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal,mountain animal",
-		},		description:"A dog."
-	},{
-		name:"Bulldog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, mountain animal",
-		},		description:"A dog."
-	},{
-		name:"Pitbull Terrier",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, mountain animal",
-		},		description:"A dog."
-	},{
-		name:"Staffordshire Terrier",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, mountain animal",
-		},		description:"A dog."
-	},{
-		name:"Argentine Dogo",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, mountain animal",
-		},		description:"A dog."
-	},{
-		name:"Boston Terrier",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, mountain animal",
-		},		description:"A dog."
-	},{
-		name:"Bull Terrier",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, mountain animal",
-		},		description:"A dog."
-	},{
-		name:"Dogue de Bordeaux",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, mountain animal",
-		},		description:"A dog."
-	},{
-		name:"English Mastiff",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"A dog."
-	},{
-		name:"Neopolitan Mastiff",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, mountain animal",
-		},		description:"A dog."
-	},{
-		name:"Manchester Terrier",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, mountain animal",
-		},		description:"A dog."
-	},{
-		name:"Shar Pei",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, mountain animal",
-		},		description:"A dog."
-	},{
-		name:"Tosa",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, mountain animal",
-		},		description:"A dog."
-	},{
-		name:"Leopard",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"A cat."
-	},{
-		name:"Snow Leopard",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, mountain animal",
-		},		description:"A cat."
-	},{
-		name:"Clouded Leopard",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"A cat."
-	},{
-		name:"Cheetah",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, jungle animal",
-		},		description:"A cat."
-	},{
-		name:"Bengal Tiger",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, jungle animal",
-		},		description:"A cat."
-	},{
-		name:"Balinese Tiger",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, jungle animal",
-		},		description:"A cat."
-	},{
-		name:"Sumatran Tiger",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, jungle animal",
-		},		description:"A cat."
-	},{
-		name:"Siberian Tiger",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, jungle animal",
-		},		description:"A cat."
-	},{
-		name:"Amur Tiger",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal,jungle animal",
-		},		description:"A cat."
-	},{
-		name:"Jaguar",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, jungle animal",
-		},		description:"A cat."
-	},{
-		name:"Lion",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal, desert animal",
-		},		description:"A cat."
-	},{
-		name:"Orangutan",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Cape Buffalo",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Rainbow Lizard",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Flying Squirrel",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Giant Panda",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Fox",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Bongo",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Bontebok",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Fossa",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Forest Hog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Gerbil",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, desert animal",
-		},		description:"Empty"
-	},{
-		name:"Hare",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Hedgehog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, desert animal, jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Jackal",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Mandrill",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Nyala",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Oribi",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Otter",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Mongoose",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Seal",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Reedbuck",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Warthog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Waterbuck",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Wild Cat",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Badger",
-		type:{
-			pet:0,
-			mount:0,
-			description:"",
-		},		description:"Empty"
-	},{
-		name:"Gorilla",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, jungle animal, mountain animal",
-		},		description:"Empty"
-	},{
-		name:"Dwarf Mongoose",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Lemur",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Iguana",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Golden Toad",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Giant Armadillo",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Sloth",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Squirrel Monkey",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Pygmy Marmoset",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Elephant",
-		type:{
-			pet:0,
-			mount:0,
-			description:"",
-		},		description:"Empty"
-	},{
-		name:"Aye-Aye Monkey",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Capuchin Monkey",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Poison Arrow Frog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Alpaca Anteater",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Red Deer Giant Armadillo",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Wooly Monkey",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Spider Monkey",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Porcupine",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, desert animal",
-		},		description:"Empty"
-	},{
-		name:"White Faced Monkey",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Howler Monkey",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Capybara",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Okapi",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Sumatran Rhinoceros",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Silvery Gibbon",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Giant River Otter",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Toucan Poison Arrow Frog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Happface Spider",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Glass Frog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Leaf-Cutter Ant",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Bush Pig",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Strawberry Poisoned Dart Frog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Antelope",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal,jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Bactrian Camel",
-		type:{
-			pet:0,
-			mount:1,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Bahamas Rock Iguana",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Bale Monkey",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Owl Faced Monkey",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Ostrich",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Ouachita Burrowing Crayfish",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Geometric Tortoise",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Galapagos Land Snail",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Salta Water Toad",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Saltwater Crocodile",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Samoan Tree Snail",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Samoan Flying Fox",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Sambar Deer",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Salvin's Salamander",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Fairy Shrimp",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Uzungwe Toad",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Prairie Dog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Usambara Banana Frog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Zug's Robber Frog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Zhou's Box Turtle",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Zapahuira Water Frog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Zambian Mole Rat",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Zacate Blanco Treefrog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Yunnan Flying Frog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Yiwu Salamander",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Yellowtail Flounder",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Yellow-tailed Wooly Monkey",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Yellow-spotted Salamander",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Yellow-margined Box Turtle",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Yellow-legged Climbing Salamander",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"White-lipped Deer",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Yellow River Frog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Yarey Robber Frog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Warty Tree Toad",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Visayan Deer",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Volcan Tacana Toad",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Yamur Lake Grunter",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Yalobusha Riverlet Crayfish",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Western Bearded Pig",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Yap Flying Fox",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Wyoming Toad",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Volcano Rabbit",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Wrinkled Madagascar Frog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Wutai Crab",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Wreathed Cactus Snail",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Wood Turtle",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Wolverine",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Wondiwoi Tree Kangaroo",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Wild Goat",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Whitehead's Spiny Rat",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"White-tipped Tuft-tailed Rat",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"White-tailed Mouse",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"White-cheeked Spider Monkey",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Water Frog Wang's Crab",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Wild Yak White-tailed Deer",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"White-spotted Madagascar Frog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Visayan Warty Pig",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Crocodile Newt",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Vanikoro Flying Fox",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Unicolored Oldfield Mouse",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Ubatuba Dwarf Frog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Turkana Mud Turtle",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Tufted Deer",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Tulotoma Snail",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Tumbala Climbing Rat",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Tufted Gray Langur",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Tufted Ground Squirrel",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Tree Hole Crab",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Travancore Flying Squirrel",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Toothless Blindcat Timor",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Tiger Chameleon",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Telescope Hornsnail",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Three-striped Roof Turtle",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Langur",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Pebblesnail",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Jackrabbit",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Swamp Deer",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Painted Tree Rat",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Palau Flying Fox",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Pond Turtle",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"La Palma Giant Lizard",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Kinabalu Toad",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Juliana's Golden Mole",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Jagged-shelled Turtle",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Ivory Coast Frog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Indian Giant Squirrel",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Sulcata Tortoise",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Dhole",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Gazelle",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Florida Panther",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Gray Wolf",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Grizzly Bear",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Koala Bears",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Kinkajou",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Kangaroo Rat",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, desert animal",
-		},		description:"Empty"
-	},{
-		name:"Numbat",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Red Wolf",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Tasmanian Devil",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"White Rhinoceros",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal",
-		},		description:"Empty"
-	},{
-		name:"Wallaby",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest animal, desert animal",
-		},		description:"Empty"
-	},{
-		name:"Prairie Falcon",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird, mountain bird",
-		},		description:"Empty"
-	},{
-		name:"Cooper's Hawk",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird, mountain bird",
-		},		description:"Empty"
-	},{
-		name:"Chanting Goshawk",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird, jungle bird, mountain bird",
-		},		description:"Empty"
-	},{
-		name:"Peregrine Falcon",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird, desert bird, mountain bird",
-		},		description:"Empty"
-	},{
-		name:"Osprey",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird, jungle bird, mountain bird",
-		},		description:"Empty"
-	},{
-		name:"Harpy Eagle",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird, mountain bird",
-		},		description:"Empty"
-	},{
-		name:"Golden Eagle",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird, mountain bird",
-		},		description:"Empty"
-	},{
-		name:"Lammergeier",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Pariah Kite",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird, jungle bird, mountain bird",
-		},		description:"Empty"
-	},{
-		name:"Brehminy Kite",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird, mountain bird",
-		},		description:"Empty"
-	},{
-		name:"Burrowing Owl",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird, mountain bird",
-		},		description:"Empty"
-	},{
-		name:"White Pelican",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Great Blue Heron",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Snowy Egret",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Green Heron",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Greater White-fronted Goose",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Purple Martin",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Wood Duck",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Red-shouldered Hawk",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Mountain Bluebird",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Ruby-crowned Kinglet",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Black-headed Heron",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Hooded Vulture",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Swallow-tailed Kite",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Paradise Tanager",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Long-tailed Sylph",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Black-backed Grosbeak",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Great Horned Owl",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Hoopoe Malachite",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Sunbird",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Scarlet Macaw",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Orange Winged Parrot",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Woodpecker",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Belted Kingfisher",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Hooded Oriole",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Western Meadowlark",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Hummingbird",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"White-Throate Swift",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Northern Pygmy Owl",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Yellow Billed Cuckoo",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Sandpiper",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Mockingbird",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Zamboanga Bulbul",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Wilson's Bird-of-paradise",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Yemen Thrush",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Wrinkled Hornbill",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Yellowish Imperial Pigeon",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Northern Spotted Owl",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Yellow-throated Hanging-parrot",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Wood Stork",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Yellow-shouldered Blackbird",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"prairie Chicken",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Lilian's Lovebird",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Yellow-legged Pigeon",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"White-winged Collared Dove",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Yellow-eyed Starling",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Western Spotted Owl",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Marbeled Murrelet",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Yellow-crowned Parakeet",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Kekapo",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Yellow-crested Cockatoo",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Hawaiian Goose",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"White-winged Wood Duck",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Purple Eagle",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Brown-winged Kingfisher",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird",
-		},		description:"Empty"
-	},{
-		name:"Bukhts",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Mule",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Dulmen",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Connemara",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Giehe",
-		type:{
-			pet:0,
-			mount:1,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Trokk",
-		type:{
-			pet:0,
-			mount:1,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Derva",
-		type:{
-			pet:0,
-			mount:1,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Ocelot",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Lion",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Addax Antelope",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Arabian Horse",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Bat",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Bighorn Sheep",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal, mountain animal",
-		},		description:"Empty"
-	},{
-		name:"Bilby",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Cape Hare",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Chuckwallas",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Civet",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Collared Peccary",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Desert Elephant",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Desert Iguana",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Desert Tortoise",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Dingo",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Donkey",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Dromedary",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Fennec Fox",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Flamingo",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Gila Monster",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Hyena",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Jerboa",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Lizard",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal, jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Marsupial Mole",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Meerkat",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal, forest animal",
-		},		description:"Empty"
-	},{
-		name:"Nine-banded Armadillo",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Onager",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Oryx",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Pack Rat",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Penguin",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Peruvian Fox",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Phrynosoma Platyrhinos",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Pocket Mouse",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Polar Bear",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Quokka",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Rattlesnakes",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Roadrunner",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Sand Cobra",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Sandgrouse",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Scorpion",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Serval",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal, forest animal",
-		},		description:"Empty"
-	},{
-		name:"Sidewinder",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Tarantula",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Veiled Chameleon",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"White-tailed Deer",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal",
-		},		description:"Empty"
-	},{
-		name:"Nubian Vulture",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert bird",
-		},		description:"Empty"
-	},{
-		name:"Griffin Vulture",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert bird",
-		},		description:"Empty"
-	},{
-		name:"Jackal Buzzard",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert bird",
-		},		description:"Empty"
-	},{
-		name:"Bald Eagle",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert bird",
-		},		description:"Empty"
-	},{
-		name:"Egyptian Vulture",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert bird",
-		},		description:"Empty"
-	},{
-		name:"Fan-tailed Raven",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert bird",
-		},		description:"Empty"
-	},{
-		name:"Lappet-faced Vulture",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert bird",
-		},		description:"Empty"
-	},{
-		name:"Great Indian Bustard",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert bird",
-		},		description:"Empty"
-	},{
-		name:"Caspian Tiger",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Leopard",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Lion",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Aardvark",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Alligator",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Armadillo",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Baboon",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Bear",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Bison",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Chimpanzee",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Coyote",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal, desert animal",
-		},		description:"Empty"
-	},{
-		name:"Crocodile",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal, forest animal",
-		},		description:"Empty"
-	},{
-		name:"Deer",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Giraffe",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Hippopotamus",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Koala Bear",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Lynx",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal, forest animal, mountain animal",
-		},		description:"Empty"
-	},{
-		name:"Monkey",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Red Panda",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Rhinoceros",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Skunk",
-		type:{
-			pet:0,
-			mount:0,
-			description:"desert animal, forest animal, jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Snake",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Turtle",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Wild Dog",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Wolf",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Zebra",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Falcon",
-		type:{
-			pet:0,
-			mount:0,
-			description:"jungle bird",
-		},		description:"Empty"
-	},{
-		name:"English Mastiff",
-		type:{
-			pet:0,
-			mount:0,
-			description:"mountain animal",
-		},		description:"Empty"
-	},{
-		name:"Cougar",
-		type:{
-			pet:0,
-			mount:0,
-			description:"mountain animal, jungle animal",
-		},		description:"Empty"
-	},{
-		name:"Bobcat",
-		type:{
-			pet:0,
-			mount:0,
-			description:"mountain animal",
-		},		description:"Empty"
-	},{
-		name:"Andean Mountain Cat",
-		type:{
-			pet:0,
-			mount:0,
-			description:"mountain animal",
-		},		description:"Empty"
-	},{
-		name:"Chinchilla",
-		type:{
-			pet:0,
-			mount:0,
-			description:"mountain animal",
-		},		description:"Empty"
-	},{
-		name:"Ibex",
-		type:{
-			pet:0,
-			mount:0,
-			description:"mountain animal, desert animal",
-		},		description:"Empty"
-	},{
-		name:"Llama",
-		type:{
-			pet:0,
-			mount:0,
-			description:"mountain animal, desert animal",
-		},		description:"Empty"
-	},{
-		name:"Mountain Goat",
-		type:{
-			pet:0,
-			mount:0,
-			description:"mountain animal",
-		},		description:"Empty"
-	},{
-		name:"Mountain Kingsnake",
-		type:{
-			pet:0,
-			mount:0,
-			description:"mountain animal",
-		},		description:"Empty"
-	},{
-		name:"Mountain Lion",
-		type:{
-			pet:0,
-			mount:0,
-			description:"mountain animal",
-		},		description:"Empty"
-	},{
-		name:"Panda",
-		type:{
-			pet:0,
-			mount:0,
-			description:"mountain animal",
-		},		description:"Empty"
-	},{
-		name:"Pike",
-		type:{
-			pet:0,
-			mount:0,
-			description:"mountain animal",
-		},		description:"Fish"
-	},{
-		name:"Puma",
-		type:{
-			pet:0,
-			mount:0,
-			description:"mountain animal",
-		},		description:"Empty"
-	},{
-		name:"Yak",
-		type:{
-			pet:0,
-			mount:0,
-			description:"mountain animal",
-		},		description:"Empty"
-	},{
-		name:"Swamp Harrier",
-		type:{
-			pet:0,
-			mount:0,
-			description:"forest bird, mountain bird",
-		},		description:"Empty"
-	}
+	{name:"Abada Grove",
+	 reqLevel:"1",
+	 maxLevel:"8",
+	 population:"Even",
+	 environments:[38],
+	 spawns:[
+	  {id:'1',type:'Magical Creature',archetype:'Standard',rank:'Mini-Boss',chance:'40'},
+	  {id:'91',type:'Magical Creature',archetype:'Standard',rank:'Minion',chance:'50'},
+	  {id:'90',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'5'},
+	  {id:'3',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'5'}
+	 ],
+	 loot:[
+	  {id:'58',type:'Armor',chance:'5'},
+	  {id:'?',type:'?',chance:'15'}
+	 ]
+	},
+	{name:"Adlet Den",
+	 reqLevel:"5",
+	 maxLevel:"15",
+	 population:"Dense",
+	 environments:[3,4,5,6,7,8,9],
+	 spawns:[
+	  {id:'4',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'80'},
+	  {id:'5',type:'Magical Creature',archetype:'Standard',rank:'Mini-Boss',chance:'20'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'10'}
+	 ]
+	},
+	{name:"Mysterious Doonan Lake",
+	 reqLevel:"0",
+	 maxLevel:"20",
+	 population:"Sparse",
+	 environments:[87],
+	 spawns:[
+	  {id:'7',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'100'},
+	  {id:'59',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'20'},
+	  {id:'61',type:'Magical Creature',archetype:'Standard',rank:'Ultra Rare',chance:'20'},
+	  {id:'69',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'80'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'10'}
+	 ]
+	},
+	{name:"Leucrota Stomping Ground",
+	 reqLevel:"10",
+	 maxLevel:"15",
+	 population:"Even",
+	 environments:[5,2,12,27],
+	 spawns:[
+	  {id:'68',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'100'},
+	  {id:'70',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'15'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'11'}
+	 ]
+	},
+	{name:"Pristine Palace of Shimmering Water",
+	 reqLevel:"13",
+	 maxLevel:"16",
+	 population:"Sparse",
+	 environments:[24],
+	 spawns:[
+	  {id:'71',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'100'},
+	  {id:'75',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'20'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'9'}
+	 ]
+	},
+	{name:"The Hive",
+	 reqLevel:"15",
+	 maxLevel:"20",
+	 population:"Full",
+	 environments:[7],
+	 spawns:[
+	  {id:'76',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'100'},
+	  {id:'89',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'20'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'8'}
+	 ]
+	},
+	{name:"The Web",
+	 reqLevel:"17",
+	 maxLevel:"23",
+	 population:"Dense",
+	 environments:[5,4,3],
+	 spawns:[
+	  {id:'89',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'100'},
+	  {id:'93',type:'Magical Creature',archetype:'Standard',rank:'Regularl',chance:'25'},
+	  {id:'94',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'25'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'12'}
+	 ]
+	},
+	{name:"A Burning Nest",
+	 reqLevel:"18",
+	 maxLevel:"24",
+	 population:"Sparse",
+	 environments:[72,67],
+	 spawns:[
+	  {id:'95',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'100'},
+	  {id:'94',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'20'},
+	  {id:'105',type:'Magical Creature',archetype:'Standard',rank:'Epic',chance:'50'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'15'}
+	 ]
+	},
+	{name:"Wayside Shore",
+	 reqLevel:"20",
+	 maxLevel:"25",
+	 population:"Even",
+	 environments:[91,92,90],
+	 spawns:[
+	  {id:'92',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'30'},
+	  {id:'17',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'75'},
+	  {id:'6',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'10',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'0',type:'Race',archetype:'Spirit',rank:'Regular',chance:'40'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'18'}
+	 ]
+	},
+	{name:"The Deep Forest",
+	 reqLevel:"18",
+	 maxLevel:"23",
+	 population:"Even",
+	 environments:[25,26,27],
+	 spawns:[
+	  {id:'8',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'100'},
+	  {id:'29',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'14',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'3',type:'Race',archetype:'Zombie',rank:'Regular',chance:'30'},
+	  {id:'2',type:'Race',archetype:'Zombie',rank:'Regular',chance:'15'},
+	  {id:'3',type:'Race',archetype:'Skeletal',rank:'Regular',chance:'15'},
+	  {id:'2',type:'Race',archetype:'Skeletal',rank:'Regular',chance:'15'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'8'}
+	 ]
+	},
+	{name:"The Skydar Nest",
+	 reqLevel:"15",
+	 maxLevel:"20",
+	 population:"Even",
+	 environments:[73,78,79],
+	 spawns:[
+	  {id:'9',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'100'},
+	  {id:'16',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'13',type:'Race',archetype:'Standard',rank:'Regular',chance:'25'},
+	  {id:'8',type:'Race',archetype:'Standard',rank:'Regular',chance:'15'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'13'}
+	 ]
+	},
+	{name:"Mogden Woods",
+	 reqLevel:"1",
+	 maxLevel:"6",
+	 population:"Even",
+	 environments:[41],
+	 spawns:[
+	  {id:'2',type:'Magical Creature',archetype:'Standard',rank:'Boss',chance:'100'},
+	  {id:'38',type:'Magical Creature',archetype:'Standard',rank:'Mini-Boss',chance:'40'},
+	  {id:'42',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'30'},
+	  {id:'0',type:'Race',archetype:'Wraith',rank:'Regular',chance:'25'},
+	  {id:'0',type:'Race',archetype:'Spectral',rank:'Regular',chance:'15'},
+	  {id:'1',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'100'},
+	  {id:'12',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'28',type:'Magical Creature',archetype:'Standard',rank:'Mini-Boss',chance:'20'},
+	  {id:'12',type:'Race',archetype:'Standard',rank:'Regular',chance:'10'},
+	  {id:'10',type:'Race',archetype:'Standard',rank:'Regular',chance:'5'}
+	 ],
+	 loot:[
+	  {id:'?',type:'Weapon',chance:'25'},
+	  {id:'?',type:'?',chance:'11'}
+	 ]
+	},
+	{name:"Sunder Mines",
+	 reqLevel:"2",
+	 maxLevel:"7",
+	 population:"Even",
+	 environments:[12],
+	 spawns:[
+	  {id:'4',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'35'},
+	  {id:'11',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'20'},
+	  {id:'89',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'32'},
+	  {id:'1',type:'Race',archetype:'Skeletal',rank:'Regular',chance:'25'},
+	  {id:'1',type:'Race',archetype:'Zombie',rank:'Regular',chance:'25'},
+	  {id:'1',type:'Race',archetype:'Wraith',rank:'Mini-Boss',chance:'15'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'13'}
+	 ]
+	},
+	{name:"Amphisbaena Graves",
+	 reqLevel:"4",
+	 maxLevel:"9",
+	 population:"Sparse",
+	 environments:[13,14],
+	 spawns:[
+	  {id:'13',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'75'},
+	  {id:'0',type:'Race',archetype:'Zombie',rank:'Regular',chance:'50'},
+	  {id:'0',type:'Race',archetype:'Skeletal',rank:'Regular',chance:'45'},
+	  {id:'0',type:'Race',archetype:'Phantom',rank:'Regular',chance:'30'},
+	  {id:'7',type:'Race',archetype:'',rank:'Mini-Boss',chance:'5'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'6'}
+	 ]
+	},
+	{name:"Folnir Bog",
+	 reqLevel:"5",
+	 maxLevel:"11",
+	 population:"Dense",
+	 environments:[49,50,51],
+	 spawns:[
+	  {id:'15',type:'Magical Creature',archetype:'Wraith',rank:'Mini-Boss',chance:'50'},
+	  {id:'0',type:'Race',archetype:'Zombie',rank:'Regular',chance:'50'},
+	  {id:'0',type:'Race',archetype:'Skeletal',rank:'Regular',chance:'45'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'12'}
+	 ]
+	},
+	{name:"Darrakah Cave",
+	 reqLevel:"12",
+	 maxLevel:"17",
+	 population:"Sparse",
+	 environments:[3,4],
+	 spawns:[
+	  {id:'18',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'43',type:'Magical Creature',archetype:'Standard',rank:'Mini-Boss',chance:'35'},
+	  {id:'44',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'40'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'4'}
+	 ]
+	},
+	{name:"Barefoot Forest",
+	 reqLevel:"9",
+	 maxLevel:"14",
+	 population:"Even",
+	 environments:[39,35],
+	 spawns:[
+	  {id:'35',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'52',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'56',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'35'},
+	  {id:'3',type:'Race',archetype:'Standard',rank:'Regular',chance:'25'},
+	  {id:'4',type:'Race',archetype:'Standard',rank:'Regular',chance:'15'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'9'}
+	 ]
+	},
+	{name:"Heart of the Mountain",
+	 reqLevel:"1",
+	 maxLevel:"5",
+	 population:"Even",
+	 environments:[12,81],
+	 spawns:[
+	  {id:'65',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'64',type:'Magical Creature',archetype:'Standard',rank:'Boss',chance:'50'},
+	  {id:'2',type:'Race',archetype:'Skeletal',rank:'Regular',chance:'25'},
+	  {id:'1',type:'Race',archetype:'Skeletal',rank:'Regular',chance:'25'},
+	  {id:'8',type:'Race',archetype:'Skeletal',rank:'Regular',chance:'25'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'11'}
+	 ]
+	},
+	{name:"Yylkra Valley",
+	 reqLevel:"2",
+	 maxLevel:"7",
+	 population:"Even",
+	 environments:[60,58,65],
+	 spawns:[
+	  {id:'63',type:'Magical Creature',archetype:'Standard',rank:'Boss',chance:'50'},
+	  {id:'0',type:'Race',archetype:'Phantom',rank:'Minion',chance:'25'},
+	  {id:'3',type:'Race',archetype:'Phantom',rank:'Minion',chance:'25'},
+	  {id:'4',type:'Race',archetype:'Phantom',rank:'Minion',chance:'25'},
+	  {id:'5',type:'Race',archetype:'Phantom',rank:'Minion',chance:'25'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'10'}
+	 ]
+	},
+	{name:"Talstar Woods",
+	 reqLevel:"6",
+	 maxLevel:"11",
+	 population:"Dense",
+	 environments:[41],
+	 spawns:[
+	  {id:'81',type:'Magical Creature',archetype:'Archon',rank:'Boss',chance:'50'},
+	  {id:'86',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'8'}
+	 ]
+	},
+	{name:"Furkrit Jungle",
+	 reqLevel:"4",
+	 maxLevel:"9",
+	 population:"Even",
+	 environments:[45],
+	 spawns:[
+	  {id:'97',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'104',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'107',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'25'},
+	  {id:'12',type:'Race',archetype:'Standard',rank:'Regular',chance:'8'},
+	  {id:'20',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'40'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'7'}
+	 ]
+	},
+	{name:"Black Tooth Port",
+	 reqLevel:"10",
+	 maxLevel:"15",
+	 population:"Dense",
+	 environments:[70,71,66],
+	 spawns:[
+	  {id:'0',type:'Race',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'6',type:'Race',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'8',type:'Race',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'9',type:'Race',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'10',type:'Race',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'5',type:'Race',archetype:'Standard',rank:'Regular',chance:'50'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'6'}
+	 ]
+	},
+	{name:"Hollow Hills",
+	 reqLevel:"12",
+	 maxLevel:"17",
+	 population:"Sparse",
+	 environments:[62],
+	 spawns:[
+	  {id:'103',type:'Magical Creature',archetype:'Wraith',rank:'Regular',chance:'50'},
+	  {id:'0',type:'Race',archetype:'Zombie',rank:'Regular',chance:'50'},
+	  {id:'0',type:'Race',archetype:'Skeletal',rank:'Regular',chance:'45'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'8'}
+	 ]
+	},
+	{name:"Redstone Timber",
+	 reqLevel:"13",
+	 maxLevel:"18",
+	 population:"Even",
+	 environments:[32],
+	 spawns:[
+	  {id:'108',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'98',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'25'},
+	  {id:'0',type:'Race',archetype:'Apparition',rank:'Regular',chance:'75'},
+	  {id:'0',type:'Race',archetype:'Ghost',rank:'Regular',chance:'35'},
+	  {id:'0',type:'Race',archetype:'Wraith',rank:'Boss',chance:'15'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'12'}
+	 ]
+	},
+	{name:"Rot Hill",
+	 reqLevel:"15",
+	 maxLevel:"20",
+	 population:"Even",
+	 environments:[62],
+	 spawns:[
+	  {id:'57',type:'Magical Creature',archetype:'Wraith',rank:'Mini-Boss',chance:'100'},
+	  {id:'65',type:'Magical Creature',archetype:'Standard',rank:'Minion',chance:'35'},
+	  {id:'0',type:'Race',archetype:'Zombie',rank:'Regular',chance:'50'},
+	  {id:'0',type:'Race',archetype:'Skeletal',rank:'Regular',chance:'45'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'15'}
+	 ]
+	},
+	{name:"Cid's Lake",
+	 reqLevel:"1",
+	 maxLevel:"5",
+	 population:"Sparse",
+	 environments:[87],
+	 spawns:[
+	  {id:'62',type:'Magical Creature',archetype:'Standard',rank:'Epic',chance:'100'},
+	  {id:'66',type:'Magical Creature',archetype:'Zombie',rank:'Regular',chance:'50'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'5'}
+	 ]
+	},
+	{name:"Jinthraku Badlands",
+	 reqLevel:"2",
+	 maxLevel:"7",
+	 population:"Even",
+	 environments:[74],
+	 spawns:[
+	  {id:'60',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'50',type:'Magical Creature',archetype:'Archon',rank:'Boss',chance:'100'},
+	  {id:'47',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'35'},
+	  {id:'7',type:'Race',archetype:'Zombie',rank:'Regular',chance:'25'},
+	  {id:'7',type:'Race',archetype:'Skeletal',rank:'Regular',chance:'25'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'6'}
+	 ]
+	},
+	{name:"Temple of Bai Ze",
+	 reqLevel:"15",
+	 maxLevel:"20",
+	 population:"Even",
+	 environments:[6,20,21,22,23],
+	 spawns:[
+	  {id:'19',type:'Magical Creature',archetype:'Spirit',rank:'Boss',chance:'50'},
+	  {id:'55',type:'Magical Creature',archetype:'Skeletal',rank:'Minion',chance:'50'},
+	  {id:'109',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'25'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'8'}
+	 ]
+	},
+	{name:"Gates of Fire",
+	 reqLevel:"20",
+	 maxLevel:"25",
+	 population:"Sparse",
+	 environments:[15,83,84],
+	 spawns:[
+	  {id:'21',type:'Magical Creature',archetype:'Standard',rank:'Epic',chance:'50'},
+	  {id:'106',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'12'}
+	 ]
+	},
+	{name:"Top of Mt. Hiegar",
+	 reqLevel:"15",
+	 maxLevel:"20",
+	 population:"Even",
+	 environments:[34],
+	 spawns:[
+	  {id:'23',type:'Magical Creature',archetype:'Standard',rank:'Mini-Boss',chance:'50'},
+	  {id:'58',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'10'}
+	 ]
+	},
+	{name:"The Wailing Port",
+	 reqLevel:"15",
+	 maxLevel:"20",
+	 population:"Even",
+	 environments:[88,93,94],
+	 spawns:[
+	  {id:'22',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'73',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'45'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'9'}
+	 ]
+	},
+	{name:"Feral Wood",
+	 reqLevel:"15",
+	 maxLevel:"20",
+	 population:"Dense",
+	 environments:[30,31],
+	 spawns:[
+	  {id:'24',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'40'},
+	  {id:'110',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'35'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'7'}
+	 ]
+	},
+	{name:"Basilisk Rock",
+	 reqLevel:"15",
+	 maxLevel:"20",
+	 population:"Even",
+	 environments:[64,28,29],
+	 spawns:[
+	  {id:'25',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'58',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'35'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'8'}
+	 ]
+	},
+	{name:"Crossroads",
+	 reqLevel:"15",
+	 maxLevel:"20",
+	 population:"Sparse",
+	 environments:[59,61,63,37],
+	 spawns:[
+	  {id:'26',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'61'},
+	  {id:'72',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'48'},
+	  {id:'31',type:'Magical Creature',archetype:'Standard',rank:'Ultra Rare',chance:'15'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'5'}
+	 ]
+	},
+	{name:"Beneath Castle Aberdeen",
+	 reqLevel:"15",
+	 maxLevel:"20",
+	 population:"Full",
+	 environments:[17,18],
+	 spawns:[
+	  {id:'27',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'38'},
+	  {id:'49',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'37'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'6'}
+	 ]
+	},
+	{name:"Mudbane Swamp",
+	 reqLevel:"15",
+	 maxLevel:"20",
+	 population:"Dense",
+	 environments:[52,54,55],
+	 spawns:[
+	  {id:'30',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'58'},
+	  {id:'54',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'34'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'4'}
+	 ]
+	},
+	{name:"Green Flats",
+	 reqLevel:"15",
+	 maxLevel:"20",
+	 population:"Sparse",
+	 environments:[68,69],
+	 spawns:[
+	  {id:'32',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'40'},
+	  {id:'53',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'33'},
+	  {id:'84',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'28'},
+	  {id:'85',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'24'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'9'}
+	 ]
+	},
+	{name:"Depths of the Crag",
+	 reqLevel:"15",
+	 maxLevel:"20",
+	 population:"Sparse",
+	 environments:[95,96,97,98,99],
+	 spawns:[
+	  {id:'33',type:'Magical Creature',archetype:'Standard',rank:'Boss',chance:'55'},
+	  {id:'39',type:'Magical Creature',archetype:'Standard',rank:'Mini-Boss',chance:'44'},
+	  {id:'51',type:'Magical Creature',archetype:'Standard',rank:'Epic',chance:'33'},
+	  {id:'67',type:'Magical Creature',archetype:'Standard',rank:'Boss',chance:'30'},
+	  {id:'102',type:'Magical Creature',archetype:'Standard',rank:'Rare',chance:'24'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'8'}
+	 ]
+	},
+	{name:"Shadowed Trees",
+	 reqLevel:"15",
+	 maxLevel:"20",
+	 population:"Dense",
+	 environments:[33,36,53],
+	 spawns:[
+	  {id:'34',type:'Magical Creature',archetype:'Standard',rank:'Boss',chance:'61'},
+	  {id:'46',type:'Magical Creature',archetype:'Standard',rank:'Mini-Boss',chance:'50'},
+	  {id:'80',type:'Magical Creature',archetype:'Standard',rank:'Minion',chance:'48'},
+	  {id:'88',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'44'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'7'}
+	 ]
+	},
+	{name:"Centaur Steading",
+	 reqLevel:"15",
+	 maxLevel:"20",
+	 population:"Even",
+	 environments:[43,44],
+	 spawns:[
+	  {id:'36',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'58'},
+	  {id:'45',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'56'},
+	  {id:'82',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'41'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'13'}
+	 ]
+	},
+	{name:"Eastern Sands of Dumasque",
+	 reqLevel:"15",
+	 maxLevel:"20",
+	 population:"Sparse",
+	 environments:[77],
+	 spawns:[
+	  {id:'37',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'88'},
+	  {id:'58',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'74'},
+	  {id:'87',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'55'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'11'}
+	 ]
+	},
+	{name:"Plains of Endless Despair",
+	 reqLevel:"15",
+	 maxLevel:"20",
+	 population:"Dense",
+	 environments:[75,76],
+	 spawns:[
+	  {id:'40',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'41'},
+	  {id:'48',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'40'},
+	  {id:'8',type:'Race',archetype:'Wraith',rank:'Regular',chance:'35'},
+	  {id:'8',type:'Race',archetype:'Standard',rank:'Regular',chance:'34'},
+	  {id:'9',type:'Race',archetype:'Wraith',rank:'Regular',chance:'30'},
+	  {id:'9',type:'Race',archetype:'Standard',rank:'Regular',chance:'25'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'9'}
+	 ]
+	},
+	{name:"Cinnimon Trees",
+	 reqLevel:"15",
+	 maxLevel:"20",
+	 population:"Even",
+	 environments:[48],
+	 spawns:[
+	  {id:'41',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'},
+	  {id:'41',type:'Magical Creature',archetype:'Spectral',rank:'Boss',chance:'50'},
+	  {id:'79',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'40'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'7'}
+	 ]
+	},
+	{name:"Lake Prim",
+	 reqLevel:"15",
+	 maxLevel:"20",
+	 population:"Even",
+	 environments:[85,86],
+	 spawns:[
+	  {id:'74',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'48'},
+	  {id:'92',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'47'},
+	  {id:'78',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'34'},
+	  {id:'100',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'20'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'10'}
+	 ]
+	},
+	{name:"Heart of the Phoenix",
+	 reqLevel:"20",
+	 maxLevel:"25",
+	 population:"Dense",
+	 environments:[90],
+	 spawns:[
+	  {id:'83',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'44'},
+	  {id:'101',type:'Magical Creature',archetype:'Standard',rank:'Rare',chance:'41'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'6'}
+	 ]
+	},
+	{name:"Nest of Lightning",
+	 reqLevel:"1",
+	 maxLevel:"5",
+	 population:"Sparse",
+	 environments:[10,11,1],
+	 spawns:[
+	  {id:'96',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'50'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'8'}
+	 ]
+	},
+	{name:"Theatre of Bone",
+	 reqLevel:"20",
+	 maxLevel:"25",
+	 population:"Full",
+	 environments:[19,16],
+	 spawns:[
+	  {id:'13',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'52'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'7'}
+	 ]
+	},
+	{name:"A Silent Marsh",
+	 reqLevel:"1",
+	 maxLevel:"5",
+	 population:"Sparse",
+	 environments:[47,48],
+	 spawns:[
+	  {id:'78',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'34'},
+	  {id:'100',type:'Magical Creature',archetype:'Standard',rank:'Regular',chance:'20'},
+	  {id:'12',type:'Race',archetype:'Spectral',rank:'Regular',chance:'19'},
+	  {id:'7',type:'Race',archetype:'Spectral',rank:'Regular',chance:'19'},
+	  {id:'6',type:'Race',archetype:'Spectral',rank:'Regular',chance:'18'},
+	  {id:'12',type:'Race',archetype:'Ghost',rank:'Regular',chance:'19'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'8'}
+	 ]
+	},
+	{name:"The Hollow",
+	 reqLevel:"10",
+	 maxLevel:"15",
+	 population:"Dense",
+	 environments:[44,56,57],
+	 spawns:[
+	  {id:'34',type:'Magical Creature',archetype:'Standard',rank:'Mini-Boss',chance:'61'},
+	  {id:'0',type:'Race',archetype:'Zombie',rank:'Regular',chance:'50'},
+	  {id:'0',type:'Race',archetype:'Skeletal',rank:'Regular',chance:'45'},
+	  {id:'0',type:'Race',archetype:'Phantom',rank:'Regular',chance:'30'}
+	 ],
+	 loot:[
+	  {id:'?',type:'?',chance:'10'}
+	 ]
+	} 
 ];
-
-var main = new CreatureGenerator(data);
+var main = new HabitatGenerator(data);
