@@ -4,7 +4,6 @@ Holds all programming experiments that are stand-alone. The To-Do List holds the
 
 ## To-Do List
  
-- [ ] **Learn some more complex TypeScript uses**
 - [ ] **Begin LiveScript**
 - [ ] **Begin Dart**
 - [X] **Begin Ruby**
