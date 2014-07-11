@@ -7,7 +7,7 @@ var ion=function(x,y,dx,dy,s,q){
 	this.dy=dy||1;
 	this.color='#48F';
 	this.size=s||1;
-	this.tween_type=30;
+	this.tween_type=6;
 	this.tween_current=0;
 	this.tween_duration=500;
 	this.populate();
@@ -131,13 +131,28 @@ ion.prototype.ease=function(b,c,t,d,o){
 		} //end if
 	}//end if
 };
+ion.prototype.getNew=function(){
+	return {
+		sx:r(0,v.w),
+		sy:r(0,v.h),
+		x:r(0,v.w),
+		y:r(0,v.h),
+		dx:r(0,v.w),
+		dy:r(0,v.h),
+		c:this.tween_current,
+		d:this.tween_duration,
+		wx:r(0,2)-1,
+		wy:r(0,2)-1
+	};
+};
 ion.prototype.populate=function(){
 	var that=this;
-	this.particle.push({x:this.sx,y:this.sy,c:this.tween_current,d:this.tween_duration,w:r(0,3)-1.5});
+	this.particle.push(this.getNew());
 	if(this.particle.length<this.quantity)setTimeout(function(){that.populate();},1);
 };
 ion.prototype.wind=function(element){
-	this.particle[element].x+=this.particle[element].w;
+	this.particle[element].dx+=this.particle[element].wx;
+	this.particle[element].dy+=this.particle[element].wy;
 };
 ion.prototype.draw=function(element){
 	ctx.fillRect(this.particle[element].x,this.particle[element].y,this.size,this.size);
@@ -148,13 +163,23 @@ ion.prototype.process=function(){
 	ctx.fillRect(0,0,v.w,v.h);
 	ctx.fillStyle=this.color;
 	for(element in this.particle){
-		this.particle[element].c++;
 		this.wind(element);
-		//this.particle[element].x=M.floor(this.particle[element].x)==M.floor(this.dx)?this.particle[element].x:this.ease(this.sx,this.dx-this.sx,this.particle[element].c,this.particle[element].d);
-		this.particle[element].y=M.floor(this.particle[element].y)==M.floor(this.dy)?this.particle[element].y:this.ease(this.sy,this.dy-this.sy,this.particle[element].c,this.particle[element].d);
 		this.draw(element);
+		if(this.particle[element].x<0||this.particle[element].y<0||this.particle[element].x>v.w||this.particle[element].y>v.h){
+			this.particle.splice(element,1,this.getNew());
+		} //end if
+		if(this.particle[element].c==this.particle[element].d){
+			this.particle[element].sx=this.particle[element].x;
+			this.particle[element].sy=this.particle[element].y;
+			this.particle[element].dx=r(0,v.w);
+			this.particle[element].dy=r(0,v.h);
+			this.particle[element].c=0;
+		}
+		this.particle[element].c++;
+		if(M.floor(this.particle[element].x)!==M.floor(this.particle[element].dx))this.particle[element].x=this.ease(this.particle[element].sx,this.particle[element].dx-this.particle[element].sx,this.particle[element].c,this.particle[element].d);
+		if(M.floor(this.particle[element].y)!==M.floor(this.particle[element].dy))this.particle[element].y=this.ease(this.particle[element].sy,this.particle[element].dy-this.particle[element].sy,this.particle[element].c,this.particle[element].d);
 	} //end for
-	if(this.particle[this.particle.length-1].c<this.tween_duration)setTimeout(function(){that.process();},1);
+	setTimeout(function(){that.process();},1);
 };
 
-new ion(v.w/2,v.h/10,v.w/2,v.h/10*9,3,1000);
+new ion(v.w,v.h/2,v.w/2,v.h/2,3,1000);
