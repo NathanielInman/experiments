@@ -1,19 +1,20 @@
-var ion=function(x,y,dx,dy,s,q){
+var Ion=function(q,s,x,y,dx,dy){
 	this.particle=[];
 	this.quantity=q||1;
 	this.sx=x||0;
 	this.sy=y||0;
 	this.dx=dx||1;
 	this.dy=dy||1;
+	this.wx=0;
+	this.wy=0;
 	this.color='#48F';
 	this.size=s||1;
-	this.tween_type=6;
+	this.tween_type=0;
 	this.tween_current=0;
-	this.tween_duration=500;
-	this.populate();
-	this.process()
+	this.tween_duration=1000;
+	this.populate()
 };
-ion.prototype.ease=function(b,c,t,d,o){
+Ion.prototype.ease=function(b,c,t,d,o){
 	var t=t||this.tween_current; 
 	var d=d||this.tween_duration;
 	o=o||0.3;
@@ -60,7 +61,7 @@ ion.prototype.ease=function(b,c,t,d,o){
 	}else if(this.tween_type==20){ //ease-in-out circular
 		return ((t/=d/2)<1)?-c/2*(Math.sqrt(1-t*t)-1)+b:c/2*(Math.sqrt(1-(t-=2)*t)+1)+b;
 	}else if(this.tween_type==21){ //ease-in elastic loose
-		this.tween_type=22;var result=ion.prototype.ease.call(this,b,c,t,d,0.5);
+		this.tween_type=22;var result=Ion.prototype.ease.call(this,b,c,t,d,0.5);
 		this.tween_type=21;return result;
 	}else if(this.tween_type==22){ //ease-in elastic normal
 	    var s=1.70158;var p=0;var a=c;
@@ -71,10 +72,10 @@ ion.prototype.ease=function(b,c,t,d,o){
 		else var s = p/(2*Math.PI) * Math.asin (c/a);
 		return -(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
 	}else if(this.tween_type==23){ //ease-in elastic strong
-		this.tween_type=22;var result=ion.prototype.ease.call(this,b,c,t,d,0.1);
+		this.tween_type=22;var result=Ion.prototype.ease.call(this,b,c,t,d,0.1);
 		this.tween_type=23;return result;
 	}else if(this.tween_type==24){ //ease-out elastic loose
-		this.tween_type=25;var result=ion.prototype.ease.call(this,b,c,t,d,0.5);
+		this.tween_type=25;var result=Ion.prototype.ease.call(this,b,c,t,d,0.5);
 		this.tween_type=24;return result;
 	}else if(this.tween_type==25){ //ease-out elastic normal
 		var s=1.70158,p=0,a=c;
@@ -110,7 +111,7 @@ ion.prototype.ease=function(b,c,t,d,o){
 		var s=1.70158;
 		return ((t/=d/2) < 1)?c/2*(t*t*(((s*=(1.525))+1)*t - s)) + b:c/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
 	}else if(this.tween_type==33){ //ease-in bounce
-		this.tween_type=34;var result=ion.prototype.ease.call(this,0,c,d-t,d);
+		this.tween_type=34;var result=Ion.prototype.ease.call(this,0,c,d-t,d);
 		this.tween_type=33;return c-result+b;
 	}else if(this.tween_type==34){ //ease-out bounce
 		if ((t/=d) < (1/2.75)) {
@@ -123,63 +124,60 @@ ion.prototype.ease=function(b,c,t,d,o){
 		return c*(7.5625*(t-=(2.625/2.75))*t + .984375) + b;		}
 	}else if(this.tween_type==35){ //ease-in-out bounce
 		if(t<d/2){
-			this.tween_type=33;var result=ion.prototype.ease.call(this,0,c,t*2,d)*.5+b;
+			this.tween_type=33;var result=Ion.prototype.ease.call(this,0,c,t*2,d)*.5+b;
 			this.tween_type=35;return result;
 		}else{
-			this.tween_type=34;var result=ion.prototype.ease.call(this,0,c,t*2-d,d)*.5+c*.5+b;
+			this.tween_type=34;var result=Ion.prototype.ease.call(this,0,c,t*2-d,d)*.5+c*.5+b;
 			this.tween_type=35;return result;
 		} //end if
 	}//end if
 };
-ion.prototype.getNew=function(){
+Ion.prototype.getNew=function(id){
 	return {
-		sx:r(0,v.w),
-		sy:r(0,v.h),
-		x:r(0,v.w),
-		y:r(0,v.h),
-		dx:r(0,v.w),
-		dy:r(0,v.h),
-		c:this.tween_current,
-		d:this.tween_duration,
-		wx:r(0,2)-1,
-		wy:r(0,2)-1
+		id:id, //be able to reference each particle individually outside of the class
+		sx:typeof this.sx=='function'?this.sx():this.sx,
+		sy:typeof this.sy=='function'?this.sy():this.sy,
+		x:typeof this.sx=='function'?this.sx():this.sx,
+		y:typeof this.sx=='function'?this.sy():this.sy,
+		dx:typeof this.dx=='function'?this.dx():this.dx,
+		dy:typeof this.dy=='function'?this.dy():this.dy,
+		c:typeof this.tween_current=='function'?this.tween_current():this.tween_current,
+		d:typeof this.tween_duration=='function'?this.tween_duration():this.tween_duration,
+		s:typeof this.size=='function'?this.size():this.size,
+		wx:typeof this.wx=='function'?this.wx():this.wx,
+		wy:typeof this.wy=='function'?this.wy():this.wy,
 	};
 };
-ion.prototype.populate=function(){
+Ion.prototype.populate=function(){
 	var that=this;
-	this.particle.push(this.getNew());
+	this.particle.push(this.getNew(this.particle.length));
 	if(this.particle.length<this.quantity)setTimeout(function(){that.populate();},1);
 };
-ion.prototype.wind=function(element){
+Ion.prototype.wind=function(element){
 	this.particle[element].dx+=this.particle[element].wx;
 	this.particle[element].dy+=this.particle[element].wy;
+	this.particle[element].sx+=this.particle[element].wx;
+	this.particle[element].sy+=this.particle[element].wy;
 };
-ion.prototype.draw=function(element){
-	ctx.fillRect(this.particle[element].x,this.particle[element].y,this.size,this.size);
+Ion.prototype.draw=function(element){
+	ctx.fillRect(this.particle[element].x,this.particle[element].y,this.particle[element].s,this.particle[element].s);
 };
-ion.prototype.process=function(){
+Ion.prototype.onEnd=function(){};
+Ion.prototype.onEscape=function(){};
+Ion.prototype.process=function(){
 	var that=this;
 	ctx.fillStyle='#000';
 	ctx.fillRect(0,0,v.w,v.h);
 	ctx.fillStyle=this.color;
 	for(element in this.particle){
+		if(this.particle[element].c==this.particle[element].d)continue; //skip a done movement process
 		this.wind(element);
 		this.draw(element);
-		if(this.particle[element].x<0||this.particle[element].y<0||this.particle[element].x>v.w||this.particle[element].y>v.h){
-			this.particle.splice(element,1,this.getNew());
-		} //end if
-		if(this.particle[element].c==this.particle[element].d){
-			this.particle[element].sx=this.particle[element].x;
-			this.particle[element].sy=this.particle[element].y;
-			this.particle[element].dx=r(0,v.w);
-			this.particle[element].dy=r(0,v.h);
-			this.particle[element].c=0;
-		}
-		this.particle[element].c++;
+		if(this.particle[element].x<0||this.particle[element].y<0||this.particle[element].x>v.w||this.particle[element].y>v.h)this.onEscape(element);
+		this.particle[element].c++; //increment the current iteration of the tween by one
+		if(this.particle[element].c==this.particle[element].d)this.onEnd(element); //movement process finished
 		if(M.floor(this.particle[element].x)!==M.floor(this.particle[element].dx))this.particle[element].x=this.ease(this.particle[element].sx,this.particle[element].dx-this.particle[element].sx,this.particle[element].c,this.particle[element].d);
 		if(M.floor(this.particle[element].y)!==M.floor(this.particle[element].dy))this.particle[element].y=this.ease(this.particle[element].sy,this.particle[element].dy-this.particle[element].sy,this.particle[element].c,this.particle[element].d);
 	} //end for
 	setTimeout(function(){that.process();},1);
 };
-
-new ion(v.w,v.h/2,v.w/2,v.h/2,3,1000);
