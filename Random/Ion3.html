@@ -1,0 +1,33 @@
+<!doctype html><head><title>Ion Demo 3</title></head><body>
+<script type='text/javascript' src='libs/easel.js'></script>
+<script type='text/javascript' src='libs/ion.dev.js'></script>
+<script>
+var nest=new Ion(1000);
+var color={r:128,g:128,b:128};
+var gcolor=function(){return {r:r(100,256,false),g:r(100,256,false),b:r(100,256,false)}};
+var tcolor=gcolor();
+nest.color='rgba(128,128,128,0.5)';
+nest.clear=false;
+nest.sx=function(){return r(v.w/2-50,v.w/2+50)};
+nest.sy=function(){return r(v.h/2-50,v.h/2+50)};
+nest.dx=v.w/2;
+nest.dy=0;
+nest.wx=function(){return r(0,3)-1.5};
+nest.wy=function(){return r(0,3)-1.5};
+nest.size=function(){return r(1,3);};
+nest.tween_type=function(){return r(20,21,false)};
+nest.onEnd=function(id){this.reset(id);};
+nest.onEscape=function(id){this.onEnd(id);};
+nest.populate();nest.process();
+setInterval(function(){
+	if(color.r==tcolor.r&&color.g==tcolor.g&&color.b==tcolor.b){tcolor=gcolor();
+	}else{
+		if(color.r<tcolor.r){color.r++}else if(color.r>tcolor.r){color.r--}
+		if(color.g<tcolor.g){color.g++}else if(color.g>tcolor.g){color.g--}
+		if(color.b<tcolor.b){color.b++}else if(color.b>tcolor.b){color.b--}
+	} //end if
+	nest.color='rgba('+color.r+','+color.g+','+color.b+',0.5)';
+},50);
+setInterval(function(){ctx.fillStyle='rgba(0,0,0,0.2)';ctx.fillRect(0,0,v.w,v.h);},50);
+</script>
+</body></html>
