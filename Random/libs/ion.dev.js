@@ -1,3 +1,21 @@
+/**********************************************************************************\
+	Ion.js performs tweening movements and operations on particles and was created
+	to use in conjunction with easel.js
+    Copyright (C) 2014 Nathaniel Inman
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ \*********************************************************************************/
 var Ion=function(q,s,x,y,dx,dy){
 	this.particle=[];
 	this.clear=true;
@@ -14,6 +32,21 @@ var Ion=function(q,s,x,y,dx,dy){
 	this.tween_current=0;
 	this.tween_duration=1000;
 };
+
+/**
+ * Ease is a tweening function using Robert Penner's equations to identify the
+ * values of an axis in respect to it's start location, destination, and the normalization
+ * of the transition between the two with respect to starting time, a given duration, and the
+ * function to impose upon the transition from that start position to it's destination.
+ * 
+ * @param  {float}   b    Beginning value of the property
+ * @param  {float}   c    Change between the beginning and destination value of the property
+ * @param  {integer} t    Current time or position of the tween
+ * @param  {integer} d    total time of the tween
+ * @param  {float}   o    modification orientation strength 
+ * @param  {integer} type specifies the tweening type
+ * @return {float}        current x or y location
+ */
 Ion.prototype.ease=function(b,c,t,d,o,type){
 	if(type==0){
 		return c*t/d+b;
@@ -120,46 +153,110 @@ Ion.prototype.ease=function(b,c,t,d,o,type){
 		} //end if
 	}//end if
 };
+
+/**
+ * getNew will create a new particle and return that result. It's possible to override the
+ * function to develop a custom particle generator for more specific applications.
+ * 
+ * @param  {Integer} atom Particle index
+ * @return {Object}       The particle object is returned
+ */
 Ion.prototype.getNew=function(atom){
 	return {
 		id:atom, //be able to reference each particle individually outside of the class
-		sx:typeof this.sx=='function'?this.sx():this.sx,
-		sy:typeof this.sy=='function'?this.sy():this.sy,
-		x:typeof this.sx=='function'?this.sx():this.sx,
-		y:typeof this.sy=='function'?this.sy():this.sy,
-		dx:typeof this.dx=='function'?this.dx():this.dx,
-		dy:typeof this.dy=='function'?this.dy():this.dy,
-		c:typeof this.tween_current=='function'?this.tween_current():this.tween_current,
-		d:typeof this.tween_duration=='function'?this.tween_duration():this.tween_duration,
-		tt:typeof this.tween_type=='function'?this.tween_type():this.tween_type,
-		s:typeof this.size=='function'?this.size():this.size,
-		wx:typeof this.wx=='function'?this.wx():this.wx,
-		wy:typeof this.wy=='function'?this.wy():this.wy
+		sx:typeof this.sx            =='function'?this.sx():this.sx,
+		sy:typeof this.sy            =='function'?this.sy():this.sy,
+		x:typeof this.sx             =='function'?this.sx():this.sx,
+		y:typeof this.sy             =='function'?this.sy():this.sy,
+		dx:typeof this.dx            =='function'?this.dx():this.dx,
+		dy:typeof this.dy            =='function'?this.dy():this.dy,
+		c:typeof this.tween_current  =='function'?this.tween_current():this.tween_current,
+		d:typeof this.tween_duration =='function'?this.tween_duration():this.tween_duration,
+		tt:typeof this.tween_type    =='function'?this.tween_type():this.tween_type,
+		s:typeof this.size           =='function'?this.size():this.size,
+		wx:typeof this.wx            =='function'?this.wx():this.wx,
+		wy:typeof this.wy            =='function'?this.wy():this.wy
 	};
 };
+
+/**
+ * Reset will perform a small number of operations to reset a particle back to a starting state
+ * instead of actually generating a new particle. This can be helpful if you want to retain it's
+ * current location or properties that have been computed thus far. It's further helpful because it
+ * can be overridden to perform other operations post-completion of the particles duration.
+ * 
+ * @param  {Integer} atom Particle index
+ * @return {Void}         Function doesn't return a value
+ */
 Ion.prototype.reset=function(atom){
-	this.particle[atom].x=this.particle[atom].sx=typeof this.sx=='function'?this.sx():this.sx;
-	this.particle[atom].y=this.particle[atom].sy=typeof this.sy=='function'?this.sy():this.sy;
-	this.particle[atom].dx=typeof this.dx=='function'?this.dx():this.dx;
-	this.particle[atom].dy=typeof this.dy=='function'?this.dy():this.dy;
-	this.particle[atom].c=0;
+	this.particle[atom].x  =this.particle[atom].sx=typeof this.sx=='function'?this.sx():this.sx;
+	this.particle[atom].y  =this.particle[atom].sy=typeof this.sy=='function'?this.sy():this.sy;
+	this.particle[atom].dx =typeof this.dx=='function'?this.dx():this.dx;
+	this.particle[atom].dy =typeof this.dy=='function'?this.dy():this.dy;
+	this.particle[atom].c  =0;
 };
+
+/**
+ * Populate pushes a new particle into the particles array then checks to see if the specified
+ * particle number has been reached, if it hasn't, then it queues up itself asynchronously to
+ * create another particle. This recursive action continues until the total particle quantity
+ * is reached.
+ * 
+ * @return {Void} Function doesn't return a value
+ */
 Ion.prototype.populate=function(){
 	var that=this;
 	this.particle.push(this.getNew(this.particle.length));
 	if(this.particle.length<this.quantity)setTimeout(function(){that.populate();},1);
 };
+
+/**
+ * Wind applies noise values on the movement patterns of the particles instead of them performing
+ * their tweening operations unhindered. This gives a more dynamic feel to their movement. The wind
+ * patterns and function can be overridden to be dynamic or conditional as desired.
+ * 
+ * @param  {Integer} atom Particle index
+ * @return {Void}         Function doesn't return a value
+ */
 Ion.prototype.wind=function(atom){
-	this.particle[atom].dx+=this.particle[atom].wx;
-	this.particle[atom].dy+=this.particle[atom].wy;
-	this.particle[atom].sx+=this.particle[atom].wx;
-	this.particle[atom].sy+=this.particle[atom].wy;
+	this.particle[atom].dx +=this.particle[atom].wx;
+	this.particle[atom].dy +=this.particle[atom].wy;
+	this.particle[atom].sx +=this.particle[atom].wx;
+	this.particle[atom].sy +=this.particle[atom].wy;
 };
+
+/**
+ * Draw simply draws a particle indicated by its index number
+ * 
+ * @param  {Integer} atom Particle index
+ * @return {Void}         Function doesn't return a value
+ */
 Ion.prototype.draw=function(atom){
 	ctx.fillRect(this.particle[atom].x,this.particle[atom].y,this.particle[atom].s,this.particle[atom].s);
 };
+
+/**
+ * OnEnd function is called after a particle finishes its tweening motion. This is merely a template function
+ * that is required to be overridden.
+ * 
+ * @return {Void} Function doesn't return a value, but can be overridden to make a callback as desired
+ */
 Ion.prototype.onEnd=function(){};
+
+/**
+ * OnEscape function is called after a particle leaves the view space. This is merely a template function
+ * that is required to be overridden.
+ * 
+ * @return {Void} Function doesn't return a value, but can be overridden to make a callback as desired
+ */
 Ion.prototype.onEscape=function(){};
+
+/**
+ * Process is the main function that performs operations on each particle. It performs asynchronously and doesn't
+ * currently have a stopping point. I may change this later.
+ * 
+ * @return {Void} Function doesn't return a value
+ */
 Ion.prototype.process=function(){
 	var that=this,p;
 	if(this.clear){
