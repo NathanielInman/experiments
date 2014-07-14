@@ -21,8 +21,8 @@ var Ion=function(q,s,x,y,dx,dy){
 	this.clear=true;
 	this.quantity=q||1;
 	this.sx=x||0;
-	this.sy=y||0;
-	this.dx=dx||1;
+	this.y=y||0;
+	this.dx=d||1;
 	this.dy=dy||1;
 	this.wx=0;
 	this.wy=0;
@@ -48,7 +48,7 @@ var Ion=function(q,s,x,y,dx,dy){
  * @return {float}        current x or y location
  */
 Ion.prototype.ease=function(b,c,t,d,o,type){
-	if(type==0){
+	if(type===0){
 		return c*t/d+b;
 	}else if(type==1){ //ease-in quad
 		return c*(t/=d)*t+b;
@@ -79,11 +79,11 @@ Ion.prototype.ease=function(b,c,t,d,o,type){
 	}else if(type==14){ //ease-out sine
 		return -c/2*(Math.cos(Math.PI*t/d)-1)+b;
 	}else if(type==15){ //ease-in exponential
-		return (t==0)?b:c*Math.pow(2,10*(t/d-1))+b;
+		return (t===0)?b:c*Math.pow(2,10*(t/d-1))+b;
 	}else if(type==16){ //ease-out exponential
 		return (t==d)?b+c:c*(-Math.pow(2,-10*t/d)+1)+b;
 	}else if(type==17){ //ease-in-out exponential
-		return (t==0)?b:((t==d)?b+c:(((t/=d/2)<1)?c/2*Math.pow(2,10*(t-1))+b:(c/2*(-Math.pow(2,-10*--t)+2)+b)));
+		return (t===0)?b:((t==d)?b+c:(((t/=d/2)<1)?c/2*Math.pow(2,10*(t-1))+b:(c/2*(-Math.pow(2,-10*--t)+2)+b)));
 	}else if(type==18){ //ease-in circular
 		return -c*(Math.sqrt(1-(t/=d)*t)-1)+b;
 	}else if(type==19){ //ease-out circular
@@ -93,38 +93,44 @@ Ion.prototype.ease=function(b,c,t,d,o,type){
 	}else if(type==21){ //ease-in elastic loose
 		return Ion.prototype.ease.call(this,b,c,t,d,0.5,22);
 	}else if(type==22){ //ease-in elastic normal
-	    var s=1.70158;var p=0;var a=c;
-		if (t==0) return b;
-		if ((t/=d)==1) return b+c;
-		if (!p) p=d*o;
-		if (a < Math.abs(c+0.1)) { a=c; var s=p/4; }
-		else var s = p/(2*Math.PI) * Math.asin (c/a);
-		return -(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
+		return (function(){
+		    var s=1.70158,p=0,a=c;
+			if (t===0) return b;
+			if ((t/=d)==1) return b+c;
+			if (!p) p=d*o;
+			if (a < Math.abs(c+0.1)) { a=c;s=p/4; }
+			else s = p/(2*Math.PI) * Math.asin (c/a);
+			return -(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
+		})();
 	}else if(type==23){ //ease-in elastic strong
 		return Ion.prototype.ease.call(this,b,c,t,d,0.1,22);
 	}else if(type==24){ //ease-out elastic loose
 		return Ion.prototype.ease.call(this,b,c,t,d,0.5,25);
 	}else if(type==25){ //ease-out elastic normal
-		var s=1.70158,p=0,a=c;
-		if (t==0) return b;
-		if ((t/=d)==1) return b+c;
-		if (!p) p=d*o;
-		if (a < Math.abs(c+0.1)) { a=c; var s=p/4; }
-		else var s = p/(2*Math.PI) * Math.asin (c/a);
-		return a*Math.pow(2,-10*t) * Math.sin( (t*d-s)*(2*Math.PI)/p ) + c + b;
+		return (function(){
+			var s=1.70158,p=0,a=c;
+			if (t===0) return b;
+			if ((t/=d)==1) return b+c;
+			if (!p) p=d*o;
+			if (a < Math.abs(c+0.1)) { a=c;s=p/4; }
+			else s = p/(2*Math.PI) * Math.asin (c/a);
+			return a*Math.pow(2,-10*t) * Math.sin( (t*d-s)*(2*Math.PI)/p ) + c + b;
+		})();
 	}else if(type==26){ //ease-out elastic strong
 		return Ion.prototype.ease.call(this,b,c,t,d,0.1,25);
 	}else if(type==27){ //ease-in-out elastic loose
 		return Ion.prototype.ease.call(this,b,c,t,d,0.5,28);
 	}else if(type==28){ //ease-in-out elastic normal
-		var s=1.70158;var p=0;var a=c;
-		if (t==0) return b;
-		if ((t/=d/2)==2) return b+c;
-		if (!p) p=d*(o*1.5);
-		if (a < Math.abs(c+0.1)) { a=c; var s=p/4; }
-		else var s = p/(2*Math.PI) * Math.asin (c/a);
-		if (t < 1) return -.5*(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
-		return a*Math.pow(2,-10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )*.5 + c + b;
+		return (function(){
+			var s=1.70158,p=0,a=c;
+			if (t===0) return b;
+			if ((t/=d/2)==2) return b+c;
+			if (!p) p=d*(o*1.5);
+			if (a < Math.abs(c+0.1)) { a=c;s=p/4; }
+			else s = p/(2*Math.PI) * Math.asin (c/a);
+			if (t < 1) return -0.5*(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
+			return a*Math.pow(2,-10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )*0.5 + c + b;
+		})();
 	}else if(type==29){ //ease-in-out elastic strong(b,c,t,d,o,type)
 		return Ion.prototype.ease.call(this,b,c,t,d,0.1,28);
 	}else if(type==30){ //ease-in back
@@ -140,16 +146,16 @@ Ion.prototype.ease=function(b,c,t,d,o,type){
 		if ((t/=d) < (1/2.75)) {
 		return c*(7.5625*t*t) + b;
 		} else if (t < (2/2.75)) {
-		return c*(7.5625*(t-=(1.5/2.75))*t + .75) + b;
+		return c*(7.5625*(t-=(1.5/2.75))*t + 0.75) + b;
 		} else if (t < (2.5/2.75)) {
-		return c*(7.5625*(t-=(2.25/2.75))*t + .9375) + b;
+		return c*(7.5625*(t-=(2.25/2.75))*t + 0.9375) + b;
 		} else {	
-		return c*(7.5625*(t-=(2.625/2.75))*t + .984375) + b;		}
+		return c*(7.5625*(t-=(2.625/2.75))*t + 0.984375) + b;}
 	}else if(type==35){ //ease-in-out bounce
 		if(t<d/2){
-			return Ion.prototype.ease.call(this,0,c,t*2,d,0,33)*.5+b;
+			return Ion.prototype.ease.call(this,0,c,t*2,d,0,33)*0.5+b;
 		}else{
-			return Ion.prototype.ease.call(this,0,c,t*2-d,d,0,34)*.5+c*.5+b;
+			return Ion.prototype.ease.call(this,0,c,t*2-d,d,0,34)*0.5+c*0.5+b;
 		} //end if
 	}//end if
 };
