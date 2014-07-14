@@ -6,7 +6,6 @@ Holds all programming experiments that are stand-alone. The To-Do List holds the
  
 - [ ] **Begin LiveScript**
 - [ ] **Begin Dart**
-- [X] **Begin Ruby**
 - [ ] **Begin LUA**
 - [ ] **Begin Python**
 
