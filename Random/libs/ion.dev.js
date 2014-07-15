@@ -1,4 +1,4 @@
-/**********************************************************************************\
+﻿/**********************************************************************************\
 	Ion.js performs tweening movements and operations on particles and was created
 	to use in conjunction with easel.js
     Copyright (C) 2014 Nathaniel Inman
@@ -22,7 +22,7 @@ var Ion=function(q,s,x,y,dx,dy){
 	this.quantity=q||1;
 	this.sx=x||0;
 	this.y=y||0;
-	this.dx=d||1;
+	this.dx=dx||1;
 	this.dy=dy||1;
 	this.wx=0;
 	this.wy=0;
@@ -47,8 +47,8 @@ var Ion=function(q,s,x,y,dx,dy){
  * @param  {integer} type specifies the tweening type
  * @return {float}        current x or y location
  */
-Ion.prototype.ease=function(b,c,t,d,o,type){
-	if(type===0){
+Ion.prototype.ease=function ease(b,c,t,d,o,type){
+	if(type===0){ //linear
 		return c*t/d+b;
 	}else if(type==1){ //ease-in quad
 		return c*(t/=d)*t+b;
@@ -91,7 +91,7 @@ Ion.prototype.ease=function(b,c,t,d,o,type){
 	}else if(type==20){ //ease-in-out circular
 		return ((t/=d/2)<1)?-c/2*(Math.sqrt(1-t*t)-1)+b:c/2*(Math.sqrt(1-(t-=2)*t)+1)+b;
 	}else if(type==21){ //ease-in elastic loose
-		return Ion.prototype.ease.call(this,b,c,t,d,0.5,22);
+		return ease(this,b,c,t,d,0.5,22);
 	}else if(type==22){ //ease-in elastic normal
 		return (function(){
 		    var s=1.70158,p=0,a=c;
@@ -103,9 +103,9 @@ Ion.prototype.ease=function(b,c,t,d,o,type){
 			return -(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
 		})();
 	}else if(type==23){ //ease-in elastic strong
-		return Ion.prototype.ease.call(this,b,c,t,d,0.1,22);
+		return ease(b,c,t,d,0.1,22);
 	}else if(type==24){ //ease-out elastic loose
-		return Ion.prototype.ease.call(this,b,c,t,d,0.5,25);
+		return ease(b,c,t,d,0.5,25);
 	}else if(type==25){ //ease-out elastic normal
 		return (function(){
 			var s=1.70158,p=0,a=c;
@@ -117,9 +117,9 @@ Ion.prototype.ease=function(b,c,t,d,o,type){
 			return a*Math.pow(2,-10*t) * Math.sin( (t*d-s)*(2*Math.PI)/p ) + c + b;
 		})();
 	}else if(type==26){ //ease-out elastic strong
-		return Ion.prototype.ease.call(this,b,c,t,d,0.1,25);
+		return ease(b,c,t,d,0.1,25);
 	}else if(type==27){ //ease-in-out elastic loose
-		return Ion.prototype.ease.call(this,b,c,t,d,0.5,28);
+		return ease(b,c,t,d,0.5,28);
 	}else if(type==28){ //ease-in-out elastic normal
 		return (function(){
 			var s=1.70158,p=0,a=c;
@@ -132,7 +132,7 @@ Ion.prototype.ease=function(b,c,t,d,o,type){
 			return a*Math.pow(2,-10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )*0.5 + c + b;
 		})();
 	}else if(type==29){ //ease-in-out elastic strong(b,c,t,d,o,type)
-		return Ion.prototype.ease.call(this,b,c,t,d,0.1,28);
+		return ease(b,c,t,d,0.1,28);
 	}else if(type==30){ //ease-in back
 		return c*(t/=d)*t*((1.70158+1)*t - 1.70158) + b;
 	}else if(type==31){ //ease-out back
@@ -141,7 +141,7 @@ Ion.prototype.ease=function(b,c,t,d,o,type){
 		var s=1.70158;
 		return ((t/=d/2) < 1)?c/2*(t*t*(((s*=(1.525))+1)*t - s)) + b:c/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
 	}else if(type==33){ //ease-in bounce
-		return c-Ion.prototype.ease.call(this,0,c,d-t,d,0,34)+b;
+		return c-ease(0,c,d-t,d,0,34)+b;
 	}else if(type==34){ //ease-out bounce
 		if ((t/=d) < (1/2.75)) {
 		return c*(7.5625*t*t) + b;
@@ -153,9 +153,9 @@ Ion.prototype.ease=function(b,c,t,d,o,type){
 		return c*(7.5625*(t-=(2.625/2.75))*t + 0.984375) + b;}
 	}else if(type==35){ //ease-in-out bounce
 		if(t<d/2){
-			return Ion.prototype.ease.call(this,0,c,t*2,d,0,33)*0.5+b;
+			return ease(0,c,t*2,d,0,33)*0.5+b;
 		}else{
-			return Ion.prototype.ease.call(this,0,c,t*2-d,d,0,34)*0.5+c*0.5+b;
+			return ease(0,c,t*2-d,d,0,34)*0.5+c*0.5+b;
 		} //end if
 	}//end if
 };
