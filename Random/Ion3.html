@@ -4,27 +4,48 @@
 <script>
 var nest=new Ion(1000);
 var color={r:128,g:128,b:128};
-var gcolor=function(){return {r:r(100,256,false),g:r(100,256,false),b:r(100,256,false)}};
+var gcolor=function(){return {r:r(100,256,false),g:r(100,256,false),b:r(100,256,false)};};
 var tcolor=gcolor();
 nest.color='rgba(128,128,128,0.5)';
 nest.clear=false;
-nest.sx=function(){return r(v.w/2-50,v.w/2+50)};
-nest.sy=function(){return r(v.h/2-50,v.h/2+50)};
+nest.sx=function(){return r(v.w/2-50,v.w/2+50);};
+nest.sy=function(){return r(v.h/5*4-50,v.h/5*4+50);};
 nest.dx=v.w/2;
 nest.dy=0;
-nest.wx=function(){return r(0,3)-1.5};
-nest.wy=function(){return r(0,3)-1.5};
+nest.wx=function(){return r(0,3)-1.5;};
+nest.wy=function(){return r(0,3)-1.5;};
 nest.size=function(){return r(1,3);};
-nest.tween_type=function(){return r(20,21,false)};
-nest.onEnd=function(id){this.reset(id);};
-nest.onEscape=function(id){this.onEnd(id);};
+nest.tween_type=function(){return r(19,20,false);};
+nest.getNew=function(atom){
+	var sx=this.sx(atom);
+	var sy=this.sy(atom);
+	var wx=sx>v.w/2?r(0,1.5):r(0,1.5)-1.5;
+	var wy=sy>v.h/2?r(0,1.5):r(0,1.5)-1.5;
+	return {
+		id:atom, //be able to reference each particle individually outside of the class
+		sx:sx,
+		sy:sy,
+		x:sx,
+		y:sy,
+		dx:typeof this.dx=='function'?this.dx(atom):this.dx,
+		dy:typeof this.dy=='function'?this.dy(atom):this.dy,
+		c:typeof this.tween_current=='function'?this.tween_current(atom):this.tween_current,
+		d:500,
+		tt:typeof this.tween_type=='function'?this.tween_type(atom):this.tween_type,
+		s:typeof this.size=='function'?this.size(atom):this.size,
+		wx:wx,
+		wy:wy
+	};
+};
+nest.onEnd=function(id){this.particle.splice(id,1,this.getNew(id));};
+nest.onEscape=function(id){this.particle.splice(id,1,this.getNew(id));};
 nest.populate();nest.process();
 setInterval(function(){
 	if(color.r==tcolor.r&&color.g==tcolor.g&&color.b==tcolor.b){tcolor=gcolor();
 	}else{
-		if(color.r<tcolor.r){color.r++}else if(color.r>tcolor.r){color.r--}
-		if(color.g<tcolor.g){color.g++}else if(color.g>tcolor.g){color.g--}
-		if(color.b<tcolor.b){color.b++}else if(color.b>tcolor.b){color.b--}
+		if(color.r<tcolor.r){color.r++;}else if(color.r>tcolor.r){color.r--;}
+		if(color.g<tcolor.g){color.g++;}else if(color.g>tcolor.g){color.g--;}
+		if(color.b<tcolor.b){color.b++;}else if(color.b>tcolor.b){color.b--;}
 	} //end if
 	nest.color='rgba('+color.r+','+color.g+','+color.b+',0.5)';
 },50);

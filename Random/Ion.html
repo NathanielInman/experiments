@@ -7,8 +7,8 @@ gnats.sx=function(){return r(0,v.w);};
 gnats.sy=function(){return r(0,v.h);};
 gnats.dx=function(){return r(0,v.w);};
 gnats.dy=function(){return r(0,v.h);};
-gnats.wx=function(){return r(0,1)-0.5};
-gnats.wy=function(){return r(0,1)-0.5};
+gnats.wx=function(){return r(0,1)-0.5;};
+gnats.wy=function(){return r(0,1)-0.5;};
 gnats.size=function(){return r(0,2);};
 gnats.tween_type=6;
 gnats.onEnd=function(id){
@@ -23,6 +23,7 @@ gnats.onEnd=function(id){
 gnats.onEscape=function(id){
 	this.particle.splice(id,1,this.getNew(id));
 };
+gnats.populate();
 gnats.process();
 </script>
 </body></html>
