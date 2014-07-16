@@ -4,6 +4,7 @@ Holds all programming experiments that are stand-alone. The To-Do List holds the
 
 ## To-Do List
  
+- [ ] **Begin using Gulp / Browserify builds**
 - [ ] **Begin LiveScript**
 - [ ] **Begin Dart**
 - [ ] **Begin LUA**
