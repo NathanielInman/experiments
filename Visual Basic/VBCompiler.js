@@ -1,5 +1,5 @@
 var VB=(function(compileType){
-	var _=this;
+	var _;
 	//Keep track of the number of scripts to be pulled, and fire the compiler
 	//after the number of loaded reaches the total
 	var scripts={
@@ -36,7 +36,7 @@ var VB=(function(compileType){
 		scripts.total=0; //clear the 'queue' incase the xhr response was super quick and happened before the initializer finished
 		source=scripts.data.join();
 		if(compileType==true){ //return the result as a string
-			_=source;
+			window.VB=source;
 		}else{ //append the data to it's own script frame and run it
         	elem = document.createElement('script');
         	elem.type = 'text/javascript';
@@ -62,5 +62,4 @@ var VB=(function(compileType){
         } //end for
 		if(scripts.loaded===scripts.total)compile(); //only fires if all scripts are innerHTML, else this is fired on XHR response
 	})();	
-	return _;
 })(true);

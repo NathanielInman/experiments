@@ -1,9 +1,9 @@
-<!doctype html><head><title>VBA Indenter</title><link href='VBCompiler.css' rel='stylesheet'></link></head>
-<body><div id='result'></div>
+<!doctype html><head><title>VBA Indenter</title>
+<link href='VBCompiler.css' rel='stylesheet'></link></head>
+<body><div id='result'>Loading Content...</div>
 <script src='input.bas' type='text/visualbasic'></script>
 <script src='VBCompiler.js'></script>
 <script>
-var contentArea=document.getElementById('content');
 var entityMap ={
 	'<':'&lt;',
 	'>':'&gt;'
@@ -327,8 +327,8 @@ var escapeHtml=function(o){
 	return String(o).replace(/[<>]/g,function(s){return entityMap[s];});
 };
 var checkDone=function(){
-	if(VB==undefined){
-		setTimeout("checkDone",10);
+	if(typeof VB == 'undefined'){
+		setTimeout("checkDone()",10);
 	}else{
 		compile(escapeHtml(VB).replace(/\n\r\r/g,'\r').replace(/\(/g,' ( ').replace(/\)/g,' ) ').split('\r'));
 	} //end if
