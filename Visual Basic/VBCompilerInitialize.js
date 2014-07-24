@@ -1,5 +1,4 @@
 var VB=(function(compileType){
-	var _;
 	//Keep track of the number of scripts to be pulled, and fire the compiler
 	//after the number of loaded reaches the total
 	var scripts={
@@ -11,7 +10,7 @@ var VB=(function(compileType){
 	
 	//Function loads each script and pushes its content into scripts.data
     var load = function(url) {
-        var xhr= window.ActiveXObject ? new window.ActiveXObject('Microsoft.XMLHTTP') : new window.XMLHttpRequest();;
+        var xhr= window.ActiveXObject ? new window.ActiveXObject('Microsoft.XMLHTTP') : new window.XMLHttpRequest();
         xhr.open('GET', url, true);
         if('overrideMimeType' in xhr)xhr.overrideMimeType('text/plain');
 		xhr.onreadystatechange=function(){
@@ -36,7 +35,7 @@ var VB=(function(compileType){
 		scripts.total=0; //clear the 'queue' incase the xhr response was super quick and happened before the initializer finished
 		source=scripts.data.join();
 		if(compileType==true){ //return the result as a string
-			window.VB=source;
+			VB=source;
 		}else{ //append the data to it's own script frame and run it
         	elem = document.createElement('script');
         	elem.type = 'text/javascript';
@@ -62,4 +61,4 @@ var VB=(function(compileType){
         } //end for
 		if(scripts.loaded===scripts.total)compile(); //only fires if all scripts are innerHTML, else this is fired on XHR response
 	})();	
-})(true);
+})(true); 
