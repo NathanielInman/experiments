@@ -57,7 +57,6 @@ var compile=function(olddata){
 		} //end if
 		if(olddata[i]=='\n'||olddata[i]=='\r'){
 			then=false;length=i;dotOperator=false;notNumber=false;keyed=false;
-			if(string){string=false;newdata+="</span>";}
 			if(comment){comment=false;newdata+="</span>";}
 			addNewLine();
 			if(drawNextErrorHeader){
@@ -148,39 +147,39 @@ var compile=function(olddata){
 			newdata+="<span style='color:#9FF'>End Sub</span>";i+=6;tabOrder--;hadError=false;
 		}else if(!string && !comment && olddata[i]=='I' && i+3<olddata.length && olddata.substring(i,i+3)=='If '){
 			newdata+="<span style='color:#0FF'>If </span>";i+=2;tabOrder++;debuggerSet=false;keyed=true;
-		}else if(!debuggerSet && !string && !comment && olddata[i]=='N' && i+4<olddata.length && olddata.substring(i,i+4)=='New '){
+		}else if(!debuggerSet && !string && !comment && olddata[i]=='N' && i+4<olddata.length && olddata.substring(i,i+4)=='New ' && !prefixOperatorAccepted[olddata[i-1]]){
 			newdata+="<span style='color:#0FF'>New </span>";i+=3;keyed=true;
-		}else if(!debuggerSet && !string && !comment && olddata[i]=='E' && i+6<olddata.length && olddata.substring(i,i+6)=='End If'){
+		}else if(!debuggerSet && !string && !comment && olddata[i]=='E' && i+6<olddata.length && olddata.substring(i,i+6)=='End If' && !prefixOperatorAccepted[olddata[i-1]]){
 			newdata=newdata.substring(0,newdata.length-24);keyed=true;
 			newdata+="<span style='color:#0FF'>End If</span>";i+=5;tabOrder--;
-		}else if(!debuggerSet && !string && !comment && olddata[i]=='E' && i+8<olddata.length && olddata.substring(i,i+8)=='End With'){
+		}else if(!debuggerSet && !string && !comment && olddata[i]=='E' && i+8<olddata.length && olddata.substring(i,i+8)=='End With' && !prefixOperatorAccepted[olddata[i-1]]){
 			newdata=newdata.substring(0,newdata.length-24);keyed=true;
 			newdata+="<span style='color:#0FF'>End With</span>";i+=7;tabOrder--;
-		}else if(!debuggerSet && !string && !comment && olddata[i]=='W' && i+4<olddata.length && olddata.substring(i,i+4)=='Wend'){
+		}else if(!debuggerSet && !string && !comment && olddata[i]=='W' && i+4<olddata.length && olddata.substring(i,i+4)=='Wend' && !prefixOperatorAccepted[olddata[i-1]]){
 			newdata=newdata.substring(0,newdata.length-24);keyed=true;
 			newdata+="<span style='color:#0FF'>Wend</span>";i+=3;tabOrder--;
-		}else if(!debuggerSet && !string && !comment && olddata[i]=='E' && i+7<olddata.length && olddata.substring(i,i+7)=='ElseIf '){
+		}else if(!debuggerSet && !string && !comment && olddata[i]=='E' && i+7<olddata.length && olddata.substring(i,i+7)=='ElseIf ' && !prefixOperatorAccepted[olddata[i-1]]){
 			newdata=newdata.substring(0,newdata.length-24);keyed=true;
 			newdata+="<span style='color:#0FF'>ElseIf </span>";i+=6;
-		}else if(!debuggerSet && !string && !comment && olddata[i]=='E' && i+4<olddata.length && olddata.substring(i,i+4)=='Else'){
+		}else if(!debuggerSet && !string && !comment && olddata[i]=='E' && i+4<olddata.length && olddata.substring(i,i+4)=='Else' && !prefixOperatorAccepted[olddata[i-1]]){
 			newdata=newdata.substring(0,newdata.length-24);keyed=true;
 			newdata+="<span style='color:#0FF'>Else</span>";i+=3;
-		}else if(!debuggerSet && !string && !comment && olddata[i]=='C' && i+9<olddata.length && olddata.substring(i,i+9)=='Case Else'){
+		}else if(!debuggerSet && !string && !comment && olddata[i]=='C' && i+9<olddata.length && olddata.substring(i,i+9)=='Case Else' && !prefixOperatorAccepted[olddata[i-1]]){
 			newdata=newdata.substring(0,newdata.length-24);keyed=true;
 			newdata+="<span style='color:#0FF'>Case Else</span>";i+=8;
-		}else if(!debuggerSet && !string && !comment && olddata[i]=='C' && i+5<olddata.length && olddata.substring(i,i+5)=='Case '){
+		}else if(!debuggerSet && !string && !comment && olddata[i]=='C' && i+5<olddata.length && olddata.substring(i,i+5)=='Case ' && !prefixOperatorAccepted[olddata[i-1]]){
 			newdata=newdata.substring(0,newdata.length-24);keyed=true;
 			newdata+="<span style='color:#0FF'>Case </span>";i+=4;
 		}else if(!debuggerSet && !string && !comment && olddata[i]=='L' && i+11<olddata.length && olddata.substring(i,i+11)=='Loop Until '){
 			newdata=newdata.substring(0,newdata.length-24);keyed=true;
 			newdata+="<span style='color:#0FF'>Loop Until </span>";i+=10;tabOrder--;
-		}else if(!debuggerSet && !string && !comment && olddata[i]=='L' && i+4<olddata.length && olddata.substring(i,i+4)=='Loop'){
+		}else if(!debuggerSet && !string && !comment && olddata[i]=='L' && i+4<olddata.length && olddata.substring(i,i+4)=='Loop' && !prefixOperatorAccepted[olddata[i-1]]){
 			newdata=newdata.substring(0,newdata.length-24);keyed=true;
 			newdata+="<span style='color:#0FF'>Loop</span>";i+=3;tabOrder--;
-		}else if(!debuggerSet && !string && !comment && olddata[i]=='N' && i+4<olddata.length && olddata.substring(i,i+4)=='Next'){
+		}else if(!debuggerSet && !string && !comment && olddata[i]=='N' && i+4<olddata.length && olddata.substring(i,i+4)=='Next' && !prefixOperatorAccepted[olddata[i-1]]){
 			newdata=newdata.substring(0,newdata.length-24);keyed=true;
 			newdata+="<span style='color:#0FF'>Next </span>";i+=3;tabOrder--;
-		}else if(!debuggerSet && !string && !comment && olddata[i]=='E' && i+10<olddata.length && olddata.substring(i,i+10)=='End Select'){
+		}else if(!debuggerSet && !string && !comment && olddata[i]=='E' && i+10<olddata.length && olddata.substring(i,i+10)=='End Select' && !prefixOperatorAccepted[olddata[i-1]]){
 			newdata=newdata.substring(0,newdata.length-48);keyed=true;
 			newdata+="<span style='color:#0FF'>End Select</span>";i+=9;tabOrder-=2;
 		}else if(!debuggerSet && !string && !comment && olddata[i]=='O' && i+14<olddata.length && olddata.substring(i,i+14)=='On Error GoTo '){
@@ -259,6 +258,8 @@ var compile=function(olddata){
 			newdata+="<span style='color:#0FF'>True</span>";i+=3;keyed=true;
 		}else if(!debuggerSet && !string && !comment && olddata[i]=='F' && i+5<olddata.length && olddata.substring(i,i+5)=='False' && !prefixOperatorAccepted[olddata[i-1]]){
 			newdata+="<span style='color:#0FF'>False</span>";i+=4;keyed=true;
+		}else if(!debuggerSet && !string && !comment && olddata[i]=='C' && i+4<olddata.length && olddata.substring(i,i+4)=='Call' && !prefixOperatorAccepted[olddata[i-1]]){
+			newdata+="<span style='color:#0FF'>Call</span>";i+=3;keyed=true;dotOperator=true;
 		}else if(!debuggerSet && !string && !comment && olddata[i]=='D' && i+5<olddata.length && olddata.substring(i,i+5)=='Debug' && !prefixOperatorAccepted[olddata[i-1]]){
 			newdata+="<span style='color:#0FF'>Debug</span>";i+=4;keyed=true;
 		}else if(!debuggerSet && !string && !comment && olddata[i]=='P' && i+6<olddata.length && olddata.substring(i,i+6)=='Print ' && !prefixOperatorAccepted[olddata[i-1]]){
@@ -268,7 +269,7 @@ var compile=function(olddata){
 		}else if(!debuggerSet && !string && !comment && olddata[i]=='O' && i+9<olddata.length && olddata.substring(i,i+9)=='Optional ' && !prefixOperatorAccepted[olddata[i-1]]){
 			newdata+="<span style='color:#0FF'>Optional </span>";i+=8;keyed=true;
 		}else if(!debuggerSet && !string && !comment && olddata[i]=='M' && i+7<olddata.length && olddata.substring(i,i+7)=='MsgBox ' && !prefixOperatorAccepted[olddata[i-1]]){
-			newdata+="<span style='color:#0FF'>MsgBox </span>";i+=6;keyed=true;
+			newdata+="<span style='color:#0FF'>MsgBox </span>";i+=6;keyed=true;dotOperator=true;
 		}else if(!debuggerSet && !string && !comment && olddata[i]=='M' && i+5<olddata.length && olddata.substring(i,i+5)=='MkDir' && !prefixOperatorAccepted[olddata[i-1]]){
 			newdata+="<span style='color:#0FF'>MkDir</span>";i+=4;keyed=true;
 		}else if(!debuggerSet && !string && !comment && olddata[i]=='D' && i+3<olddata.length && olddata.substring(i,i+3)=='Dir' && !prefixOperatorAccepted[olddata[i-1]]){
@@ -309,6 +310,13 @@ var compile=function(olddata){
 			newdata+="<span style='color:#57C'>&nbsp;&lt;&nbsp;</span>";i+=3;keyed=true;
 		}else if(!debuggerSet && !string && !comment && olddata[i]=='&' && i+4<olddata.length && olddata.substring(i,i+4)=='&gt;'){
 			newdata+="<span style='color:#57C'>&nbsp;&gt;&nbsp;</span>";i+=3;keyed=true;
+		}else if(!debuggerSet && !string && !comment && olddata[i]=='"' && i+3<olddata.length && olddata.substring(i,i+3)=='"""'){
+			string^=1;keyed=true;i+=2;
+			if(string){
+				newdata+="<span style='color:#396'>\"\"\"";
+			}else{
+				newdata+="\" </span>";
+			} //end if
 		}else if(!debuggerSet && !string && !comment && olddata[i]=='"' && i+4<olddata.length && olddata.substring(i,i+4)=='""""'){
 			newdata+="<span style='color:#FFF'>\"\"\"\"</span>";i+=3;keyed=true;
 		}else if(!debuggerSet && !string && !comment && olddata[i]=='&' && i+5<olddata.length && olddata.substring(i,i+5)=='&amp;'){
@@ -406,11 +414,20 @@ var compile=function(olddata){
 		}else if(!debuggerSet){
 			if(highlightName){functionName+=olddata[i];}
 			newdata+=olddata[i];
-			if(then){tabOrder--;then=false;}
+			if(then&&olddata[i]!=' '&&!comment){tabOrder--;then=false;}
 			if(!keyed){
 				keyed=true;
 				dotOperator=true;
 			} //end if
+			if(i-length>100&&string){
+				length=i;
+				if(string)newdata+="\"</span> ";
+				newdata+="<span style='color:#57C'>&amp; </span><span style='color:#F00'>_</span><br/>";
+				for(j=0;j<tabOrder;j++){
+					newdata+='&nbsp;&nbsp;&nbsp;&nbsp;'; //4 space tabs
+				}
+				if(string){newdata+="<span style='color:#396'>\"";}
+			}
 		} //end if
 	} //end for
 	var result=document.getElementById('result');
