@@ -1,0 +1,19 @@
+<!doctype html><head><title>VBC Interceptor</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" /></head>
+<body>
+<div id='result' style='position:absolute;left:0;top:0;right:0;bottom:0;'></div>
+<div id='exportFrame' style='visibility:hidden;'></div>
+<div id='importFrame' style='visibility:hidden;'></div>
+<script type='text/visualbasic' src='input.bas'></script>
+<script src='VBC_Keywords.js'></script>
+<script src='VBC_Highlight.js'></script>
+<script src='VBC_Initialize.js'></script>
+<script>
+setInterval(function(){
+	if(document.getElementById('exportFrame').innerHTML.length>0){
+		document.getElementById('importFrame').innerHTML=document.getElementById('exportFrame').innerHTML;
+		document.getElementById('exportFrame').innerHTML="";
+	} //end if
+},500);
+document.getElementById('result').innerHTML=VBC.highlight(VBC.source);
+</script></body></html>
