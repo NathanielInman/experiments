@@ -1,19 +1,16 @@
 <!doctype html><head><title>VBC Interceptor</title>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" /></head>
-<body>
-<div id='result' style='position:absolute;left:0;top:0;right:0;bottom:0;'></div>
-<div id='exportFrame' style='visibility:hidden;'></div>
-<div id='importFrame' style='visibility:hidden;'></div>
-<script type='text/visualbasic' src='input.bas'></script>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link href='VBC_Interceptor.css' /></head>
+<body style='background-color:#000'>
+<div id='wrapper' class='contain' style='overflow:hidden;'>
+	<div id='result'></div>
+	<div id='exportFrame' class='hidden'></div>
+	<div id='importFrame' class='hidden'></div>
+	<div id='progressBar'>
+		<div id='progressBar_progress'></div>
+	</div>
+</div>
 <script src='VBC_Keywords.js'></script>
 <script src='VBC_Highlight.js'></script>
 <script src='VBC_Initialize.js'></script>
-<script>
-setInterval(function(){
-	if(document.getElementById('exportFrame').innerHTML.length>0){
-		document.getElementById('importFrame').innerHTML=document.getElementById('exportFrame').innerHTML;
-		document.getElementById('exportFrame').innerHTML="";
-	} //end if
-},500);
-document.getElementById('result').innerHTML=VBC.highlight(VBC.source);
-</script></body></html>
+<script src='VBC_Interceptor.js'></script></body></html>

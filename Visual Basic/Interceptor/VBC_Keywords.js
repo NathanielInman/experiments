@@ -276,7 +276,7 @@ var VBC;
 		'Stop'           :{},
 		'String'         :{},
 		'Structure'      :{},
-		'Sub'            :{tab:1},
+		'Sub'            :{tab:1,capture:1},
 		'SyncLock'       :{},
 		'Then'           :{},
 		'Throw'          :{},
