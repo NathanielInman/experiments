@@ -23,59 +23,37 @@
 \******************************************************************************************************************/
 
 /*
-Lexical Types
-	[Part of Speech]
-		v                   = verb
-		n                   = noun
-		aj                  = adjective
-		av                  = adverb
-		p                   = preposition
-		pp                  = prepositional phrase
-		d                   = determiner
-		c                   = conjunction
-		cm                  = complementizer
-		x                   = miscellaneous
-		pt                  = punctuation
-	[Order Sequence of Compliments]
+Abbreviations
 		np                  = Noun phrase (no longer obligatorily awaiting a specifier)
 		vp                  = Verb Phrase (not yet subject-saturated)
 		cp                  = Sentential Complement (With or without an overt complementizer)
 		pp                  = Prepositional Phrase (complement-saturated)
 		ap                  = Adjective Phrase
-		prd                 = Predicate Phrase (including CP,AP, PP
-		p                   = particle (semantically empty)
+		prd                 = Predicate Phrase (including CP,AP, PP)
 		it                  = expletive 'it'
 		nb                  = nominal phrase (not yet specifier-saturated)
 		adv                 = Adverb Phrase
 		vpslnp              = Verb Phrase Containing an NP gap
 		xp                  = Underspecified Category
-Rules Abbreviations
-	[Main Abbreviations]
 		hd                  = head
 		hdn                 = nominal head
 		nh                  = non-head
 		sb                  = subject
 		sp                  = specifier
 		cmp                 = complement
-		aj                  = adjunct
+		aj                  = adjunct / Adjective
 		flr                 = filler
 		mrk                 = marker
 		np                  = nominal phrase
 		cl                  = clause
 		vp                  = verb phrase
-		pp                  = prepositional phrase
-		n                   = noun
-		v                   = verb
 		j                   = adjective
-		r                   = adverb
-		p                   = preposition
 		num                 = number
 		prdp                = predicative adjective phrase
 		vpr                 = predicative verb phrase
 		ppr                 = predicative prepositional phrase
 		mnp                 = measure noun phrase
 		pct                 = punctuation mark
-	[Types]
 		_ilr                = orth-invariant inflectional rule
 		_olr                = orth-changing inflectional rule
 		_dlr                = orth-invariant derivational rule
@@ -85,6 +63,22 @@ Rules Abbreviations
  */
 var DLP;
 (function(DLP){
+	DLP.types=[
+		'Unknown', //               ? | 0  = not used in the lexicon, used for error control
+/*done*/'Noun', //                  n | 1  = used in the lexicon
+/*done*/'Verb', //                  v | 2  = used in the lexicon
+/*done*/'Adjective', //        j | aj | 3  = used in the lexicon
+/*done*/'Adverb', //           r | av | 4  = used in the lexicon
+/*done*/'Slang', //                s$ | 5  = not used in the lexicon
+/*done*/'Preposition', //           p | 6  = used in the lexicon, pp (prepositional phrase) used in lexicon
+		'Article', //               p | 7  = (particle) used in the lexicon, otherwise dictated as an article in dictionary
+/*done*/'Determiner', //            d | 8  = used in the lexicon
+/*done*/'Conjunction', //           c | 9  = used in the lexicon
+		'Complimentizer', //       cm | 10 = used in the lexicon
+		'Miscellaneous', //         x | 11 = used in the lexicon
+		'Punctuation', //          pt | 12 = used in the lexicon
+/*done*/'Pronoun' //                P | 13 = not used in the lexicon
+	];
 	DLP.lexicon=[]; //will be used to hold all of the label types words will be associated with index# -> DLookup
 	DLP.dictionary={}; //will be used to hold all of the words
 	DLP.lexicon.push(

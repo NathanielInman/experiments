@@ -36,6 +36,7 @@ var DLP;
 		'qintar':1,
 		'qoph':1,
 		'Quaalude':1,
+		'qua':6,
 		'quack(a)':5,
 		'quack':1,
 		'quack':2,
