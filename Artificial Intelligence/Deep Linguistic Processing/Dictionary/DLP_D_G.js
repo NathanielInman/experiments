@@ -98,6 +98,7 @@ var DLP;
 		'gagman':1,
 		'gagster':1,
 		'gagwriter':1,
+		'gah':11,
 		'gai_choi':1,
 		'Gaia':1,
 		'gaiety':1,

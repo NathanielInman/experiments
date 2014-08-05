@@ -2764,7 +2764,7 @@ var DLP;
 		'feverishness':1,
 		'feverous':5,
 		'feverroot':1,
-		'few':[3,1,7],
+		'few':[3,1,7,13],
 		'few-flowered_leek':1,
 		'fewer':3,
 		'fewest(a)':3,

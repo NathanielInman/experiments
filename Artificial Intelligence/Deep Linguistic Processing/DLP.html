@@ -10,6 +10,7 @@
  }
  .color_head{ color:#999;float:left;width:100px; }
  .color_base{ color:#555 }
+ .color_0   { color:#f33 }
  .color_1   { color:#963 }
  .color_2   { color:#936 }
  .color_3   { color:#693 }
@@ -23,7 +24,10 @@
  .color_11  { color:#93f }
  .color_12  { color:#39f }
  .color_13  { color:#a3a }
- .color_14  { color:#f33 }
+ .color_14  { color:#3ff }
+ .color_14  { color:#f3f }
+ .color_15  { color:#FF3 }
+ .color_16  { color:#9DF }
 </style>
 </head>
 <body><div id='result'></div>
@@ -61,7 +65,10 @@
 <script>console.log('Loading dictionary took '+(new Date()-t)+'ms.');t=new Date();</script>
 <script>
 	var $=function(o){return document.getElementById(o);};
-	$('result').innerHTML=DLP.process('Hello there, my name is Samuel and I love to eat Fritos.');
+	DLP.process("His name was Samuel. "+
+		        "He'd have loved to eat Fritos if he were still alive; "+
+		        "However, he died at the young age of 13.");
+	DLP.printStructure($('result'));
 </script>
 <script>console.log('Processing text took '+(new Date()-t)+'ms.');</script>
 </body>

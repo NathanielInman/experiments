@@ -47,13 +47,10 @@ Abbreviations
 		np                  = nominal phrase
 		cl                  = clause
 		vp                  = verb phrase
-		j                   = adjective
-		num                 = number
 		prdp                = predicative adjective phrase
 		vpr                 = predicative verb phrase
 		ppr                 = predicative prepositional phrase
 		mnp                 = measure noun phrase
-		pct                 = punctuation mark
 		_ilr                = orth-invariant inflectional rule
 		_olr                = orth-changing inflectional rule
 		_dlr                = orth-invariant derivational rule
@@ -65,20 +62,48 @@ var DLP;
 (function(DLP){
 	DLP.types=[
 		'Unknown', //               ? | 0  = not used in the lexicon, used for error control
-/*done*/'Noun', //                  n | 1  = used in the lexicon
-/*done*/'Verb', //                  v | 2  = used in the lexicon
-/*done*/'Adjective', //        j | aj | 3  = used in the lexicon
-/*done*/'Adverb', //           r | av | 4  = used in the lexicon
-/*done*/'Slang', //                s$ | 5  = not used in the lexicon
-/*done*/'Preposition', //           p | 6  = used in the lexicon, pp (prepositional phrase) used in lexicon
+		'Noun', //                  n | 1  = used in the lexicon
+		'Verb', //                  v | 2  = used in the lexicon
+		'Adjective', //        j | aj | 3  = used in the lexicon
+		'Adverb', //           r | av | 4  = used in the lexicon
+		'Slang', //                s$ | 5  = not used in the lexicon
+		'Preposition', //           p | 6  = used in the lexicon, pp (prepositional phrase) used in lexicon
 		'Article', //               p | 7  = (particle) used in the lexicon, otherwise dictated as an article in dictionary
-/*done*/'Determiner', //            d | 8  = used in the lexicon
-/*done*/'Conjunction', //           c | 9  = used in the lexicon
+		'Determiner', //            d | 8  = used in the lexicon
+		'Conjunction', //           c | 9  = used in the lexicon
 		'Complimentizer', //       cm | 10 = used in the lexicon
-		'Miscellaneous', //         x | 11 = used in the lexicon
-		'Punctuation', //          pt | 12 = used in the lexicon
-/*done*/'Pronoun' //                P | 13 = not used in the lexicon
+		'Interjection', //          x | 11 = used in the lexicon
+		'Punctuation', //    pct | pt | 12 = used in the lexicon
+		'Pronoun', //               P | 13 = not used in the lexicon
+		'Number', //          num | # | 14 = not used in the lexicon 
+		'Auxiliary Verb', //       av | 15 = not used in the lexicon
+		'Contraction' //           cx | 16 = not used in the lexicon
 	];
+	DLP.rules={
+		'Contraction':function(word1,word2){
+			if(word1[word1.length-1]=='n' && word2=='t'){  //not = *n't
+				return [word1.substring(0,word1.length-1),'not'];
+			}else if(word1=='let' && word2=='s'){ //let us = let's
+				return [word1,'us'];
+			}else if(word1=='I' && word2=='m'){ //I am = I'm
+				return [word1,'am'];
+			}else if(word2=='re'){ //we are, they are, .. = we're , they're, ..
+				return [word1,'are'];
+			}else if(word2=='s'){ //Bob is, Larry does, Jenny has, .. = Bob's, Larry's, Jenny's, ..
+				return [word1,'is'];
+			}else if(word2=='ve'){ //we have, .. = we've, ..
+				return [word1,'have'];
+			}else if(word2=='d'){ //where had, why did, who would, .. = where'd, why'd, who'd, ..
+				return [word1,'had'];
+			}else if(word2=='ll'){ //he will, .. = he'll, ..
+				return [word1,'will'];
+			}else if(word1=='o'){ //of clock, .. = o'clock, ..
+				return [word2];
+			}else{
+				return false;
+			} //end if
+		}
+	};
 	DLP.lexicon=[]; //will be used to hold all of the label types words will be associated with index# -> DLookup
 	DLP.dictionary={}; //will be used to hold all of the words
 	DLP.lexicon.push(
