@@ -1,32 +1,48 @@
 var DLP;
 (function(DLP){
 	DLP.words=[]; //holds the contextual data types as one word per entry. Contractions merge together all data
+
+	/*
+	   This function prints the structure of the processed string with each word being on a line by itself
+	   with it's grammar types being to the right pretty-printed. This gives a good analytical view of how
+	   the grammar pre-processor analyzes the sentence structure before performing more interesting analysis
+	   on the sentence as a whole 
+	*/
 	DLP.printStructure=function(frame){
+		//The following 4 items are common markup to be used in the innerHTML of the passed frame
 		var $1='<span class="color_base">',
 		    $2='</span>',
 		    $3='</br>',
 		    $4=function(n){return '<span class="color_'+n+'">';};
-		var output='',word;
-		var joinDiction=function(o,customAppend){
-			var i,s='';
-			if(!customAppend)customAppend='';
+		var output='',word; //output holds all the data that will be sent to the innerHTML, word holds each word
+
+		//This utility function helps by dissecting array of types and giving each of those grammar
+		//types their own formatting. This occurs in dictionary words that can be conveyed as multiple types
+		//such as noun / verb depending on how that word is used. The later grammar analyzers will detect the
+		//proper type that is being conveyed by the sentence
+		var joinDiction=function(o){
+			var i,s=''; //temporary variables : i is an iterator that moves through the DLP.types array and s is the end string
 			if(isNaN(o)){ //therefor it must be an array holding multiple type entries
 				for(i=0;i<o.length;i++){
 					s+=$4(o[i])+DLP.types[o[i]]+$2;
-					if(i<o.length-1)s+=customAppend+' / ';
+					if(i<o.length-1)s+=' / ';
 				} //end for
-				return s+customAppend;
+				return s; //return the finished string after building each type entry
 			}else{
-				return $4(o)+DLP.types[o]+$2+customAppend;
+				return $4(o)+DLP.types[o]+$2; //was a single entry, simply return it's formatted result
 			} //end if
 		};
+		//This is the main loop for this function. It iterates through each of the words and outputs their
+		//identified types by using the utility function joinDiction() and returns the final result
+		//into the passed frame.innerHTML to achieve a pretty-printed indication of how the grammar stands
+		//at the pre-processor identification level
 		for(index in DLP.words){
 			word=DLP.words[index];
-			if(word.ft===0){
+			if(word.ft===0){ //word format type of zero : the standard format type
 				output+=$4('head')+word.w+$2+$1+' ( '+joinDiction(word.bt)+' ) '+$2+$3;
-			}else if(word.ft===1){
+			}else if(word.ft===1){ //word format type of 1 : this word could have multiple types, add question mark
 				output+=$4('head')+word.w+$2+$1+' ( '+joinDiction(word.bt,$4(0)+'?'+$2)+' ) '+$2+$3;
-			}else if(word.ft===2){
+			}else if(word.ft===2){ //the Conjunction word format type
 				output+=$4('head')+word.w+$2+$1+' ( '+joinDiction(word.bt[0])+' ::';
 				(function(types){
 					/*for(var i=0;i<types.length;i++){
@@ -37,8 +53,6 @@ var DLP;
 					}//end for */
 				})(word.bt[1]);
 				output+=' ) '+$3;
-			}else{
-				console.log('fail');
 			} //end if
 		} //end for
 		frame.innerHTML=output;
