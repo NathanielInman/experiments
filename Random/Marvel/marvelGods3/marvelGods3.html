@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html> 
+<html>
+<head>
+    <title>Marvel Gods List 3</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="css/jquery-ui-1.10.2.custom.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="css/layout-default-latest.css" rel="stylesheet" type="text/css"  />
+    <link href="css/primitives.latest.css?206" media="screen" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="scripts/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui-1.10.2.custom.min.js"></script>
+    <script type="text/javascript" src="scripts/jquery.layout-latest.min.js"></script>    
+    <script type="text/javascript" src="scripts/primitives.min.js?206"></script>
+    <script type="text/javascript" src="scripts/database.js?a=1"></script>
+    <script type="text/javascript">
+        var famDiagram = null;
+        var fromItem = 0;
+        var toItem = 0;
+        var treeItems = {};
+        var setup=function(selector) {
+            famDiagram = selector.famDiagram(getOrgDiagramConfig());
+        }; //end setup()
+        var Update=function(selector, updateMode) {
+            selector.famDiagram("option", getOrgDiagramConfig());
+            selector.famDiagram("update", updateMode);
+        }; //end Update()
+        var getOrgDiagramConfig=function(){
+            return {
+                graphicsType:1, //prefer canvas
+                pageFitMode:3, //fit width
+                orientationType:2, //orient to top
+                verticalAlignment:0, //0:top,1:middle,2:bottom
+                minimalVisibility:2, //0:auto,1:normal,2:dot,3:line,4:invisible
+                hasSelectorCheckbox:false,
+                selectionPathMode:1, //1: fullstack, 0: none
+                hasButtons:0,
+                groupByType:0, //parents
+                buttons:[],
+                leavesPlacementType:3, //matrix
+                childrenPlacementType:3,
+                itemTitleFirstFontColor:'#08C',
+                itemTitleSecondFontColor:'#C80',
+                normalLevelShift:15,
+                dotLevelShift:15,
+                lineLevelShift:15,
+                normalItemsInterval:20,
+                dotItemsInterval:5,
+                lineItemsInterval:0,
+                highlightLinesColor:'#F00',
+                linesWidth:2,
+                linesColor:"#555",
+                showLabels:false,
+                linesPalette:[],
+                cousinsIntervalMultiplier: 0
+            }; //end return object
+        }; //end getOrgDiagramConfig()
+        var loadItems=function(selector){
+            selector.famDiagram("option",{
+                items:database,
+                cursorItem:0
+            });
+            selector.famDiagram("update");
+        }; //end loadItems()
+        jQuery(document).ready(function () {
+            jQuery('body').layout({center__paneSelector:"#contentpanel"});
+            jQuery.ajaxSetup({cache: false});
+            jQuery('#contentpanel').layout({
+                center__paneSelector: "#centerpanel",
+                center__onresize: function(){
+                    if (famDiagram !== null) {
+                        jQuery("#centerpanel").famDiagram("update", primitives.common.UpdateMode.Refresh);
+                    } //end if
+                } //end center__onresize()
+            });
+            setup(jQuery("#centerpanel"));
+            loadItems(jQuery("#centerpanel"));
+        });
+    </script>
+</head>
+<body style="font-size: 12px">
+    <div id="contentpanel" style="padding: 0px;">
+        <div id="centerpanel" style="overflow: hidden; padding: 0px; margin: 0px; border: 0px;"></div>
+    </div>
+</body>
+</html>
