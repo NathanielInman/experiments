@@ -1,4 +1,4 @@
-<!doctype html><head><title>Dragon Curve</title></head><body>
+<!doctype html><head><title>Pleasant Error</title></head><body>
 <script type='text/javascript' src='../libs/easel.js'></script>
 <script>
 var LindenmayerSystem=function(iterations,axiom,rules,angle,constants){
@@ -76,9 +76,14 @@ var LindenmayerSystem=function(iterations,axiom,rules,angle,constants){
 			} //end if
 		} //end for
 		if(this.current.iteration==this.iterations)(function(lx,ly,gx,gy){
-			ctx.scale(v.w/(Math.abs(gx)+Math.abs(lx)),v.h/(Math.abs(gy)+Math.abs(ly)));
-			/* Custom scaling transformation especially for Dragon Curve */
-			ctx.translate(gx,gy); 
+			if(v.w<v.h){
+				ctx.scale(v.w/(Math.abs(gx)+Math.abs(lx)),v.w/(Math.abs(gx)+Math.abs(lx)));
+			}else{
+				ctx.scale(v.h/(Math.abs(gy)+Math.abs(ly)),v.h/(Math.abs(gy)+Math.abs(ly)));
+			} //end if
+			/* Custom scaling transformation especially for sierpenski's Triangle */
+			console.log(lx+":"+ly+":"+gx+":"+gy);
+			ctx.translate(-1*lx+gx,gy-ly);
 		})(this.current.lx,this.current.ly,this.current.gx,this.current.gy);
 	};
 	this.process=function process(){
@@ -117,10 +122,9 @@ var LindenmayerSystem=function(iterations,axiom,rules,angle,constants){
 	};
 };
 (function(){
-	var dragonCurve=new LindenmayerSystem(12,'FX',[
-		{condition:'X',result:'X+YF+'},
-		{condition:'Y',result:'-FX-Y'}],90,[]);
-	ctx.strokeStyle='#0F0';
-	dragonCurve.process();
+	var pleasantError=new LindenmayerSystem(5,'F-F-F-F-F',[
+		{condition:'F',result:'F-F++F+F-F-F'}],72,[]);
+	ctx.strokeStyle='#F06';
+	pleasantError.process();
 })();
 </script></body></html>

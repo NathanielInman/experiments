@@ -1,4 +1,4 @@
-<!doctype html><head><title>Dragon Curve</title></head><body>
+<!doctype html><head><title>Sierpinski Triangle</title></head><body>
 <script type='text/javascript' src='../libs/easel.js'></script>
 <script>
 var LindenmayerSystem=function(iterations,axiom,rules,angle,constants){
@@ -77,8 +77,12 @@ var LindenmayerSystem=function(iterations,axiom,rules,angle,constants){
 		} //end for
 		if(this.current.iteration==this.iterations)(function(lx,ly,gx,gy){
 			ctx.scale(v.w/(Math.abs(gx)+Math.abs(lx)),v.h/(Math.abs(gy)+Math.abs(ly)));
-			/* Custom scaling transformation especially for Dragon Curve */
-			ctx.translate(gx,gy); 
+			/* Custom scaling transformation especially for sierpenski's Triangle */
+			if(gy<1){
+				ctx.translate(gx,-1*ly);			
+			}else{
+				ctx.translate(-1*lx,-1*ly);
+			} //end if
 		})(this.current.lx,this.current.ly,this.current.gx,this.current.gy);
 	};
 	this.process=function process(){
@@ -117,10 +121,10 @@ var LindenmayerSystem=function(iterations,axiom,rules,angle,constants){
 	};
 };
 (function(){
-	var dragonCurve=new LindenmayerSystem(12,'FX',[
-		{condition:'X',result:'X+YF+'},
-		{condition:'Y',result:'-FX-Y'}],90,[]);
+	var sierpenskiTriangle=new LindenmayerSystem(8,'A',[
+		{condition:'A',result:'B-A-B'},
+		{condition:'B',result:'A+B+A'}],60,[]);
 	ctx.strokeStyle='#0F0';
-	dragonCurve.process();
+	sierpenskiTriangle.process();
 })();
 </script></body></html>
