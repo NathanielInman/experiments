@@ -12,10 +12,10 @@
 var color={
 	r:128,
 	g:128,
-	b:128
+	b:128,
 	generate:function(){
 		return {r:(100,256,false),g:r(100,256,false),b:r(100,256,false)};
-	}
+	},
 	target:{r:128,g:128,b:128}
 };
 
@@ -37,8 +37,8 @@ var nest            = new Ion(1000);
 	nest.wy         = function(){return r(0,3)-1.5;};
 	nest.size       = function(){return r(1,3);};
 	nest.tween_type = function(){return r(19,20,false);};
-	nest.onEnd      = function(id){this.particle.splice(id,1,this.getnew(id));};
-	nest.onEscape   = function(id){this.particle.splice(id,1,this.getnew(id));};
+	nest.onEnd      = function(id){this.particle.splice(id,1,this.getNew(id));};
+	nest.onEscape   = function(id){this.particle.splice(id,1,this.getNew(id));};
 	nest.getNew     = function(atom){
 		var sx=this.sx(atom);
 		var sy=this.sy(atom);

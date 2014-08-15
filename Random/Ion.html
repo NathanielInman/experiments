@@ -18,17 +18,15 @@ var gnats=new Ion(1000);
 	gnats.wy             = function(){return r(0,1)-0.5;};
 	gnats.size           = function(){return r(0,2);};
 	gnats.tween_type     = 6;
-	gnats.onEscape       = function(id){
-		this.particle.splice(id,1,this.getnew(id));
-	}
-	gnats.onEnd          = function(id){
-		this.particle[id].sx =this.particle[id].x;
-		this.particle[id].sy =this.particle[id].y;
-		this.particle[id].dx =this.dx();
-		this.particle[id].dy =this.dy();
-		this.particle[id].wx =this.wx();
-		this.particle[id].wy =this.wy();
-		this.particle[id].c  =0;
+	gnats.onEscape       = function(atom){this.onEnd(atom);};
+	gnats.onEnd          = function(atom){
+		this.particle[atom].x = this.particle[atom].sx = gnats.sx();
+		this.particle[atom].y = this.particle[atom].sy = gnats.sy();
+		this.particle[atom].dx =gnats.dx();
+		this.particle[atom].dy =gnats.dy();
+		this.particle[atom].wx =gnats.wx();
+		this.particle[atom].wy =gnats.wy();
+		this.particle[atom].c  =0;
 	};
 	gnats.populate();
 	gnats.process();

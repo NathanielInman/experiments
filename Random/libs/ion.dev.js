@@ -1,6 +1,6 @@
 ﻿/**********************************************************************************\
 	Ion.js performs tweening movements and operations on particles and was created
-	to use in conjunction with easel.js
+	to use in conjunction with Easel.js
     Copyright (C) 2014 Nathaniel Inman
 
     This program is free software: you can redistribute it and/or modify
@@ -26,11 +26,13 @@ var Ion=function(q,s,x,y,dx,dy){
 	this.dy=dy||1;
 	this.wx=0;
 	this.wy=0;
+	this.m=0; //modulation factor - only runs if it's set explicitly
 	this.color='#48F';
+	this.clearColor='#000';
 	this.size=s||1;
 	this.tween_type=0;
 	this.tween_current=0;
-	this.tween_duration=1000;
+	this.tween_duration=1000; 
 };
 
 /**
@@ -168,6 +170,7 @@ Ion.prototype.ease=function ease(b,c,t,d,o,type){
  * @return {Object}       The particle object is returned
  */
 Ion.prototype.getNew=function(atom){
+	this.onCreate(); //even fired as a new particle is created
 	return {
 		id:atom, //be able to reference each particle individually outside of the class
 		sx:typeof this.sx            =='function'?this.sx():this.sx,
@@ -242,6 +245,26 @@ Ion.prototype.draw=function(atom){
 };
 
 /**
+ * This function exits early if it wasn't explicitly declared, otherwise it runs the function specified
+ * and sends it the current atom, in the case that the function utilizes case-specific information. It also
+ * sends the cx,cy,dx, and dy variables
+ * 
+ * @param  {Integer} atom Particle index
+ * @return {Void}         Function doesn't return a value
+ */
+Ion.prototype.modulate=function(atom){
+	if(!(typeof this.m === 'function'))return;
+	this.m(atom,this.particle[atom].x,this.particle[atom].y,this.particle[atom].dx,this.particle[atom].dy);
+};
+
+/**
+ * OnCreate function is called when a particle is created for the first time. This allows one to keep track
+ * of how far into the creation of all the particles one is given the particle total that they already control.
+ * 
+ * @return {Void} Function doesn't return a value, but can be overriden to make a callback as desired
+ */
+Ion.prototype.onCreate=function(){};
+/**
  * OnEnd function is called after a particle finishes its tweening motion. This is merely a template function
  * that is required to be overridden.
  * 
@@ -258,28 +281,41 @@ Ion.prototype.onEnd=function(){};
 Ion.prototype.onEscape=function(){};
 
 /**
- * Process is the main function that performs operations on each particle. It performs asynchronously and doesn't
- * currently have a stopping point. I may change this later.
+ * Process is the automatic function that calls the getFrame main function and after updating, queues the next
+ * update frame. It will also auto-clear. This function is mostly used for testing a single Ion instance. Most
+ * mock-ups of Ion should be done using the getFrame function and manually resetting the canvas as needed
  * 
  * @return {Void} Function doesn't return a value
  */
 Ion.prototype.process=function(){
 	var that=this,p;
 	if(this.clear){
-		ctx.fillStyle='#000';
+		ctx.fillStyle=this.clearColor;
 		ctx.fillRect(0,0,v.w,v.h);
 	} //end if
+	this.getFrame(); //call getFrame() to receive and flip all pixel information for next update
+	setTimeout(function(){that.process();},1);
+};
+
+/**
+ * getFrame is the main function that performs operations on each particle. It immediately flips those variables
+ * after they've been computed. There is no clearing of pixels, it superimposes onto what's already available on the screen
+ * so any clearing will have to be done through the process function or manually.
+ * 
+ * @return {Void} Function doesn't return a value
+ */
+Ion.prototype.getFrame=function(){
 	ctx.fillStyle=this.color;
 	for(atom in this.particle){
 		p=this.particle[atom]; //reference to clean up code
 		if(p.c==p.d)continue; //skip a done movement process
 		this.wind(atom);
 		this.draw(atom);
+		this.modulate(atom);
 		if(p.x<0||p.y<0||p.x>v.w||p.y>v.h)this.onEscape(atom);
 		p.c++; //increment the current iteration of the tween by one
 		if(p.c==p.d)this.onEnd(atom); //movement process finished
 		if(M.floor(p.x)!==M.floor(p.dx))p.x=this.ease(p.sx,p.dx-p.sx,p.c,p.d,0.3,p.tt);
 		if(M.floor(p.y)!==M.floor(p.dy))p.y=this.ease(p.sy,p.dy-p.sy,p.c,p.d,0.3,p.tt);
 	} //end for
-	setTimeout(function(){that.process();},1);
 };
