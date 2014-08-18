@@ -1,14 +1,75 @@
 # Experiments
 
-Holds all programming experiments that are stand-alone. The To-Do List holds the status of what I finished and guage what's on my plate to do in the future. It doesn't mean that I won't find something more interesting for my next experiments, but I like to finish things that I started too. The overall purpose of these experiments are small code experiments to help me become familiar with things I haven't had a lot of experience with. All code can be used without my consent, but I'd love to hear from you if something here helped you in a project.
+The purpose of this repository project was to acquire knowledge that was not taught in my Computer Science degree.
+All code can be used without my consent. 
 
-## To-Do List
- 
-- [ ] **Begin using Gulp / Browserify builds**
+## Due by December 2014 (Graduation Date)
+
+* Unit Testing
+- [ ] **Jasmine**
+- [ ] **BrowserSwarm**
+- [ ] **Buster.js**
+- [ ] **Karma**
+- [ ] **TestSwarm**
+- [ ] **QUnit**
+- [ ] **Sinon**
+* Build Processes
+- [ ] **Gulp**
+- [ ] **Grunt**
+- [ ] **Browserify**
+- [ ] **Bower**
+  * Module Loading
+    * Asynchronous Module Definition (AMD)
+    - [ ] **RequireJS**
+    - [ ] **Curl.js**
+    * Globbing
+    - [ ] **Proper and common techniques**
+    * General Script Loading
+    - [ ] **HeadJS**
+    - [ ] **YepNOpe.js**
+    - [ ] **LABjs**
+    - [ ] **LazyLoad**
+  * CSS Pre-processors
+  - [ ] **SCSS**
+  - [ ] **SASS**
+  - [ ] **LESS**
+  - [ ] **stylus**
+  * CSS Post-processor
+  - [ ] **rework**
+* RESTful
+- [ ] **SOAP**
+- [ ] **XML-RPC**
+- [x] **JSON**
+* Javascript Frameworks
+- [ ] **BackboneJS**
+- [ ] **SpineJS**
+- [ ] **AngularJS (NG)**
+- [ ] **Agility.js**
+- [ ] **Meteor.js**
+- [ ] **RactiveJS**
+- [ ] **Can.js**
+- [ ] **Sammy.js**
+- [ ] **Snack.js**
+- [ ] **Ember.js**
+- [ ] **Extjs**
+- [ ] **Knockout.js**
+- [ ] **Twitter Bootstrap**
+* Javascript Utility Libraries
+- [ ] **JQuery**
+- [ ] **JQueryUI**
+- [ ] **Underscore.js**
+- [ ] **Lo-Dash**
+- [ ] **Derby**
+- [ ] **Polymer**
+* Learn Languages
 - [ ] **Begin LiveScript**
 - [ ] **Begin Dart**
 - [ ] **Begin LUA**
 - [ ] **Begin Python**
+* Other
+- [ ] **Kinetic Style Sheets (KSS)**
+- [ ] **BEM Naming Convention**
+- [ ] **Sencha SDK**
 
 ## Done List
 
