@@ -6,70 +6,70 @@ All code can be used without my consent.
 ## Due by December 2014 (Graduation Date)
 
 * Unit Testing
-- [ ] **Jasmine**
-- [ ] **BrowserSwarm**
-- [ ] **Buster.js**
-- [ ] **Karma**
-- [ ] **TestSwarm**
-- [ ] **QUnit**
-- [ ] **Sinon**
+  - [ ] **Jasmine**
+  - [ ] **BrowserSwarm**
+  - [ ] **Buster.js**
+  - [ ] **Karma**
+  - [ ] **TestSwarm**
+  - [ ] **QUnit**
+  - [ ] **Sinon**
 * Build Processes
-- [ ] **Gulp**
-- [ ] **Grunt**
-- [ ] **Browserify**
-- [ ] **Bower**
+  - [ ] **Gulp**
+  - [ ] **Grunt**
+  - [ ] **Browserify**
+  - [ ] **Bower**
   * Module Loading
     * Asynchronous Module Definition (AMD)
-    - [ ] **RequireJS**
-    - [ ] **Curl.js**
+      - [ ] **RequireJS**
+      - [ ] **Curl.js**
     * Globbing
-    - [ ] **Proper and common techniques**
+      - [ ] **Proper and common techniques**
     * General Script Loading
-    - [ ] **HeadJS**
-    - [ ] **YepNOpe.js**
-    - [ ] **LABjs**
-    - [ ] **LazyLoad**
+      - [ ] **HeadJS**
+      - [ ] **YepNOpe.js**
+      - [ ] **LABjs**
+      - [ ] **LazyLoad**
   * CSS Pre-processors
-  - [ ] **SCSS**
-  - [ ] **SASS**
-  - [ ] **LESS**
-  - [ ] **stylus**
+    - [ ] **SCSS**
+    - [ ] **SASS**
+    - [ ] **LESS**
+    - [ ] **stylus**
   * CSS Post-processor
-  - [ ] **rework**
+    - [ ] **rework**
 * RESTful
-- [ ] **SOAP**
-- [ ] **XML-RPC**
-- [x] **JSON**
+  - [ ] **SOAP**
+  - [ ] **XML-RPC**
+  - [x] **JSON**
 * Javascript Frameworks
-- [ ] **BackboneJS**
-- [ ] **SpineJS**
-- [ ] **AngularJS (NG)**
-- [ ] **Agility.js**
-- [ ] **Meteor.js**
-- [ ] **RactiveJS**
-- [ ] **Can.js**
-- [ ] **Sammy.js**
-- [ ] **Snack.js**
-- [ ] **Ember.js**
-- [ ] **Extjs**
-- [ ] **Knockout.js**
-- [ ] **Twitter Bootstrap**
+  - [ ] **BackboneJS**
+  - [ ] **SpineJS**
+  - [ ] **AngularJS (NG)**
+  - [ ] **Agility.js**
+  - [ ] **Meteor.js**
+  - [ ] **RactiveJS**
+  - [ ] **Can.js**
+  - [ ] **Sammy.js**
+  - [ ] **Snack.js**
+  - [ ] **Ember.js**
+  - [ ] **Extjs**
+  - [ ] **Knockout.js**
+  - [ ] **Twitter Bootstrap**
 * Javascript Utility Libraries
-- [ ] **JQuery**
-- [ ] **JQueryUI**
-- [ ] **Underscore.js**
-- [ ] **Lo-Dash**
-- [ ] **Derby**
-- [ ] **Polymer**
+  - [ ] **JQuery**
+  - [ ] **JQueryUI**
+  - [ ] **Underscore.js**
+  - [ ] **Lo-Dash**
+  - [ ] **Derby**
+  - [ ] **Polymer**
 * Learn Languages
-- [ ] **Begin LiveScript**
-- [ ] **Begin Dart**
-- [ ] **Begin LUA**
-- [ ] **Begin Python**
+  - [ ] **Begin LiveScript**
+  - [ ] **Begin Dart**
+  - [ ] **Begin LUA**
+  - [ ] **Begin Python**
 * Other
-- [ ] **Kinetic Style Sheets (KSS)**
-- [ ] **BEM Naming Convention**
-- [ ] **Sencha SDK**
+  - [ ] **Kinetic Style Sheets (KSS)**
+  - [ ] **BEM Naming Convention**
+  - [ ] **Sencha SDK**
 
 ## Done List
 
