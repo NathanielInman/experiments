@@ -23,7 +23,7 @@ All code can be used without my consent.
       - [ ] RequireJS
       - [ ] Curl.js
     * **Globbing**
-      - [ ] Proper and common techniques
+      - [X] Proper and common techniques
     * **General Script Loading**
       - [ ] HeadJS
       - [ ] YepNOpe.js
