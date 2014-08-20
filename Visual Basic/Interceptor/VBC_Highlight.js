@@ -2,7 +2,20 @@ var VBC;
 (function(VBC){
 	//Collection of color themes
 	var themes={
-		none:0,
+		none:{
+			comments:'#888888',
+			content:'#3838d3',
+			background:'#151515',
+			highlight:'#404040',
+			highlight1:'#99ad6a',
+			highlight2:'#556633',
+			highlight3:'#7697d6',
+			highlight4:'#dd0093',
+			highlight5:'#ffb964',
+			highlight6:'#cf6a4c',
+			highlight7:'#ffb964',
+			highlight8:'#8fbfdc'
+		},
 		solarized:{
 			comments:'#586e75',
 			content:'#839496',
@@ -47,7 +60,8 @@ var VBC;
 		}
 	};
 	VBC.themes=themes;
-	VBC.themes.current=themes.heroku;
+	VBC.themes.current=themes.none;
+	//VBC.themes.current=themes.heroku;
 	VBC.themes.scrollbar=""+
   		"scrollbar-base-color: #C0C0C0;"+
   		"scrollbar-face-color: "+VBC.themes.current.content+";"+
@@ -206,7 +220,7 @@ var VBC;
 				}else{
 					return '<span style="color:'+VBC.themes.current.highlight5+';">'+arguments[0].replace(/^\s+|\s+$/gm,'')+'</span>';
 				} //end if
-			})+(VBC.themes.current?'<br/>':'\n');
+			})+(VBC.themes.current!==VBC.themes.none?'<br/>':'\n<br/>');
 			linenum+=line+'<br/>';
 			if(pLine.length>VBC.metric.maxCharactersPerLine)linenum+=VBC.themes.current?'<br/>':'/n';
 			dTab=0;then=0;capture=0;
@@ -233,18 +247,13 @@ var VBC;
 			} //end for
 			capture=0;dTab=0;then=0;comment=0;
 		} //end for
-		return '<div style="position:absolute;left:0;top:0;right:0;bottom:0;min-width:'+VBC.metric.viewportSize+'px;'+
-			   'max-width:'+VBC.metric.viewportSize+'px;color:'+VBC.themes.current.content+';background-color:'+
-			   VBC.themes.current.background+";font-family:'Courier New';font-size:1em;overflow:hidden;"+
-		       'font-weight:800;"><div style="position:absolute;text-align:right;padding-right:10px;'+
-		       'width:50px;overflow:hidden;">'+linenum+'</div><div style="padding-left:75px;min-width:'+VBC.metric.lineWidth+'px;'+
-		       'max-width:'+VBC.metric.lineWidth+'px;overflow:hidden;">'+output+'</div></div>'+
-		       '<div style="position:absolute;left:60px;top:0;bottom:0;width:60px;border-left:5px solid '+
-		       VBC.themes.current.highlight+';overflow:hidden;"></div>'+
-		       '<div style="position:absolute;right:5%;top:0;width:500px;bottom:0;border:15px solid #000;'+
-		       'background-color:#000;opacity:0.3;overflow:hidden;"></div>'+
-		       '<div style="position:absolute;right:5%;top:5%;width:500px;bottom:5%;overflow-y:scroll;overflow:hidden;'+
-		       VBC.themes.scrollbar+'color:'+VBC.themes.current.content+';">'+printFunctionNames()+'</div>';
+		return '<div style="position:absolute;left:0;top:0;right:0;bottom:0;color:'+VBC.themes.current.content+';background-color:'+VBC.themes.current.background+";overflow-y:scroll;font-family:'Courier New';font-size:1em;overflow-x:hidden;font-weight:800;\">"+
+			   		'<div style="position:absolute;left:0;top:0;text-align:right;padding-right:10px;width:50px;">'+linenum+'</div>'+
+			   		'<div id="result" style="position:relative;padding-left:75px;min-width:'+VBC.metric.lineWidth+'px;max-width:'+VBC.metric.lineWidth+'px;">'+output+'</div>'+
+			   '</div>'+
+		       '<div style="position:absolute;left:60px;top:0;bottom:0;width:60px;border-left:5px solid '+VBC.themes.current.highlight+';"></div>'+
+		       '<div style="position:absolute;right:80px;top:80px;width:540px;bottom:80px;background-color:#000;opacity:0.3;"></div>'+
+		       '<div style="position:absolute;right:100px;top:100px;width:500px;bottom:100px;overflow-y:scroll;overflow-x:hidden;'+VBC.themes.scrollbar+'color:'+VBC.themes.current.content+';">'+printFunctionNames()+'</div>';
 	};
 	VBC.highlight=highlight;
 })(VBC||(VBC={}));

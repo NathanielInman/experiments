@@ -7,7 +7,9 @@ var VBC;
 		},
 		fromMarkup:{
 			'&lt;':'<',
-			'&gt;':'>'
+			'&gt;':'>',
+			'&nbsp;':' ',
+			'&amp;':'&'
 		}
 	};
 	VBC.entityMap=entityMap;
