@@ -31,7 +31,7 @@ var Interceptor;
 			if($('exportFrame').innerHTML.length>0){
 				if($('exportFrame').innerHTML=="DONE"){
 					Interceptor.progress.state=1;
-					$('label').innerHTML='DEPLOYING'
+					$('label').innerHTML='DEPLOYING';
 				}else if($('exportFrame').innerHTML.substring(0,1)!='{'){
 					$('resultFrame').innerHTML=VBC.highlight($('exportFrame').innerHTML);
 					Interceptor.progress.finished.push($('result').textContent);
