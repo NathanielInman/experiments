@@ -1,22 +1,22 @@
-.hidden{
-	visibility:hidden;
-}
 #wrapper{
 	position:absolute;left:0;top:0;bottom:0;right:0;overflow:hidden;
 }
 #progressBar{
 	position:absolute;
-	left:0;top:48%;right:0;bottom:48%;
-	border-top:3px solid #333;
-	border-bottom:3px solid #333;
+	left:0;top:48%;right:0;bottom:50%;
+	border-top:2px solid #333;
 	background-color:#000;
 	opacity:0.6; 
 	visibility:hidden;
 }
-#progressBar_progress{
-	position:relative;
-	width:0%;height:100%;
-	background-color:#062;
+#progressBar2{
+	position:absolute;
+	left:0;top:50%;right:0;bottom:48%;
+	border-top:2px solid #333;
+	border-bottom:2px solid #333;
+	background-color:#000;
+	opacity:0.6;
+	visibility:hidden;
 }
 #titleFrame{
 	position:absolute;
@@ -25,7 +25,7 @@
 	left:0;right:0;
 }
 #title{
-	font:1.5em "Courier New";
+	font:1em "Courier New";
 	position:relative;
 	display:inline-block;
 	margin:auto;
@@ -35,10 +35,91 @@
 	color:#AFA;
 }
 #label{
-	font:1.5em "Courier New";
+	font:1em "Courier New";
 	position:absolute;
 	top:1px;
 	width:100%;
 	color:#FFF;
 	text-align:center;
+}
+.hidden{
+	visibility:hidden;
+}
+.progressBar{
+	position:relative;
+	width:0%;height:100%;
+	background-color:#062;
+}
+.list-outerFrame{
+	position:absolute;
+	left:20%;top:20%;right:20%;bottom:20%;
+	border:2px solid #333;
+	background-color:#000;
+	opacity:0.6;
+}
+.list-innerFrame{
+	position:absolute;
+	left:20%;top:20%;right:20%;bottom:20%;
+	margin:20px;
+	overflow-y:scroll;overflow-x:hidden;
+}
+.list-object{
+	position:relative;
+	width:98%;height:30px;
+	margin-bottom:5px;
+	background-color:#111;
+	border:2px solid #333;
+	font:1.3em "Courier New";
+	line-height:1.5;
+	color:#FFF;
+	opacity:0.7;
+	cursor:default;
+}
+.control-title{
+	position:absolute;
+	left:20%;bottom:80%;right:20%;
+	background-color:#000;
+	font:1.5em "Courier new";
+	font-weight:800;
+	border:2px solid #333;
+	text-align:center;
+	color:#FFF;
+	opacity:0.6;
+	height:25px;
+}
+.control-box{
+	position:absolute;
+	left:20%;top:80%;right:20%;
+	background-color:#000;
+	border:2px solid #333;
+	opacity:0.6;
+	height:50px;
+}
+.control-box-button{
+	position:absolute;
+	bottom:0;top:0;margin:5px;
+	padding:0 15px 0 15px;
+	border:2px solid #222;
+	background-color:#444;
+	font-family:"Courier new";
+	font-weight:800;
+	color:#FFF;text-align:center;
+	line-height:2;
+}
+.control-box-button:hover{
+	background-color:#555;
+	cursor:pointer;
+}
+.checkbox{
+	float:left;
+	width:30px;height:100%;
+	background-color:#000;
+	border-right:2px solid #333;
+	margin-right:20px;
+	color:#0F0;
+	text-align:center;
+	cursor:pointer;
+}
+.checkbox:hover{
+	background-color:#060;
 }

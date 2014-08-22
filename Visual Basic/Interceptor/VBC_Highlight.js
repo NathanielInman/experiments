@@ -3,18 +3,18 @@ var VBC;
 	//Collection of color themes
 	var themes={
 		none:{
-			comments:'#888888',
-			content:'#3838d3',
-			background:'#151515',
-			highlight:'#404040',
-			highlight1:'#99ad6a',
-			highlight2:'#556633',
-			highlight3:'#7697d6',
-			highlight4:'#dd0093',
-			highlight5:'#ffb964',
-			highlight6:'#cf6a4c',
-			highlight7:'#ffb964',
-			highlight8:'#8fbfdc'
+			comments:'#586e75',
+			content:'#839496',
+			background:'#002b36',
+			highlight:'#073642',
+			highlight1:'#b58900',
+			highlight2:'#cb4b16',
+			highlight3:'#dc322f',
+			highlight4:'#d33682',
+			highlight5:'#6c71c4',
+			highlight6:'#268bd2',
+			highlight7:'#2aa198',
+			highlight8:'#859900'
 		},
 		solarized:{
 			comments:'#586e75',
@@ -61,8 +61,10 @@ var VBC;
 	};
 	VBC.themes=themes;
 	VBC.themes.current=themes.none;
-	//VBC.themes.current=themes.heroku;
-	VBC.themes.scrollbar=""+
+	//Adjust all the scrollbars of the page to reflect the theme chosen
+	(function(){
+		var style=document.createElement("style");
+		style.innerHTML="body{"+
   		"scrollbar-base-color: #C0C0C0;"+
   		"scrollbar-face-color: "+VBC.themes.current.content+";"+
   		"scrollbar-3dlight-color: #C0C0C0;"+
@@ -70,8 +72,9 @@ var VBC;
   		"scrollbar-track-color: "+VBC.themes.current.highlight+";"+
   		"scrollbar-arrow-color: black;"+
   		"scrollbar-shadow-color: "+VBC.themes.current.background+";"+
-  		"scrollbar-dark-shadow-color: #000000;";
-
+  		"scrollbar-dark-shadow-color: #000000;}";
+  		document.head.appendChild(style);
+  	})();
 })(VBC||(VBC={}));
 var VBC;
 (function(VBC){
@@ -116,14 +119,16 @@ var VBC;
 	
 	//The main highlight function
 	var highlight=function(data){
-		var output='',linenum='',oLine='',pLine='',functionNames={};
+		var output=[],linenum='',oLine='',pLine='',functionNames={};
 		var comment=0,instring=0,w,tw,i,tabsc=0,tabs=0,dTab=0,then=0,capture=0,pdata,lastFunction='';
 		var conditions=function(){return !comment&&!instring;};
 		var addTabs=function(){
+			var addString='';
 			for(var i=0;i<tabsc;i++){
-				output+=VBC.themes.current?"&nbsp;&nbsp;&nbsp;&nbsp;":'    ';
+				addString+=VBC.themes.current?"&nbsp;&nbsp;&nbsp;&nbsp;":'    ';
 			} //end for
 			tabsc=tabs;
+			return addString;
 		};
 		var print=function(txt,format,skipTag,space){
 			if(VBC.themes.current===0){
@@ -131,21 +136,6 @@ var VBC;
 			}else{
 				oLine+=format+txt+(skipTag?'':'</span>'+(space?' ':''));
 			} //end if
-		};
-		var printFunctionNames=function(){
-			var data='',index=-1;
-			for(element in functionNames){
-				index++;
-				if(index%2===0){
-					data+='<span style="float:left;clear:right;width:95%;background-color:'+VBC.themes.current.background+';">';
-				}else{
-					data+='<span style="float:left;clear:right;width:95%;">';
-				} //end if
-				data+='<span style="float:left;">'+element+'</span>'+
-				      '<span style="float:right;clear:right;text-align:right;">'+functionNames[element].join('<br/>')+
-				      '</span></span>';
-			} //end for
-			return data;
 		};
 		var testKeywords=function(w){
 			var i,db=[{o:VBC.vbaAdditionalKeywords,color:VBC.themes.current.highlight1},
@@ -205,7 +195,15 @@ var VBC;
 					print(w,'<span style="color:'+VBC.themes.current.highlight4+';">',false,true);
 				}else if(!(conditions()&&testKeywords(w.trim()))){
 					oLine+=w+' ';
-					if(capture){lastFunction=w.trim();functionNames[lastFunction]=[];capture=0;}
+					if(capture){
+						lastFunction=w.trim();
+						functionNames[lastFunction]={
+							location:line,
+							calls:[],
+							uses:[]
+						};
+						capture=0;
+					} //end if
 					if(then&&!comment&&w.trim()!==''){tabs--;then=0;}
 				} //end if
 			} //end for
@@ -213,14 +211,14 @@ var VBC;
 				if(VBC.themes.current)oLine+='</span>';
 				comment=0;tw=1;
 			}else{tw=0;} //end if
-			addTabs();
-			output+=oLine.replace(/\s+[()]\s+/g,function(){
+			oLine=addTabs()+oLine;
+			output.push(oLine.replace(/\s+[()]\s+/g,function(){
 				if(VBC.themes.current===0||tw){
 					return arguments[0].replace(/^\s+|\s+$/gm,'');
 				}else{
 					return '<span style="color:'+VBC.themes.current.highlight5+';">'+arguments[0].replace(/^\s+|\s+$/gm,'')+'</span>';
 				} //end if
-			})+(VBC.themes.current!==VBC.themes.none?'<br/>':'\n<br/>');
+			})+(VBC.themes.current!==VBC.themes.none?'<br/>':'\n<br/>'));
 			linenum+=line+'<br/>';
 			if(pLine.length>VBC.metric.maxCharactersPerLine)linenum+=VBC.themes.current?'<br/>':'/n';
 			dTab=0;then=0;capture=0;
@@ -239,21 +237,57 @@ var VBC;
 						} //end if
 					} //end for
 				} //end if
-				if(conditions()&&VBC.operators[w]){
+				if(conditions()&&VBC.operators[w]){0;
 				}else if(!(conditions()&&testKeywords(w.trim()))){
 					if(capture){lastFunction=w.trim();capture=0;}
-					if(functionNames[w.trim()])functionNames[w.trim()].push(lastFunction);
+					if(functionNames[w.trim()]){
+						functionNames[lastFunction].calls.push(w.trim());
+						functionNames[w.trim()].uses.push(lastFunction);
+					} //end if
 				} //end if
 			} //end for
 			capture=0;dTab=0;then=0;comment=0;
 		} //end for
+		(function(){
+			var getUnique=function(array){
+				var object={},index,result='',skip=array[0];
+				for(word in array){
+					if(array[word]==skip)continue;
+					if(object[array[word]]){
+						object[array[word]]++;
+					}else{
+						object[array[word]]=1;
+					} //end if					
+				} //end for
+				for(element in object){
+					if(result!=='')result+=', ';
+					result+=element+'('+object[element]+')';
+				} //end for
+				return result;
+			};
+			var keys = [],index,calls,uses;
+			for(key in functionNames){keys.unshift(functionNames[key]);keys[0].name=key;}
+			for(index=0;index<keys.length;index++){
+				calls=getUnique(keys[index].calls);
+				uses=getUnique(keys[index].uses);
+				output.splice(keys[index].location,
+					          0,
+					          "<span style='color:"+VBC.themes.current.comments+";'>'-----------------------------------------------------<br/>\n",
+					          "' "+keys[index].name+" still needs a description. Please add it here.<br/>\n",
+					          "' <br/>\n",
+					          calls?"' @calls&nbsp;&nbsp;"+getUnique(keys[index].calls)+"<br/>\n":'',
+					          uses?"' @uses&nbsp;&nbsp;&nbsp;"+getUnique(keys[index].uses)+"<br/>\n":'',
+					          "' @param&nbsp;&nbsp;<br/>\n",
+					          "' @return&nbsp;<br/>\n",
+					          "'-----------------------------------------------------</span><br/>\n"
+				);
+			} //end for
+		})();
 		return '<div style="position:absolute;left:0;top:0;right:0;bottom:0;color:'+VBC.themes.current.content+';background-color:'+VBC.themes.current.background+";overflow-y:scroll;font-family:'Courier New';font-size:1em;overflow-x:hidden;font-weight:800;\">"+
 			   		'<div style="position:absolute;left:0;top:0;text-align:right;padding-right:10px;width:50px;">'+linenum+'</div>'+
-			   		'<div id="result" style="position:relative;padding-left:75px;min-width:'+VBC.metric.lineWidth+'px;max-width:'+VBC.metric.lineWidth+'px;">'+output+'</div>'+
+			   		'<div id="result" style="position:relative;padding-left:75px;min-width:'+VBC.metric.lineWidth+'px;max-width:'+VBC.metric.lineWidth+'px;">'+output.join('')+'</div>'+
 			   '</div>'+
-		       '<div style="position:absolute;left:60px;top:0;bottom:0;width:60px;border-left:5px solid '+VBC.themes.current.highlight+';"></div>'+
-		       '<div style="position:absolute;right:80px;top:80px;width:540px;bottom:80px;background-color:#000;opacity:0.3;"></div>'+
-		       '<div style="position:absolute;right:100px;top:100px;width:500px;bottom:100px;overflow-y:scroll;overflow-x:hidden;'+VBC.themes.scrollbar+'color:'+VBC.themes.current.content+';">'+printFunctionNames()+'</div>';
+		       '<div style="position:absolute;left:60px;top:0;bottom:0;width:60px;border-left:5px solid '+VBC.themes.current.highlight+';"></div>';
 	};
 	VBC.highlight=highlight;
 })(VBC||(VBC={}));
