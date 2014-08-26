@@ -38,7 +38,7 @@ All code can be used without my consent.
     - [ ] rework
 * **RESTful**
   - [ ] SOAP
-  - [ ] XML-RPC
+  - [X] XML-RPC
   - [x] JSON
 * **Javascript Frameworks**
   - [ ] BackboneJS
