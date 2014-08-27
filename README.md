@@ -32,7 +32,7 @@ All code can be used without my consent.
   * **CSS Pre-processors**
     - [ ] SCSS
     - [ ] SASS
-    - [ ] LESS
+    - [X] LESS
     - [ ] stylus
   * **CSS Post-processor**
     - [ ] rework
