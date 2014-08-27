@@ -6,7 +6,7 @@ All code can be used without my consent.
 ## Due by December 2014 (Graduation Date)
 
 * **Unit Testing**
-  - [ ] Jasmine
+  - [X] Jasmine
   - [ ] BrowserSwarm
   - [ ] Buster.js
   - [ ] Karma
