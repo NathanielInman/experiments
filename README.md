@@ -8,7 +8,7 @@ All code can be used without my consent.
 * **Unit Testing**
   - [X] Jasmine
   - [X] BrowserSwarm / modern.IE
-  - [ ] Buster.js
+  - [X] Buster.js
   - [ ] Karma
   - [ ] TestSwarm
   - [ ] QUnit
