@@ -89,7 +89,7 @@ All code can be used without my consent.
   * Compile to JS: Coffeescript, TypeScript, Ruby
 * **Programming Concepts**
   * Regular Expressions
-  * Object Collision: Using Mapper, Using Entity Iteration
+  * Object Collision: Using Mapper, Using Entity Iteration, Spatial Hashing
   * Map Generation: Basics, Prototype Variant, Asynchronicity
 * **Random**
   * Marvel Database
