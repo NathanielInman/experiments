@@ -31,7 +31,7 @@ All code can be used without my consent.
       - [ ] LazyLoad
   * **CSS Pre-processors**
     - [ ] SCSS
-    - [ ] SASS
+    - [X] SASS
     - [X] LESS
     - [ ] stylus
   * **CSS Post-processor**
