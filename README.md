@@ -26,7 +26,7 @@ All code can be used without my consent.
       - [X] Proper and common techniques
     * **General Script Loading**
       - [ ] HeadJS
-      - [ ] YepNOpe.js
+      - [X] ~~YepNope.js~~
       - [ ] LABjs
       - [ ] LazyLoad
   * **CSS Pre-processors**
