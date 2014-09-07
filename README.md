@@ -42,7 +42,9 @@ All code can be used without my consent.
 * **Javascript Frameworks**
   - [ ] BackboneJS
   - [ ] SpineJS
-  - [ ] AngularJS (NG)
+  * AngularJS (NG)
+    - [ ] Angular
+    - [ ] UI Bootstrap
   - [ ] Agility.js
   - [ ] Meteor.js
   - [ ] RactiveJS
@@ -52,7 +54,7 @@ All code can be used without my consent.
   - [ ] Ember.js
   - [ ] Extjs
   - [ ] Knockout.js
-  - [ ] Twitter Bootstrap
+  - [X] ~~Twitter Bootstrap~~
 * **Javascript Utility Libraries**
   - [ ] JQuery
   - [ ] JQueryUI
