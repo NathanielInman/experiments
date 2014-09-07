@@ -29,13 +29,12 @@ All code can be used without my consent.
       - [X] ~~YepNope.js~~
       - [ ] LABjs
       - [ ] LazyLoad
-  * **CSS Pre-processors**
+  * **CSS**
     - [ ] SCSS
     - [X] SASS
     - [X] LESS
-    - [ ] stylus
-  * **CSS Post-processor**
-    - [ ] rework
+    - [X] ~~stylus~~
+    - [ ] rework / styl
 * **RESTful**
   - [ ] SOAP
   - [X] XML-RPC
