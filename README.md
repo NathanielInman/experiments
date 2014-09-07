@@ -52,7 +52,7 @@ All code can be used without my consent.
   - [ ] Sammy.js
   - [ ] Snack.js
   - [ ] Ember.js
-  - [ ] Extjs
+  - [ ] Sencha Ext JS
   - [ ] Knockout.js
   - [X] ~~Twitter Bootstrap~~
 * **Javascript Utility Libraries**
