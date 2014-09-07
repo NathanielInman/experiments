@@ -45,7 +45,7 @@ All code can be used without my consent.
   * AngularJS (NG)
     - [ ] Angular
     - [ ] UI Bootstrap
-  - [ ] Agility.js
+  - [X] ~~Agility.js~~
   - [ ] Meteor.js
   - [ ] RactiveJS
   - [ ] Can.js
