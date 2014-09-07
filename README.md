@@ -14,10 +14,19 @@ All code can be used without my consent.
   - [ ] QUnit
   - [ ] Sinon
 * **Build Processes**
-  - [ ] Gulp
-  - [ ] Grunt
-  - [ ] Browserify
-  - [ ] Bower
+  * **Scaffolding**
+    - [ ] Yeoman
+  * **Building**
+    - [ ] Gulp
+    - [ ] Grunt
+    - [ ] Browserify
+    - [ ] Bower
+  * **CSS Preprocessors**
+    - [ ] SCSS
+    - [X] SASS
+    - [X] LESS
+    - [X] ~~stylus~~
+    - [ ] rework / styl
   * **Module Loading**
     * **Asynchronous Module Definition (AMD)**
       - [ ] RequireJS
@@ -25,16 +34,11 @@ All code can be used without my consent.
     * **Globbing**
       - [X] Proper and common techniques
     * **General Script Loading**
-      - [ ] HeadJS
+      - [X] ~~HeadJS~~
       - [X] ~~YepNope.js~~
-      - [ ] LABjs
+      - [X] ~~LABjs~~
       - [ ] LazyLoad
-  * **CSS**
-    - [ ] SCSS
-    - [X] SASS
-    - [X] LESS
-    - [X] ~~stylus~~
-    - [ ] rework / styl
+      - [ ] Conditioner.js
 * **RESTful**
   - [ ] SOAP
   - [X] XML-RPC
@@ -60,7 +64,7 @@ All code can be used without my consent.
   - [ ] JQuery
   - [ ] JQueryUI
   - [ ] Underscore.js
-  - [ ] Lo-Dash
+  - [ ] Lo-Dash (better Underscore library)
   - [ ] Derby
   - [ ] Polymer
 * **Templating**
@@ -76,7 +80,13 @@ All code can be used without my consent.
 * **Other**
   - [ ] Kinetic Style Sheets (KSS)
   - [ ] BEM Naming Convention
-  - [ ] Sencha SDK
+  - [ ] fn.js (promote functional programming)
+  - [ ] Progress.js (stylable progress bar, conditioned or on elements)
+  - [ ] Headroom.js (conditionable titlebar on scroll events)
+  - [ ] Hammer.JS (touch gestures)
+  - [ ] Type Rendering Mix
+  - [ ] InstantClick (pre-loading pages using mouseover & touch gestures)
+  - [ ] Shepherd (App tutorial intorudction)
 
 ## Done List
 
