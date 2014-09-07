@@ -46,8 +46,9 @@ All code can be used without my consent.
     - [ ] Angular
     - [ ] UI Bootstrap
   - [X] ~~Agility.js~~
-  - [ ] Meteor.js (with JSX)
-  - [ ] RactiveJS
+  - [ ] Meteor.js
+  - [ ] React (with JSX)
+  - [ ] RactiveJS (with Mustache)
   - [ ] Can.js
   - [ ] Sammy.js
   - [ ] Snack.js
@@ -62,6 +63,10 @@ All code can be used without my consent.
   - [ ] Lo-Dash
   - [ ] Derby
   - [ ] Polymer
+* **Templating**
+  - [X] Mustache
+  - [ ] Handlebars
+  - [ ] Jade
 * **Learn Languages**
   - [ ] LiveScript
   - [ ] JSX
