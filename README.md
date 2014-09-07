@@ -46,7 +46,7 @@ All code can be used without my consent.
     - [ ] Angular
     - [ ] UI Bootstrap
   - [X] ~~Agility.js~~
-  - [ ] Meteor.js
+  - [ ] Meteor.js (with JSX)
   - [ ] RactiveJS
   - [ ] Can.js
   - [ ] Sammy.js
@@ -63,10 +63,11 @@ All code can be used without my consent.
   - [ ] Derby
   - [ ] Polymer
 * **Learn Languages**
-  - [ ] Begin LiveScript
-  - [ ] Begin Dart
-  - [ ] Begin LUA
-  - [ ] Begin Python
+  - [ ] LiveScript
+  - [ ] JSX
+  - [ ] Dart
+  - [ ] LUA
+  - [ ] Python
 * **Other**
   - [ ] Kinetic Style Sheets (KSS)
   - [ ] BEM Naming Convention
