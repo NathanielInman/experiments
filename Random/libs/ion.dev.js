@@ -50,6 +50,7 @@ var Ion=function(q,s,x,y,dx,dy){
  * @return {float}        current x or y location
  */
 Ion.prototype.ease=function ease(b,c,t,d,o,type){
+	type=type|0; //force integer in the case float is passed
 	if(type===0){ //linear
 		return c*t/d+b;
 	}else if(type==1){ //ease-in quad
@@ -171,16 +172,18 @@ Ion.prototype.ease=function ease(b,c,t,d,o,type){
  */
 Ion.prototype.getNew=function(atom){
 	this.onCreate(); //even fired as a new particle is created
+	var sx=typeof this.sx=='function'?this.sx():this.sx;
+	var sy=typeof this.sy=='function'?this.sy():this.sy;
 	return {
 		id:atom, //be able to reference each particle individually outside of the class
-		sx:typeof this.sx            =='function'?this.sx():this.sx,
-		sy:typeof this.sy            =='function'?this.sy():this.sy,
-		x:typeof this.sx             =='function'?this.sx():this.sx,
-		y:typeof this.sy             =='function'?this.sy():this.sy,
+		sx:sx,
+		sy:sy,
+		x:sx,
+		y:sy,
 		dx:typeof this.dx            =='function'?this.dx():this.dx,
 		dy:typeof this.dy            =='function'?this.dy():this.dy,
 		c:typeof this.tween_current  =='function'?this.tween_current():this.tween_current,
-		d:typeof this.tween_duration =='function'?this.tween_duration():this.tween_duration,
+		d:(typeof this.tween_duration =='function'?this.tween_duration():this.tween_duration)|0,
 		tt:typeof this.tween_type    =='function'?this.tween_type():this.tween_type,
 		s:typeof this.size           =='function'?this.size():this.size,
 		wx:typeof this.wx            =='function'?this.wx():this.wx,
@@ -198,10 +201,10 @@ Ion.prototype.getNew=function(atom){
  * @return {Void}         Function doesn't return a value
  */
 Ion.prototype.reset=function(atom){
-	this.particle[atom].x  =this.particle[atom].sx=typeof this.sx=='function'?this.sx():this.sx;
-	this.particle[atom].y  =this.particle[atom].sy=typeof this.sy=='function'?this.sy():this.sy;
-	this.particle[atom].dx =typeof this.dx=='function'?this.dx():this.dx;
-	this.particle[atom].dy =typeof this.dy=='function'?this.dy():this.dy;
+	this.particle[atom].x  =this.particle[atom].sx=(typeof this.sx=='function'?this.sx():this.sx);
+	this.particle[atom].y  =this.particle[atom].sy=(typeof this.sy=='function'?this.sy():this.sy);
+	this.particle[atom].dx =(typeof this.dx=='function'?this.dx():this.dx);
+	this.particle[atom].dy =(typeof this.dy=='function'?this.dy():this.dy);
 	this.particle[atom].c  =0;
 };
 
@@ -315,7 +318,7 @@ Ion.prototype.getFrame=function(){
 		if(p.x<0||p.y<0||p.x>v.w||p.y>v.h)this.onEscape(atom);
 		p.c++; //increment the current iteration of the tween by one
 		if(p.c==p.d)this.onEnd(atom); //movement process finished
-		if(M.floor(p.x)!==M.floor(p.dx))p.x=this.ease(p.sx,p.dx-p.sx,p.c,p.d,0.3,p.tt);
-		if(M.floor(p.y)!==M.floor(p.dy))p.y=this.ease(p.sy,p.dy-p.sy,p.c,p.d,0.3,p.tt);
+		if((p.x)|0!==(p.dx)|0)p.x=this.ease(p.sx,p.dx-p.sx,p.c,p.d,0.3,p.tt);
+		if((p.y)|0!==(p.dy)|0)p.y=this.ease(p.sy,p.dy-p.sy,p.c,p.d,0.3,p.tt);
 	} //end for
 };
