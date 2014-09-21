@@ -17,7 +17,7 @@ All code can be used without my consent.
   * **Scaffolding**
     - [ ] Yeoman
   * **Building**
-    - [ ] Gulp
+    - [X] Gulp
     - [ ] Grunt
     - [ ] Browserify
     - [ ] Bower
