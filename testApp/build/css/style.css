@@ -1,0 +1,686 @@
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-family: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+body {
+  line-height: 1;
+  color: #000;
+  background: #fff;
+}
+ol,
+ul {
+  list-style: none;
+}
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  vertical-align: middle;
+}
+caption,
+th,
+td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+a img {
+  border: none;
+}
+::selection {
+  background: #111;
+  color: #eee;
+  text-shadow: none;
+}
+::-moz-selection {
+  background: #111;
+  color: #eee;
+  text-shadow: none;
+}
+::-webkit-input-placeholder {
+  color: #111;
+}
+:-moz-placeholder {
+  color: #111;
+}
+::-moz-placeholder {
+  color: #111;
+}
+:-ms-input-placeholder {
+  color: #111;
+}
+:hover,
+:focus {
+  outline: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+html {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: inherit;
+}
+button,
+input {
+  line-height: normal;
+  border: none;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+a,
+button,
+input[type=button],
+input[type=reset],
+input[type=submit] {
+  cursor: pointer;
+  text-decoration: none;
+}
+input[type=search]::-webkit-search-decoration,
+input[type=search]::-webkit-search-cancel-button {
+  display: none;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  color: #eee;
+  background: #222 url("../img/backgrounds/bart.png") left bottom no-repeat;
+}
+body.loaded {
+  -webkit-animation: slide 1s;
+  -moz-animation: slide 1s;
+  -o-animation: slide 1s;
+  -ms-animation: slide 1s;
+  animation: slide 1s;
+}
+@font-face {
+  font-family: 'Burp';
+  font-style: normal;
+  src: url("../font/burp.eot");
+  src: url("../font/burp.eot?#iefix") format('embedded-opentype'), url("../font/burp.woff") format('woff'), url("../font/burp.ttf") format('truetype'), url("../font/burp.svg#burp") format('svg');
+}
+h1 {
+  font: 10em/1 'Burp', sans-serif;
+  text-align: center;
+}
+@-moz-keyframes slide {
+  from {
+    background-position: -100% 100%;
+  }
+  to {
+    background-position: 0 100%;
+  }
+}
+@-webkit-keyframes slide {
+  from {
+    background-position: -100% 100%;
+  }
+  to {
+    background-position: 0 100%;
+  }
+}
+@-o-keyframes slide {
+  from {
+    background-position: -100% 100%;
+  }
+  to {
+    background-position: 0 100%;
+  }
+}
+@keyframes slide {
+  from {
+    background-position: -100% 100%;
+  }
+  to {
+    background-position: 0 100%;
+  }
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+body {
+  background: #111;
+  font: 12px Verdana, Arial, Helvetica, sans-serif;
+  padding: 0;
+}
+blockquote {
+  border-left: 1px solid #326ea1;
+  color: #555;
+  font-size: 1em;
+  margin: 0 30px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+a {
+  color: #748f3b;
+  outline: none;
+  text-decoration: none;
+}
+a:hover {
+  color: #18cc36;
+}
+code {
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  color: #555;
+  font: 11px Verdana, Arial, Helvetica, sans-serif;
+  padding: 10px;
+  text-align: left;
+}
+h1 {
+  color: #999;
+  display: block;
+  font: 24px Arial, Helvetica, Verdana, sans-serif;
+  font-weight: 100;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+}
+h1 a {
+  color: #748f3b;
+  font: 24px Arial, Helvetica, Verdana, sans-serif;
+  font-weight: 100;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+}
+h2,
+h3,
+h4 {
+  color: #777;
+  font-weight: 100;
+  margin: 0 0 5px;
+  padding: 0;
+}
+h2 a,
+h3 a,
+h4 a {
+  color: #18cc36;
+  font-weight: 100;
+  margin: 0;
+  padding: 0;
+}
+img {
+  border: none;
+}
+img.latex {
+  background-color: #181818 !important;
+  padding: 10px !important;
+}
+ol,
+form {
+  margin: 0;
+  padding: 0;
+}
+p {
+  line-height: 1.7em;
+  text-align: justify;
+}
+.entry {
+  line-height: 1.3em;
+  text-align: justify;
+}
+small {
+  font-size: 10px;
+}
+#page {
+  background: transparent;
+  margin: 0 auto;
+  padding: 0;
+  text-align: left;
+  width: 810px;
+}
+#header {
+  background-image: url("http://theoestudio.com/wp-content/uploads/2013/04/WebsiteCenterpiece.png");
+  background-position: left top;
+  background-repeat: no-repeat;
+  font-size: 13px;
+  height: 300px;
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 15px;
+  text-align: center;
+}
+#header a {
+  color: #666;
+}
+#header a:hover {
+  color: #699;
+}
+#header h2 {
+  font: 30px Georgia, 'Times New Roman', Times, serif;
+  margin: 0;
+  text-align: center;
+}
+#header h2 a {
+  text-align: center;
+  text-decoration: none;
+}
+#header p {
+  line-height: 1em;
+  margin: 0 auto;
+  padding: 13px 0 0 10px;
+  text-align: center;
+}
+#top {
+  background: #333;
+  border-bottom: 1px solid #42591e;
+  height: 34px;
+  margin: 0 auto;
+  overflow: hidden;
+  text-align: center;
+  width: 100%;
+}
+#topbar {
+  height: 34px;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+  width: 810px;
+}
+ul.topmenu {
+  background: transparent;
+  float: left;
+  list-style-type: none;
+  margin: 0 auto;
+  padding: 0;
+}
+ul.topmenu li {
+  float: left;
+}
+ul.topmenu li a {
+  color: #cbcbcb;
+  display: block;
+  float: left;
+  height: 34px;
+  padding: 9px 20px 0 0;
+}
+#content {
+  background: transparent;
+  border: 0;
+  color: #282828;
+  float: left;
+  margin: 20px 0 30px;
+  padding: 0 40px 0 0;
+  text-align: left;
+  width: 510px;
+}
+#content img {
+  background-color: #151515;
+  float: left;
+  padding: 5px;
+}
+#content a:hover img {
+  background: #748f3b;
+}
+#content ul {
+  list-style-type: circle;
+  margin: 0 0 0 25px;
+  padding: 0;
+}
+#content ul li {
+  line-height: 1.5em;
+  margin: 0;
+  padding: 5px;
+}
+#comment {
+  background: #000;
+  border: 1px solid #42591e;
+  color: #666;
+  font-size: 13px;
+  padding-left: 2px;
+  vertical-align: middle;
+  width: 510px;
+}
+.commentbody {
+  -moz-border-radius: 10px;
+  background: #222;
+  border: 1px solid #42591e;
+  color: #666;
+  font-size: 13px;
+  margin: 0 0 10px;
+  padding: 15px 15px 5px;
+  position: relative;
+}
+.commentbody a {
+  color: #748f3b;
+  padding-left: 10px;
+  text-decoration: none;
+}
+.commentbody a:hover {
+  color: #699;
+  text-decoration: none;
+}
+.commentbody p {
+  line-height: 1.2em;
+}
+.commentlink {
+  font-size: 13px;
+}
+.commentlist {
+  list-style: none;
+}
+.gravatar {
+  background-color: inherit !important;
+  padding: 4px !important;
+}
+* html .gravatar {
+  position: relative;
+}
+#email,
+#author {
+  background: #000;
+  border: 1px solid #555;
+  color: #748f3b;
+  font: 12px Verdana, Arial, Helvetica, sans-serif;
+  padding-left: 5px;
+  vertical-align: middle;
+}
+#url {
+  background: #fafafa;
+  border: 1px solid #ccc;
+  color: #444;
+  font: 12px Verdana, Arial, Helvetica, sans-serif;
+  height: 16px;
+  padding-left: 5px;
+  vertical-align: middle;
+}
+#submit {
+  background: #333;
+  border: 1px solid #42591e;
+  color: #aaa;
+  font: 12px Verdana, Arial, Helvetica, sans-serif;
+  padding: 0 10px;
+}
+textarea {
+  overflow: auto;
+}
+#footer {
+  background: #222;
+  border-top: 1px solid #42591e;
+  clear: both;
+  color: #666;
+  height: 25px;
+  margin: 20px 0 0;
+  overflow: hidden;
+  padding: 10px 0 50px;
+  text-align: center;
+}
+.s {
+  background: #000;
+  border: 1px solid #222;
+  color: #748f3b;
+  font: 12px Verdana, Arial, Helvetica, sans-serif;
+  height: 15px;
+  padding-left: 3px;
+  vertical-align: middle;
+  width: 245px;
+}
+#sidebar {
+  color: #18cc36;
+  float: left;
+  line-height: 1.6em;
+  margin: 20px 0 30px;
+  padding: 0;
+  text-align: left;
+  width: 250px;
+}
+#sidebar ul {
+  border: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#sidebar li {
+  border-bottom: 1px solid #222;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+#sidebar li:hover {
+  border-bottom: 1px solid #42591e;
+}
+#sidebar li a {
+  background-color: transparent;
+  border-bottom: 0;
+  color: #42591e;
+  display: block;
+  padding: 5px;
+  text-decoration: none;
+}
+.sidelist {
+  background: transparent;
+  margin: 0 0 20px;
+  padding: 0;
+}
+#sidebar li.linkcat,
+#sidebar li.categories,
+#sidebar li.pagenav {
+  border-bottom: 0 solid #ccc;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+#wrapper {
+  float: left;
+  margin: 0;
+  padding: 0;
+}
+.alignleft {
+  float: left;
+  text-align: left;
+}
+.alignright {
+  float: right;
+  margin-top: -1px;
+  text-align: right;
+}
+.date {
+  background: transparent;
+  color: #363636;
+  font: 11px 'Trebuchet MS', Verdana, Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+.postmetadata {
+  background: #222;
+  border: 1px solid #20370a;
+  clear: both;
+  color: #666;
+  font-style: italic;
+  line-height: 1.5em;
+  margin: 15px 0 0;
+  padding: 3px;
+  text-align: right;
+}
+.postmetadata2 {
+  -moz-border-radius: 10px;
+  background: #181818;
+  background-image: url("http://theoestudio.com/wp-content/uploads/2013/02/Signature.png");
+  background-position: right top;
+  background-repeat: no-repeat;
+  -webkit-background-size: 320px 210px;
+  -moz-background-size: 320px 210px;
+  background-size: 320px 210px;
+  border: 1px solid #42591e;
+  clear: both;
+  color: #666;
+  font-size: 11px;
+  letter-spacing: 0;
+  line-height: 1.3em;
+  margin-bottom: 15px;
+  padding: 5px;
+  text-align: left;
+}
+.more-link {
+  background-color: background;
+}
+.more-link :#181818,
+.more-link margin-bottom 10px,
+.more-link border 1px solid #20370A,
+.more-link float left,
+.more-link font-weight 800,
+.more-link padding-bottom 5px,
+.more-link padding-top 5px,
+.more-link text-align center,
+.more-link width 496px,
+.more-link:hover {
+  background-color: #222;
+  cursor: pointer;
+}
+.alt {
+  line-height: 1.3em;
+  padding: 10px;
+}
+.alt a {
+  background: inherit;
+  color: #18cc36;
+  text-decoration: none;
+}
+.commentheader {
+  background: inherit;
+  color: #666;
+  font-size: 18px;
+  font-weight: lighter;
+  line-height: 1.5em;
+  padding: 0;
+  text-align: left;
+}
+.clear {
+  clear: both;
+}
+.aligncenter {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.wp-caption {
+  background-color: #222;
+  border: 1px solid #20370a;
+  color: #666;
+  margin: 10px 0 0 !important;
+  padding: 10px;
+  text-align: center;
+  width: 476px !important;
+}
+.wp-caption img {
+  border: 0 none;
+  clear: both;
+  float: left;
+  margin: 0 auto;
+  padding: 0;
+  width: 466px;
+}
+.wp-caption-dd {
+  font-size: 11px;
+  line-height: 17px;
+  margin: 0;
+  padding: 0 4px 5px;
+}
+.tagcloud a {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  background: #181818;
+  border: 1px solid #42591e;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  color: #666;
+  display: block;
+  float: left;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 7px;
+  margin-right: 7px;
+  padding: 4px 10px;
+  text-decoration: none;
+  text-shadow: 1px 1px 1px #000;
+  text-transform: lowercase;
+}
+.tagcloud a:hover {
+  background: #222;
+  color: #18cc36;
+  text-decoration: none;
+}
+ul.topmenu li a:hover,
+#sidebar li a:hover {
+  color: #18cc36;
+  text-decoration: none;
+}
+#footer a,
+#footer a:hover {
+  color: #748f3b;
+  text-decoration: none;
+}

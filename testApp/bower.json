@@ -1,0 +1,20 @@
+{
+  "name": "testapp",
+  "version": "0.1.0",
+  "authors": [
+    "Author Name <author@email.com>"
+  ],
+  "description": "Test application created by Nathaniel Inman",
+  "main": "gulpfile.js",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "2.*"
+  }
+}
