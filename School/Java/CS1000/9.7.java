@@ -46,10 +46,9 @@ public class DialConverter {
             case 'Z':
                number = 9;
                break;
-        }
-        
+        } //end switch
         return number;
-    }
+    } //end getNumber() method
 
     public static void main(String[] args) {
         System.out.print("Enter a string: ");
@@ -74,8 +73,8 @@ public class DialConverter {
             } else {
                // The character was not a letter, so print it unmodified.
                System.out.print(currChar);
-            }
-        }
+            } //end if
+        } //end for
         System.out.println();
-    }
-}
+    } //end main()
+} //end DialConverter class
