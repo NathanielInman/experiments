@@ -16,10 +16,9 @@ public class Checkers {
 	
 	boolean currentStatus=true;
 	
-	 public Checkers()
-	{
-		 control = new Control(this);
-		 cell = new Cell[8][8];
+	public Checkers(){
+		control = new Control(this);
+		cell = new Cell[8][8];
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setSize(300,370);
 		window.setResizable(false);
@@ -39,29 +38,26 @@ public class Checkers {
 		
 		GridLayout layout2 = new GridLayout(8,8);
 		row2.setLayout(layout2);
-		for(int x =0; x < 8; x++)
-		{
+		for(int x =0; x < 8; x++){
 			currentStatus = (currentStatus ==true? false:true); //if the status is true, then it'll turn to false and vis-versa 
-			for(int y=0; y < 8; y++)
-			{
-			cell[x][y] = new Cell();
-			currentStatus = (currentStatus ==true? false:true); //if the status is true, then it'll turn to false and vis-versa 
-			cell[x][y].isBlack = (currentStatus==true?false:true); //draws it either black or leave it
-			row2.add(cell[x][y]);
-			}
-		}
+			for(int y=0; y < 8; y++){
+        cell[x][y] = new Cell();
+        currentStatus = (currentStatus ==true? false:true); //if the status is true, then it'll turn to false and vis-versa
+        cell[x][y].isBlack = (currentStatus==true?false:true); //draws it either black or leave it
+        row2.add(cell[x][y]);
+			} //end for
+		} //end for
 		row2.setPreferredSize(new Dimension(32*8,32*8));
 		window.add(row2);
 		
 		start.addActionListener(control);
 		window.setVisible(true);
-	}
+	} //end Checkers()
 	
 	public static void main(String[] args) {
 		Checkers game = new Checkers();
-	}
-
-}
+	} //end main()
+} //end Checkers Class
 
 class Cell extends JPanel
 {
