@@ -18,7 +18,7 @@ public class TESTFOURFANS extends JFrame implements Runnable {
     run();
   } //end TESTFOURFANS method
 
-	public void run(){
+  public void run(){
     try{
       Thread.sleep(100);
 
@@ -31,17 +31,17 @@ public class TESTFOURFANS extends JFrame implements Runnable {
       return;
     } //end try
     run();
-	} //end run() method
+  } //end run() method
 
-	
-	public static void main(String[] args){
-		TESTFOURFANS frame = new TESTFOURFANS();
-		
-		frame.setSize(400, 200);
-		frame.setTitle("FOUR FANS");
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-	} //end main method()
+  
+  public static void main(String[] args){
+    TESTFOURFANS frame = new TESTFOURFANS();
+    
+    frame.setSize(400, 200);
+    frame.setTitle("FOUR FANS");
+    frame.setLocationRelativeTo(null);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setVisible(true);
+  } //end main method()
 } //end TESTFOURFANS Class
 

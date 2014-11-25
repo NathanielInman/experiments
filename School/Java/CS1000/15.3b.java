@@ -1,15 +1,15 @@
 import java.awt.event.*;
 public class Control implements ItemListener, ActionListener{
-	Checkers game;
-	int[][] theBoard = new int[8][8];
-	
-	public Control(Checkers game){
-		this.game = game;
-	} //end Control
+  Checkers game;
+  int[][] theBoard = new int[8][8];
+  
+  public Control(Checkers game){
+    this.game = game;
+  } //end Control
 
-	public void actionPerformed(ActionEvent input) {
+  public void actionPerformed(ActionEvent input) {
     Object current = input.getSource();
-    if(current.equals(game.start))	{
+    if(current.equals(game.start))  {
       game.AI.setEnabled(false);
       game.difficulty.setEnabled(false);
       game.start.setEnabled(false);
@@ -49,11 +49,11 @@ public class Control implements ItemListener, ActionListener{
         } //end for
       } //end for
     } //end if
-	} //end actionPerformed() method
+  } //end actionPerformed() method
 
-	@Override
-	public void itemStateChanged(ItemEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	} //end itemStateChanged method
+  @Override
+  public void itemStateChanged(ItemEvent arg0) {
+    // TODO Auto-generated method stub
+    
+  } //end itemStateChanged method
 } //end Control class
