@@ -1,1 +1,0 @@
-taskthreaddemo.PrintChar
