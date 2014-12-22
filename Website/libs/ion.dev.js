@@ -32,7 +32,8 @@ var Ion=function(q,s,x,y,dx,dy){
 	this.size=s||1;
 	this.tween_type=0;
 	this.tween_current=0;
-	this.tween_duration=1000; 
+	this.tween_duration=1000;
+	this.tween_speed=1;
 };
 
 /**
@@ -298,13 +299,13 @@ Ion.prototype.onEscape=function(){};
  * @return {Void} Function doesn't return a value
  */
 Ion.prototype.process=function(){
-	var that=this,p;
+	var that=this;
 	if(this.clear){
 		ctx.fillStyle=this.clearColor;
 		ctx.fillRect(0,0,v.w,v.h);
 	} //end if
 	this.getFrame(); //call getFrame() to receive and flip all pixel information for next update
-	setTimeout(function(){that.process();},1);
+	setTimeout(function(){that.process();},this.tween_speed);
 };
 
 /**
