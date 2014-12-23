@@ -29,6 +29,7 @@ var Ion=function(q,s,x,y,dx,dy){
 	this.m=0; //modulation factor - only runs if it's set explicitly
 	this.color='#48F';
 	this.clearColor='#000';
+	this.retain=null; //this can be set as a function for a draw after clear screen
 	this.size=s||1;
 	this.tween_type=0;
 	this.tween_current=0;
@@ -303,6 +304,9 @@ Ion.prototype.process=function(){
 	if(this.clear){
 		ctx.fillStyle=this.clearColor;
 		ctx.fillRect(0,0,v.w,v.h);
+		if(this.retain){
+			this.retain(); //if there is a retaining script, run it
+		}
 	} //end if
 	this.getFrame(); //call getFrame() to receive and flip all pixel information for next update
 	setTimeout(function(){that.process();},this.tween_speed);
