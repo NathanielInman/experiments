@@ -1,0 +1,75 @@
+<!doctype html><head><title>Deep Linguistic Processing</title>
+<style>
+ #result{
+ 	position:absolute;
+ 	left:0;top:0;right:0;bottom:0;
+ 	background-color:#000;color:#fff;
+ 	border:20px solid #000;
+ 	font-family:'Courier New';
+ 	font-weight:800;
+ }
+ .color_head{ color:#999;float:left;width:100px; }
+ .color_base{ color:#555 }
+ .color_0   { color:#f33 }
+ .color_1   { color:#963 }
+ .color_2   { color:#936 }
+ .color_3   { color:#693 }
+ .color_4   { color:#396 }
+ .color_5   { color:#639 }
+ .color_6   { color:#369 }
+ .color_7   { color:#f93 }
+ .color_8   { color:#f39 }
+ .color_9   { color:#9f3 }
+ .color_10  { color:#3f9 }
+ .color_11  { color:#93f }
+ .color_12  { color:#39f }
+ .color_13  { color:#a3a }
+ .color_14  { color:#3ff }
+ .color_14  { color:#f3f }
+ .color_15  { color:#FF3 }
+ .color_16  { color:#9DF }
+</style>
+</head>
+<body><div id='result'></div>
+<script>var t=new Date();</script>
+<script src='DLP.js'></script>
+<script src='DLP_Lexer.js'></script>
+<script>console.log('Loading engine took '+(new Date()-t)+'ms.');t=new Date();</script>
+<script src='Dictionary/DLP_D__.js'></script>
+<script src='Dictionary/DLP_D_A.js'></script>
+<script src='Dictionary/DLP_D_B.js'></script>
+<script src='Dictionary/DLP_D_C.js'></script>
+<script src='Dictionary/DLP_D_D.js'></script>
+<script src='Dictionary/DLP_D_E.js'></script>
+<script src='Dictionary/DLP_D_F.js'></script>
+<script src='Dictionary/DLP_D_G.js'></script>
+<script src='Dictionary/DLP_D_H.js'></script>
+<script src='Dictionary/DLP_D_I.js'></script>
+<script src='Dictionary/DLP_D_J.js'></script>
+<script src='Dictionary/DLP_D_K.js'></script>
+<script src='Dictionary/DLP_D_L.js'></script>
+<script src='Dictionary/DLP_D_M.js'></script>
+<script src='Dictionary/DLP_D_N.js'></script>
+<script src='Dictionary/DLP_D_O.js'></script>
+<script src='Dictionary/DLP_D_P.js'></script>
+<script src='Dictionary/DLP_D_Q.js'></script>
+<script src='Dictionary/DLP_D_R.js'></script>
+<script src='Dictionary/DLP_D_S.js'></script>
+<script src='Dictionary/DLP_D_T.js'></script>
+<script src='Dictionary/DLP_D_U.js'></script>
+<script src='Dictionary/DLP_D_V.js'></script>
+<script src='Dictionary/DLP_D_W.js'></script>
+<script src='Dictionary/DLP_D_X.js'></script>
+<script src='Dictionary/DLP_D_Y.js'></script>
+<script src='Dictionary/DLP_D_Z.js'></script>
+<script>console.log('Loading dictionary took '+(new Date()-t)+'ms.');t=new Date();</script>
+<script>
+	var $=function(o){return document.getElementById(o);};
+	DLP.process("His name was Samuel. "+
+		        "He'd have loved to eat Fritos if he were still alive; "+
+		        "However, he died at the young age of 13.");
+	DLP.printStructure($('result'));
+</script>
+<script>console.log('Processing text took '+(new Date()-t)+'ms.');</script>
+</body>
+</html>

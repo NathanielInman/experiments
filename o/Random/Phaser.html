@@ -1,0 +1,23 @@
+<!doctype html><head><title>Phaser Demo</title></head><body>
+<script type='text/javascript' src='libs/easel.js'></script>
+<script type='text/javascript' src='libs/phaser.js'></script><script>
+var color=[
+	{
+		current: {r:  0,g:  0,b:  0},
+		dawn:    {r:119,g:153,b:187},
+		daytime: {r:204,g:238,b:255},
+		dusk:    {r:135,g: 51,b: 85},
+		midnight:{r:  0,g:  0,b: 17}
+	},{
+		current: {r:  0,g:  0,b:  0},
+		dawn:    {r:153,g: 85,b: 51},
+		daytime: {r:170,g: 85,b: 51},
+		dusk:    {r:  0,g: 17,b: 34},
+		midnight:{r:153,g: 87,b: 22}
+	}
+];
+//Phaser(interval_amount, starting_tag_name, color_array, drawing_context, function_returning_properties, function_returning_gradient)
+var dayCycle=new Phaser(100,'dawn',color,ctx,function(){return [0,0,v.w,v.h];},function(){return ctx.createLinearGradient(0,0,0,v.h/5*4);});
+easel.redraw=function(){dayCycle.drawNext(true);}; //ensure resizing of window works and just redraws instead of pulling next frame
+setInterval(function(){dayCycle.drawNext();},10); //step through the frames to show the looping transitions.
+</script></body></html>

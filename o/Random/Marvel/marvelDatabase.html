@@ -1,0 +1,72 @@
+<!doctype html>
+<head><title>Marvel Database</title>
+<style>
+body{background-color:#000;}
+#wrapper{
+	position:absolute;left:0;top:0;bottom:0;right:0;
+	overflow-y:scroll;min-width:1228px;cursor:default;
+} 
+.header{
+	position:absolute;left:0;top:0;right:20px;
+	font-size:1.5em;height:30px;min-height:30px;
+	color:#F55;text-align:center;margin:0 0 10px 0;
+	border-top:5px solid #222;
+	border-bottom:5px solid #222;
+	background-color:#111;
+	text-align:center;min-width:1228px;
+	cursor:default;
+}
+.lsection{
+	float:left;min-width:130px;height:100%;border-left:3px solid #111;
+	padding:0 20px 0 20px;background-color:#222;color:#999;
+}
+.lsection:hover{ background-color:#422;color:#F99;cursor:pointer;}
+.rsection{
+	float:right;min-width:130px;height:100%;border-right:3px solid #111;
+	padding:0 20px 0 20px;background-color:#222;color:#999;
+}
+.rsection:hover{ background-color:#422;color:#F99;cursor:pointer;}
+.lsection_end{
+	float:left;height:100%;border-left:1px solid #111;
+}
+.rsection_end{
+	float:right;height:100%;border-right:1px solid #111;
+}
+.lpane{
+	position:absolute;left:0;width:19%;top:50px;bottom:0px;
+	color:#FFF;
+}
+.lpaneb{
+	position:absolute;left:0;width:19%;top:0px;bottom:0px;
+	border-right:3px solid #222;
+}
+.cpane{
+	position:absolute;left:20%;width:80%;bottom:0px;top:50px;
+	color:#FFF;cursor:default;
+}
+.rpane{
+	position:absolute;right:0%;width:40%;top:40px;
+	border-left:3px solid #222;border-bottom:3px solid #222;
+	background-color:#111;visibility:hidden;
+}
+</style>
+</head><body>
+<div class='lpaneb'></div>
+<div id='rpane' class='rpane'></div>
+<div id='wrapper' onselectstart="return false">
+	<div id='lpane' class='lpane'></div>
+	<div id='cpane' class='cpane'></div>
+</div>
+<div id='header' class='header' onselectstart="return false">
+	<div id='alphabetical' class='lsection'>Alphabetical</div>
+	<div id='yearly' class='lsection'>Year</div>
+	<div id='month' class='lsection'>Month</div>
+	<div class='lsection_end'></div>
+	<div id='options' class='rsection'>Settings</div>
+	<div id='show_info' class='rsection'>Show By Info</div>
+	<div id='show_icon' class='rsection'>Show By Icon</div>
+	<div class='rsection_end'></div>
+	Marvel Database
+</div>
+<script src='marvelDatabase.js'></script>
+</body></html>
