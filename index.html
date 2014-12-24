@@ -5,11 +5,60 @@
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
   <meta name="description" content="Experiments : Holds all programming experiments that are stand-alone.">
   <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/custom.css">
   <title>Experiments</title>
+  <script src="javascripts/ion.dev.js"></script>
 </head>
 <body>
+<!-- MAIN CONTENT -->
+<div class="absolute" style="bottom:10%;top:25%;">
+  <canvas id='pad'></canvas>
+</div>
+<div id="main_content_wrap" class="absolute" style="bottom:10%;top:25%">
+  <section id="main_content" class="inner">
+    <span class="transparentBG"><a href="http://nathanielinman.github.io/Experiments/o/Complex%20Math/DLACentroidDispersal.html" style="background-color:rgba(0,0,0,0.5);">
+      Diffusion Limited Aggregation : Centroid Dispersal
+    </a></span>
+    <br/>
+    <span class="transparentBG"><a href="http://nathanielinman.github.io/Experiments/o/Complex%20Math/DiscreteTimeDynamicalSystem.html">
+      Discrete Time Dynamical System
+    </a></span>
+    <br/>
+    <span class="transparentBG"><a href="http://nathanielinman.github.io/Experiments/o/Complex%20Math/ProceduralTreesWithDLA.html">
+      Procedural Trees (DLA)
+    </a></span>
+    <br/>
+    <span class="transparentBG"><a href="http://nathanielinman.github.io/Experiments/o/Complex%20Math/Langtons%20Ant.html">
+      Langtons Ant
+    </a></span>
+    <br/>
+    <span class="transparentBG"><a href="http://nathanielinman.github.io/Experiments/o/CoffeeScript/MapGeneration.html">
+      Random Map Generation
+    </a></span>
+    <br/>
+    <span class="transparentBG">Bouncing Balls [<a href="http://nathanielinman.github.io/Experiments/o/Object%20Collision/bouncingBalls_entities.html">entities</a>] [<a href="http://nathanielinman.github.io/Experiments/o/Object%20Collision/bouncingBalls_mapper.html">mapper</a>] [<a href="http://nathanielinman.github.io/Experiments/o/Object%20Collision/bouncingBalls_spatialHash.html">spatial hashing</a>]</span>
+    <br/>
+    <span class="transparentBG">Particle Generator</span>
+    <br/>
+    <span class="transparentBG"><a href="http://nathanielinman.github.io/Experiments/o/Random/Ion.html">
+      Demo 1 : Roaming Particles
+    </a></span>
+    <br/>
+    <span class="transparentBG"><a href="http://nathanielinman.github.io/Experiments/o/Random/Ion2.html">
+      Demo 2 : Pathing Particles
+    </a></span>
+    <br/>
+    <span class="transparentBG"><a href="http://nathanielinman.github.io/Experiments/o/Random/Ion3.html">
+      Demo 3 : Particle Fountain
+    </a></span>
+    <br/>
+    <span class="transparentBG"><a href="http://nathanielinman.github.io/Experiments/o/Random/Ion4.html">
+      Demo 4 : Fire
+    </a></span>
+  </section>
+</div>
 <!-- HEADER -->
-<div id="header_wrap" class="outer">
+<div id="header_wrap" class="absolute" style="top:0;height:25%;border-bottom:2px solid #444;">
   <header class="inner">
     <a id="forkme_banner" href="https://github.com/NathanielInman/Experiments">View on GitHub</a>
 
@@ -26,68 +75,8 @@
     </section>
   </header>
 </div>
-<!-- MAIN CONTENT -->
-<div id="main_content_wrap" class="outer">
-  <section id="main_content" class="inner">
-    <ul>
-      <li>
-        <a href="http://nathanielinman.github.io/Experiments/o/Complex%20Math/DLACentroidDispersal.html">
-          Diffusion Limited Aggregation : Centroid Dispersal
-        </a>
-      </li>
-      <li>
-        <a href="http://nathanielinman.github.io/Experiments/o/Complex%20Math/DiscreteTimeDynamicalSystem.html">
-          Discrete Time Dynamical System
-        </a>
-      </li>
-      <li>
-        <a href="http://nathanielinman.github.io/Experiments/o/Complex%20Math/ProceduralTreesWithDLA.html">
-          Procedural Trees (DLA)
-        </a>
-      </li>
-      <li>
-        <a href="http://nathanielinman.github.io/Experiments/o/Complex%20Math/Langtons%20Ant.html">
-          Langtons Ant
-        </a>
-      </li>
-      <li>
-        <a href="http://nathanielinman.github.io/Experiments/o/CoffeeScript/MapGeneration.html">
-          Random Map Generation
-        </a>
-      </li>
-      <li>
-        <span style="font-weight:800;">Bouncing Balls</span> [<a href="http://nathanielinman.github.io/Experiments/o/Object%20Collision/bouncingBalls_entities.html">entities</a>] [<a href="http://nathanielinman.github.io/Experiments/o/Object%20Collision/bouncingBalls_mapper.html">mapper</a>] [<a href="http://nathanielinman.github.io/Experiments/o/Object%20Collision/bouncingBalls_spatialHash.html">spatial hashing</a>]
-      </li>
-      <li>
-        <span style="font-weight:800;">Particle Generator</span>
-        <ul>
-          <li>
-            <a href="http://nathanielinman.github.io/Experiments/o/Random/Ion1.html">
-              Demo 1 : Roaming Particles
-            </a>
-          </li>
-          <li>
-            <a href="http://nathanielinman.github.io/Experiments/o/Random/Ion2.html">
-              Demo 2 : Pathing Particles
-            </a>
-          </li>
-          <li>
-            <a href="http://nathanielinman.github.io/Experiments/o/Random/Ion3.html">
-              Demo 3 : Particle Fountain
-            </a>
-          </li>
-          <li>
-            <a href="http://nathanielinman.github.io/Experiments/o/Random/Ion4.html">
-              Demo 4 : Fire
-            </a>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </section>
-</div>
 <!-- FOOTER  -->
-<div id="footer_wrap" class="outer">
+<div id="footer_wrap" class="absolute" style="bottom:0;height:10%;border-top:2px solid #444;">
   <footer class="inner">
     <p class="copyright">Experiments maintained by <a href="https://github.com/NathanielInman">NathanielInman</a>
     </p>
@@ -103,5 +92,6 @@
     pageTracker._trackPageview();
   } catch (err) {}
 </script>
+<script src="javascripts/main.js"></script>
 </body>
 </html>
