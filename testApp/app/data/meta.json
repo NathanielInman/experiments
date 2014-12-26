@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "master": {
+      "title": "TestApp :: Master",
+      "description": "Awesome project.",
+      "keywords": "html5, css3, TestApp"
+    },
+    "index": {
+      "title": "TestApp :: Home",
+      "description": "Awesome project.",
+      "keywords": "html5, css3, TestApp"
+    }
+  }
+}

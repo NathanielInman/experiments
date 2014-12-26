@@ -1,0 +1,27 @@
+/**
+ * Sticky
+ */
+
+html,
+body {
+  height: 100%;
+}
+
+.layout-wrap {
+  @include min-height(100%);
+}
+
+.layout-breaker {
+  height: $footer-height;
+
+  @if ($layout-breaker-padding-top > 0) {
+    padding-top: $layout-breaker-padding-top;
+  }
+}
+
+.layout-footer {
+  background: $base;
+  height: $footer-height - $footer-padding-top - $footer-padding-bottom;
+  margin-top: -1 * $footer-height;
+  padding: $footer-padding-top 0 $footer-padding-bottom;
+}

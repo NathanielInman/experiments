@@ -1,0 +1,10 @@
+exclude: 
+ - 'app/styles/helpers/_sprite.scss'
+
+linters:
+  Indentation:
+    enabled: true
+    width: 2
+
+  Comment:
+    enabled: false
