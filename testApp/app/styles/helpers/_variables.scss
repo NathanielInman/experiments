@@ -1,0 +1,59 @@
+//
+// Polyfills
+//
+
+$is-oldie: false !default;
+$is-responsive: true !default;
+
+
+//
+// Fonts
+//
+
+$base-font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+
+
+//
+// Sizes
+//
+
+$container-padding: 15px;
+
+$screen-sm-min: 724px; // Small devices
+$screen-md-min: 960px; // Middle devices
+$screen-lg-min: 1200px; // Large devices
+
+$container-sm-width: ($screen-sm-min - $container-padding * 2);
+$container-md-width: ($screen-md-min - $container-padding * 2);
+$container-lg-width: ($screen-lg-min - $container-padding * 2);
+
+
+//
+// Colors
+//
+
+// Base colors
+
+$white: #fff;
+$base: #333;
+$black: #000;
+
+// Red group
+
+$red-misty: #f2dede;
+$red-lighty: #ebccd1;
+$red-maroon: #800000;
+
+
+//
+// Diff stuff
+//
+
+$sprite-image: url(../images/sprite.png);
+
+// Sticky footer
+
+$layout-breaker-padding-top: 0;
+$footer-height: 50px;
+$footer-padding-top: 10px;
+$footer-padding-bottom: $footer-padding-top;

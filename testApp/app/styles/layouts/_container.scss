@@ -1,0 +1,18 @@
+.layout-container {
+  @extend %clearfix;
+
+  margin: 0 auto;
+  padding: 0 $container-padding;
+
+  @include breakpoint(sm) {
+    width: $container-sm-width;
+  }
+
+  @include breakpoint(md) {
+    width: $container-md-width;
+  }
+
+  @include breakpoint(lg) {
+    width: $container-lg-width;
+  } 
+}
