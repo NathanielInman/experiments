@@ -38,7 +38,7 @@ angular.module('BudgetModule').controller('MainCtrl', function ($scope, $window)
 
   //initialization
   $scope.todos = JSON.parse($window.localStorage.getItem('todos') || '[]');
-  $scope.total = $scope.updateTotal();
+  $scope.updateTotal();
   $scope.$watch('todos', function (newTodos, oldTodos) {
     if (newTodos !== oldTodos) {
       $window.localStorage.setItem('todos', JSON.stringify(angular.copy($scope.todos)));
