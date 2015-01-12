@@ -1,0 +1,53 @@
+<div class="budgetTable">
+  <table>
+    <tr>
+      <td>Name</td>
+      <td>Price</td>
+      <td>Paid</td>
+    </tr>
+    <tr ng-repeat="todo in todos" ng-class="{'todo-done':todo.isDone}">
+      <td>{{ todo.label }}</td>
+      <td>{{ todo.amount }}</td>
+      <td><input type="checkbox" ng-click="check()" ng-model="todo.isDone"/></td>
+    </tr>
+    <tr>
+      <td>TOTAL</td>
+      <td>{{ this.total }}</td>
+      <td></td>
+    </tr>
+  </table>
+</div>
+<div class="underTable">
+  <table>
+    <tr>
+      <td>
+        <form ng-submit="add()">
+          <input
+            id="label"
+            type="text"
+            placeholder="New item..."
+            ng-model="label"
+            autofocus
+            />
+          <input
+            type="number"
+            name="currency"
+            min="0"
+            max="999999"
+            step="0.01"
+            size="4"
+            title="CDA Currency Format - No dollar sign or comma(s), cents (.##) are optional"
+            placeholder="0.00"
+            ng-model="amount"
+            />
+          <button type="submit" ng-disabled="posting || !label">Add</button>
+        </form>
+      </td>
+      <td>
+        <form ng-submit="remove()">
+          <button type="submit" tabindex="4">Remove Paid</button>
+        </form>
+      </td>
+    </tr>
+  </table>
+</div>

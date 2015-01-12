@@ -1,0 +1,71 @@
+.budgetTable
+  position absolute
+  left 5%
+  top 75px
+  bottom 75px
+  overflow-y scroll
+  padding 0
+  width 90%
+  box-shadow 10px 10px 5px #888888
+  border 1px solid #000000
+  border-bottom-left-radius 0
+  border-bottom-right-radius 0
+  border-top-right-radius 0
+  border-top-left-radius 0
+
+.budgetTable table
+  border-collapse collapse
+  border-spacing 0
+  width 100%
+  height 100%
+  margin 0
+  padding 0
+
+.budgetTable tr:last-child td:last-child
+  border-bottom-right-radius 0
+
+.budgetTable table tr:first-child td:first-child
+  border-top-left-radius 0
+
+.budgetTable table tr:first-child td:last-child
+  border-top-right-radius 0
+
+.budgetTable tr:last-child td:first-child
+  border-bottom-left-radius 0
+
+.budgetTable tr:hover td
+  background #aaffd4
+
+.budgetTable tr:nth-child(odd)
+  background-color #aad4ff
+
+.budgetTable tr:nth-child(even)
+  background-color #ffffff
+
+.budgetTable td
+  vertical-align middle
+  border-width 0 1px 1px 0
+  text-align center
+  padding 7px
+  color #000000
+
+.budgetTable tr:first-child td
+  background-color #005fbf;
+  text-align center;
+  border-width 0 0 1px 1px;
+  color #ffffff
+  font-weight bold
+
+.budgetTable tr:first-child:hover td
+  background-color #005fbf;
+
+.budgetTable tr:first-child td:first-child
+  border-width 0 0 1px 0;
+
+.budgetTable tr:first-child td:last-child
+  border-width 0 0 1px 1px;
+
+.budgetTable tr:last-child td
+  background #DDDDDD;
+  font-weight bold;
+  border-top 5px double #000;
