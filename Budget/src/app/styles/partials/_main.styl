@@ -25,11 +25,11 @@ input[type=checkbox]
   margin 20px auto
   border-radius 50px
   position relative
-  -webkit-box-shadow inset 0 1px 1px rgba(0,0,0,0.5),0 1px 0 rgba(255,255,255,0.2)
+  box-shadow inset 0 1px 1px rgba(0,0,0,0.5),0 1px 0 rgba(255,255,255,0.2)
 
 .customCheckbox:before
   content 'YES'
-  color #090
+  color #060
   position absolute
   left 10px
   top 1px
@@ -38,7 +38,7 @@ input[type=checkbox]
   text-shadow 1px 1px 0 rgba(255,255,255,.15)
 .customCheckbox:after
   content 'NO'
-  color #000
+  color #600
   position absolute
   right 10px
   top 1px
@@ -53,11 +53,12 @@ input[type=checkbox]
   transition all .4s ease
   cursor pointer
   position absolute
-  top 3px
+  top 4px
   left 3px
   z-index 1
   background #fcfff4
-  background: linear-gradient(top,#fcfff4 0%, #dfe5d7 40%, #b3bead 100%)
+  background: -webkit-linear-gradient(top,#fff 0%, #ddd 40%, #bbb 100%)
+  box-shadow inset -1px -1px 0px rgba(0,0,0,0.3),0 1px 0 rgba(255,255,255,0.2)
 
 .customCheckbox input[type=checkbox]:checked + label
   left 43px
