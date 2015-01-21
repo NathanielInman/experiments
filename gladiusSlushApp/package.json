@@ -1,0 +1,35 @@
+{
+  "name": "testApp",
+  "version": "0.1.0",
+  "scripts": {
+    "start": "node ./bin/www",
+    "test": "gulp test"
+  },
+  "author": {
+    "name": "Nathaniel Inman",
+    "email": "nate@codekoalas.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Nate/testApp.git"
+  },
+  "dependencies": {
+    "jade": "0.26.0",
+    
+    "express": "^4.8.3",
+    "consolidate": "^0.10.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.7",
+    "gladius-forge": "^1.0.0"
+  },
+  "subdomain": "",
+  "engines": {
+    "node": "0.10.x"
+  },
+  "bugs": {
+    "url": "https://github.com/Nate/testApp/issues"
+  },
+  "readmeFilename": "README.md",
+  "homepage": "https://github.com/Nate/testApp"
+}
