@@ -44,11 +44,10 @@ var Database;
   };
   Creature.prototype.ai={};
   Creature.prototype.default=function(target){
-    console.log(this);
     if(r(0,2,1)===0){ //50% to physical attack
       return this.attack(target); //return the result string
     }else{ //50% to cast a spell instead
-      return this.cast('immolate fire'); //return the result string
+      return this.cast('immolate fire',target); //return the result string
     }
     //for(var spell in c1.affect)if(c1.affect[spell].script)console.log(c1.affect[spell].script.call({actor:c1,spell:spell}));
     //outputCache.push(c1.cast('elemental precision'));

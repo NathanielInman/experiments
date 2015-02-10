@@ -93,15 +93,16 @@ Arcanic   Language proficiency.
     var minDamage;
     // if this affect already exists on the target, then ensure
     // that it stacks for a maximum of 5 times
-    if(this.target.affect['immolate '+this.element] &&
-       this.target.affect['immolate '+this.element].stack<5){
-      minDamage=this.target.affect['immolate '+this.element].stack;
-      this.target.affect['immolate '+this.element] = {
+    console.log(this);
+    if(this.target.affects['immolate '+this.element] &&
+       this.target.affects['immolate '+this.element].stack<5){
+      minDamage=this.target.affects['immolate '+this.element].stack;
+      this.target.affects['immolate '+this.element] = {
         timer:5,
-        stack:++this.target.affect['immolate '+this.element].stack,
+        stack:++this.target.affects['immolate '+this.element].stack,
         name:'immolate '+this.element,
         script:function(name){
-          var stacks = this.actor.affect[this.spell].stack;
+          var stacks = this.actor.affects[this.spell].stack;
           var dmg = r(stacks,stacks*4,1);
           this.actor.health -= dmg;
           return 'The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges more strongly (x'+stacks+').';
@@ -110,7 +111,7 @@ Arcanic   Language proficiency.
       console.log(this.target);
       return this.target.name+' begins to REALLY suffer from '+this.element+' damage.';
     }else{ //this is the first time that the affect has been applied to the target
-      this.target.affect['immolate '+this.element] = {
+      this.target.affects['immolate '+this.element] = {
         timer:5,
         stack:1,
         script:function(){
