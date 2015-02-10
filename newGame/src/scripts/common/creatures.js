@@ -26,11 +26,17 @@ var Database;
     return this.spells[name].call({actor:this,target:target,name:name});
   };
   Creature.prototype.attack = function(target){
-    var attackRoll = r(1,100,1);
-    var damage = this.damage>5?r(this.damage-5,this.damage,1):r(0,this.damage,1);
+    var attackRoll = r(1,101,1);
+    var damage = this.damage>5?r(this.damage-5,this.damage+1,1):r(0,this.damage+1,1);
     if(attackRoll<5){ //critical miss
-      this.health -= damage;
-      return this.name+' strikes wildly and damages itself for '+damage+' hp.';
+      attackRoll = r(1,101,1);
+      if(attackRoll>=95){
+        this.health -= (damage=(damage+1)*2);
+        return this.name+' strikes wildly and CRITICALLY damages itself for '+damage+' hp.';
+      }else{
+        this.health -= ++damage; //add 1 to ensure it always deals damage
+        return this.name+' strikes wildly and damages itself for '+damage+' hp.';
+      } //end if
     }else if(attackRoll<15){ //miss
       return this.name+' misses '+target.name+'.';
     }else if(attackRoll>=95){ //critical strike x2damage
@@ -38,21 +44,71 @@ var Database;
       target.health -= damage;
       return this.name+' CRITICALLY attacks '+target.name+' for '+damage+' hp.';
     }else{
-      target.health -= damage;
-      return this.name+' attacks '+target.name+' for '+damage+' hp.';
+      if(damage===0){
+        return this.name+' weakly attacks '+target.name+' and deals no damage.';
+      }else{
+        target.health -= damage;
+        return this.name+' attacks '+target.name+' for '+damage+' hp.';
+      } //end if
     } //end if
   };
   Creature.prototype.ai={};
   Creature.prototype.default=function(target){
+    var result=[];
+    if(this.health<=0)return this.name+' hits the ground in a heap.';
+    // Start by applying any affects the creature has on it before they decide to act
+    for(var spell in this.affects){
+      // Run the script if it's an executable affect
+      if(this.affects[spell].script){ //the affect has a script to run
+        result.push(this.affects[spell].script.call({actor:this,spell:spell}));
+      } //end if
+      // Decrement the timer for the affect or remove it if it expires
+      if(this.affects[spell].timer>0){
+        this.affects[spell].timer--; //decrement the timer on spells that don't last forever
+      }else if(this.affects[spell].timer===0){
+        delete this.affects[spell]; //remove the node from the object that has expired
+      } //end if
+    } //end for
     if(r(0,2,1)===0){ //50% to physical attack
-      return this.attack(target); //return the result string
+      result.push(this.attack(target)); //return the result string
     }else{ //50% to cast a spell instead
-      return this.cast('immolate fire',target); //return the result string
-    }
-    //for(var spell in c1.affect)if(c1.affect[spell].script)console.log(c1.affect[spell].script.call({actor:c1,spell:spell}));
-    //outputCache.push(c1.cast('elemental precision'));
-    //outputCache.push(c1.cast('immolate fire', c2));
-    //outputCache.push(c2.cast('immolate darkness', c1));
+      if(!this.affects['elemental precision']){ //always cast elemental precision before immolate spells
+        result.push(this.cast('elemental precision',this)); 
+      }else{ //elemental precision 
+        if(r(0,2,1)===0){ //apply vicerating element
+          return (function(type){
+            type=0;
+            if(type===0){
+              return this.cast('vicerating fire',target); //returns the result string / array of strings
+            }else if(type==1){
+              return this.cast('vicerating ice',target); //returns the result string / array of strings
+            }else if(type==2){
+              return this.cast('vicerating sparks',target); //returns the result string / array of strings
+            }else if(type==3){
+              return this.cast('vicerating pulses',target); //returns the result string / array of strings
+            }else if(type==4){
+              return this.cast('vicerating darkness',target); //returns the result string / array of strings
+            } //end if
+          }).call(this,r(0,5,1));
+        }else{ //cast immolation
+          return (function(type){
+            type=0;
+            if(type===0){
+              return this.cast('immolate fire',target); //returns the result string / array of strings
+            }else if(type==1){
+              return this.cast('immolate ice',target); //returns the result string / array of strings
+            }else if(type==2){
+              return this.cast('immolate sparks',target); //returns the result string / array of strings
+            }else if(type==3){
+              return this.cast('immolate pulses',target); //returns the result string / array of strings
+            }else if(type==4){
+              return this.cast('immolate darkness',target); //returns the result string / array of strings
+            } //end if
+          }).call(this,r(0,5,1));
+        } //end if
+      } //end if
+    } //end if
+    return result;
   };
   Database.Creature = Creature; //give the Creature class to the Database
   var creatures= [{
@@ -62,7 +118,12 @@ var Database;
     health: 40,
     damage: 5,
     symbol: 'a',
-    description: "Remarkably similar to the unicorn except they bear on their heads two crooked horns instead of one straight horn. They are also thought to be the size of a small donkey, have a dark bay color and have a boar's tail. Like the unicorn, its horns are thought to act as an antidote to poisons. It repoortedly lives in the Tropics of Dumet and is the lesser known variety of its cousin teh unicorn."
+    description: "Remarkably similar to the unicorn except they bear on their heads"+
+                 "two crooked horns instead of one straight horn. They are also thought "+
+                 "to be the size of a small donkey, have a dark bay color and have a "+
+                 "boar's tail. Like the unicorn, its horns are thought to act as an "+
+                 "antidote to poisons. It reportedly lives in the Tropics of Dummet "+
+                 "and is the lesser known variety of its cousin the unicorn."
   }, {
     name: 'Abaddon',
     weight: 340,
@@ -70,7 +131,15 @@ var Database;
     health: 90,
     damage: 11,
     symbol: 'A',
-    description: "Abaddon literally translates from Narsik into destruction, ruin, and perdition. This name is also used to refer to the palace of Dekkashraen. Abaddon is described as the king of a group of locust-like creatures with the faces of men, the hair of women, tails of scorpions, teeth of lions, and wings that sound like the thunder of horses' hooves charging into battle. He is the chief of the demons of the sevent heirarchy. Though there may be more than one Abaddon, they are only talked about in myths and there are no accounts of them being seen, though it's rumored they hail from deep within The Bleak."
+    description: "Abaddon literally translates from Narsik into destruction, ruin, "+
+                 "and perdition. This name is also used to refer to the palace of "+
+                 "Dekkashraen. Abaddon is described as the king of a group of locust-like "+
+                 "creatures with the faces of men, the hair of women, tails of scorpions, "+
+                 "teeth of lions, and wings that sound like the thunder of horses' hooves "+
+                 "charging into battle. He is the chief of the demons of the servant "+
+                 "hierarchy. Though there may be more than one Abaddon, they are only "+
+                 "talked about in myths and there are no accounts of them being seen, "+
+                 "though it's rumored they hail from deep within The Bleak."
   }, {
     name: 'Adar llwch Gwin',
     weight: 250,

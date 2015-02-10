@@ -65,27 +65,28 @@ Arcanic   Language proficiency.
     this.script=script; //this is the script that will be ran when the effect is called.
   };
   var spell = function(){
-    var t;
-    for(var i=0;i<this.affects.length;i++)outputCache.push(this.affects[i].script.call(this)); //call each spell affect given current context
+    var t,result=[];
+    if(this.affects)for(var i=0;i<this.affects.length;i++)result.push(this.affects[i].script.call(this)); //call each spell affect given current context
     if(this.levelReq&&this.actor.level&&this.actor.level<this.levelReq)return false; //failed level requirement
     if(this.damage){
       if(this.actor.amplitude&&this.actor.amplitude[this.element]>0){
         this.damage+=t=this.actor.amplitude[this.element];
-        outputCache.push(this.actor.name+' increases the potency of '+this.name+' by '+t+'.');
+        result.push(this.actor.name+' increases the potency of '+this.name+' by '+t+'.');
       } //end if
       if(this.target.resistance&&this.target.resistance[this.element]>0){
         this.damage-=t=this.actor.resistance[this.element];
-        outputCache.push(this.target.name+' reflects '+t+' damage of '+this.name+'.');
+        result.push(this.target.name+' reflects '+t+' damage of '+this.name+'.');
       } //end if
       if(this.damage>0){
         this.target.health-=this.damage;
-        return this.actor.name+' casts '+this.name+' and deals '+this.damage+' damage to '+this.target.name+'.';  
+        result.push(this.actor.name+' casts '+this.name+' and deals '+this.damage+' damage to '+this.target.name+'.');  
       }else{
-        return this.actor.name+' attempts casting '+this.name+' but it has no affect on '+this.target.name+'.';
+        result.push(this.actor.name+' attempts casting '+this.name+' but it has no affect on '+this.target.name+'.');
       } //end if
     }else if(this.enhancement){
-      return this.enhancement.call(this);
-    } //end if  
+      result.push(this.enhancement.call(this));
+    } //end if
+    return result;
   };
   Database.spells={};
   Database.spells.effects={};
@@ -93,29 +94,35 @@ Arcanic   Language proficiency.
     var minDamage;
     // if this affect already exists on the target, then ensure
     // that it stacks for a maximum of 5 times
-    console.log(this);
     if(this.target.affects['immolate '+this.element] &&
-       this.target.affects['immolate '+this.element].stack<5){
-      minDamage=this.target.affects['immolate '+this.element].stack;
+       this.target.affects['immolate '+this.element].stacks<5){
+      minDamage=this.target.affects['immolate '+this.element].stacks;
       this.target.affects['immolate '+this.element] = {
         timer:5,
-        stack:++this.target.affects['immolate '+this.element].stack,
+        stack:++this.target.affects['immolate '+this.element].stacks,
         name:'immolate '+this.element,
         script:function(name){
-          var stacks = this.actor.affects[this.spell].stack;
+          var stacks = this.actor.affects[this.spell].stacks;
           var dmg = r(stacks,stacks*4,1);
+          var element = this.spell.split(' ')[1];
+          if(this.actor.affects['vicerating '+element]){
+            dmg+=10*this.actor.affects['vicerating '+element].stacks;
+          } //end if
           this.actor.health -= dmg;
           return 'The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges more strongly (x'+stacks+').';
         }
       };
-      console.log(this.target);
       return this.target.name+' begins to REALLY suffer from '+this.element+' damage.';
     }else{ //this is the first time that the affect has been applied to the target
       this.target.affects['immolate '+this.element] = {
         timer:5,
-        stack:1,
+        stacks:1,
         script:function(){
           var dmg = r(1,4,1);
+          var element = this.spell.split(' ')[1];
+          if(this.actor.affects['vicerating '+element]){
+            dmg+=10*this.actor.affects['vicerating '+element].stacks;
+          } //end if
           this.actor.health -= dmg;
           return 'The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges.';
         }
@@ -123,7 +130,29 @@ Arcanic   Language proficiency.
       return this.target.name+' begins to suffer from '+this.element+' damage.';
     } //end if
   });
+  var viceration=new SpellEffect(function(){
+    var minDamage;
+    // if this affect already exists on the target, then ensure
+    // that it stacks for a maximum of 5 times
+    if(this.target.affects['vicerating '+this.element] &&
+       this.target.affects['vicerating '+this.element].stacks<5){
+      minDamage=this.target.affects['vicerating '+this.element].stacks;
+      this.target.affects['vicerating '+this.element] = {
+        timer:3,
+        stacks:++this.target.affects['vicerating '+this.element].stacks,
+        name:'vicerating '+this.element
+      };
+      return this.target.name+' becomes INCREDIBLY susceptible to '+this.element+' damage.';
+    }else{ //this is the first time that the affect has been applied to the target
+      this.target.affects['vicerating '+this.element] = {
+        timer:3,
+        stacks:1
+      };
+      return this.target.name+' becomes susceptible to '+this.element+' damage.';
+    } //end if
+  });
   Database.spells.effects.immolation=immolation; //link immolation to the spell effects collection
+  Database.spells.effects.viceration=viceration; //link viceration to the spell effects collection
   Database.spells.elementalist={
     'immolate fire': function(){
       this.element = 'fire';
@@ -161,22 +190,49 @@ Arcanic   Language proficiency.
     } ,
     'elemental precision': function(){
       this.levelReq = 100;
-      this.affects = [];
       this.enhancement = function(){
-        console.log('applied affect');
-        this.actor.affect['elemental precision']={
+        this.actor.affects['elemental precision']={
           timer:-1 //lasts an infinite amount of time, it's a passive
         };
         return this.actor.name+' gains elemental precision.';
       };
       return spell.call(this);
-    } /*,, //100
-    'vicerating fire': function(actor, target) {}, //0
-    'vicerating ice': function(actor, target) {}, //10
-    'vicerating lightning': function(actor, target) {}, //20
-    'vicerating pulse': function(actor, target) {}, //30
-    'vicerating darkness': function(actor, target) {}, //40
-    'vicerating amplitude': function(actor, target) {}, //50
+    },
+    'vicerating fire': function(){
+      this.element = 'fire';
+      this.affects = [viceration];
+      return spell.call(this);
+    }, //0
+    'vicerating ice': function(){
+      this.levelReq = 10;
+      this.affects = [viceration];
+      return spell.call(this);
+    }, 
+    'vicerating lightning': function(){
+      this.levelReq = 20;
+      this.affects = [viceration];
+      return spell.call(this);
+    },
+    'vicerating pulse': function(){
+      this.levelReq = 30;
+      this.affects = [viceration];
+      return spell.call(this);
+    },
+    'vicerating darkness': function(){
+      this.levelReq = 40;
+      this.affects = [viceration];
+      return spell.call(this);
+    }, 
+    'elemental amplitude': function(){
+      this.levelReq = 50;
+      this.enhancement = function(){
+        this.actor.affects['elemental amplitude']={
+          timer:-1 //lasts an infinite amount of time, it's a passive
+        };
+        return this.actor.name+' gains elemental amplitude.';
+      };
+      return spell.call(this);
+    } /*, 
     'fireball': function(actor, target) {}, //0
     'frostcone': function(actor, target) {}, //10
     'lightning ball': function(actor, target) {}, //20

@@ -38,6 +38,12 @@ function tick(c1,c2) {
     setTimeout(function() {
       tick(c1,c2);
     }, 1000);
+  }else{
+    if(c1.health<=0){
+      outputCache.push(c1.name+' dies.');
+    }else if(c2.health<=0){
+      outputCache.push(c2.name+' dies.');
+    } //end if
   } //end if
 }
 
@@ -61,8 +67,18 @@ function printCreatures(c1,c2) {
 
   // Display center messaging if there are any messages in the cache
   ctx.textAlign = 'center';
-  for(var i=0;i<outputCache.length;i++){
-    ctx.fillText(outputCache[i], v.w/2, 18+fontHeight*i);
+  for(var i=0,j=0;i<outputCache.length;i++){
+    if(outputCache[i] instanceof Array){
+      for(var k=0;k<outputCache[i].length;k++){
+        ctx.fillStyle="#F00";
+        ctx.fillText(outputCache[i][k], v.w/2, 18+fontHeight*i+fontHeight*j);
+        j++;
+      } //end for
+      j--;
+    }else{
+      ctx.fillText(outputCache[i], v.w/2, 18+fontHeight*i+fontHeight*j);
+    }
+    ctx.fillStyle="#FFF";
   } //end for
 
   // Display Creature One
