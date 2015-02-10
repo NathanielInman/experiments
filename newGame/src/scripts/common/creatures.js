@@ -26,31 +26,33 @@ var Database;
     return this.spells[name].call({actor:this,target:target,name:name});
   };
   Creature.prototype.attack = function(target){
+    var result=[];
     var attackRoll = r(1,101,1);
     var damage = this.damage>5?r(this.damage-5,this.damage+1,1):r(0,this.damage+1,1);
     if(attackRoll<5){ //critical miss
       attackRoll = r(1,101,1);
       if(attackRoll>=95){
         this.health -= (damage=(damage+1)*2);
-        return this.name+' strikes wildly and CRITICALLY damages itself for '+damage+' hp.';
+        result.push(this.name+' strikes wildly and CRITICALLY damages itself for '+damage+' hp.');
       }else{
         this.health -= ++damage; //add 1 to ensure it always deals damage
-        return this.name+' strikes wildly and damages itself for '+damage+' hp.';
+        result.push(this.name+' strikes wildly and damages itself for '+damage+' hp.');
       } //end if
     }else if(attackRoll<15){ //miss
-      return this.name+' misses '+target.name+'.';
+      result.push(this.name+' misses '+target.name+'.');
     }else if(attackRoll>=95){ //critical strike x2damage
       damage*=2;
       target.health -= damage;
-      return this.name+' CRITICALLY attacks '+target.name+' for '+damage+' hp.';
+      result.push(this.name+' CRITICALLY attacks '+target.name+' for '+damage+' hp.');
     }else{
       if(damage===0){
-        return this.name+' weakly attacks '+target.name+' and deals no damage.';
+        result.push(this.name+' weakly attacks '+target.name+' and deals no damage.');
       }else{
         target.health -= damage;
-        return this.name+' attacks '+target.name+' for '+damage+' hp.';
+        result.push('|W|'+this.name+' |r|attacks|W| '+target.name+' for '+damage+' hp.');
       } //end if
     } //end if
+    return result;
   };
   Creature.prototype.ai={};
   Creature.prototype.default=function(target){

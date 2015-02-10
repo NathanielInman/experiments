@@ -79,7 +79,7 @@ Arcanic   Language proficiency.
       } //end if
       if(this.damage>0){
         this.target.health-=this.damage;
-        result.push(this.actor.name+' casts '+this.name+' and deals '+this.damage+' damage to '+this.target.name+'.');  
+        result.push('|x|'+this.actor.name+' casts '+this.name+' and deals |R|'+this.damage+'|x| damage to '+this.target.name+'.');  
       }else{
         result.push(this.actor.name+' attempts casting '+this.name+' but it has no affect on '+this.target.name+'.');
       } //end if
