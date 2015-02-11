@@ -71,17 +71,17 @@ Arcanic   Language proficiency.
     if(this.damage){
       if(this.actor.amplitude&&this.actor.amplitude[this.element]>0){
         this.damage+=t=this.actor.amplitude[this.element];
-        result.push(this.actor.name+' increases the potency of '+this.name+' by '+t+'.');
+        result.push('|Y|'+this.actor.name+' increases the potency of '+this.name+' by '+t+'.');
       } //end if
       if(this.target.resistance&&this.target.resistance[this.element]>0){
         this.damage-=t=this.actor.resistance[this.element];
-        result.push(this.target.name+' reflects '+t+' damage of '+this.name+'.');
+        result.push('|Y|'+this.target.name+' reflects '+t+' damage of '+this.name+'.');
       } //end if
       if(this.damage>0){
         this.target.health-=this.damage;
-        result.push('|x|'+this.actor.name+' casts '+this.name+' and deals |R|'+this.damage+'|x| damage to '+this.target.name+'.');  
+        result.push('|Y|'+this.actor.name+' casts '+this.name+' and deals |R|'+this.damage+'|Y| damage to '+this.target.name+'.');  
       }else{
-        result.push(this.actor.name+' attempts casting '+this.name+' but it has no affect on '+this.target.name+'.');
+        result.push('|Y|'+this.actor.name+' attempts casting '+this.name+' but it has no affect on '+this.target.name+'.');
       } //end if
     }else if(this.enhancement){
       result.push(this.enhancement.call(this));
@@ -99,7 +99,7 @@ Arcanic   Language proficiency.
       minDamage=this.target.affects['immolate '+this.element].stacks;
       this.target.affects['immolate '+this.element] = {
         timer:5,
-        stack:++this.target.affects['immolate '+this.element].stacks,
+        stacks:++this.target.affects['immolate '+this.element].stacks,
         name:'immolate '+this.element,
         script:function(name){
           var stacks = this.actor.affects[this.spell].stacks;
@@ -109,7 +109,7 @@ Arcanic   Language proficiency.
             dmg+=10*this.actor.affects['vicerating '+element].stacks;
           } //end if
           this.actor.health -= dmg;
-          return 'The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges more strongly (x'+stacks+').';
+          return '|M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges more strongly (x'+stacks+').';
         }
       };
       return this.target.name+' begins to REALLY suffer from '+this.element+' damage.';
@@ -124,7 +124,7 @@ Arcanic   Language proficiency.
             dmg+=10*this.actor.affects['vicerating '+element].stacks;
           } //end if
           this.actor.health -= dmg;
-          return 'The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges.';
+          return '|M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges.';
         }
       };
       return this.target.name+' begins to suffer from '+this.element+' damage.';
@@ -142,13 +142,13 @@ Arcanic   Language proficiency.
         stacks:++this.target.affects['vicerating '+this.element].stacks,
         name:'vicerating '+this.element
       };
-      return this.target.name+' becomes INCREDIBLY susceptible to '+this.element+' damage.';
+      return '|M|'+this.target.name+' becomes INCREDIBLY susceptible to '+this.element+' damage.';
     }else{ //this is the first time that the affect has been applied to the target
       this.target.affects['vicerating '+this.element] = {
         timer:3,
         stacks:1
       };
-      return this.target.name+' becomes susceptible to '+this.element+' damage.';
+      return '|M|'+this.target.name+' becomes susceptible to '+this.element+' damage.';
     } //end if
   });
   Database.spells.effects.immolation=immolation; //link immolation to the spell effects collection

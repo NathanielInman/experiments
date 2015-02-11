@@ -18,7 +18,9 @@ var r = r || function() {};
 var Ion = Ion || function() {};
 var outputCache=[];
 var fontHeight = 16;
+var heightOffset = 0;
 ctx.font = fontHeight + "px Courier New";
+ctx.textAlign = 'center';
 
 /**
  * The tick function is the main recursive function that continues until one of the
@@ -133,36 +135,46 @@ function printCreatures(c1,c2) {
   var right = v.w - left;
 
   // Display center messaging if there are any messages in the cache
-  ctx.textAlign = 'center';
   for(var i=0,j=0;i<outputCache.length;i++){
     if(outputCache[i] instanceof Array){
       for(var k=0;k<outputCache[i].length;k++){
-        prettyPrint(outputCache[i][k],v.w/4,18+fontHeight*i+fontHeight*j);
+        prettyPrint(outputCache[i][k],fontHeight,10+fontHeight+fontHeight*i+fontHeight*j-heightOffset);
         j++;
       } //end for
       j--;
     }else{
-      prettyPrint(outputCache[i],v.w/4,18+fontHeight*i+fontHeight*j);
+      prettyPrint(outputCache[i],fontHeight,10+fontHeight+fontHeight*i+fontHeight*j-heightOffset);
     }
   } //end for
+  if(10+fontHeight+fontHeight*i+fontHeight*j-heightOffset>v.h/2)heightOffset+=fontHeight;
 
+  ctx.fillStyle='#333';
+  ctx.fillRect(v.w/4*3,0,10,v.h); //vertical separator
+  ctx.fillRect(v.w/4*3,v.h/2,v.w/4,10); //horizontal separator
   // Display Creature One
-  ctx.textAlign = 'left';
-  ctx.fillText(c1.name, left, top);
-  ctx.fillText('Weight: ' + c1.weight, left, top + fontHeight);
-  ctx.fillText('Height: ' + c1.height, left, top + fontHeight * 2);
-  ctx.fillText('Health: ' + c1.health, left, top + fontHeight * 3);
-  ctx.fillText('Damage: ' + c1.damage, left, top + fontHeight * 4);
-  ctx.fillText('Symbol: ' + c1.symbol, left, top + fontHeight * 5);
+  ctx.fillStyle='#400';
+  ctx.fillRect(v.w/4*3+10,fontHeight+10,v.w/4,fontHeight);
+  ctx.fillRect(v.w/4*3+10,fontHeight+20+v.h/2,v.w/4,fontHeight);
+  ctx.fillStyle='#F00';
+  ctx.fillRect(v.w/4*3+10,fontHeight+10,      v.w/4/c1.healthMax*(c1.health<0?0:c1.health),fontHeight);
+  ctx.fillRect(v.w/4*3+10,fontHeight+20+v.h/2,v.w/4/c2.healthMax*(c2.health<0?0:c2.health),fontHeight);
+  ctx.fillStyle='#FFF';
+  
+  ctx.fillText(c1.name, v.w-v.w/8, fontHeight);
+
+  prettyPrint('|w|Weight|C|: |W|' + c1.weight, v.w-v.w/4+20, 10 + fontHeight * 3);
+  prettyPrint('|w|Height|C|: |W|' + c1.height, v.w-v.w/4+20, 10 + fontHeight * 4);
+  prettyPrint('|w|Health|C|: |W|' + c1.health+'/'+c1.healthMax, v.w-v.w/4+20, 10 + fontHeight * 5);
+  prettyPrint('|w|Damage|C|: |W|' + c1.damage, v.w-v.w/4+20, 10 + fontHeight * 6);
+  prettyPrint('|w|Symbol|C|: |W|' + c1.symbol, v.w-v.w/4+20, 10 + fontHeight * 7);
 
   // Display Creature Two
-  ctx.textAlign = 'right';
-  ctx.fillText(c2.name, right, top);
-  ctx.fillText('Weight: ' + c2.weight, right, top + fontHeight);
-  ctx.fillText('Height: ' + c2.height, right, top + fontHeight * 2);
-  ctx.fillText('Health: ' + c2.health, right, top + fontHeight * 3);
-  ctx.fillText('Damage: ' + c2.damage, right, top + fontHeight * 4);
-  ctx.fillText('Symbol: ' + c2.symbol, right, top + fontHeight * 5);
+  ctx.fillText(c2.name, v.w-v.w/8, v.h/2+10+fontHeight);
+  prettyPrint('|w|Weight|C|: |W|' + c2.weight, v.w-v.w/4+20, 20+v.h/2 + fontHeight * 3);
+  prettyPrint('|w|Height|C|: |W|' + c2.height, v.w-v.w/4+20, 20+v.h/2 + fontHeight * 4);
+  prettyPrint('|w|Health|C|: |W|' + c2.health+'/'+c2.healthMax, v.w-v.w/4+20, 20+v.h/2 + fontHeight * 5);
+  prettyPrint('|w|Damage|C|: |W|' + c2.damage, v.w-v.w/4+20, 20+v.h/2 + fontHeight * 6);
+  prettyPrint('|w|Symbol|C|: |W|' + c2.symbol, v.w-v.w/4+20, 20+v.h/2 + fontHeight * 7);
   setTimeout(function(){printCreatures(c1,c2);},500);
 } //end printCreatures()
 

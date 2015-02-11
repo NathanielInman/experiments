@@ -9,6 +9,7 @@ var Database;
     this.weight      = type.weight;
     this.height      = type.height;
     this.health      = type.health;
+    this.healthMax   = type.health;
     this.damage      = type.damage;
     this.symbol      = type.symbol;
     this.resistance  = { fire: 2 };
