@@ -101,31 +101,58 @@ Arcanic   Language proficiency.
         timer:5,
         stacks:++this.target.affects['immolate '+this.element].stacks,
         name:'immolate '+this.element,
-        script:function(name){
-          var stacks = this.actor.affects[this.spell].stacks;
-          var dmg = r(stacks,stacks*4,1);
-          var element = this.spell.split(' ')[1];
-          if(this.actor.affects['vicerating '+element]){
-            dmg+=10*this.actor.affects['vicerating '+element].stacks;
-          } //end if
-          this.actor.health -= dmg;
-          return '|M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges more strongly (x'+stacks+').';
-        }
+        script:(
+          this.actor.affects['elemental precision']?
+          function(name){
+            var stacks = this.actor.affects[this.spell].stacks;
+            var dmg = 10+r(stacks,stacks*4,1);
+            var element = this.spell.split(' ')[1];
+            if(this.actor.affects['vicerating '+element]){
+              dmg+=10*this.actor.affects['vicerating '+element].stacks;
+            } //end if
+            this.actor.health -= dmg;
+            return '|M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges more strongly (x'+stacks+').';
+          }
+          :
+          function(name){
+            var stacks = this.actor.affects[this.spell].stacks;
+            var dmg = r(stacks,stacks*4,1);
+            var element = this.spell.split(' ')[1];
+            if(this.actor.affects['vicerating '+element]){
+              dmg+=10*this.actor.affects['vicerating '+element].stacks;
+            } //end if
+            this.actor.health -= dmg;
+            return '|M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges more strongly (x'+stacks+').';
+          }
+        )
       };
       return this.target.name+' begins to REALLY suffer from '+this.element+' damage.';
     }else{ //this is the first time that the affect has been applied to the target
       this.target.affects['immolate '+this.element] = {
         timer:5,
         stacks:1,
-        script:function(){
-          var dmg = r(1,4,1);
-          var element = this.spell.split(' ')[1];
-          if(this.actor.affects['vicerating '+element]){
-            dmg+=10*this.actor.affects['vicerating '+element].stacks;
-          } //end if
-          this.actor.health -= dmg;
-          return '|M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges.';
-        }
+        script:(
+          this.actor.affects['elemental precision']?
+          function(){
+            var dmg = 10+r(1,4,1);
+            var element = this.spell.split(' ')[1];
+            if(this.actor.affects['vicerating '+element]){
+              dmg+=10*this.actor.affects['vicerating '+element].stacks;
+            } //end if
+            this.actor.health -= dmg;
+            return '|M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges.';
+          }
+          :
+          function(){
+            var dmg = r(1,4,1);
+            var element = this.spell.split(' ')[1];
+            if(this.actor.affects['vicerating '+element]){
+              dmg+=10*this.actor.affects['vicerating '+element].stacks;
+            } //end if
+            this.actor.health -= dmg;
+            return '|M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges.';
+          }
+        )
       };
       return this.target.name+' begins to suffer from '+this.element+' damage.';
     } //end if

@@ -150,7 +150,11 @@ var Database;
     health: 40,
     damage: 7,
     symbol: 'l',
-    description: "Huge magical birds that can understand human speech and obey all commands given to them by their master. An Adar Llwch Gwin looks similar to a griffin. An Adar generally sticks to where it was born so they haven't moved far from the Amari Hinterlands, though some have bee rumored to roam Lythantos' Shrine."
+    description: "Huge magical birds that can understand human speech and obey all commands "+
+                 "given to them by their master. An Adar Llwch Gwin looks similar to a "+
+                 "griffin. An Adar generally sticks to where it was born so they haven't "+
+                 "moved far from the Amari Hinterlands, though some have bee rumored to "+
+                 "roam Lythantos' Shrine."
   }, {
     name: 'Adlet',
     weight: 90,
@@ -158,7 +162,11 @@ var Database;
     health: 30,
     damage: 3.2,
     symbol: 'd',
-    description: "A bloodthirsty, cannibalistic race of canine like hominids said to be the offspring of a Karthaginian womans unnatural mating with a ferocious giant red dog. Adlets roam the Frozen Wastes as scavengers. An Adlet can weigh from 60 stones to 190 stones depending on whether it has eaten recently. Adlets stand 40 stones tall."
+    description: "A bloodthirsty, cannibalistic race of canine like hominids said to be "+
+                 "the offspring of a Karthaginian womans unnatural mating with a ferocious "+
+                 "giant red dog. Adlets roam the Frozen Wastes as scavengers. An Adlet can "+
+                 "weigh from 60 stones to 190 stones depending on whether it has eaten "+
+                 "recently. Adlets stand 40 stones tall."
   }, {
     name: 'Addonexus',
     weight: 270,
@@ -166,7 +174,16 @@ var Database;
     health: 75,
     damage: 8,
     symbol: 'D',
-    description: "An Addonexus is a large white canine. They use pure energy which causes tehm to be able to control the elements and heal physical wounds. They age approximately 3 years slow than normal humans however, and are only capable of living 75 years at most. Addonexus were born during the War of Souls. It's said they will die the day the Everspark is put back together as teh wandering energy of the Everspark is said to encompass their souls. Addonexus have been spotted all throughout Sedia though they are normally seen within caves or among Adlets with whom they becom packleaders. An Addonexus is generally 2 to 270 stones in weight and needs little sustenance to live efficiently. An addonexus generally stands 50 stones tall."
+    description: "An Addonexus is a large white canine. They use pure energy which causes "+
+                 "them to be able to control the elements and heal physical wounds. They age "+
+                 "approximately 3 years slow than normal humans however, and are only capable "+
+                 "of living 75 years at most. Addonexus were born during the War of Souls. "+
+                 "It's said they will die the day the Everspark is put back together as the "+
+                 "wandering energy of the Everspark is said to encompass their souls. "+
+                 "Addonexus have been spotted all throughout Sedia though they are normally "+
+                 "seen within caves or among Adlets with whom they becom packleaders. An "+
+                 "Addonexus is generally 2 to 270 stones in weight and needs little sustenance "+
+                 "to live efficiently. An addonexus generally stands 50 stones tall."
   }, {
     name: 'Afanc',
     weight: 30,
