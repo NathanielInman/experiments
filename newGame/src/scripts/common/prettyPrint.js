@@ -7,6 +7,7 @@
  */
 function prettyPrint(text,x,y){
   if(typeof text=='object')text=text.join();
+  if(!text){ console.log('FAILED');return;}
   for(var i=0;i<=text.length;++i){
     ch=text.charAt(i);
     if(i<text.length-3&&ch=='|'&&text.charAt(i+1)=='R'&&text.charAt(i+2)=='|'){

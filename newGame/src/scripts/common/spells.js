@@ -64,62 +64,39 @@ Arcanic   Language proficiency.
   var SpellEffect = function(script){
     this.script=script; //this is the script that will be ran when the effect is called.
   };
-  var spell = function(){
-    var t,result=[];
-    if(this.affects)for(var i=0;i<this.affects.length;i++)result.push(this.affects[i].script.call(this)); //call each spell affect given current context
-    if(this.levelReq&&this.actor.level&&this.actor.level<this.levelReq)return false; //failed level requirement
-    if(this.damage){
-      if(this.actor.amplitude&&this.actor.amplitude[this.element]>0){
-        this.damage+=t=this.actor.amplitude[this.element];
-        result.push('|Y|'+this.actor.name+' increases the potency of '+this.name+' by '+t+'.');
-      } //end if
-      if(this.target.resistance&&this.target.resistance[this.element]>0){
-        this.damage-=t=this.actor.resistance[this.element];
-        result.push('|Y|'+this.target.name+' reflects '+t+' damage of '+this.name+'.');
-      } //end if
-      if(this.damage>0){
-        this.target.health-=this.damage;
-        result.push('|Y|'+this.actor.name+' casts '+this.name+' and deals |R|'+this.damage+'|Y| damage to '+this.target.name+'.');  
-      }else{
-        result.push('|Y|'+this.actor.name+' attempts casting '+this.name+' but it has no affect on '+this.target.name+'.');
-      } //end if
-    }else if(this.enhancement){
-      result.push(this.enhancement.call(this));
-    } //end if
-    return result;
-  };
   Database.spells={};
   Database.spells.effects={};
   var immolation=new SpellEffect(function(){
+    console.log(this);
     var minDamage;
     // if this affect already exists on the target, then ensure
     // that it stacks for a maximum of 5 times
-    if(this.target.affects['immolate '+this.element] &&
-       this.target.affects['immolate '+this.element].stacks<5){
-      minDamage=this.target.affects['immolate '+this.element].stacks;
-      this.target.affects['immolate '+this.element] = {
+    if(this.target.effects['immolate '+this.element] &&
+       this.target.effects['immolate '+this.element].stacks<5){
+      minDamage=this.target.effects['immolate '+this.element].stacks;
+      this.target.effects['immolate '+this.element] = {
         timer:5,
-        stacks:++this.target.affects['immolate '+this.element].stacks,
+        stacks:++this.target.effects['immolate '+this.element].stacks,
         name:'immolate '+this.element,
         script:(
-          this.actor.affects['elemental precision']?
+          this.actor.effects['elemental precision']?
           function(name){
-            var stacks = this.actor.affects[this.spell].stacks;
+            var stacks = this.actor.effects[this.spell].stacks;
             var dmg = 10+r(stacks,stacks*4,1);
             var element = this.spell.split(' ')[1];
-            if(this.actor.affects['vicerating '+element]){
-              dmg+=10*this.actor.affects['vicerating '+element].stacks;
+            if(this.actor.effects['vicerating '+element]){
+              dmg+=10*this.actor.effects['vicerating '+element].stacks;
             } //end if
             this.actor.health -= dmg;
             return '|M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges more strongly (x'+stacks+').';
           }
           :
           function(name){
-            var stacks = this.actor.affects[this.spell].stacks;
+            var stacks = this.actor.effects[this.spell].stacks;
             var dmg = r(stacks,stacks*4,1);
             var element = this.spell.split(' ')[1];
-            if(this.actor.affects['vicerating '+element]){
-              dmg+=10*this.actor.affects['vicerating '+element].stacks;
+            if(this.actor.effects['vicerating '+element]){
+              dmg+=10*this.actor.effects['vicerating '+element].stacks;
             } //end if
             this.actor.health -= dmg;
             return '|M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges more strongly (x'+stacks+').';
@@ -128,16 +105,16 @@ Arcanic   Language proficiency.
       };
       return this.target.name+' begins to REALLY suffer from '+this.element+' damage.';
     }else{ //this is the first time that the affect has been applied to the target
-      this.target.affects['immolate '+this.element] = {
+      this.target.effects['immolate '+this.element] = {
         timer:5,
         stacks:1,
         script:(
-          this.actor.affects['elemental precision']?
+          this.actor.effects['elemental precision']?
           function(){
             var dmg = 10+r(1,4,1);
             var element = this.spell.split(' ')[1];
-            if(this.actor.affects['vicerating '+element]){
-              dmg+=10*this.actor.affects['vicerating '+element].stacks;
+            if(this.actor.effects['vicerating '+element]){
+              dmg+=10*this.actor.effects['vicerating '+element].stacks;
             } //end if
             this.actor.health -= dmg;
             return '|M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges.';
@@ -146,8 +123,8 @@ Arcanic   Language proficiency.
           function(){
             var dmg = r(1,4,1);
             var element = this.spell.split(' ')[1];
-            if(this.actor.affects['vicerating '+element]){
-              dmg+=10*this.actor.affects['vicerating '+element].stacks;
+            if(this.actor.effects['vicerating '+element]){
+              dmg+=10*this.actor.effects['vicerating '+element].stacks;
             } //end if
             this.actor.health -= dmg;
             return '|M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges.';
@@ -158,20 +135,21 @@ Arcanic   Language proficiency.
     } //end if
   });
   var viceration=new SpellEffect(function(){
+    console.log(this);
     var minDamage;
     // if this affect already exists on the target, then ensure
     // that it stacks for a maximum of 5 times
-    if(this.target.affects['vicerating '+this.element] &&
-       this.target.affects['vicerating '+this.element].stacks<5){
-      minDamage=this.target.affects['vicerating '+this.element].stacks;
-      this.target.affects['vicerating '+this.element] = {
+    if(this.target.effects['vicerating '+this.element] &&
+       this.target.effects['vicerating '+this.element].stacks<5){
+      minDamage=this.target.effects['vicerating '+this.element].stacks;
+      this.target.effects['vicerating '+this.element] = {
         timer:3,
-        stacks:++this.target.affects['vicerating '+this.element].stacks,
+        stacks:++this.target.effects['vicerating '+this.element].stacks,
         name:'vicerating '+this.element
       };
       return '|M|'+this.target.name+' becomes INCREDIBLY susceptible to '+this.element+' damage.';
     }else{ //this is the first time that the affect has been applied to the target
-      this.target.affects['vicerating '+this.element] = {
+      this.target.effects['vicerating '+this.element] = {
         timer:3,
         stacks:1
       };
@@ -180,123 +158,4 @@ Arcanic   Language proficiency.
   });
   Database.spells.effects.immolation=immolation; //link immolation to the spell effects collection
   Database.spells.effects.viceration=viceration; //link viceration to the spell effects collection
-  Database.spells.elementalist={
-    'immolate fire': function(){
-      this.element = 'fire';
-      this.affects = [immolation];
-      this.damage = r(1,20,1);
-      return spell.call(this);
-    },
-    'immolate ice': function(){
-      this.levelReq = 20;
-      this.element = 'water';
-      this.affects = [immolation];
-      this.damage = r(1,20,1);
-      return spell.call(this);
-    }, 
-    'immolate sparks': function(){
-      this.levelReq = 40;
-      this.element = 'air';
-      this.affects = [immolation];
-      this.damage = r(1,20,1);
-      return spell.call(this);
-    }, 
-    'immolate pulses': function(){
-      this.levelReq = 60;
-      this.element = 'earth';
-      this.affects = [immolation];
-      this.damage = r(1,20,1);
-      return spell.call(this);
-    },
-    'immolate darkness': function(){
-      this.levelReq = 80;
-      this.element = 'spirit';
-      this.affects = [immolation];
-      this.damage = r(1,20,1);
-      return spell.call(this);
-    } ,
-    'elemental precision': function(){
-      this.levelReq = 100;
-      this.enhancement = function(){
-        this.actor.affects['elemental precision']={
-          timer:-1 //lasts an infinite amount of time, it's a passive
-        };
-        return this.actor.name+' gains elemental precision.';
-      };
-      return spell.call(this);
-    },
-    'vicerating fire': function(){
-      this.element = 'fire';
-      this.affects = [viceration];
-      return spell.call(this);
-    }, //0
-    'vicerating ice': function(){
-      this.levelReq = 10;
-      this.affects = [viceration];
-      return spell.call(this);
-    }, 
-    'vicerating lightning': function(){
-      this.levelReq = 20;
-      this.affects = [viceration];
-      return spell.call(this);
-    },
-    'vicerating pulse': function(){
-      this.levelReq = 30;
-      this.affects = [viceration];
-      return spell.call(this);
-    },
-    'vicerating darkness': function(){
-      this.levelReq = 40;
-      this.affects = [viceration];
-      return spell.call(this);
-    }, 
-    'elemental amplitude': function(){
-      this.levelReq = 50;
-      this.enhancement = function(){
-        this.actor.affects['elemental amplitude']={
-          timer:-1 //lasts an infinite amount of time, it's a passive
-        };
-        return this.actor.name+' gains elemental amplitude.';
-      };
-      return spell.call(this);
-    }, 
-    'fireball': function(){
-      this.element = 'fire';
-      this.damage = r(1,17,1)+Math.floor(this.actor.intelligence/5);
-      return spell.call(this);
-    }, 
-    'frostcone': function(){
-      this.levelReq = 10;
-      this.damage = r(3,25,1)+Math.floor(this.actor.intelligence/5);
-      return spell.call(this);
-    },
-    'lightning ball': function(){
-      this.levelReq = 20;
-      this.damage = r(2,41,1)+Math.floor(this.actor.intelligence/5);
-      return spell.call(this);
-    }, 
-    'earthquake': function(){
-      this.levelReq = 30;
-      this.damage = r(1,5,1)+Math.floor(this.actor.intelligence/5);
-      return spell.call(this);
-    }, 
-    'plague': function(){
-      this.levelReq = 40;
-      this.damage = r(1,9,1)+Math.floor(this.actor.intelligence/5);
-      return spell.call(this);
-    } /*, 
-    'elemental specification': function(actor, target) {}, //50
-    'fire shield': function(actor, target) {}, //45
-    'ice shield': function(actor, target) {}, //46
-    'lightning shield': function(actor, target) {}, //47
-    'earth shield': function(actor, target) {}, //48
-    'poison shield': function(actor, target) {}, //49
-    'elemental protection': function(actor, target) {}, //50
-    'reflex casting': function(actor, target) {}, //60
-    'elemental spontaneity': function(actor, target) {}, //70
-    'saturation': function(actor, target) {}, //80
-    'simplify energies': function(actor, target) {}, //90
-    'natural reflection': function(actor, target) {}, //100
-    'elemental allocation': function(actor, target) {} //100 */
-  };
 })(Database||(Database={}));

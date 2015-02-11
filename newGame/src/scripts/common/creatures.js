@@ -1,5 +1,42 @@
 var Database;
 (function(Database){
+  class Spell {
+    constructor(name,config){
+      this.name = name;
+      this.levelReq = config.levelReq || 0;
+      this.element = config.element || 'none';
+      this.effects = config.effects || [];
+      this.damage = config.damage || 0;
+      this.actor = config.actor;
+      this.enhancement = config.enhancement; //undefined inherited is considered fine
+    }
+    cast(target){
+      var t,result=[];this.target=target;
+      if(this.effects)for(var i=0;i<this.effects.length;i++)result.push(this.effects[i].script.call(this)); //call each spell affect given current context
+      if(this.levelReq&&this.actor.level&&this.actor.level<this.levelReq){
+        result.push('|R|'+this.actor.name+' tried using an ability they\'re not skilled enough at.');
+      } //end if
+      if(this.damage){
+        if(this.actor.amplitude&&this.actor.amplitude[this.element]>0){
+          this.damage+=t=this.actor.amplitude[this.element];
+          result.push('|Y|'+this.actor.name+' increases the potency of '+this.name+' by '+t+'.');
+        } //end if
+        if(this.target.resistance&&this.target.resistance[this.element]>0){
+          this.damage-=t=this.actor.resistance[this.element];
+          result.push('|Y|'+this.target.name+' reflects '+t+' damage of '+this.name+'.');
+        } //end if
+        if(this.damage>0){
+          this.target.health-=this.damage;
+          result.push('|Y|'+this.actor.name+' casts '+this.name+' and deals |R|'+this.damage+'|Y| damage to '+this.target.name+'.');  
+        }else{
+          result.push('|Y|'+this.actor.name+' attempts casting '+this.name+' but it has no affect on '+this.target.name+'.');
+        } //end if
+      }else if(this.enhancement){
+        result.push(this.enhancement.call(this));
+      } //end if
+      return result;
+    }
+  }
   /**
    * Class is a base class that all classes are built
    * upon. It contains generic functions that they all
@@ -11,10 +48,9 @@ var Database;
     }
     addAbility(config){
       var name = config.name || 'error';
-      var ability = this.abilities[name];
-      this.name = name;
-      this.levelReq = config.levelReq || 0;
-      console.log('tried adding '+name);
+      config.actor = this.actor; //insert the actor into the spell as it's scoped in
+      this.abilities[name]=new Spell(name,config);
+      console.log('Added skill '+name+' to '+this.actor.name+'.');
     }
   }
 
@@ -26,83 +62,192 @@ var Database;
    * that they prefer. This is common for mobiles.
    */
   class Elementalist extends Class {
-    constructor(specialty){
+    constructor(actor,specialty){
+      var t;
+      this.actor = actor;
       this.name = 'Elementalist';
       this.abilities = {}; //start out with a blank slate
-      if(!specialty||specialty=='fire'){
-
+      this.specialty = specialty || 'none';
+      if(specialty=='none'||specialty=='fire'){
+        this.addAbility({
+          name:'immolate fire',
+          element:'fire',
+          effects:[Database.spells.effects.immolation],
+          damage:r(1,20,1)
+        });
+        this.addAbility({
+          name:'vicerating fire',
+          element:'fire',
+          effects:[Database.spells.effects.viceration]
+        });
+        this.addAbility({
+          name:'fireball',
+          element:'fire',
+          damage:r(1,17,1)+Math.floor(this.actor.intelligence/5)
+        });
       } //end if
-      if(!specialty||specialty=='water'){
-
+      if(specialty=='none'||specialty=='water'){
+        this.addAbility({
+          name:'immolate ice',
+          levelReq:20,
+          element:'water',
+          effects:[Database.spells.effects.immolation],
+          damage:r(1,20,1)
+        });
+        this.addAbility({
+          name:'vicerating ice',
+          levelReq:10,
+          element:'water',
+          effects:[Database.spells.effects.viceration]
+        });
+        this.addAbility({
+          name:'frostcone',
+          levelReq:10,
+          element:'water',
+          damage:r(3,25,1)+Math.floor(this.actor.intelligence/5)
+        });
       } //end if
-      if(!specialty||specialty=='air'){
-
+      if(specialty=='none'||specialty=='air'){
+        this.addAbility({
+          name:'immolate sparks',
+          levelReq:40,
+          element:'air',
+          effects:[Database.spells.effects.immolation],
+          damage:r(1,20,1)
+        });
+        this.addAbility({
+          name:'vicerating lightning',
+          levelReq:20,
+          element:'air',
+          effects:[Database.spells.effects.viceration]
+        });
+        this.addAbility({
+          name:'lightning ball',
+          levelReq:20,
+          element:'air',
+          damage:r(2,41,1)+Math.floor(this.actor.intelligence/5)
+        });
       } //end if
-      if(!specialty||specialty=='earth'){
-
+      if(specialty=='none'||specialty=='earth'){
+        this.addAbility({
+          name:'immolate pulses',
+          levelReq:60,
+          element:'earth',
+          effects:[Database.spells.effects.immolation],
+          damage:r(1,20,1)
+        });
+        this.addAbility({
+          name:'vicerating pulse',
+          levelReq:30,
+          element:'earth',
+          effects:[Database.spells.effects.viceration]
+        });
+        this.addAbility({
+          name:'earthquake',
+          levelReq:30,
+          element:'earth',
+          damage:r(1,5,1)+Math.floor(this.actor.intelligence/5)
+        });
       } //end if
-      if(!specialty||specialty=='spirit'){
-
+      if(specialty=='none'||specialty=='spirit'){
+        this.addAbility({
+          name:'immolate darkness',
+          levelReq:80,
+          element:'spirit',
+          effects:[Database.spells.effects.immolation],
+          damage:r(1,20,1)
+        });
+        this.addAbility({
+          name:'ivicerating darkness',
+          levelReq:40,
+          element:'spirit',
+          effects:[Database.spells.effects.viceration]
+        });
+        this.addAbility({
+          name:'plague',
+          levelReq:40,
+          element:'spirit',
+          damage:r(1,9,1)+Math.floor(this.actor.intelligence/5)
+        });
       } //end if
-      this.addAbility({name:'super'});
+      // Now abilities that all specializations will have
+      this.addAbility({
+        name:'elemental precision',
+        levelReq:100,
+        enhancement:function(){
+          this.actor.effects['elemental precision']={
+            timer: -1 //lasts an infinite amount of time, it's a passive
+          };
+          return this.actor.name+' gains elemental precision.';
+        }
+      });
+      this.addAbility({
+        name:'elemental amplitude',
+        levelReq:50,
+        enhancement:function(){
+          this.actor.effects['elemental amplitude']={
+            timer: -1 //lasts an infinite amount of time, it's a passive
+          };
+          return this.actor.name+' gains elemental amplitude.';
+        }
+      });
     }
-    castImmolation(){
-      console.log('this is doing stuff');
-    }
-    ai(){
+    ai(target){
       var result=[];
       if(r(0,2,1)===0){ //50% to physical attack
-        result.push(this.attack(target)); //return the result string
+        result.push(this.actor.attack(target)); //return the result string
       }else{ //50% to cast a spell instead
-        if(!this.affects['elemental precision']){ //always cast elemental precision before immolate spells
-          result.push(this.cast('elemental precision',this)); 
-        }else if(!this.affects['elemental amplitude']){ //always cast elemental amplitude before immolate spells
-          result.push(this.cast('elemental amplitude',this));
+        if(!this.actor.effects['elemental precision']){ //always cast elemental precision before immolate spells
+          result.push(this.actor.cast('elemental precision',this)); 
+        }else if(!this.actor.effects['elemental amplitude']){ //always cast elemental amplitude before immolate spells
+          result.push(this.actor.cast('elemental amplitude',this));
         }else{ //elemental precision 
           var randomVar=r(0,3,1);
           if(randomVar===0){ //apply vicerating element
-            return (function(type){
-              type=0;
-              if(type===0){
-                return this.cast('vicerating fire',target); //returns the result string / array of strings
-              }else if(type==1){
-                return this.cast('vicerating ice',target); //returns the result string / array of strings
-              }else if(type==2){
-                return this.cast('vicerating sparks',target); //returns the result string / array of strings
-              }else if(type==3){
-                return this.cast('vicerating pulses',target); //returns the result string / array of strings
-              }else if(type==4){
-                return this.cast('vicerating darkness',target); //returns the result string / array of strings
+            result.push((function(type,specialty){
+              if(specialty!=='none')type=-1;
+              if(specialty=='fire'||type===0){
+                result.push(this.actor.cast('vicerating fire',target)); //returns the result string / array of strings
+              }else if(specialty=='fire'||type==1){
+                result.push(this.actor.cast('vicerating ice',target)); //returns the result string / array of strings
+              }else if(specialty=='fire'||type==2){
+                result.push(this.actor.cast('vicerating sparks',target)); //returns the result string / array of strings
+              }else if(specialty=='fire'||type==3){
+                result.push(this.actor.cast('vicerating pulses',target)); //returns the result string / array of strings
+              }else if(specialty=='fire'||type==4){
+                result.push(this.actor.cast('vicerating darkness',target)); //returns the result string / array of strings
               } //end if
-            }).call(this,r(0,5,1));
+            }).call(this,r(0,5,1),this.actor.class.specialty));
           }else if(randomVar===1){ //cast immolation
-            return (function(type){
-              type=0;
-              if(type===0){
-                return this.cast('immolate fire',target); //returns the result string / array of strings
-              }else if(type==1){
-                return this.cast('immolate ice',target); //returns the result string / array of strings
-              }else if(type==2){
-                return this.cast('immolate sparks',target); //returns the result string / array of strings
-              }else if(type==3){
-                return this.cast('immolate pulses',target); //returns the result string / array of strings
-              }else if(type==4){
-                return this.cast('immolate darkness',target); //returns the result string / array of strings
+            result.push((function(type,specialty){
+              if(specialty!=='none')type=-1;
+              if(specialty=='fire'||type===0){
+                result.push(this.actor.cast('immolate fire',target)); //returns the result string / array of strings
+              }else if(specialty=='water'||type==1){
+                result.push(this.actor.cast('immolate ice',target)); //returns the result string / array of strings
+              }else if(specialty=='air'||type==2){
+                result.push(this.actor.cast('immolate sparks',target)); //returns the result string / array of strings
+              }else if(specialty=='earth'||type==3){
+                result.push(this.actor.cast('immolate pulses',target)); //returns the result string / array of strings
+              }else if(specialty=='spirit'||type==4){
+                result.push(this.actor.cast('immolate darkness',target)); //returns the result string / array of strings
               } //end if
-            }).call(this,r(0,5,1));
+            }).call(this,r(0,5,1),this.actor.class.specialty));
           }else{
-            randomVar=r(1,6,1);
-            if(randomVar==1){
-              return this.cast('fireball',target);
-            }else if(randomVar==2){
-              return this.cast('frostcone',target);
-            }else if(randomVar==3){
-              return this.cast('lightning ball',target);
-            }else if(randomVar==4){
-              return this.cast('earthquake',target);
-            }else if(randomVar==5){
-              return this.cast('plague',target);
-            } //end if
+            result.push((function(type,specialty){
+              if(specialty!=='none')type=-1;
+              if(specialty=='fire'||type===0){
+                result.push(this.actor.cast('fireball',target));
+              }else if(specialty=='water'||type==1){
+                result.push(this.actor.cast('frostcone',target));
+              }else if(specialty=='air'||type==2){
+                result.push(this.actor.cast('lightning ball',target));
+              }else if(specialty=='earth'||type==3){
+                result.push(this.actor.cast('earthquake',target));
+              }else if(specialty=='spirit'||type==4){
+                result.push(this.actor.cast('plague',target));
+              } //end if
+            }).call(this,r(0,5,1),this.actor.class.specialty));            
           } //end if
         } //end if
       } //end if
@@ -124,16 +269,16 @@ var Database;
       this.symbol      = type.symbol;
       this.resistance  = { fire: 2 };
       this.amplitude   = { fire: 1 };
-      this.affects     = { }; //no current affects
+      this.effects     = { }; //no current effects
       this.description = type.description;
-      this.class       = new Elementalist();
+      this.class       = new Elementalist(this,'fire');
       this.actions     = {
         cur:0,
         list:[]
       };  
     }
     cast(name,target){
-      return this.spells[name].call({actor:this,target:target,name:name});  
+      return this.class.abilities[name].cast(target);  
     }
     attack(target){
       var result=[];
@@ -164,25 +309,32 @@ var Database;
       } //end if
       return result;
     }
-    process(){
+    process(target){
+      var result = [],result2;
       // Start processing the mobiles actions by iterating through the effects that
       // they're currently under and applying them. If they die during this section
       // then their AI routines aren't executed
       if(this.health<=0)return this.name+' hits the ground in a heap.';
-      // Start by applying any affects the creature has on it before they decide to act
-      for(var spell in this.affects){
+      // Start by applying any effects the creature has on it before they decide to act
+      for(var spell in this.effects){
         // Run the script if it's an executable affect
-        if(this.affects[spell].script){ //the affect has a script to run
-          result.push(this.affects[spell].script.call({actor:this,spell:spell}));
+        if(this.effects[spell].script){ //the affect has a script to run
+          result.push(this.effects[spell].script.call({actor:this,spell:spell}));
         } //end if
         // Decrement the timer for the affect or remove it if it expires
-        if(this.affects[spell].timer>0){
-          this.affects[spell].timer--; //decrement the timer on spells that don't last forever
-        }else if(this.affects[spell].timer===0){
-          delete this.affects[spell]; //remove the node from the object that has expired
+        if(this.effects[spell].timer>0){
+          this.effects[spell].timer--; //decrement the timer on spells that don't last forever
+        }else if(this.effects[spell].timer===0){
+          delete this.effects[spell]; //remove the node from the object that has expired
         } //end if
       } //end for
-      this.class.ai(); //run the ai routines
+      result2=this.class.ai(target); //run the ai routines
+      if(result2 instanceof Array){
+        result.push.apply(result,result2);
+      }else{
+        result.push(result2);
+      }
+      return result;
     }
   }
   Database.Creature = Creature; //give the Creature class to the Database

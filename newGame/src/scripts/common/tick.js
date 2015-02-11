@@ -8,11 +8,11 @@ function tick(c1,c2) {
   "use strict";
 
   if(r(0,2,1)===0){ //c1 -> c2
-    outputCache.push(c1.default(c2));
-    outputCache.push(c2.default(c1));
+    outputCache.push(c1.process(c2));
+    outputCache.push(c2.process(c1));
   }else{ //c2 -> c1
-    outputCache.push(c2.default(c1));
-    outputCache.push(c1.default(c2));
+    outputCache.push(c2.process(c1));
+    outputCache.push(c1.process(c2));
   } //end if
   if (c1.health > 0 && c2.health > 0) {
     setTimeout(function() {
