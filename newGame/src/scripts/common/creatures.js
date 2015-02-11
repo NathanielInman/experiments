@@ -1,134 +1,190 @@
 var Database;
 (function(Database){
-  var Creature = function(num) {
-    var creatures    = Database.creatures;
-    var type         = num?creatures[num]:creatures[r(0,creatures.length,1)];
-    this.level       = 100;
-    this.type        = type;
-    this.name        = type.name;
-    this.weight      = type.weight;
-    this.height      = type.height;
-    this.health      = type.health;
-    this.healthMax   = type.health;
-    this.damage      = type.damage;
-    this.symbol      = type.symbol;
-    this.resistance  = { fire: 2 };
-    this.amplitude   = { fire: 1 };
-    this.affects     = { }; //no current affects
-    this.description = type.description;
-    this.class       = type.class||'elementalist';
-    this.spells      = Database.spells.elementalist;
-    this.actions     = {
-      cur:0,
-      list:[]
-    };
-  };
-  Creature.prototype.cast = function(name, target) {
-    return this.spells[name].call({actor:this,target:target,name:name});
-  };
-  Creature.prototype.attack = function(target){
-    var result=[];
-    var attackRoll = r(1,101,1);
-    var damage = this.damage>5?r(this.damage-5,this.damage+1,1):r(0,this.damage+1,1);
-    if(attackRoll<5){ //critical miss
-      attackRoll = r(1,101,1);
-      if(attackRoll>=95){
-        this.health -= (damage=(damage+1)*2);
-        result.push(this.name+' strikes wildly and CRITICALLY damages itself for '+damage+' hp.');
-      }else{
-        this.health -= ++damage; //add 1 to ensure it always deals damage
-        result.push(this.name+' strikes wildly and damages itself for '+damage+' hp.');
+  /**
+   * Class is a base class that all classes are built
+   * upon. It contains generic functions that they all
+   * use.
+   */
+  class Class {
+    getClass(){
+      console.log('My class is '+this.name);
+    }
+    addAbility(config){
+      var name = config.name || 'error';
+      var ability = this.abilities[name];
+      this.name = name;
+      this.levelReq = config.levelReq || 0;
+      console.log('tried adding '+name);
+    }
+  }
+
+  /**
+   * Elementalist class extends the generic Class so it
+   * inherits some of the basic functions that all classes
+   * share. The Elementalist can be created given a
+   * specialty to limit its skills down to a certain set
+   * that they prefer. This is common for mobiles.
+   */
+  class Elementalist extends Class {
+    constructor(specialty){
+      this.name = 'Elementalist';
+      this.abilities = {}; //start out with a blank slate
+      if(!specialty||specialty=='fire'){
+
       } //end if
-    }else if(attackRoll<15){ //miss
-      result.push(this.name+' misses '+target.name+'.');
-    }else if(attackRoll>=95){ //critical strike x2damage
-      damage*=2;
-      target.health -= damage;
-      result.push(this.name+' CRITICALLY attacks '+target.name+' for '+damage+' hp.');
-    }else{
-      if(damage===0){
-        result.push(this.name+' weakly attacks '+target.name+' and deals no damage.');
-      }else{
-        target.health -= damage;
-        result.push('|W|'+this.name+' |r|attacks|W| '+target.name+' for '+damage+' hp.');
+      if(!specialty||specialty=='water'){
+
       } //end if
-    } //end if
-    return result;
-  };
-  Creature.prototype.ai={};
-  Creature.prototype.default=function(target){
-    var result=[];
-    if(this.health<=0)return this.name+' hits the ground in a heap.';
-    // Start by applying any affects the creature has on it before they decide to act
-    for(var spell in this.affects){
-      // Run the script if it's an executable affect
-      if(this.affects[spell].script){ //the affect has a script to run
-        result.push(this.affects[spell].script.call({actor:this,spell:spell}));
+      if(!specialty||specialty=='air'){
+
       } //end if
-      // Decrement the timer for the affect or remove it if it expires
-      if(this.affects[spell].timer>0){
-        this.affects[spell].timer--; //decrement the timer on spells that don't last forever
-      }else if(this.affects[spell].timer===0){
-        delete this.affects[spell]; //remove the node from the object that has expired
+      if(!specialty||specialty=='earth'){
+
       } //end if
-    } //end for
-    if(r(0,2,1)===0){ //50% to physical attack
-      result.push(this.attack(target)); //return the result string
-    }else{ //50% to cast a spell instead
-      if(!this.affects['elemental precision']){ //always cast elemental precision before immolate spells
-        result.push(this.cast('elemental precision',this)); 
-      }else if(!this.affects['elemental amplitude']){ //always cast elemental amplitude before immolate spells
-        result.push(this.cast('elemental amplitude',this));
-      }else{ //elemental precision 
-        var randomVar=r(0,3,1);
-        if(randomVar===0){ //apply vicerating element
-          return (function(type){
-            type=0;
-            if(type===0){
-              return this.cast('vicerating fire',target); //returns the result string / array of strings
-            }else if(type==1){
-              return this.cast('vicerating ice',target); //returns the result string / array of strings
-            }else if(type==2){
-              return this.cast('vicerating sparks',target); //returns the result string / array of strings
-            }else if(type==3){
-              return this.cast('vicerating pulses',target); //returns the result string / array of strings
-            }else if(type==4){
-              return this.cast('vicerating darkness',target); //returns the result string / array of strings
+      if(!specialty||specialty=='spirit'){
+
+      } //end if
+      this.addAbility({name:'super'});
+    }
+    castImmolation(){
+      console.log('this is doing stuff');
+    }
+    ai(){
+      var result=[];
+      if(r(0,2,1)===0){ //50% to physical attack
+        result.push(this.attack(target)); //return the result string
+      }else{ //50% to cast a spell instead
+        if(!this.affects['elemental precision']){ //always cast elemental precision before immolate spells
+          result.push(this.cast('elemental precision',this)); 
+        }else if(!this.affects['elemental amplitude']){ //always cast elemental amplitude before immolate spells
+          result.push(this.cast('elemental amplitude',this));
+        }else{ //elemental precision 
+          var randomVar=r(0,3,1);
+          if(randomVar===0){ //apply vicerating element
+            return (function(type){
+              type=0;
+              if(type===0){
+                return this.cast('vicerating fire',target); //returns the result string / array of strings
+              }else if(type==1){
+                return this.cast('vicerating ice',target); //returns the result string / array of strings
+              }else if(type==2){
+                return this.cast('vicerating sparks',target); //returns the result string / array of strings
+              }else if(type==3){
+                return this.cast('vicerating pulses',target); //returns the result string / array of strings
+              }else if(type==4){
+                return this.cast('vicerating darkness',target); //returns the result string / array of strings
+              } //end if
+            }).call(this,r(0,5,1));
+          }else if(randomVar===1){ //cast immolation
+            return (function(type){
+              type=0;
+              if(type===0){
+                return this.cast('immolate fire',target); //returns the result string / array of strings
+              }else if(type==1){
+                return this.cast('immolate ice',target); //returns the result string / array of strings
+              }else if(type==2){
+                return this.cast('immolate sparks',target); //returns the result string / array of strings
+              }else if(type==3){
+                return this.cast('immolate pulses',target); //returns the result string / array of strings
+              }else if(type==4){
+                return this.cast('immolate darkness',target); //returns the result string / array of strings
+              } //end if
+            }).call(this,r(0,5,1));
+          }else{
+            randomVar=r(1,6,1);
+            if(randomVar==1){
+              return this.cast('fireball',target);
+            }else if(randomVar==2){
+              return this.cast('frostcone',target);
+            }else if(randomVar==3){
+              return this.cast('lightning ball',target);
+            }else if(randomVar==4){
+              return this.cast('earthquake',target);
+            }else if(randomVar==5){
+              return this.cast('plague',target);
             } //end if
-          }).call(this,r(0,5,1));
-        }else if(randomVar===1){ //cast immolation
-          return (function(type){
-            type=0;
-            if(type===0){
-              return this.cast('immolate fire',target); //returns the result string / array of strings
-            }else if(type==1){
-              return this.cast('immolate ice',target); //returns the result string / array of strings
-            }else if(type==2){
-              return this.cast('immolate sparks',target); //returns the result string / array of strings
-            }else if(type==3){
-              return this.cast('immolate pulses',target); //returns the result string / array of strings
-            }else if(type==4){
-              return this.cast('immolate darkness',target); //returns the result string / array of strings
-            } //end if
-          }).call(this,r(0,5,1));
-        }else{
-          randomVar=r(1,6,1);
-          if(randomVar==1){
-            return this.cast('fireball',target);
-          }else if(randomVar==2){
-            return this.cast('frostcone',target);
-          }else if(randomVar==3){
-            return this.cast('lightning ball',target);
-          }else if(randomVar==4){
-            return this.cast('earthquake',target);
-          }else if(randomVar==5){
-            return this.cast('plague',target);
           } //end if
         } //end if
       } //end if
-    } //end if
-    return result;
-  };
+      return result;
+    }
+  }
+  class Creature {
+    constructor(num){
+      var creatures    = Database.creatures;
+      var type         = num?creatures[num]:creatures[r(0,creatures.length,1)];
+      this.level       = 100;
+      this.type        = type;
+      this.name        = type.name;
+      this.weight      = type.weight;
+      this.height      = type.height;
+      this.health      = type.health;
+      this.healthMax   = type.health;
+      this.damage      = type.damage;
+      this.symbol      = type.symbol;
+      this.resistance  = { fire: 2 };
+      this.amplitude   = { fire: 1 };
+      this.affects     = { }; //no current affects
+      this.description = type.description;
+      this.class       = new Elementalist();
+      this.actions     = {
+        cur:0,
+        list:[]
+      };  
+    }
+    cast(name,target){
+      return this.spells[name].call({actor:this,target:target,name:name});  
+    }
+    attack(target){
+      var result=[];
+      var attackRoll = r(1,101,1);
+      var damage = this.damage>5?r(this.damage-5,this.damage+1,1):r(0,this.damage+1,1);
+      if(attackRoll<5){ //critical miss
+        attackRoll = r(1,101,1);
+        if(attackRoll>=95){
+          this.health -= (damage=(damage+1)*2);
+          result.push(this.name+' strikes wildly and CRITICALLY damages itself for '+damage+' hp.');
+        }else{
+          this.health -= ++damage; //add 1 to ensure it always deals damage
+          result.push(this.name+' strikes wildly and damages itself for '+damage+' hp.');
+        } //end if
+      }else if(attackRoll<15){ //miss
+        result.push(this.name+' misses '+target.name+'.');
+      }else if(attackRoll>=95){ //critical strike x2damage
+        damage*=2;
+        target.health -= damage;
+        result.push(this.name+' CRITICALLY attacks '+target.name+' for '+damage+' hp.');
+      }else{
+        if(damage===0){
+          result.push(this.name+' weakly attacks '+target.name+' and deals no damage.');
+        }else{
+          target.health -= damage;
+          result.push('|W|'+this.name+' |r|attacks|W| '+target.name+' for '+damage+' hp.');
+        } //end if
+      } //end if
+      return result;
+    }
+    process(){
+      // Start processing the mobiles actions by iterating through the effects that
+      // they're currently under and applying them. If they die during this section
+      // then their AI routines aren't executed
+      if(this.health<=0)return this.name+' hits the ground in a heap.';
+      // Start by applying any affects the creature has on it before they decide to act
+      for(var spell in this.affects){
+        // Run the script if it's an executable affect
+        if(this.affects[spell].script){ //the affect has a script to run
+          result.push(this.affects[spell].script.call({actor:this,spell:spell}));
+        } //end if
+        // Decrement the timer for the affect or remove it if it expires
+        if(this.affects[spell].timer>0){
+          this.affects[spell].timer--; //decrement the timer on spells that don't last forever
+        }else if(this.affects[spell].timer===0){
+          delete this.affects[spell]; //remove the node from the object that has expired
+        } //end if
+      } //end for
+      this.class.ai(); //run the ai routines
+    }
+  }
   Database.Creature = Creature; //give the Creature class to the Database
   var creatures= [{
     name: 'Abada',
