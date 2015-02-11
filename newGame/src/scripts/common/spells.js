@@ -259,12 +259,32 @@ Arcanic   Language proficiency.
         return this.actor.name+' gains elemental amplitude.';
       };
       return spell.call(this);
+    }, 
+    'fireball': function(){
+      this.element = 'fire';
+      this.damage = r(1,17,1)+Math.floor(this.actor.intelligence/5);
+      return spell.call(this);
+    }, 
+    'frostcone': function(){
+      this.levelReq = 10;
+      this.damage = r(3,25,1)+Math.floor(this.actor.intelligence/5);
+      return spell.call(this);
+    },
+    'lightning ball': function(){
+      this.levelReq = 20;
+      this.damage = r(2,41,1)+Math.floor(this.actor.intelligence/5);
+      return spell.call(this);
+    }, 
+    'earthquake': function(){
+      this.levelReq = 30;
+      this.damage = r(1,5,1)+Math.floor(this.actor.intelligence/5);
+      return spell.call(this);
+    }, 
+    'plague': function(){
+      this.levelReq = 40;
+      this.damage = r(1,9,1)+Math.floor(this.actor.intelligence/5);
+      return spell.call(this);
     } /*, 
-    'fireball': function(actor, target) {}, //0
-    'frostcone': function(actor, target) {}, //10
-    'lightning ball': function(actor, target) {}, //20
-    'earthquake': function(actor, target) {}, //30
-    'plague': function(actor, target) {}, //40
     'elemental specification': function(actor, target) {}, //50
     'fire shield': function(actor, target) {}, //45
     'ice shield': function(actor, target) {}, //46

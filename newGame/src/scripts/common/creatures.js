@@ -77,8 +77,11 @@ var Database;
     }else{ //50% to cast a spell instead
       if(!this.affects['elemental precision']){ //always cast elemental precision before immolate spells
         result.push(this.cast('elemental precision',this)); 
+      }else if(!this.affects['elemental amplitude']){ //always cast elemental amplitude before immolate spells
+        result.push(this.cast('elemental amplitude',this));
       }else{ //elemental precision 
-        if(r(0,2,1)===0){ //apply vicerating element
+        var randomVar=r(0,3,1);
+        if(randomVar===0){ //apply vicerating element
           return (function(type){
             type=0;
             if(type===0){
@@ -93,7 +96,7 @@ var Database;
               return this.cast('vicerating darkness',target); //returns the result string / array of strings
             } //end if
           }).call(this,r(0,5,1));
-        }else{ //cast immolation
+        }else if(randomVar===1){ //cast immolation
           return (function(type){
             type=0;
             if(type===0){
@@ -108,6 +111,19 @@ var Database;
               return this.cast('immolate darkness',target); //returns the result string / array of strings
             } //end if
           }).call(this,r(0,5,1));
+        }else{
+          randomVar=r(1,6,1);
+          if(randomVar==1){
+            return this.cast('fireball',target);
+          }else if(randomVar==2){
+            return this.cast('frostcone',target);
+          }else if(randomVar==3){
+            return this.cast('lightning ball',target);
+          }else if(randomVar==4){
+            return this.cast('earthquake',target);
+          }else if(randomVar==5){
+            return this.cast('plague',target);
+          } //end if
         } //end if
       } //end if
     } //end if
