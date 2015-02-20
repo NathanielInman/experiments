@@ -1,13 +1,12 @@
 /**
  * prettyPrint is a function that giving text and a location to print it will abstract colors
  * out of it and print it to the screen
- * 
+ *
  * @param  {String} text The string of text that needs to be displayed to the screen pretty printed
  * @return {VOID}   prettyPrint returns no value
  */
 function prettyPrint(text,x,y){
-  if(typeof text=='object')text=text.join();
-  if(!text){ console.log('FAILED');return;}
+  if(!text){ return;}
   for(var i=0;i<=text.length;++i){
     ch=text.charAt(i);
     if(i<text.length-3&&ch=='|'&&text.charAt(i+1)=='R'&&text.charAt(i+2)=='|'){

@@ -24,4 +24,24 @@
       document.getElementById('noscript').style.visibility='hidden';app();"
       >Continue Anyways</div>`;
   } //end if
+
+  //Enter/Exit the fullscreen mode by clicking the canvas
+  document.getElementsByTagName('canvas')[0].addEventListener('click', function requestFullScreen() {
+    console.log('fullscreen = '+window.fullscreen);
+    var req, e = document, el = e.body;
+    if(window.fullscreen){
+      window.fullscreen = false;el = e;
+      req = e.exitFullscreen || e.msExitFullscreen || e.mozCancelFullScreen || e.webkitExitFullscreen;
+    }else{
+      window.fullscreen = true;
+      req = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+    } //end if
+    if (req) { // Native full screen.
+      req.call(el);
+    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+      (function(wscript){
+        if (wscript !== null) wscript.SendKeys("{F11}");
+      })(new ActiveXOBject("WScript.Shell"));
+    } //end if
+  }, false);
 })();

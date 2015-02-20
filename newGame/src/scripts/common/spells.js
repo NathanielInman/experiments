@@ -1,6 +1,6 @@
 var Database;
 /*
-Elementalist  Nihilist  Sorcerer  Arcanist  Myrmidon 
+Elementalist  Nihilist  Sorcerer  Arcanist  Myrmidon
   The class starts as elementalist, nihilist, sorcerer, arcanist, and eventually becomes a Myrmidon. Myrmidons are reflexive casters adept in warfare who relish the power and naturally carry their abilities into the battlefield with almost a nonchalant manner. Myrmidons may speak a number of languages innately, unknowingly perhaps, and are quit adept at counter spelling mages or necromancer's natural elements. A Myrmidon may only have one type of shield on at a time. They also may immolate only one kind at a time. They may cast any element spell under any kind of shield or immolation. If they, however, cast a fire spell under a fire shield, that spell is amplified by 10 in damage. Any element that is received, as an example under the fire shield will be reduced by 10 damage save for fire in which damage would be thenceforth amplified by 10 damage. Outgoing magic of non-fire elements are not diminished in power when under the fire shield. This works for all elements respectfully. Elemental Specification stacks with the damage amplified and diminished by the shields. Saturation deducts all amplification of incoming spells when under effect of a shield. Elemental Allocation completely bypasses all incoming amplifications of shields and moves the elemental type into the type with most resistance. The most efficient races for the Myrmidon are Human, Dwarf, Goblin, Troll, Half-Orc, and the most common race: Orc.
 
 
@@ -143,14 +143,14 @@ Arcanic   Language proficiency.
        this.target.effects['vicerating '+this.element].stacks<5){
       minDamage=this.target.effects['vicerating '+this.element].stacks;
       this.target.effects['vicerating '+this.element] = {
-        timer:3,
+        timer:15,
         stacks:++this.target.effects['vicerating '+this.element].stacks,
         name:'vicerating '+this.element
       };
       return '|M|'+this.target.name+' becomes INCREDIBLY susceptible to '+this.element+' damage.';
     }else{ //this is the first time that the affect has been applied to the target
       this.target.effects['vicerating '+this.element] = {
-        timer:3,
+        timer:15,
         stacks:1
       };
       return '|M|'+this.target.name+' becomes susceptible to '+this.element+' damage.';
