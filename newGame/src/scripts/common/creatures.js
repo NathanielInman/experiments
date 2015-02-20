@@ -328,12 +328,9 @@ var Database;
           delete this.effects[spell]; //remove the node from the object that has expired
         } //end if
       } //end for
-      result2=this.class.ai(target); //run the ai routines
-      if(result2 instanceof Array){
-        result.push.apply(result,result2);
-      }else{
-        result.push(result2);
-      }
+      result2=this.class.ai(target); //run the ai routines      
+      Array.prototype.push.apply(result,result2);
+      console.log(result2,result);
       return result;
     }
   }
