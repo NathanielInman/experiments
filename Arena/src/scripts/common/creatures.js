@@ -14,22 +14,22 @@ var Database;
       var t,result=[];this.target=target;
       if(this.effects)for(var i=0;i<this.effects.length;i++)result.push(this.effects[i].script.call(this)); //call each spell affect given current context
       if(this.levelReq&&this.actor.level&&this.actor.level<this.levelReq){
-        result.push('|R|'+this.actor.name+' tried using an ability they\'re not skilled enough at.');
+        result.push('{R|'+this.actor.name+' tried using an ability they\'re not skilled enough at.');
       } //end if
       if(this.damage){
         if(this.actor.amplitude&&this.actor.amplitude[this.element]>0){
           this.damage+=t=this.actor.amplitude[this.element];
-          result.push('|Y|'+this.actor.name+' increases the potency of '+this.name+' by '+t+'.');
+          result.push('{Y|'+this.actor.name+' increases the potency of '+this.name+' by '+t+'.');
         } //end if
         if(this.target.resistance&&this.target.resistance[this.element]>0){
           this.damage-=t=this.actor.resistance[this.element];
-          result.push('|Y|'+this.target.name+' reflects '+t+' damage of '+this.name+'.');
+          result.push('{Y|'+this.target.name+' reflects '+t+' damage of '+this.name+'.');
         } //end if
         if(this.damage>0){
           this.target.health-=this.damage;
-          result.push('|Y|'+this.actor.name+' casts '+this.name+' and deals |R|'+this.damage+'|Y| damage to '+this.target.name+'.');
+          result.push('{Y|'+this.actor.name+' casts '+this.name+' and deals {R|'+this.damage+'|} damage to '+this.target.name+'.');
         }else{
-          result.push('|Y|'+this.actor.name+' attempts casting '+this.name+' but it has no affect on '+this.target.name+'.');
+          result.push('{Y|'+this.actor.name+' attempts casting '+this.name+' but it has no affect on '+this.target.name+'.');
         } //end if
       }else if(this.enhancement){
         result.push(this.enhancement.call(this));
@@ -85,6 +85,16 @@ var Database;
           element:'fire',
           damage:r(1,17,1)+Math.floor(this.actor.intelligence/5)
         });
+        this.addAbility({
+          name:'fire shield',
+          levelReq:45,
+          enhancement:function(){
+            this.actor.effects['fire shield']={
+              timer: 5 //lasts an infinite amount of time, it's a passive
+            };
+            return this.actor.name+' gains fire shield.';
+          }
+        });
       } //end if
       if(specialty=='none'||specialty=='water'){
         this.addAbility({
@@ -105,6 +115,16 @@ var Database;
           levelReq:10,
           element:'water',
           damage:r(3,25,1)+Math.floor(this.actor.intelligence/5)
+        });
+        this.addAbility({
+          name:'ice shield',
+          levelReq:46,
+          enhancement:function(){
+            this.actor.effects['ice shield']={
+              timer: 5 //lasts an infinite amount of time, it's a passive
+            };
+            return this.actor.name+' gains ice shield.';
+          }
         });
       } //end if
       if(specialty=='none'||specialty=='air'){
@@ -127,10 +147,20 @@ var Database;
           element:'air',
           damage:r(2,41,1)+Math.floor(this.actor.intelligence/5)
         });
+        this.addAbility({
+          name:'lightning shield',
+          levelReq:47,
+          enhancement:function(){
+            this.actor.effects['lightning shield']={
+              timer: 5 //lasts an infinite amount of time, it's a passive
+            };
+            return this.actor.name+' gains lightning shield.';
+          }
+        });
       } //end if
       if(specialty=='none'||specialty=='earth'){
         this.addAbility({
-          name:'immolate pulses',
+          name:'immolate pulse',
           levelReq:60,
           element:'earth',
           effects:[Database.spells.effects.immolation],
@@ -147,6 +177,16 @@ var Database;
           levelReq:30,
           element:'earth',
           damage:r(1,5,1)+Math.floor(this.actor.intelligence/5)
+        });
+        this.addAbility({
+          name:'earth shield',
+          levelReq:48,
+          enhancement:function(){
+            this.actor.effects['earth shield']={
+              timer: 5 //lasts an infinite amount of time, it's a passive
+            };
+            return this.actor.name+' gains earth shield.';
+          }
         });
       } //end if
       if(specialty=='none'||specialty=='spirit'){
@@ -169,6 +209,16 @@ var Database;
           element:'spirit',
           damage:r(1,9,1)+Math.floor(this.actor.intelligence/5)
         });
+        this.addAbility({
+          name:'poison shield',
+          levelReq:49,
+          enhancement:function(){
+            this.actor.effects['poison shield']={
+              timer: 5 //lasts an infinite amount of time, it's a passive
+            };
+            return this.actor.name+' gains poison shield.';
+          }
+        });
       } //end if
       // Now abilities that all specializations will have
       this.addAbility({
@@ -190,6 +240,131 @@ var Database;
           };
           return this.actor.name+' gains elemental amplitude.';
         }
+      });
+      this.addAbility({
+        name:'elemental protection',
+        levelReq:50,
+        enhancement:function(){
+          this.actor.effects['elemental protection']={
+            timer: -1 //lasts an infinite amount of time, it's a passive
+          };
+          return this.actor.name+' gains elemental protection.';
+        }
+      });
+      this.addAbility({
+        name:'reflex casting',
+        levelReq:50,
+        enhancement:function(){
+          this.actor.effects['reflex casting']={
+            timer: -1 //lasts an infinite amount of time, it's a passive
+          };
+          return this.actor.name+' gains reflex casting.';
+        }
+      });
+      this.addAbility({
+        name:'elemental spontaneity',
+        levelReq:60,
+        enhancement:function(){
+          this.actor.effects['elemental spontaneity']={
+            timer: -1 //lasts an infinite amount of time, it's a passive
+          };
+          return this.actor.name+' gains elemental spontaneity.';
+        }
+      });
+      this.addAbility({
+        name:'saturation',
+        levelReq:70,
+        enhancement:function(){
+          this.actor.effects['saturation']={
+            timer: -1 //lasts an infinite amount of time, it's a passive
+          };
+          return this.actor.name+' gains saturation.';
+        }
+      });
+      this.addAbility({
+        name:'simplify energies',
+        levelReq:80,
+        enhancement:function(){
+          this.actor.effects['simplify energies']={
+            timer: -1 //lasts an infinite amount of time, it's a passive
+          };
+          return this.actor.name+' gains simplify energies.';
+        }
+      });
+      this.addAbility({
+        name:'natural reflection',
+        levelReq:90,
+        enhancement:function(){
+          this.actor.effects['natural reflection']={
+            timer: -1 //lasts an infinite amount of time, it's a passive
+          };
+          return this.actor.name+' gains natural reflection.';
+        }
+      });
+      this.addAbility({
+        name:'elemental allocation',
+        levelReq:100,
+        enhancement:function(){
+          this.actor.effects['elemental allocation']={
+            timer: -1 //lasts an infinite amount of time, it's a passive
+          };
+          return this.actor.name+' gains elemental allocation.';
+        }
+      });
+      this.addAbility({
+        name:'intimidation presence',
+        levelReq:50,
+        enhancement:function(){
+          this.actor.effects['intimidation presence']={
+            timer: -1 //lasts an infinite amount of time, it's a passive
+          };
+          return this.actor.name+' gains intimidation presence.';
+        }
+      });
+      this.addAbility({
+        name:'demand presence',
+        levelReq:60,
+        enhancement:function(){
+          this.actor.effects['demand presence']={
+            timer: -1 //lasts an infinite amount of time, it's a passive
+          };
+          return this.actor.name+' gains demand presence.';
+        }
+      });
+      this.addAbility({
+        name:'darkness presence',
+        levelReq:70,
+        enhancement:function(){
+          this.actor.effects['darkness presence']={
+            timer: -1 //lasts an infinite amount of time, it's a passive
+          };
+          return this.actor.name+' gains darkness presence.';
+        }
+      });
+      this.addAbility({
+        name:'blood presence',
+        levelReq:80,
+        enhancement:function(){
+          this.actor.effects['blood presence']={
+            timer: -1 //lasts an infinite amount of time, it's a passive
+          };
+          return this.actor.name+' gains blood presence.';
+        }
+      });
+      this.addAbility({
+        name:'infectious presence',
+        levelReq:90,
+        enhancement:function(){
+          this.actor.effects['infectious presence']={
+            timer: -1 //lasts an infinite amount of time, it's a passive
+          };
+          return this.actor.name+' gains infectious presence.';
+        }
+      });
+      this.addAbility({
+        name:'pulse of disease',
+        levelReq:100
+        //TODO: FINISH ABILITY
       });
     }
     ai(target){
@@ -238,9 +413,9 @@ var Database;
             } //end if
           }else if(this.specialty=='earth'){
             if(!target.effects['vicerating earth']){ //step 1
-              result.push(this.actor.cast('vicerating pulses',target));
+              result.push(this.actor.cast('vicerating pulse',target));
             }else if(!target.effects['immolate earth']){
-              result.push(this.actor.cast('immolate pulses',target));
+              result.push(this.actor.cast('immolate pulse',target));
             }else{
               result.push(this.actor.cast('earthquake',target));
             } //end if
@@ -259,12 +434,12 @@ var Database;
     }
   }
   class Creature {
-    constructor(num){
+    constructor(name,num){
       var creatures    = Database.creatures;
       var type         = creatures[104]; //num?creatures[num]:creatures[r(0,creatures.length,1)];
       this.level       = 100;
       this.type        = type;
-      this.name        = type.name;
+      this.name        = name || type.name;
       this.weight      = type.weight;
       this.height      = type.height;
       this.health      = 1000; //type.health;
@@ -293,23 +468,23 @@ var Database;
         attackRoll = r(1,101,1);
         if(attackRoll>=95){
           this.health -= (damage=(damage+1)*2);
-          result.push(this.name+' strikes wildly and CRITICALLY damages itself for '+damage+' hp.');
+          result.push(this.name+' strikes wildly and {R|CRITICALLY|} damages itself for {R|'+damage+'|} hp.');
         }else{
           this.health -= ++damage; //add 1 to ensure it always deals damage
-          result.push(this.name+' strikes wildly and damages itself for '+damage+' hp.');
+          result.push(this.name+' strikes wildly and damages itself for {R|'+damage+'|} hp.');
         } //end if
       }else if(attackRoll<15){ //miss
-        result.push(this.name+' misses '+target.name+'.');
+        result.push(this.name+' {r|misses|} '+target.name+'.');
       }else if(attackRoll>=95){ //critical strike x2damage
         damage*=2;
         target.health -= damage;
-        result.push(this.name+' CRITICALLY attacks '+target.name+' for '+damage+' hp.');
+        result.push(this.name+' {R|CRITICALLY|} attacks '+target.name+' for {R|'+damage+'|} hp.');
       }else{
         if(damage===0){
           result.push(this.name+' weakly attacks '+target.name+' and deals no damage.');
         }else{
           target.health -= damage;
-          result.push('|W|'+this.name+' |r|attacks|W| '+target.name+' for '+damage+' hp.');
+          result.push(this.name+' attacks '+target.name+' for {R|'+damage+'|} hp.');
         } //end if
       } //end if
       return result.join('|||');

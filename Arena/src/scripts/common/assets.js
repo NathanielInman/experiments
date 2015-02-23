@@ -1,3 +1,4 @@
+/* jshint ignore:start */
 function ImageCollection(list, callback){
   var total = 0, images = {};   //private :)
   for(var i = 0; i < list.length; i++){
@@ -5,16 +6,15 @@ function ImageCollection(list, callback){
     images[list[i].name] = img;
     img.onload = function(){
       total++;
-      if(total == list.length){
-        callback && callback();
-      }
+      if(total == list.length)callback && callback();
     };
     img.src = list[i].url;
-  }
+  } //end for
   this.get = function(name){
     return images[name] || (function(){throw "Not exist"})();
   };
 }
+/* jshint ignore:end */
 
 //Create an ImageCollection to load and store my images
 var images = new ImageCollection([{

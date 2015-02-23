@@ -88,7 +88,7 @@ Arcanic   Language proficiency.
               dmg+=10*this.actor.effects['vicerating '+element].stacks;
             } //end if
             this.actor.health -= dmg;
-            return '|M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges more strongly (x'+stacks+').';
+            return '{M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges more strongly (x'+stacks+').';
           }
           :
           function(name){
@@ -99,7 +99,7 @@ Arcanic   Language proficiency.
               dmg+=10*this.actor.effects['vicerating '+element].stacks;
             } //end if
             this.actor.health -= dmg;
-            return '|M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges more strongly (x'+stacks+').';
+            return '{M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges more strongly (x'+stacks+').';
           }
         )
       };
@@ -117,7 +117,7 @@ Arcanic   Language proficiency.
               dmg+=10*this.actor.effects['vicerating '+element].stacks;
             } //end if
             this.actor.health -= dmg;
-            return '|M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges.';
+            return '{M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges.';
           }
           :
           function(){
@@ -127,7 +127,7 @@ Arcanic   Language proficiency.
               dmg+=10*this.actor.effects['vicerating '+element].stacks;
             } //end if
             this.actor.health -= dmg;
-            return '|M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges.';
+            return '{M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges.';
           }
         )
       };
@@ -147,13 +147,13 @@ Arcanic   Language proficiency.
         stacks:++this.target.effects['vicerating '+this.element].stacks,
         name:'vicerating '+this.element
       };
-      return '|M|'+this.target.name+' becomes INCREDIBLY susceptible to '+this.element+' damage.';
+      return '{M|'+this.target.name+' becomes INCREDIBLY susceptible to '+this.element+' damage.';
     }else{ //this is the first time that the affect has been applied to the target
       this.target.effects['vicerating '+this.element] = {
         timer:15,
         stacks:1
       };
-      return '|M|'+this.target.name+' becomes susceptible to '+this.element+' damage.';
+      return '{M|'+this.target.name+' becomes susceptible to '+this.element+' damage.';
     } //end if
   });
   Database.spells.effects.immolation=immolation; //link immolation to the spell effects collection
