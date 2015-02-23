@@ -4,9 +4,9 @@ var gulp = require('gulp'), // This streaming build system
     reload = browserSync.reload, // Ensure the event emitter is set
     addsrc = require('gulp-add-src'), // Add more source files after init
     stylus = require('gulp-stylus'), // CSS Pre-processor
-    
+
       ks = require('kouto-swiss'),
-    
+
     nib = require('nib'), // Plugin for Stylus
     jade = require('gulp-jade'), // Template language for HTML5
     rename = require('gulp-rename'), // Change filenames
@@ -29,9 +29,9 @@ gulp.task('styles', function(){
   gulp.src('src/styles/*.styl')
     .pipe(concat('app.styl'))
     .pipe(stylus({
-      
+
       use: ks(),
-      
+
       compress: true
     }))
     .pipe(rename({suffix: '.min'}))
@@ -52,7 +52,7 @@ gulp.task('jade', function(){
 gulp.task('scripts', function(){
   // Runtime Scripts
   gulp.src([
-    'src/scripts/common/*.js'
+    'src/scripts/common/**/*.js'
   ])
     .pipe(jshint({ esnext: true }))
     .pipe(jshint.reporter(stylish))

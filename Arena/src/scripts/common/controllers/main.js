@@ -38,8 +38,8 @@ function app() {
   "use strict";
 
   //Setup the two creatures that will attack each other
-  var c1 = new Database.Creature("{R|C1|}");
-  var c2 = new Database.Creature("{G|C2|}");
+  var c1 = new Database.Creature("{r|C1|}");
+  var c2 = new Database.Creature("{g|C2|}");
   tick(c1,c2);
   printCreatures(c1,c2); //begin updating of the view
 } //end app()

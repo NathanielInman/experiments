@@ -20,9 +20,9 @@ function tick(c1,c2) {
     }, 1000);
   }else{
     if(c1.health<=0){
-      outputCache.push('{w|'+c1.name+' dies.');
+      outputCache.push(c1.name+' dies.');
     }else if(c2.health<=0){
-      outputCache.push('{w|'+c2.name+' dies.');
+      outputCache.push(c2.name+' dies.');
     } //end if
   } //end if
 }

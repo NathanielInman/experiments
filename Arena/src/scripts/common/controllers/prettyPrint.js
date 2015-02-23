@@ -8,7 +8,7 @@
 function prettyPrint(text,x,y){
   var lastColor = [];
   if(!text){ return;}
-  text='{W|'+text; //apply a default swatch color
+  text='{w|'+text; //apply a default swatch color
   for(var i=0;i<=text.length;++i){
     ch=text.charAt(i);
     if(i<=text.length-3&&ch=='{'&&text.charAt(i+1)=='R'&&text.charAt(i+2)=='|'){
@@ -52,5 +52,4 @@ function prettyPrint(text,x,y){
       x+=ctx.measureText(ch).width;
     } //end if
   }
-  ctx.fillStyle="#FFF";
 }

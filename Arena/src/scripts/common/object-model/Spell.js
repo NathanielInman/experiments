@@ -61,101 +61,42 @@ Arcanic   Language proficiency.
 
  */
 (function(Database){
-  var SpellEffect = function(script){
-    this.script=script; //this is the script that will be ran when the effect is called.
-  };
-  Database.spells={};
-  Database.spells.effects={};
-  var immolation=new SpellEffect(function(){
-    console.log(this);
-    var minDamage;
-    // if this affect already exists on the target, then ensure
-    // that it stacks for a maximum of 5 times
-    if(this.target.effects['immolate '+this.element] &&
-       this.target.effects['immolate '+this.element].stacks<5){
-      minDamage=this.target.effects['immolate '+this.element].stacks;
-      this.target.effects['immolate '+this.element] = {
-        timer:5,
-        stacks:++this.target.effects['immolate '+this.element].stacks,
-        name:'immolate '+this.element,
-        script:(
-          this.actor.effects['elemental precision']?
-          function(name){
-            var stacks = this.actor.effects[this.spell].stacks;
-            var dmg = 10+r(stacks,stacks*4,1);
-            var element = this.spell.split(' ')[1];
-            if(this.actor.effects['vicerating '+element]){
-              dmg+=10*this.actor.effects['vicerating '+element].stacks;
-            } //end if
-            this.actor.health -= dmg;
-            return '{M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges more strongly (x'+stacks+').';
-          }
-          :
-          function(name){
-            var stacks = this.actor.effects[this.spell].stacks;
-            var dmg = r(stacks,stacks*4,1);
-            var element = this.spell.split(' ')[1];
-            if(this.actor.effects['vicerating '+element]){
-              dmg+=10*this.actor.effects['vicerating '+element].stacks;
-            } //end if
-            this.actor.health -= dmg;
-            return '{M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges more strongly (x'+stacks+').';
-          }
-        )
-      };
-      return this.target.name+' begins to REALLY suffer from '+this.element+' damage.';
-    }else{ //this is the first time that the affect has been applied to the target
-      this.target.effects['immolate '+this.element] = {
-        timer:5,
-        stacks:1,
-        script:(
-          this.actor.effects['elemental precision']?
-          function(){
-            var dmg = 10+r(1,4,1);
-            var element = this.spell.split(' ')[1];
-            if(this.actor.effects['vicerating '+element]){
-              dmg+=10*this.actor.effects['vicerating '+element].stacks;
-            } //end if
-            this.actor.health -= dmg;
-            return '{M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges.';
-          }
-          :
-          function(){
-            var dmg = r(1,4,1);
-            var element = this.spell.split(' ')[1];
-            if(this.actor.effects['vicerating '+element]){
-              dmg+=10*this.actor.effects['vicerating '+element].stacks;
-            } //end if
-            this.actor.health -= dmg;
-            return '{M|The '+this.spell+' deals an extra '+dmg+' damage to '+this.actor.name+' as it surges.';
-          }
-        )
-      };
-      return this.target.name+' begins to suffer from '+this.element+' damage.';
-    } //end if
-  });
-  var viceration=new SpellEffect(function(){
-    console.log(this);
-    var minDamage;
-    // if this affect already exists on the target, then ensure
-    // that it stacks for a maximum of 5 times
-    if(this.target.effects['vicerating '+this.element] &&
-       this.target.effects['vicerating '+this.element].stacks<5){
-      minDamage=this.target.effects['vicerating '+this.element].stacks;
-      this.target.effects['vicerating '+this.element] = {
-        timer:15,
-        stacks:++this.target.effects['vicerating '+this.element].stacks,
-        name:'vicerating '+this.element
-      };
-      return '{M|'+this.target.name+' becomes INCREDIBLY susceptible to '+this.element+' damage.';
-    }else{ //this is the first time that the affect has been applied to the target
-      this.target.effects['vicerating '+this.element] = {
-        timer:15,
-        stacks:1
-      };
-      return '{M|'+this.target.name+' becomes susceptible to '+this.element+' damage.';
-    } //end if
-  });
-  Database.spells.effects.immolation=immolation; //link immolation to the spell effects collection
-  Database.spells.effects.viceration=viceration; //link viceration to the spell effects collection
+  class Spell {
+    constructor(name,config){
+      this.name = name;
+      this.levelReq = config.levelReq || 0;
+      this.element = config.element || 'none';
+      this.effects = config.effects || [];
+      this.damage = config.damage || 0;
+      this.actor = config.actor;
+      this.enhancement = config.enhancement; //undefined inherited is considered fine
+    }
+    cast(target){
+      var t,result=[];this.target=target;
+      if(this.effects)for(var i=0;i<this.effects.length;i++)result.push(this.effects[i].script.call(this)); //call each spell affect given current context
+      if(this.levelReq&&this.actor.level&&this.actor.level<this.levelReq){
+        result.push('{R|'+this.actor.name+' tried using an ability they\'re not skilled enough at.');
+      } //end if
+      if(this.damage){
+        if(this.actor.amplitude&&this.actor.amplitude[this.element]>0){
+          this.damage+=t=this.actor.amplitude[this.element];
+          result.push(''+this.actor.name+' increases the potency of '+this.name+' by '+t+'.');
+        } //end if
+        if(this.target.resistance&&this.target.resistance[this.element]>0){
+          this.damage-=t=this.actor.resistance[this.element];
+          result.push(''+this.target.name+' reflects {Y|'+t+'|} damage of '+this.name+'.');
+        } //end if
+        if(this.damage>0){
+          this.target.health-=this.damage;
+          result.push(this.name+' and deals {R|'+this.damage+'|} damage to '+this.target.name+'.');
+        }else{
+          result.push(this.name+' has no affect on '+this.target.name+'.');
+        } //end if
+      }else if(this.enhancement){
+        result.push(this.enhancement.call(this));
+      } //end if
+      return result.join('|||');
+    }
+  }
+  Database.Spell = Spell;
 })(Database||(Database={}));
