@@ -345,7 +345,12 @@ var Database;
     health:      40,
     damage:      5,
     asset:       [4,0],
-    class:       'Elementalist',
+    class:       {
+      name:      'Elementalist',
+      specialty: 'Spirit'
+    },
+    resistances: { fire:-2, water:-1, air:-1, earth: 0, spirit: 3 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 5 },
     symbol:      'a',
     description: "Remarkably similar to the unicorn except they bear on their heads"+
                  "two crooked horns instead of one straight horn. They are also thought "+
@@ -360,7 +365,12 @@ var Database;
     health:      90,
     damage:      11,
     asset:       [,],
-    class:       'Headhunter',
+    class:       {
+      name:      'Headhunter',
+      specialty: 'none'
+    },
+    resistances: { fire: 6, water:-1, air:-2, earth: 1, spirit: 2 },
+    amplitude:   { fire: 2, water: 0, air: 0, earth: 1, spirit: 0 },
     symbol:      'A',
     description: "Abaddon literally translates from Narsik into destruction, ruin, "+
                  "and perdition. This name is also used to refer to the palace of "+
@@ -378,7 +388,12 @@ var Database;
     health:      40,
     damage:      7,
     asset:       [,],
-    class:       'Minstrel',
+    class:       {
+      name:      'Minstrel',
+      specialty: 'none'
+    },
+    resistances: { fire: 2, water: 2, air: 3, earth: 2, spirit: 2 },
+    amplitude:   { fire: 1, water: 1, air: 2, earth: 1, spirit: 1 },
     symbol:      'l',
     description: "Huge magical birds that can understand human speech and obey all commands "+
                  "given to them by their master. An Adar Llwch Gwin looks similar to a "+
@@ -392,7 +407,12 @@ var Database;
     health:      30,
     damage:      3.2,
     asset:       [,],
-    class:       'Scout',
+    class:       {
+      name:      'Scout',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 2, air: 1, earth: 0, spirit: 1 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'd',
     description: "A bloodthirsty, cannibalistic race of canine like hominids said to be "+
                  "the offspring of a Karthaginian womans unnatural mating with a ferocious "+
@@ -406,7 +426,12 @@ var Database;
     health:      75,
     damage:      8,
     asset:       [,],
-    class:       'Mageling',
+    class:       {
+      name:      'Mageling',
+      specialty: 'none'
+    },
+    resistances: { fire:-2, water:-1, air: 0, earth: 2, spirit: 1 },
+    amplitude:   { fire: 0, water: 0, air: 1, earth: 2, spirit: 3 },
     symbol:      'D',
     description: "An Addonexus is a large white canine. They use pure energy which causes "+
                  "them to be able to control the elements and heal physical wounds. They age "+
@@ -425,7 +450,12 @@ var Database;
     health:      25,
     damage:      2,
     asset:       [,],
-    class:       'Plainsman',
+    class:       {
+      name:      'Plainsman',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 3, air: 0, earth:-1, spirit: 0 },
+    amplitude:   { fire: 0, water: 2, air: 0, earth: 0, spirit: 0 },
     symbol:      'f',
     description: "An Afanc is a creature from elven folklore that lives in lakes. It's description "+
                  "differs highly, ranging from dwarf, beaver, crocodile, and is sometimes said "+
@@ -442,7 +472,12 @@ var Database;
     health:      35,
     damage:      2,
     asset:       [,],
-    class:       'Gravedigger',
+    class:       {
+      name:      'Gravedigger',
+      specialty: 'none'
+    },
+    resistances: { fire:-1, water: 1, air: 0, earth: 0, spirit: 1 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 1, spirit: 2 },
     symbol:      'g',
     description: "A good spirit of the Doonan elk. A benevolent spirit in Doonan mythology, it lived "+
                  "under the ice and helped hunters and fishermen. Agloolik lives about the Frozen "+
@@ -456,7 +491,12 @@ var Database;
     health:      70,
     damage:      7,
     asset:       [,],
-    class:       'Hermit',
+    class:       {
+      name:      'Hermit',
+      specialty: 'none'
+    },
+    resistances: { fire:-4, water: 0, air: 0, earth: 3, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 2, spirit: 0 },
     symbol:      'G',
     description: "An Agta is a tree demon but with more human characteristics. It is described as "+
                  "being in between 70 to 90 stones tall, brown, and a hairy male with a beard. "+
@@ -477,7 +517,12 @@ var Database;
     health:      80,
     damage:      3,
     asset:       [,],
-    class:       'Monk',
+    class:       {
+      name:      'Monk',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 3, earth: 0, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 2, earth: 0, spirit: 0 },
     symbol:      'r',
     description: "An alerion lives near humid dry places. Alerions are large eagle-like birds who "+
                  "have children only once every 60 years. Alerions have a wide wing span and are "+
@@ -490,7 +535,12 @@ var Database;
     health:      90,
     damage:      4,
     asset:       [,],
-    class:       'Gravedigger',
+    class:       {
+      name:      'Gravedigger',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 6, air: 0, earth: 0, spirit: 2 },
+    amplitude:   { fire: 0, water: 3, air: 0, earth: 0, spirit: 1 },
     symbol:      'z',
     description: "Meaning 'water oppossum', also called 'sun dog', the ahuizotl is a vicious and "+
                  "savage predator. It resembles a medium-sized dog with a monkey's paws and human "+
@@ -507,7 +557,12 @@ var Database;
     health:      100,
     damage:      9,
     asset:       [,],
-    class:       'Plainsman',
+    class:       {
+      name:      'Plainsman',
+      specialty: 'none'
+    },
+    resistances: { fire:-2, water: 0, air: 0, earth: 1, spirit:-1 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'k',
     description: "Hideous, gigantic, creatures with sharp claws, wild hair, and two long horns "+
                  "growing from their ears, akki are fierce. They are humanoid for the most part, "+
@@ -523,7 +578,12 @@ var Database;
     health:      95,
     damage:      4,
     asset:       [,],
-    class:       'Priest',
+    class:       {
+      name:      'Priest',
+      specialty: 'none'
+    },
+    resistances: { fire: 4, water:-2, air: 0, earth: 0, spirit: 2 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 1 },
     symbol:      'p',
     description: "Alphyn are wonderful wolf creatures featured in heraldry. Alphyn sport a "+
                  "dragon's scaly underbelly and forelimbs, a long knotted tail, large pointed "+
@@ -537,7 +597,12 @@ var Database;
     health:      15,
     damage:      2,
     asset:       [,],
-    class:       'Monk',
+    class:       {
+      name:      'Monk',
+      specialty: 'none'
+    },
+    resistances: { fire: 3, water:-1, air:-1, earth: 0, spirit: 3 },
+    amplitude:   { fire: 2, water: 0, air: 0, earth: 0, spirit: 2 },
     symbol:      'P',
     description: "Amphisbaena are said to be winged snakes with a main head, a secondary head "+
                  "on its tail. Amphisbaena feed on the rotting dead and most generally inhabit "+
@@ -552,7 +617,12 @@ var Database;
     health:      40,
     damage:      4,
     asset:       [,],
-    class:       'Minstrel',
+    class:       {
+      name:      'Minstrel',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 1, earth:-2, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 2, earth: 0, spirit: 0 },
     symbol:      'm',
     description: "Amphitheres are passive beasts with a serpentine body and feathered wings. "+
                  "They kill by strangulation with their tails or burning with their breath. "+
@@ -567,7 +637,12 @@ var Database;
     health:      45,
     damage:      4,
     asset:       [,],
-    class:       'Runescribe',
+    class:       {
+      name:      'Runescribe',
+      specialty: 'none'
+    },
+    resistances: { fire: 2, water: 1, air: 0, earth:-6, spirit: 4 },
+    amplitude:   { fire: 1, water: 0, air: 0, earth: 0, spirit: 3 },
     symbol:      'K',
     description: "Ankous are seen as a death omen, and are said to collect the souls of the "+
                  "dead. They appear taller than they are, usually 80 stones tall, and are "+
@@ -582,7 +657,12 @@ var Database;
     health:      85,
     damage:      9,
     asset:       [,],
-    class:       'Elementalist',
+    class:       {
+      name:      'Elementalist',
+      specialty: 'none'
+    },
+    resistances: { fire: 2, water: 2, air: 2, earth: 2, spirit: 2 },
+    amplitude:   { fire: 1, water: 1, air: 1, earth: 1, spirit: 1 },
     symbol:      's',
     description: "A winged drake, said to have carried a carbuncle stone on its head. Aspis "+
                  "are incredibly gentle drakes that live on the sides of southern cliffs and "+
@@ -598,7 +678,12 @@ var Database;
     health:      55,
     damage:      3,
     asset:       [,],
-    class:       'Mageling',
+    class:       {
+      name:      'Mageling',
+      specialty: 'none'
+    },
+    resistances: { fire: 3, water: 4, air:-2, earth:-2, spirit:-1 },
+    amplitude:   { fire: 2, water: 3, air: 0, earth: 0, spirit: 0 },
     symbol:      'S',
     description: "Asrai are very beautiful and appear to never age, living usually up to a "+
                  "hundered years old. Asrai are aquatic faeries that can appear to have "+
@@ -611,7 +696,12 @@ var Database;
     health:      30,
     damage:      2,
     asset:       [,],
-    class:       'Headhunter',
+    class:       {
+      name:      'Headhunter',
+      specialty: 'none'
+    },
+    resistances: { fire:-2, water: 1, air: 2, earth: 0, spirit: 3 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 1 },
     symbol:      'w',
     description: "Aswang are ghouls that feed on young children or unborn babies. They appear "+
                  "as regular townsmen by day and prefer an occupation related to meat such as "+
@@ -627,7 +717,12 @@ var Database;
     health:      40,
     damage:      2,
     asset:       [,],
-    class:       'Woodsman',
+    class:       {
+      name:      'Woodsman',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 5, spirit: 0 },
+    amplitude:   { fire: 0, water: 1, air: 0, earth: 3, spirit: 2 },
     symbol:      'z',
     description: "Bai Ze were worshipped as guardian spirits for herbal medicine in the old "+
                  "age, before the war of souls. They look much like large white lions and can "+
@@ -643,7 +738,12 @@ var Database;
     health:      65,
     damage:      6,
     asset:       [,],
-    class:       'Page',
+    class:       {
+      name:      'Page',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 0, spirit: 2 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 1 },
     symbol:      'b',
     description: "Balam are supernatural jaguars that guard nature and protect villagers of "+
                  "certain distinguishable areas found sacred. Balam are only whispered "+
@@ -657,7 +757,12 @@ var Database;
     health:      100,
     damage:      20,
     asset:       [,],
-    class:       'Gravedigger',
+    class:       {
+      name:      'Gravedigger',
+      specialty: 'none'
+    },
+    resistances: { fire: 5, water: 4, air: 3, earth: 4, spirit: 5 },
+    amplitude:   { fire: 5, water: 2, air: 1, earth: 2, spirit: 5 },
     symbol:      'B',
     description: "Balrogs are tall and thick giants with the ability to shroud themselves "+
                  "within fire or darkness. They prefer to use whips as their weapon of "+
@@ -672,7 +777,12 @@ var Database;
     health:      75,
     damage:      6,
     asset:       [,],
-    class:       'Minstrel',
+    class:       {
+      name:      'Minstrel',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 5, earth: 0, spirit: 0 },
+    amplitude:   { fire: 0, water: 1, air: 3, earth: 0, spirit: 2 },
     symbol:      'e',
     description: "Banshees are rarely seen but it's told they are omens of death, a warning "+
                  "to certain families that their time has come. Her mourning call is often "+
@@ -686,7 +796,12 @@ var Database;
     health:      40,
     damage:      2,
     asset:       [,],
-    class:       'Scout',
+    class:       {
+      name:      'Scout',
+      specialty: 'none'
+    },
+    resistances: { fire:-1, water: 2, air: 1, earth: 0, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 2, spirit: 0 },
     symbol:      'R',
     description: "Barbegazis are a type of gnome that can be found at the tops of frozen "+
                  "mountains. They are rarely seen, these creatures enjoy helping each "+
@@ -701,7 +816,12 @@ var Database;
     health:      70,
     damage:      4,
     asset:       [,],
-    class:       'Pickpocket',
+    class:       {
+      name:      'Pickpocket',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 0, spirit: 1 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'B',
     description: "Barghest are dangerous black dogs with huge teeth and claws. The name "+
                  "barghest was attributed from ghosts or bear spirits as it was often "+
@@ -717,7 +837,12 @@ var Database;
     health:      30,
     damage:      10,
     asset:       [,],
-    class:       'Hermit',
+    class:       {
+      name:      'Hermit',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 2, air: 1, earth: 2, spirit: 0 },
+    amplitude:   { fire: 0, water: 1, air: 0, earth: 1, spirit: 0 },
     symbol:      'i',
     description: "Basilisks are said to have the power to cause death by simply peering "+
                  "into it's enemies eyes. It has the tail of a snake, the head of a "+
@@ -732,7 +857,12 @@ var Database;
     health:      70,
     damage:      3,
     asset:       [,],
-    class:       'Woodsman',
+    class:       {
+      name:      'Woodsman',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 1, spirit: 0 },
+    amplitude:   { fire: 1, water: 1, air: 0, earth: 0, spirit: 0 },
     symbol:      't',
     description: "Bastet are warecats or halfhuman, halfcat. Bastet hide in the wild and "+
                  "are rebuked by humans and elves as deformities of nature. Bastets are "+
@@ -748,7 +878,12 @@ var Database;
     health:      40,
     damage:      3,
     asset:       [,],
-    class:       'Runescribe',
+    class:       {
+      name:      'Runescribe',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 0, spirit: 3 },
+    amplitude:   { fire: 0, water: 0, air: 1, earth: 0, spirit: 1 },
     symbol:      'y',
     description: "Baykoks are walking skeletons but with a thin translucent skin and "+
                  "fearsome red eyes glowing from sockets within their skull. Baykoks "+
@@ -763,7 +898,12 @@ var Database;
     health:      80,
     damage:      5,
     asset:       [,],
-    class:       'Gravedigger',
+    class:       {
+      name:      'Gravedigger',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 0, spirit: 4 },
+    amplitude:   { fire: 1, water: 0, air: 1, earth: 0, spirit: 2 },
     symbol:      'N',
     description: "Black annis were once thought to be a boogyman story told to ornery "+
                  "children to scare good into them. Black annis are very real however, "+
@@ -778,7 +918,12 @@ var Database;
     health:      120,
     damage:      7,
     asset:       [,],
-    class:       'Minstrel',
+    class:       {
+      name:      'Minstrel',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 4, spirit: 0 },
+    amplitude:   { fire: 1, water: 1, air: 1, earth: 0, spirit: 1 },
     symbol:      'R',
     description: "Blurrs are vague human-like figures that are often seen randomly "+
                  "near sides of trees. They emit a frequency of sound that interferes "+
@@ -794,7 +939,12 @@ var Database;
     health:      25,
     damage:      2,
     asset:       [,],
-    class:       'Page',
+    class:       {
+      name:      'Page',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 2, air: 0, earth: 1, spirit: 0 },
+    amplitude:   { fire: 0, water: 1, air: 1, earth: 0, spirit: 0 },
     symbol:      'Y',
     description: "Bunyips tend to lurk in swamps, billabongs, creeks, riverbeds or "+
                  "waterholes. Bunyips are considered water spirits and tend to resemble "+
@@ -809,13 +959,18 @@ var Database;
     health:      50,
     damage:      1,
     asset:       [,],
-    class:       'Priest',
+    class:       {
+      name:      'Priest',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 3, earth: 0, spirit: 5 },
+    amplitude:   { fire: 1, water: 1, air: 2, earth: 0, spirit: 5 },
     symbol:      'c',
     description: "Caladrius are said to be snow-white birds who can tell when someone "+
                  "is on the verge of death. They are said to swoop down and emerse the "+
                  "target with magical curing energies, feeding on the sickness only. "+
-                 "They are thought as wings of Ettphemone and are highly sought after, "+
-                 "sometimes sold for truckloads of Sovern to kings or queens. Caladrius "+
+                 "They are thought of as the wings of Ettphemone and are highly sought after, "+
+                 "sometimes sold for cartloads of Sovern to kings or queens. Caladrius "+
                  "weigh no more than 2 to 3 stones and stand 5 to 8 stones tall."
   }, {
     name:        'Calygrehound',
@@ -824,10 +979,15 @@ var Database;
     health:      30,
     damage:      4,
     asset:       [,],
-    class:       'Woodsman',
+    class:       {
+      name:      'Woodsman',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 3, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 1, spirit: 0 },
     symbol:      'C',
-    description: "The calygreyhound is most commonly shown with teh head of a wildcat, "+
-                 "body of a deer, forelegs of an eagle, and hinde legs of an ox. "+
+    description: "The calygreyhound is most commonly shown with the head of a wildcat, "+
+                 "body of a deer, forelegs of an eagle, and hind legs of an ox. "+
                  "Calygreyhounds are fast and passive creatures that are seen in the "+
                  "Southeastern location of the Old Kingdom. Calygreyhounds are 80 to "+
                  "120 stones and stand 30 stones tall."
@@ -838,7 +998,12 @@ var Database;
     health:      100,
     damage:      14,
     asset:       [,],
-    class:       'Headhunter',
+    class:       {
+      name:      'Headhunter',
+      specialty: 'none'
+    },
+    resistances: { fire: 2, water: 5, air: 1, earth:-3, spirit: 0 },
+    amplitude:   { fire: 1, water: 3, air: 0, earth: 0, spirit: 0 },
     symbol:      'P',
     description: "Compacti are daemons, vast dragons whose bodies were slain to release "+
                  "earth and sinew. Campacti inhabit the deeps of the water and look most "+
@@ -851,7 +1016,12 @@ var Database;
     health:      100,
     damage:      12,
     asset:       [,],
-    class:       'Scout',
+    class:       {
+      name:      'Scout',
+      specialty: 'none'
+    },
+    resistances: { fire:-2, water: 2, air: 0, earth: 4, spirit: 0 },
+    amplitude:   { fire: 0, water: 1, air: 0, earth: 2, spirit: 0 },
     symbol:      'M',
     description: "Canaima was a pagan god that was said to have the ability to change "+
                  "form or shape into whatever he possessed. In actuality Canaima are "+
@@ -867,7 +1037,12 @@ var Database;
     health:      400,
     damage:      20,
     asset:       [,],
-    class:       'Page',
+    class:       {
+      name:      'Page',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 1, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'o',
     description: "Catoblepas are said to have the body of a buffalo and the head of a "+
                  "hog. The back is composed of scales that protect the creature, and "+
@@ -883,7 +1058,12 @@ var Database;
     health:      80,
     damage:      9,
     asset:       [,],
-    class:       'Woodsman',
+    class:       {
+      name:      'Woodsman',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 1, spirit: 1 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'e',
     description: "Centaurs are creatures that have the head, torso, and arms of a man "+
                  "while having the body and legs of a horse. Centaurs are said to be extremely "+
@@ -896,7 +1076,12 @@ var Database;
     health:      80,
     damage:      4,
     asset:       [,],
-    class:       'Monk',
+    class:       {
+      name:      'Monk',
+      specialty: 'none'
+    },
+    resistances: { fire: 1, water: 0, air: 1, earth: 0, spirit: 1 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'R',
     description: "A Cerastes is a serpent-like imp with four small pairs of horns that "+
                  "resemble a ram. A cerastes hides within sand of deserts with it's horns "+
@@ -909,7 +1094,12 @@ var Database;
     health:      60,
     damage:      20,
     asset:       [,],
-    class:       'Hermit',
+    class:       {
+      name:      'Hermit',
+      specialty: 'none'
+    },
+    resistances: { fire: 1, water: 0, air: 0, earth: 1, spirit: 1 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'C',
     description: "Cerberus is most commonly depicted as a giant dog with three heads, and "+
                  "sometimes a mane composed of snakes or tails of a serpent. The cerberus "+
@@ -923,7 +1113,12 @@ var Database;
     health:      100,
     damage:      20,
     asset:       [,],
-    class:       'Elementalist',
+    class:       {
+      name:      'Elementalist',
+      specialty: 'Water'
+    },
+    resistances: { fire: 0, water: 5, air: 0, earth: 0, spirit: 0 },
+    amplitude:   { fire: 0, water: 5, air: 0, earth: 0, spirit: 0 },
     symbol:      'Y',
     description: "Charybdis is a creature that sits under the water and causes whirlpools "+
                  "by opening her gaping mouth and sucking in and swallowing everything, "+
@@ -936,7 +1131,12 @@ var Database;
     health:      15,
     damage:      11,
     asset:       [,],
-    class:       'Page',
+    class:       {
+      name:      'Page',
+      specialty: 'none'
+    },
+    resistances: { fire: 1, water: 1, air: 1, earth: 1, spirit: 1 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'm',
     description: "Chimaera's are part lion, goat, and snake. Chimaera's are the second "+
                  "most popular beast to guard portals, next to dragons. They are all "+
@@ -950,7 +1150,12 @@ var Database;
     health:      10,
     damage:      5,
     asset:       [,],
-    class:       'Elementalist',
+    class:       {
+      name:      'Elementalist',
+      specialty: 'Water'
+    },
+    resistances: { fire: 0, water: 0, air: 2, earth: 2, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 1, spirit: 0 },
     symbol:      'o',
     description: "A Cinnamologus is a giant bird who is said to collect and nest among "+
                  "cinnamon trees. This cinnamon bird is incredbly passive and cares only "+
@@ -967,7 +1172,12 @@ var Database;
     health:      5,
     damage:      2,
     asset:       [,],
-    class:       'Pickpocket',
+    class:       {
+      name:      'Pickpocket',
+      specialty: 'none'
+    },
+    resistances: { fire: 1, water:-4, air: 0, earth: 0, spirit: 1 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'u',
     description: "Clurichuans are mischievous imps who have drinking problems. They dwell "+
                  "mostly within Narsis and have hobbies that consist of thievary or "+
@@ -983,7 +1193,12 @@ var Database;
     health:      20,
     damage:      17,
     asset:       [,],
-    class:       'Plainsman',
+    class:       {
+      name:      'Plainsman',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 0, spirit:-5 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'c',
     description: "Cyclops are members of a primordial race. Cyclopes are giants with a "+
                  "single eye in the middle of their forehead and a foul disposition. "+
@@ -998,7 +1213,12 @@ var Database;
     health:      15,
     damage:      4,
     asset:       [,],
-    class:       'Page',
+    class:       {
+      name:      'Page',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 1, air: 0, earth: 1, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'o',
     description: "With a resemblance to death dogs, a dip is said to be an evil, black, "+
                  "hairy dog that is an emissary of Dekkashraen. It's said Dips suck "+
@@ -1012,7 +1232,12 @@ var Database;
     health:      30,
     damage:      3,
     asset:       [,],
-    class:       'Monk',
+    class:       {
+      name:      'Monk',
+      specialty: 'none'
+    },
+    resistances: { fire: 3, water:-5, air: 0, earth: 0, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'h',
     description: "Dobhar-chu's are cryptids that resemble either an otter or a "+
                  "serpentine creature. It's generally described as having fur with some "+
@@ -1028,7 +1253,12 @@ var Database;
     health:      20,
     damage:      3,
     asset:       [,],
-    class:       'Pickpocket',
+    class:       {
+      name:      'Pickpocket',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air:-3, earth: 0, spirit: 5 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'p',
     description: "A doppelganger shapeshifts only into sentient beings and cannot "+
                  "communicate. It's said that doppelgangers are mirror images so that "+
@@ -1045,7 +1275,12 @@ var Database;
     health:      25,
     damage:      2,
     asset:       [,],
-    class:       'Plainsman',
+    class:       {
+      name:      'Plainsman',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 0, spirit: 3 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 1 },
     symbol:      'D',
     description: "A dullahan is a malevolent sprite without a head quite simply. They "+
                  "prefer to use whips during combat and are considered creatures as "+
@@ -1059,7 +1294,12 @@ var Database;
     health:      95,
     damage:      14,
     asset:       [,],
-    class:       'Elementalist',
+    class:       {
+      name:      'Elementalist',
+      specialty: 'none'
+    },
+    resistances: { fire: 5, water: 5, air: 5, earth: 5, spirit: 5 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'K',
     description: "Drakes are offspring of degenerate dragons and are frail and thin, "+
                  "though faster then their ancestors. Drakes are rarely seen but around "+
@@ -1074,7 +1314,12 @@ var Database;
     health:      35,
     damage:      2,
     asset:       [,],
-    class:       'Gravedigger',
+    class:       {
+      name:      'Gravedigger',
+      specialty: 'none'
+    },
+    resistances: { fire:-2, water: 0, air: 0, earth: 0, spirit: 5 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'v',
     description: "Drekavac are creatures of the night and graveyard. It's said that "+
                  "they come from the souls of dead children. Some believe that "+
@@ -1093,7 +1338,12 @@ var Database;
     health:      5,
     damage:      7,
     asset:       [,],
-    class:       'Hermit',
+    class:       {
+      name:      'Hermit',
+      specialty: 'none'
+    },
+    resistances: { fire: 5, water: 2, air:-2, earth: 0, spirit: 5 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'm',
     description: "Dromedaries are extremely durable camels who never fall to "+
                  "fatigue. They are highly sought after by riders who fare the desert "+
@@ -1108,7 +1358,12 @@ var Database;
     health:      100,
     damage:      20,
     asset:       [,],
-    class:       'Mageling',
+    class:       {
+      name:      'Mageling',
+      specialty: 'none'
+    },
+    resistances: { fire: 5, water: 5, air:-5, earth: 0, spirit: 0 },
+    amplitude:   { fire: 0, water: 4, air: 0, earth: 0, spirit: 0 },
     symbol:      'E',
     description: "Echeneis is a large legendary creature described in tall tales and "+
                  "yore that dates before the War of Souls. The stories tell of a fish "+
@@ -1123,7 +1378,12 @@ var Database;
     health:      30,
     damage:      5,
     asset:       [,],
-    class:       'Priest',
+    class:       {
+      name:      'Priest',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 0, spirit: 3 },
+    amplitude:   { fire: 0, water: 0, air: 1, earth: 1, spirit: 2 },
     symbol:      'f',
     description: "Fauns resemble satyrs except they fare well with other creatures, "+
                  "sentient and non-sentient alike. They attempt to win love of fair "+
@@ -1138,7 +1398,12 @@ var Database;
     health:      50,
     damage:      5,
     asset:       [,],
-    class:       'Scout',
+    class:       {
+      name:      'Scout',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 1, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'F',
     description: "Fei lan have the body and legs of a stag and is are as swift as the "+
                  "wind. A long serpentine tail balances their heavy head as they "+
@@ -1154,7 +1419,12 @@ var Database;
     health:      70,
     damage:      7,
     asset:       [,],
-    class:       'Runescribe',
+    class:       {
+      name:      'Runescribe',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 0, spirit: 2 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 1 },
     symbol:      'F',
     description: "Furies are female cththonic deities of vengeance or supernatural "+
                  "personifications of the anger of the dead. They represent "+
@@ -1171,7 +1441,12 @@ var Database;
     health:      80,
     damage:      8,
     asset:       [,],
-    class:       'Gravedigger',
+    class:       {
+      name:      'Gravedigger',
+      specialty: 'none'
+    },
+    resistances: { fire:-5, water: 1, air: 2, earth: 3, spirit: 3 },
+    amplitude:   { fire: 0, water: 0, air: 1, earth: 1, spirit: 2 },
     symbol:      'g',
     description: "Gashadokuro are giant skeletons many times taller than a human. "+
                  "It's thought that they are made of bones of people who have "+
@@ -1187,7 +1462,12 @@ var Database;
     health:      20,
     damage:      7,
     asset:       [,],
-    class:       'Minstrel',
+    class:       {
+      name:      'Minstrel',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 1, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'n',
     description: "Grants are small horses that stand on their hind legs looking "+
                  "for possible danger. If they see danger they emit a piercing cry "+
@@ -1202,7 +1482,12 @@ var Database;
     health:      15,
     damage:      2,
     asset:       [,],
-    class:       'Headhunter',
+    class:       {
+      name:      'Headhunter',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 0, spirit: 1 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'r',
     description: "Gobriks are 30 to 36 stones tall. Gobriks are incredibly "+
                  "grotesque creatures that almost inhibit qualities of phantoms. "+
@@ -1217,7 +1502,12 @@ var Database;
     health:      100,
     damage:      20,
     asset:       [,],
-    class:       'Elementalist',
+    class:       {
+      name:      'Elementalist',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 5, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 3, spirit: 0 },
     symbol:      'G',
     description: "Golems are elemental embodiments of their giant predecessors. "+
                  "It's said that golems were created accidentally by mages during "+
@@ -1232,7 +1522,12 @@ var Database;
     health:      30,
     damage:      6,
     asset:       [,],
-    class:       'Priest',
+    class:       {
+      name:      'Priest',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 0, spirit: 2 },
+    amplitude:   { fire: 0, water: 1, air: 2, earth: 1, spirit: 0 },
     symbol:      'g',
     description: "Griffins have the body of a lion with the wings and head of an "+
                  "eagle. Griffins represent royalty and are often seen on coat of arms "+
@@ -1246,7 +1541,12 @@ var Database;
     health:      15,
     damage:      4,
     asset:       [,],
-    class:       'Minstrel',
+    class:       {
+      name:      'Minstrel',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 2, earth: 0, spirit: 0 },
+    amplitude:   { fire: 0, water: 1, air: 0, earth: 1, spirit: 1 },
     symbol:      'h',
     description: "Harpies are beautiful winged bird-women. They have protruding tongues "+
                  "and fangs and have the ability to bring life. They are also known as "+
@@ -1259,7 +1559,12 @@ var Database;
     health:      20,
     damage:      1,
     asset:       [,],
-    class:       'Priest',
+    class:       {
+      name:      'Priest',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 1, earth: 0, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 3, earth: 0, spirit: 0 },
     symbol:      'H',
     description: "Hercinias are birds with brightly glowing feathers. They are "+
                  "incredibly passive and feed only on insects, attacking only when "+
@@ -1272,7 +1577,12 @@ var Database;
     health:      90,
     damage:      20,
     asset:       [,],
-    class:       'Headhunter',
+    class:       {
+      name:      'Headhunter',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 0, spirit: 5 },
+    amplitude:   { fire: 0, water: 1, air: 1, earth: 1, spirit: 4 },
     symbol:      'H',
     description: "Hydras are guardians within the Bleak. A Hydra generally has 9 heads "+
                  "with the mdidle head supposedly being immortal with poisonous venom "+
@@ -1287,7 +1597,12 @@ var Database;
     health:      80,
     damage:      6,
     asset:       [,],
-    class:       'Mageling',
+    class:       {
+      name:      'Mageling',
+      specialty: 'none'
+    },
+    resistances: { fire:-2, water:-2, air:-2, earth:-2, spirit:-4 },
+    amplitude:   { fire: 2, water: 2, air: 2, earth: 2, spirit: 4 },
     symbol:      'I',
     description: "Incubai are lewd male creatures that take on the illusory appearance "+
                  "of a male human being and seeks sexual intercourse with women, usually "+
@@ -1302,7 +1617,12 @@ var Database;
     health:      80,
     damage:      19,
     asset:       [,],
-    class:       'Elementalist',
+    class:       {
+      name:      'Elementalist',
+      specialty: 'Fire'
+    },
+    resistances: { fire: 5, water:-1, air:-1, earth:-2, spirit: 0 },
+    amplitude:   { fire: 3, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'F',
     description: "Ifrits are elemental giants of fire. Ifrits are generally created by "+
                  "Archmages to protect portals, but there have been known to be a few "+
@@ -1316,7 +1636,12 @@ var Database;
     health:      10,
     damage:      1,
     asset:       [,],
-    class:       'Pickpocket',
+    class:       {
+      name:      'Pickpocket',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth:-1, spirit: 1 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'i',
     description: "Imps are 10 stones tall and resemble goblins except for their thin "+
                  "bodies and addition of wings. Imps aren't generally able to use their "+
@@ -1329,7 +1654,12 @@ var Database;
     health:      70,
     damage:      14,
     asset:       [,],
-    class:       'Woodsman',
+    class:       {
+      name:      'Woodsman',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 2, spirit: 0 },
+    amplitude:   { fire: 0, water: 1, air: 1, earth: 1, spirit: 1 },
     symbol:      'P',
     description: "Kampes are monstrous centaurine creatures who are have woman with "+
                  "serpentine hair and below the waist they have the scaly dragon "+
@@ -1348,7 +1678,12 @@ var Database;
     health:      100,
     damage:      20,
     asset:       [,],
-    class:       'Elementalist',
+    class:       {
+      name:      'Elementalist',
+      specialty: 'Water'
+    },
+    resistances: { fire: 5, water: 5, air: 5, earth: 3, spirit: 0 },
+    amplitude:   { fire: 1, water: 5, air: 1, earth: 1, spirit: 0 },
     symbol:      'K',
     description: "Krakkan are considered a myth by seafarers of ages old. The myth "+
                  "is that there is a being that greatly resembles a colossal octopus "+
@@ -1362,7 +1697,12 @@ var Database;
     health:      30,
     damage:      2,
     asset:       [,],
-    class:       'Headhunter',
+    class:       {
+      name:      'Headhunter',
+      specialty: 'none'
+    },
+    resistances: { fire:-1, water: 0, air: 0, earth:-1, spirit: 2 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'L',
     description: "Leucrota are dog-like beasts with a mouths that stretch ear-to-ear "+
                  "and plenty long teeth to boot. These scary looking creatures are "+
@@ -1380,7 +1720,12 @@ var Database;
     health:      35,
     damage:      4,
     asset:       [,],
-    class:       'Scout',
+    class:       {
+      name:      'Scout',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 2, earth: 0, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'L',
     description: "Llamhigyn Y Dwrs are creatures that dwell in ponds, swamps, and "+
                  "lakes. They are amphibious, having the limbless body of a frogg, a "+
@@ -1398,7 +1743,12 @@ var Database;
     health:      30,
     damage:      8,
     asset:       [,],
-    class:       'Monk',
+    class:       {
+      name:      'Monk',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 1, spirit: 2 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 1 },
     symbol:      'M',
     description: "Manticores are creatures with a humans face, lions body, and the "+
                  "stinger of scorpion. Manticores are said to swallow men whole and "+
@@ -1414,7 +1764,12 @@ var Database;
     health:      15,
     damage:      12,
     asset:       [,],
-    class:       'Mageling',
+    class:       {
+      name:      'Mageling',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 5, air:-1, earth:-1, spirit: 0 },
+    amplitude:   { fire: 1, water: 3, air: 1, earth: 1, spirit: 1 },
     symbol:      'm',
     description: "Marids are powerful giant elementals of water conjured by strong "+
                  "Archmages or the occasional Myrmidon during battle. Marids tear "+
@@ -1427,7 +1782,12 @@ var Database;
     health:      30,
     damage:      6,
     asset:       [,],
-    class:       'Plainsman',
+    class:       {
+      name:      'Plainsman',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 0, spirit: 5 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'm',
     description: "Minotaurs are creatures with the lower half of a man and the top "+
                  "half of a bull. They have cannabilitic hunger for mainly small "+
@@ -1442,7 +1802,12 @@ var Database;
     health:      35,
     damage:      3,
     asset:       [,],
-    class:       'Scout',
+    class:       {
+      name:      'Scout',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 1, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'o',
     description: "Monocerus' are dog-like beasts with a long horns in their forehead, "+
                  "almost more than bucks than dogs. Monocerus, though another way to "+
@@ -1457,7 +1822,12 @@ var Database;
     health:      20,
     damage:      5,
     asset:       [,],
-    class:       'Hermit',
+    class:       {
+      name:      'Hermit',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 3, air: 0, earth: 0, spirit: 0 },
+    amplitude:   { fire: 0, water: 1, air: 1, earth: 0, spirit: 1 },
     symbol:      'j',
     description: "Muldjewangk are lake monsters only visible at night when they "+
                  "glow slightly. These creatures are enormous toads that remain most "+
@@ -1475,7 +1845,12 @@ var Database;
     health:      5,
     damage:      1,
     asset:       [,],
-    class:       'Monk',
+    class:       {
+      name:      'Monk',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 1, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'm',
     description: "Muscaliets are creatures with the body of a hare, tail of a squirrel, "+
                  "and teeth of a boar. These creatures are incredibly timid and hide "+
@@ -1489,7 +1864,12 @@ var Database;
     health:      30,
     damage:      10,
     asset:       [,],
-    class:       'Scout',
+    class:       {
+      name:      'Scout',
+      specialty: 'none'
+    },
+    resistances: { fire: 1, water:-2, air: 0, earth: 1, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 1 },
     symbol:      'y',
     description: "Myrmecoleons are huge ants that supposedly kills other ants and "+
                  "small animals. These ants are incredibly dangerous to any creature "+
@@ -1504,7 +1884,12 @@ var Database;
     health:      10,
     damage:      2,
     asset:       [,],
-    class:       'Mageling',
+    class:       {
+      name:      'Mageling',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 3, air: 0, earth: 0, spirit: 0 },
+    amplitude:   { fire: 2, water: 4, air: 2, earth: 2, spirit: 2 },
     symbol:      'n',
     description: "Nymphs are said to be natural entities of nature, spirits of the "+
                  "woods. They take the appearance of young, beautiful girls. They "+
@@ -1521,7 +1906,12 @@ var Database;
     health:      25,
     damage:      11,
     asset:       [,],
-    class:       'Plainsman',
+    class:       {
+      name:      'Plainsman',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air:-1, earth: 3, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 1, earth: 2, spirit: 0 },
     symbol:      'o',
     description: "Ogres are large giants whose mind was tainted by the evil of "+
                  "Dekkashraen. Ogres stand up to 100 stones tall and weigh 300 to 400 "+
@@ -1534,7 +1924,12 @@ var Database;
     health:      15,
     damage:      5,
     asset:       [,],
-    class:       'Woodsman',
+    class:       {
+      name:      'Woodsman',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 1, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'o',
     description: "Onocentaurs are creatures with the upper body of man and lower of "+
                  "an ass. Onocentaurs have violent tempers and do not endure in capture, "+
@@ -1547,7 +1942,12 @@ var Database;
     health:      30,
     damage:      4,
     asset:       [,],
-    class:       'Priest',
+    class:       {
+      name:      'Priest',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 1, earth: 1, spirit: 3 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 1 },
     symbol:      'o',
     description: "Parandrus are beasts that can conceal itself by changing their "+
                  "appearance to camoflauge themselves in their surrounding environment. "+
@@ -1561,7 +1961,12 @@ var Database;
     health:      80,
     damage:      5,
     asset:       [,],
-    class:       'Priest',
+    class:       {
+      name:      'Priest',
+      specialty: 'none'
+    },
+    resistances: { fire: 5, water: 5, air: 5, earth: 5, spirit: 5 },
+    amplitude:   { fire: 1, water: 1, air: 5, earth: 1, spirit: 5 },
     symbol:      'O',
     description: "Pegasus' are white winged horses that live in small herds in "+
                  "forest areas. There is very rarely just one pegasus in the same area. "+
@@ -1577,7 +1982,12 @@ var Database;
     health:      15,
     damage:      3,
     asset:       [,],
-    class:       'Woodsman',
+    class:       {
+      name:      'Woodsman',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 2, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 1, spirit: 1 },
     symbol:      'y',
     description: "Perytons are herbivore stags with black antlers and horns, rows of "+
                  "sharp teeth, golden fur, and feathered wings and hindquarters. They "+
@@ -1594,7 +2004,12 @@ var Database;
     health:      30,
     damage:      3,
     asset:       [,],
-    class:       'Page',
+    class:       {
+      name:      'Page',
+      specialty: 'none'
+    },
+    resistances: { fire: 5, water:-2, air: 2, earth:-1, spirit: 0 },
+    amplitude:   { fire: 5, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'h',
     description: "Phoenix's are sacred firebirds found in colder climates as their "+
                  "internal fire makes them too hot to live in any other climate. They "+
@@ -1614,7 +2029,12 @@ var Database;
     health:      10,
     damage:      1,
     asset:       [,],
-    class:       'Headhunter',
+    class:       {
+      name:      'Headhunter',
+      specialty: 'none'
+    },
+    resistances: { fire: 1, water: 0, air: 0, earth: 1, spirit: 0 },
+    amplitude:   { fire: 0, water: 1, air: 0, earth: 0, spirit: 0 },
     symbol:      'M',
     description: "Quanliers are creatures with the head of a wolf, the torso of a man, "+
                  "the arms of a dog, and the legs of a jackal. It feeds on human flesh "+
@@ -1628,7 +2048,12 @@ var Database;
     health:      50,
     damage:      16,
     asset:       [,],
-    class:       'Page',
+    class:       {
+      name:      'Page',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 2, earth: 0, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 1, spirit: 2 },
     symbol:      'R',
     description: "A large bird of prey, about twice the size of a bald eagle, is often "+
                  "depicted as white and is reputed to have been able to carry off and eat "+
@@ -1641,7 +2066,12 @@ var Database;
     health:      30,
     damage:      3,
     asset:       [,],
-    class:       'Pickpocket',
+    class:       {
+      name:      'Pickpocket',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air:-2, earth:-1, spirit: 1 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'S',
     description: "Satyrs are a troop of male companions who have a human torso, goat "+
                  "legs, a goat tail, pointed ears, horns, curly hair, and full beards. "+
@@ -1656,7 +2086,12 @@ var Database;
     health:      5,
     damage:      1,
     asset:       [,],
-    class:       'Scout',
+    class:       {
+      name:      'Scout',
+      specialty: 'none'
+    },
+    resistances: { fire: 1, water: 1, air: 1, earth: 1, spirit: 1 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      's',
     description: "Scarabs are very large beetles that burrow within the flesh of large "+
                  "or colossal creatures, much like a parasite. These creatures could be "+
@@ -1669,7 +2104,12 @@ var Database;
     health:      80,
     damage:      6,
     asset:       [,],
-    class:       'Pickpocket',
+    class:       {
+      name:      'Pickpocket',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 1, earth: 2, spirit: 1 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 1, spirit: 0 },
     symbol:      'G',
     description: "Sceadugenga are said to neither be alive or dead and can shapeshift, "+
                  "which is generally incorrect as they are clearly alive and merely "+
@@ -1684,7 +2124,12 @@ var Database;
     health:      50,
     damage:      4,
     asset:       [,],
-    class:       'Runescribe',
+    class:       {
+      name:      'Runescribe',
+      specialty: 'none'
+    },
+    resistances: { fire: 2, water: 2, air: 2, earth: 2, spirit: 4 },
+    amplitude:   { fire: 1, water: 1, air: 1, earth: 1, spirit: 1 },
     symbol:      'L',
     description: "Schilla are spiders with a human head that communicates telepathically. "+
                  "They creatures are found all throughout the Bleak, and many ruins. "+
@@ -1701,7 +2146,12 @@ var Database;
     health:      55,
     damage:      9,
     asset:       [,],
-    class:       'Runescribe',
+    class:       {
+      name:      'Runescribe',
+      specialty: 'none'
+    },
+    resistances: { fire: 1, water: 2, air: 3, earth: 0, spirit: 3 },
+    amplitude:   { fire: 0, water: 1, air: 2, earth: 1, spirit: 5 },
     symbol:      's',
     description: "Serpents are creatures with a snake body and human head. Serpents "+
                  "prefer to live in water and are rarely seen elsewhere, though they are "+
@@ -1715,7 +2165,12 @@ var Database;
     health:      65,
     damage:      6,
     asset:       [,],
-    class:       'Page',
+    class:       {
+      name:      'Page',
+      specialty: 'none'
+    },
+    resistances: { fire: 2, water: 2, air: 2, earth: 2, spirit: 2 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'h',
     description: "Shishi's are dogs with a lion-like mane and fur. Shishi are posted "+
                  "right and left of temple and house entrances as guardians against evil "+
@@ -1731,7 +2186,12 @@ var Database;
     health:      15,
     damage:      4,
     asset:       [,],
-    class:       'Minstrel',
+    class:       {
+      name:      'Minstrel',
+      specialty: 'none'
+    },
+    resistances: { fire:-2, water: 0, air:-1, earth: 0, spirit: 2 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 1 },
     symbol:      's',
     description: "Sirens are serpent-like creatures who ensnare creatures with their "+
                  "lulling songs. They inhabit areas surrounded by water. Sirens are "+
@@ -1744,7 +2204,12 @@ var Database;
     health:      15,
     damage:      4,
     asset:       [,],
-    class:       'Mageling',
+    class:       {
+      name:      'Pickpocket',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 1, earth: 0, spirit: 2 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'c',
     description: "Succubai are beautiful and desirable women, unlike their male "+
                  "counterparts, Incubai. Though they sometimes have bat-like wings "+
@@ -1763,7 +2228,12 @@ var Database;
     health:      80,
     damage:      3,
     asset:       [,],
-    class:       'Scout',
+    class:       {
+      name:      'Scout',
+      specialty: 'none'
+    },
+    resistances: { fire:-1, water:-1, air:-5, earth: 3, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'V',
     description: "Svagin are large swarms of bloodsucking insects. Svagin can range "+
                  "incredibly in size from 3 stones diameter to leagues of what might "+
@@ -1775,7 +2245,12 @@ var Database;
     health:      80,
     damage:      11,
     asset:       [,],
-    class:       'Hermit',
+    class:       {
+      name:      'Hermit',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
+    amplitude:   { fire: 0, water: 1, air: 0, earth: 1, spirit: 0 },
     symbol:      'T',
     description: "Tarasques are menacing beasts that cause much devastation to "+
                  "landscape. The tarasque is a sort of dragon with six short legs "+
@@ -1789,12 +2264,17 @@ var Database;
     health:      70,
     damage:      20,
     asset:       [,],
-    class:       'Elementalist',
+    class:       {
+      name:      'Elementalist',
+      specialty: 'Air'
+    },
+    resistances: { fire: 0, water: 3, air: 5, earth: 0, spirit: 0 },
+    amplitude:   { fire: 0, water: 1, air: 5, earth: 0, spirit: 0 },
     symbol:      't',
     description: "Thunderbirds are supernatural birds that beat their enormous wings "+
                  "causing thunder and stirring the wind. They're said to be the "+
                  "bringers of rain and storms, large enough to hunt small whales "+
-                 "individually. They are the predecessors of Rocs and are though "+
+                 "individually. They are the predecessors of Rocs and are thought "+
                  "extinct. Thunderbirds would have weighed 3000 stones and with a "+
                  "wingspan of 330 stones."
   }, {
@@ -1804,16 +2284,21 @@ var Database;
     health:      40,
     damage:      6,
     asset:       [,],
-    class:       'Woodsman',
+    class:       {
+      name:      'Woodsman',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 1, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      't',
     description: "Tikbalangs are creatures that have a horse's head, body of a "+
                  "human, but with the feet of a horse. They travel at night and rape "+
                  "female sentient beings. The raped women will then give birth to more "+
                  "Tikbalang. They are also believed to cause travelers to lose their "+
                  "way particularly in mountains or forest areas. Tikbalang are very "+
-                 "playful with people, and they usually make a person imagine things "+
+                 "mischievous with people, and they usually make a person imagine things "+
                  "that aren't real. Sometimes a tikbalang will drive a person crazy. "+
-                 "Legends say that when rain falls while teh sun in shining, a pair "+
+                 "Legends say that when rain falls while the sun in shining, a pair "+
                  "of tikbalangs are being wed. Tikbalangs stand 60 stones tall and "+
                  "weigh approximately 220 stones."
   }, {
@@ -1823,7 +2308,12 @@ var Database;
     health:      30,
     damage:      7,
     asset:       [,],
-    class:       'Plainsman',
+    class:       {
+      name:      'Plainsman',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 0, spirit: 1 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'h',
     description: "Tikoloshe are bear-like humanoids considered to be mischievous "+
                  "spirits as they can become invisible at will by swallowing pebbles. "+
@@ -1840,7 +2330,12 @@ var Database;
     health:      80,
     damage:      2,
     asset:       [,],
-    class:       'Mageling',
+    class:       {
+      name:      'Mageling',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 0, spirit: 1 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      't',
     description: "Tiyanaks resemble small children except the horns and sharp teeth on "+
                  "their face. They are offpsring between incubai and creatures that are "+
@@ -1858,7 +2353,12 @@ var Database;
     health:      1,
     damage:      1,
     asset:       [,],
-    class:       'Priest',
+    class:       {
+      name:      'Priest',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 0, spirit: 5 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 5 },
     symbol:      'l',
     description: "Tlatecuhtli are huge frogs that are strongly used as examples of "+
                  "mage spire teachers for the representation of life, death, and rebirth. "+
@@ -1873,7 +2373,12 @@ var Database;
     health:      50,
     damage:      10,
     asset:       [,],
-    class:       'Priest',
+    class:       {
+      name:      'Priest',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
+    amplitude:   { fire: 1, water: 1, air: 1, earth: 2, spirit: 5 },
     symbol:      'u',
     description: "Unicorns are beautiful large horses with spiral horns growing out "+
                  "of their forehead. The horn and the unicorns blood are used in medicine "+
@@ -1888,7 +2393,12 @@ var Database;
     health:      75,
     damage:      6,
     asset:       [,],
-    class:       'Runescribe',
+    class:       {
+      name:      'Runescribe',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 5, air: 0, earth: 0, spirit: 0 },
+    amplitude:   { fire: 0, water: 5, air: 2, earth: 1, spirit: 1 },
     symbol:      'U',
     description: "Undines are sea faries who appear as seahorses with human faces. "+
                  "It's said that undines lack souls which constitutes for the forelorn "+
@@ -1901,7 +2411,12 @@ var Database;
     health:      30,
     damage:      5,
     asset:       [,],
-    class:       'Gravedigger',
+    class:       {
+      name:      'Gravedigger',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 0, spirit: 5 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 3 },
     symbol:      'w',
     description: "Wendigos are considered cannabilistic spirits having some similar "+
                  "characteristics between a zombie and a being that lives on blood. It's "+
@@ -1920,7 +2435,12 @@ var Database;
     health:      30,
     damage:      2,
     asset:       [,],
-    class:       'Mageling',
+    class:       {
+      name:      'Mageling',
+      specialty: 'none'
+    },
+    resistances: { fire: 4, water: 4, air: 4, earth: 4, spirit: 4 },
+    amplitude:   { fire: 3, water: 3, air: 3, earth: 3, spirit: 3 },
     symbol:      'w',
     description: "Will'o'Wisps are also known as fairy lights, they're a debatable "+
                  "phenomenon. Humans who follow them can be lead to a fairy gather it's "+
@@ -1938,7 +2458,12 @@ var Database;
     health:      100,
     damage:      20,
     asset:       [,],
-    class:       'Mageling',
+    class:       {
+      name:      'Mageling',
+      specialty: 'none'
+    },
+    resistances: { fire: 5, water: 5, air: 5, earth: 5, spirit: 5 },
+    amplitude:   { fire: 5, water: 5, air: 5, earth: 5, spirit: 5 },
     symbol:      'W',
     description: "Wyverns are colossal, ancient, dragons who have aged so much they "+
                  "lost theirs wings and tails have enlarged. They look more-or-less "+
@@ -1955,7 +2480,12 @@ var Database;
     health:      20,
     damage:      3,
     asset:       [,],
-    class:       'Headhunter',
+    class:       {
+      name:      'Headhunter',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 1, earth: 0, spirit: 3 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'x',
     description: "Xolotl are horrible underworld dogs whose legs and feet are backwards. "+
                  "It's ears can swivel in any direction. Every evening it's said that "+
@@ -1969,7 +2499,12 @@ var Database;
     health:      15,
     damage:      6,
     asset:       [,],
-    class:       'Mageling',
+    class:       {
+      name:      'Mageling',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
+    amplitude:   { fire: 2, water: 2, air: 2, earth: 2, spirit: 2 },
     symbol:      'y',
     description: "Yales are beasts with flexible horns that they can move at will. "+
                  "They resemble most generally bucks, or deer as it were. Yale are "+
@@ -1982,7 +2517,12 @@ var Database;
     health:      10,
     damage:      1,
     asset:       [,],
-    class:       'Headhunter',
+    class:       {
+      name:      'Headhunter',
+      specialty: 'none'
+    },
+    resistances: { fire: 5, water: 5, air: 5, earth: 5, spirit: 5 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'y',
     description: "Yara-ma-yha-who are little red men who have large teethless heads "+
                  "and suckers for hands and feet. They stand no more than 2 stones tall "+
@@ -1996,7 +2536,12 @@ var Database;
     health:      80,
     damage:      9,
     asset:       [,],
-    class:       'Hermit',
+    class:       {
+      name:      'Hermit',
+      specialty: 'none'
+    },
+    resistances: { fire:-1, water: 3, air: 2, earth: 0, spirit: 0 },
+    amplitude:   { fire: 0, water: 1, air: 0, earth: 0, spirit: 0 },
     symbol:      'Y',
     description: "Yetis are ape-like beasts that reside in the cold mountainous "+
                  "regions of the Northern Reach. These creatures are mostly passive "+
@@ -2010,7 +2555,12 @@ var Database;
     health:      100,
     damage:      20,
     asset:       [,],
-    class:       'Monk',
+    class:       {
+      name:      'Monk',
+      specialty: 'none'
+    },
+    resistances: { fire: 0, water: 0, air: 1, earth: 0, spirit: 0 },
+    amplitude:   { fire: 0, water: 0, air: 0, earth: 0, spirit: 0 },
     symbol:      'z',
     description: "Ziz are enormous griffin-like bird creatures. They can have a wingspan "+
                  "so wide it blocks out the sun from miles above, though they themselves "+
