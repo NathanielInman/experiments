@@ -1,0 +1,1 @@
+define(["exports"],function(e){function n(){return"f"}e.f=n,Object.defineProperty(e,"__esModule",{value:!0})});
