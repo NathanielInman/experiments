@@ -1,4 +1,4 @@
-import { b } from 'common/r1/b';
+import { b } from 'engine/r1/b';
 export function a(){
   console.log(b());
   return 'a';

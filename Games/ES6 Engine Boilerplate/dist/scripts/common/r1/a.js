@@ -1,1 +1,0 @@
-define(["exports","common/r1/b"],function(e,o){function n(){return console.log(r()),"a"}e.a=n;var r=o.b;Object.defineProperty(e,"__esModule",{value:!0})});

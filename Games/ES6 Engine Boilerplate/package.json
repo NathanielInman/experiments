@@ -15,7 +15,11 @@
     "url": "https://github.com/Nathaniel Inman/es6enginemodule/issues"
   },
   "devDependencies": {
-    "gulp": "^3.8.10"
+    "amd-optimize": "^0.4.3",
+    "gulp": "^3.8.10",
+    "gulp-amd-optimize": "^0.4.3",
+    "gulp-insert": "^0.4.0",
+    "gulp-rjs": "^0.1.0"
   },
   "readmeFilename": "README.md",
   "homepage": "https://github.com/Nathaniel Inman/es6enginemodule",
