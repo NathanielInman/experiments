@@ -1,5 +1,5 @@
-var Easel;
-(function(a) {
+export var Easel=(function(a) {
+    if(!!window.CanvasRenderingContext2D){Easel.activated=true;}else{return false;}
     W = window;
     D = document;
     M = Math;
@@ -30,7 +30,6 @@ var Easel;
     v = w();
     a.background = "#000";
     a.redraw = function() {
-      console.log('draw');
       if(!a.started){a.config();a.started=true}
       a.onDraw();
     };
@@ -58,5 +57,6 @@ var Easel;
     d.rel = "stylesheet";
     d.innerHTML = "body{background-color:" + a.background + ";overflow:hidden;margin:0;}.canvas{position:absolute;left:0;top:0;width:" + v.w + "px;height:" + v.h + "px;}";
     D.getElementsByTagName("head")[0].appendChild(d);
-    q()
+    q();
+    return a;
 })(Easel || (Easel = {}));

@@ -1,0 +1,14 @@
+import { a } from 'engine/r1/a';
+import { b } from 'engine/r1/b';
+import { c } from 'engine/r2/c';
+  import { e } from 'engine/r2/r2c/e';
+  import { f } from 'engine/r2/r2c/f';
+import { d } from 'engine/r2/d';
+var Engine = function(){};
+Engine.prototype.a = a;
+Engine.prototype.b = b;
+Engine.prototype.c = c;
+Engine.prototype.c.e = e;
+Engine.prototype.c.f = f;
+Engine.prototype.d = d;
+export { Engine };
