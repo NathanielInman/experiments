@@ -30,8 +30,15 @@ var Easel;
     v = w();
     a.background = "#000";
     a.redraw = function() {
-        ctx.fillStyle = a.background;
-        ctx.fillRect(0, 0, v.w, v.h)
+      console.log('draw');
+      if(!a.started){a.config();a.started=true}
+      a.onDraw();
+    };
+    a.started = false;
+    a.config = function(){};
+    a.onDraw = function(){
+      ctx.fillStyle = a.background;
+      ctx.fillRect(0, 0, v.w, v.h)
     };
     W.r = function(f, g, e) {
         f = !g ? 0 * (g = f) : f > g ? g + (d = f) - g : f;
@@ -42,6 +49,7 @@ var Easel;
     W.onresize = function() {
         W.v = w();
         q();
+        a.config();
         a.redraw()
     };
     D.body.appendChild(C);

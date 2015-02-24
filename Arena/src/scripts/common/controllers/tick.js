@@ -9,10 +9,20 @@ function tick(c1,c2) {
 
   if(r(0,2,1)===0){ //c1 -> c2
     outputCache.push(c1.process(c2).split('|||').clean());
-    if(c2.health>0)setTimeout(function(){outputCache.push(c2.process(c1).split('|||').clean());},500);
+    if(c2.health>0){
+      setTimeout(function(){
+        outputCache.push(c2.process(c1).split('|||').clean());
+        Easel.redraw();
+      },500);
+    } //end if
   }else{ //c2 -> c1
     outputCache.push(c2.process(c1).split('|||').clean());
-    if(c1.health>0)setTimeout(function(){outputCache.push(c1.process(c2).split('|||').clean());},500);
+    if(c1.health>0){
+      setTimeout(function(){
+        outputCache.push(c1.process(c2).split('|||').clean());
+        Easel.redraw();
+      },500);
+    } //en dif
   } //end if
   if (c1.health > 0 && c2.health > 0) {
     setTimeout(function() {
@@ -25,4 +35,5 @@ function tick(c1,c2) {
       outputCache.push(c2.name+' dies.');
     } //end if
   } //end if
+  Easel.redraw();
 }

@@ -1,7 +1,7 @@
 /**
  * Main anonymous function that launches the web application
  */
-(function(){
+(function($$){
   "use strict";
 
   var status=''; // This will hold the error text if features are missing from the browser
@@ -27,13 +27,12 @@
 
   //Enter/Exit the fullscreen mode by clicking the canvas
   document.getElementsByTagName('canvas')[0].addEventListener('click', function requestFullScreen() {
-    console.log('fullscreen = '+window.fullscreen);
     var req, e = document, el = e.body;
-    if(window.fullscreen){
-      window.fullscreen = false;el = e;
+    if($$.fullscreen){
+      $$.fullscreen = false;el = e;
       req = e.exitFullscreen || e.msExitFullscreen || e.mozCancelFullScreen || e.webkitExitFullscreen;
     }else{
-      window.fullscreen = true;
+      $$.fullscreen = true;
       req = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
     } //end if
     if (req) { // Native full screen.
@@ -44,4 +43,4 @@
       })(new ActiveXOBject("WScript.Shell"));
     } //end if
   }, false);
-})();
+})(window);
