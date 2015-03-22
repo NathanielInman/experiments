@@ -19,8 +19,9 @@ if(!Easel.activated){
     window.fontRatio = 0.02; //scale the font to the size of the window
     window.fontSize = (v.w * fontRatio)|0; //scale size based solely on viewport width
     window.scrollOffset = 0; //this is used to scroll the main text during overflow
-    ctx.font = window.fontSize + "px Courier New";
-    ctx.textAlign = 'center';
+    //ctx.font = window.fontSize + "px Courier New";
+    ctx.font = '10px Courier New';
+    ctx.textAlign = 'left';
     ctx.imageSmoothingEnabled = false;
   };
 
@@ -33,6 +34,7 @@ if(!Easel.activated){
   // Instantiate the game engine
   window.engine = new Engine();
   window.engine.enabled = {};
+  window.engine.enabled.totalVnums = 0;
   ctx.strokeStyle="#555";
   for(let x = 1; x< v.w;x+=50){ ctx.moveTo(x,0);ctx.lineTo(x,v.h); }
   for(let y = 1; y< v.h;y+=50){ ctx.moveTo(0,y);ctx.lineTo(v.w,y); }
@@ -47,11 +49,47 @@ if(!Easel.activated){
 
     // Draw the outlines and then draw the selected squares
     ctx.stroke();
-    ctx.fillStyle="#369";
     var o = window.engine.enabled;
     for(let i in o){
-      if(o[i].enabled)ctx.fillRect(o[i].c*50,o[i].r*50,50,50);
+      if(o[i].enabled){
+        // fill square
+        ctx.fillStyle="#222";
+        ctx.fillRect(o[i].c*50,o[i].r*50,50,50);
+
+        // bottom arrow
+        ctx.moveTo(o[i].c*50+25,o[i].r*50+35);
+        ctx.lineTo(o[i].c*50+25,o[i].r*50+48);
+        ctx.lineTo(o[i].c*50+20,o[i].r*50+43);
+        ctx.moveTo(o[i].c*50+25,o[i].r*50+48);
+        ctx.lineTo(o[i].c*50+30,o[i].r*50+43);
+
+        // top arrow
+        ctx.moveTo(o[i].c*50+25,o[i].r*50+15);
+        ctx.lineTo(o[i].c*50+25,o[i].r*50+ 2);
+        ctx.lineTo(o[i].c*50+20,o[i].r*50+ 7);
+        ctx.moveTo(o[i].c*50+25,o[i].r*50+ 2);
+        ctx.lineTo(o[i].c*50+30,o[i].r*50+ 7);
+
+        // left arrow
+        ctx.moveTo(o[i].c*50+15,o[i].r*50+25);
+        ctx.lineTo(o[i].c*50+ 2,o[i].r*50+25);
+        ctx.lineTo(o[i].c*50+ 7,o[i].r*50+20);
+        ctx.moveTo(o[i].c*50+ 2,o[i].r*50+25);
+        ctx.lineTo(o[i].c*50+ 7,o[i].r*50+30);
+
+        // right arrow
+        ctx.moveTo(o[i].c*50+35,o[i].r*50+25);
+        ctx.lineTo(o[i].c*50+48,o[i].r*50+25);
+        ctx.lineTo(o[i].c*50+43,o[i].r*50+20);
+        ctx.moveTo(o[i].c*50+48,o[i].r*50+25);
+        ctx.lineTo(o[i].c*50+43,o[i].r*50+30);
+
+        // draw the vnum on the bottom left of the square
+        ctx.fillStyle="#fff";
+        ctx.fillText(o[i].vnum,3+o[i].c*50,(1+o[i].r)*50-3);
+      } //end if
     }
+    ctx.stroke();
   };
 
   // Add an event listener to the canvas so we can pass clicked sectors
@@ -62,10 +100,12 @@ if(!Easel.activated){
     if(collection[key]&&collection[key].enabled){
       collection[key].enabled=false;
     }else{
+      if(!collection[key])collection.totalVnums++;
       collection[key]={
         c: column,
         r: row,
-        enabled: true
+        enabled: true,
+        vnum: collection.totalVnums
       }
     }
     Easel.redraw();
