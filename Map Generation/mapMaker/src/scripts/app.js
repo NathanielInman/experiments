@@ -33,8 +33,6 @@ if(!Easel.activated){
 
   // Instantiate the game engine
   window.engine = new Engine();
-  window.engine.enabled = {};
-  window.engine.enabled.totalVnums = 0;
 
   // Instantiate the drawing loop
   window.draw = function(){
@@ -53,48 +51,16 @@ if(!Easel.activated){
     for(let i in o){
       if(o[i].enabled){
         // fill square
-        ctx.fillStyle="#222";
-        ctx.fillRect(o[i].c*50,o[i].r*50,50,50);
+        engine.draw.sector.base(o[i].c,o[i].r);
 
-        // bottom arrow
-        if(o[i].south){
-          ctx.moveTo(o[i].c*50+25,o[i].r*50+25);
-          ctx.lineTo(o[i].c*50+25,o[i].r*50+48);
-          ctx.lineTo(o[i].c*50+20,o[i].r*50+43);
-          ctx.moveTo(o[i].c*50+25,o[i].r*50+48);
-          ctx.lineTo(o[i].c*50+30,o[i].r*50+43);
-        } //end if
-
-        // top arrow
-        if(o[i].north){
-          ctx.moveTo(o[i].c*50+25,o[i].r*50+25);
-          ctx.lineTo(o[i].c*50+25,o[i].r*50+ 2);
-          ctx.lineTo(o[i].c*50+20,o[i].r*50+ 7);
-          ctx.moveTo(o[i].c*50+25,o[i].r*50+ 2);
-          ctx.lineTo(o[i].c*50+30,o[i].r*50+ 7);
-        } //end if
-
-        // left arrow
-        if(o[i].west){
-          ctx.moveTo(o[i].c*50+25,o[i].r*50+25);
-          ctx.lineTo(o[i].c*50+ 2,o[i].r*50+25);
-          ctx.lineTo(o[i].c*50+ 7,o[i].r*50+20);
-          ctx.moveTo(o[i].c*50+ 2,o[i].r*50+25);
-          ctx.lineTo(o[i].c*50+ 7,o[i].r*50+30);
-        } //end if
-
-        // right arrow
-        if(o[i].east){
-          ctx.moveTo(o[i].c*50+25,o[i].r*50+25);
-          ctx.lineTo(o[i].c*50+48,o[i].r*50+25);
-          ctx.lineTo(o[i].c*50+43,o[i].r*50+20);
-          ctx.moveTo(o[i].c*50+48,o[i].r*50+25);
-          ctx.lineTo(o[i].c*50+43,o[i].r*50+30);
-        } //end if
+        // draw exit arrow
+        if(o[i].south)engine.draw.arrow.south(o[i].c,o[i].r)
+        if(o[i].north)engine.draw.arrow.north(o[i].c,o[i].r);
+        if(o[i].west)engine.draw.arrow.west(o[i].c,o[i].r);
+        if(o[i].east)engine.draw.arrow.east(o[i].c,o[i].r);
 
         // draw the vnum on the bottom left of the square
-        ctx.fillStyle="#fff";
-        ctx.fillText(o[i].vnum,3+o[i].c*50,(1+o[i].r)*50-3);
+        engine.draw.sector.vnum(o[i].vnum,o[i].c,o[i].r);
       } //end if
     }
     ctx.stroke();
