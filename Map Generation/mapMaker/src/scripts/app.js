@@ -68,14 +68,14 @@ if(!Easel.activated){
 
   // Add an event listener to the canvas so we can pass clicked sectors
   C.addEventListener('mousedown', function(e){
-    window.engine.clickX = Math.floor(e.x/50);
-    window.engine.clickY = Math.floor(e.y/50);
+    engine.input.click.x = Math.floor(e.x/50);
+    engine.input.click.y = Math.floor(e.y/50);
   });
   C.addEventListener('mouseup', function(e){
-    var dX = window.engine.clickX;
-    var dY = window.engine.clickY;
-    var uX = Math.floor(e.x/50);
-    var uY = Math.floor(e.y/50);
+    var dX = engine.input.click.x; //mouse down x
+    var dY = engine.input.click.y; //mouse down y
+    var uX = Math.floor(e.x/50);   //mouse up x
+    var uY = Math.floor(e.y/50);   //mouse up y
     var linkSector = function(dir){
       var keyA = dX+":"+dY;
       var keyB = uX+":"+uY;
