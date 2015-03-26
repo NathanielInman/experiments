@@ -4,6 +4,7 @@ import { draw } from 'engine/draw/main';
 import { sector } from 'engine/draw/sector';
 import { mousedown } from 'engine/input/mousedown';
 import { mouseup } from 'engine/input/mouseup';
+import { keydown } from 'engine/input/keydown';
 import { location } from 'engine/input/mouselocation';
 import { map  } from 'engine/map/collection';
 
@@ -15,6 +16,7 @@ Engine.prototype.draw.sector = sector;
 Engine.prototype.input = {};
 Engine.prototype.input.mousedown = mousedown;
 Engine.prototype.input.mouseup = mouseup;
+Engine.prototype.input.keydown = keydown;
 Engine.prototype.input.mouselocation = location;
 Engine.prototype.map = map;
 

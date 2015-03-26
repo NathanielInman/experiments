@@ -30,4 +30,9 @@ export function draw(){
     } //end if
   } //end for
   ctx.stroke();
+
+  ctx.beginPath();
+  let activeSector = map.getActiveSector();
+  sector.outline(activeSector.x,activeSector.y);
+  ctx.stroke();
 } //end function

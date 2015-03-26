@@ -6,5 +6,9 @@ export var sector = {
   vnum:function(vnum,x,y){
     ctx.fillStyle="#fff";
     ctx.fillText(vnum,3+x*50,(1+y)*50-3);
+  },
+  outline:function(x,y){
+    ctx.strokeStyle='#69F';
+    ctx.rect(x*50,y*50,50,50);
   }
 };

@@ -40,6 +40,7 @@ if(!Easel.activated){
   // Add an event listener to the canvas so we can pass clicked sectors
   C.addEventListener('mousedown', engine.input.mousedown);
   C.addEventListener('mouseup', engine.input.mouseup);
+  document.addEventListener('keydown', engine.input.keydown);
 
   // Go ahead and draw
   Easel.redraw();
