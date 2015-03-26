@@ -10,6 +10,12 @@ if(!Easel.activated){
     <span style="color:red;"><br/>Canvas isn't supported in your browser.</span>
   </p>`;
 }else{
+  // Debugging variables
+  window.easel = Easel; //pull to outer scope
+
+  // Establish an instance of the engine
+  window.engine = new Engine();
+
   // Hide the no script overlay
   document.getElementById('noscript').style.visibility='hidden';
 

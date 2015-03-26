@@ -1,3 +1,2 @@
-export var map = {
-  totalVnums: 0
-};
+import { Map } from 'engine/map/Map';
+export var map = new Map();

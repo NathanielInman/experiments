@@ -4,7 +4,7 @@ var gulp = require('gulp'), // This streaming build system
     reload = browserSync.reload, // Ensure the event emitter is set
     stylus = require('gulp-stylus'), // CSS Pre-processor
     ks = require('kouto-swiss'),
-    
+
     jade = require('gulp-jade'), // Template language for HTML5
     notify = require('gulp-notify'), // Give notification on updates
     babel = require('gulp-babel'), // Babel (formerly 6to5) ECMAScript transpiler
@@ -22,7 +22,7 @@ gulp.task('styles', function(){
     .pipe(concat('app.min.styl'))
     .pipe(stylus({
       use: ks(),
-      
+
       compress: true
     }))
     .pipe(minifycss())
@@ -49,7 +49,7 @@ gulp.task('scripts', function(){
       moduleIds: true
     }))
     .pipe(optimize('app'))
-    .pipe(minifyjs())
+    //.pipe(minifyjs())
     .pipe(concat('runtime.min.js'))
     .pipe(append('\nrequire(["app"]);'))
     .pipe(gulp.dest('dist/'))
