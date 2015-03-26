@@ -27,4 +27,4 @@ export var arrow = {
     ctx.moveTo(x*50+25,y*50+48);
     ctx.lineTo(x*50+30,y*50+43);
   }
-}
+};

@@ -1,4 +1,4 @@
-export var sector{
+export var sector = {
   base:function(x,y){
     ctx.fillStyle="#222";
     ctx.fillRect(x*50,y*50,50,50);

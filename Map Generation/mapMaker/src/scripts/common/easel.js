@@ -6,50 +6,50 @@ export var Easel=(function(a) {
     C = D.createElement("canvas");
     ctx = C.getContext("2d");
     $ = function(c) {
-        return D.getElementById(c)
+        return D.getElementById(c);
     };
     q = function() {
         C.width = v.w;
-        C.height = v.h
+        C.height = v.h;
     };
     u = function() {
-        ctx = C.getContext("2d")
+        ctx = C.getContext("2d");
     };
     w = function() {
         d = W;
         b = "inner";
         if (!(d.innerWidth)) {
             b = "client";
-            d = D.documentElement || D.body
+            d = D.documentElement || D.body;
         }
         return {
             w: d[b + "Width"],
             h: d[b + "Height"]
-        }
+        };
     };
     v = w();
     a.background = "#000";
     a.redraw = function() {
-      if(!a.started){a.config();a.started=true}
+      if(!a.started){a.config();a.started=true;}
       a.onDraw();
     };
     a.started = false;
     a.config = function(){};
     a.onDraw = function(){
       ctx.fillStyle = a.background;
-      ctx.fillRect(0, 0, v.w, v.h)
+      ctx.fillRect(0, 0, v.w, v.h);
     };
     W.r = function(f, g, e) {
         f = !g ? 0 * (g = f) : f > g ? g + (d = f) - g : f;
         e = e || 0;
         g = M.random() * (g - f) + f;
-        return e ? g | 0 : g
+        return e ? g | 0 : g;
     };
     W.onresize = function() {
         W.v = w();
         q();
         a.config();
-        a.redraw()
+        a.redraw();
     };
     D.body.appendChild(C);
     d = document.createElement("style");

@@ -1,3 +1,3 @@
 export var map = {
-  totalVnums: 0;
-}
+  totalVnums: 0
+};
