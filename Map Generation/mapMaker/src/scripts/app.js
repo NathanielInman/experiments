@@ -27,8 +27,6 @@ if(!Easel.activated){
     window.fontSize = (v.w * fontRatio)|0; //scale size based solely on viewport width
     window.scrollOffset = 0; //this is used to scroll the main text during overflow
     //ctx.font = window.fontSize + "px Courier New";
-    ctx.font = '10px Courier New';
-    ctx.textAlign = 'left';
     ctx.imageSmoothingEnabled = false;
   };
 

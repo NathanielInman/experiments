@@ -1,5 +1,21 @@
 export var Easel=(function(a) {
     if(!!window.CanvasRenderingContext2D){Easel.activated=true;}else{return false;}
+    CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r,f,s){
+      if (typeof r === "undefined") r = 5; //radius
+      this.beginPath();
+      this.moveTo(x + r, y);
+      this.lineTo(x + w - r, y);
+      this.quadraticCurveTo(x + w, y, x + w, y + r);
+      this.lineTo(x + w, y + h - r);
+      this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      this.lineTo(x + r, y + h);
+      this.quadraticCurveTo(x, y + h, x, y + h - r);
+      this.lineTo(x, y + r);
+      this.quadraticCurveTo(x, y, x + r, y);
+      this.closePath();
+      if (s||typeof s=='undefined')this.stroke(); //default is stroke
+      if (f)this.fill(); //default is no fill
+    };
     W = window;
     D = document;
     M = Math;

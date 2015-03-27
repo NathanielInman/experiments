@@ -11,9 +11,11 @@ import { creature    } from 'engine/data-model/creature';
 import { environment } from 'engine/data-model/environment';
 import { floor       } from 'engine/data-model/floor';
 import { wall        } from 'engine/data-model/wall';
+import { hex2rgba    } from 'engine/controllers/draw/hex2rgba';
 
 // Create the deliverable structure for the engine.
 var Engine = function(){};
+Engine.prototype.hex2rgba = hex2rgba;
 Engine.prototype.draw = draw;
 Engine.prototype.draw.sector = sector;
 Engine.prototype.draw.sizes = sizes;
