@@ -1,6 +1,9 @@
+import { environment } from 'engine/database/environment';
+
 export class Map{
   constructor(){
     this.totalVnums = 0;
+    this.environment = environment[Math.floor(Math.random()*environment.length)]; //randomly choose one
     this.sector = {
       active: {x: 0, y: 0}
     };
@@ -44,8 +47,10 @@ export class Map{
       if(!sector){ //not created yet, make it now
         this.totalVnums++;
         this.sector[this.getKey(x,y)]=sector={
-          c: x,
-          r: y,
+          x: x,
+          y: y,
+          floor: this.environment.floor[Math.floor(this.environment.floor.length*Math.random())],
+          wall: this.environment.wall[Math.floor(this.environment.wall.length*Math.random())],
           enabled: true,
           north: false,
           south: false,

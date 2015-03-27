@@ -1,6 +1,7 @@
 import { location } from 'engine/input/mouselocation';
 import { map } from 'engine/map/collection';
 import { draw } from 'engine/draw/main';
+import { sizes } from 'engine/draw/sizes';
 
 export function mouseup(e){
   "use strict";
@@ -12,7 +13,9 @@ export function mouseup(e){
   var uY = Math.floor(e.y/50);   //mouse up y
 
   // main logic
-  if(uX == dX && uY == dY){
+  if(uX>=sizes.number||uY>=sizes.number||dX>=sizes.number||dY>=sizes.number){
+    return;
+  }else if(uX == dX && uY == dY){
     map.addSector(uX,uY);
   }else if(uX == dX +1 && uY == dY){
     map.linkSector(dX,dY,uX,uY);
