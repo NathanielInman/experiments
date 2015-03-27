@@ -1,4 +1,4 @@
-import { environment } from 'engine/database/environment';
+import { environment } from 'engine/data-model/environment';
 
 export class Map{
   constructor(){

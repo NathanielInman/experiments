@@ -1,4 +1,4 @@
-import { location } from 'engine/input/mouselocation';
+import { location } from 'engine/controllers/input/mouselocation';
 
 export function mousedown(e){
   location.x = Math.floor(e.x/50);

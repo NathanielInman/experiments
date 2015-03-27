@@ -1,7 +1,7 @@
-import { location } from 'engine/input/mouselocation';
-import { map } from 'engine/map/collection';
-import { draw } from 'engine/draw/main';
-import { sizes } from 'engine/draw/sizes';
+import { draw     } from 'engine/controllers/draw/main';
+import { sizes    } from 'engine/controllers/draw/sizes';
+import { location } from 'engine/controllers/input/mouselocation';
+import { map      } from 'engine/controllers/map/collection';
 
 export function mouseup(e){
   "use strict";

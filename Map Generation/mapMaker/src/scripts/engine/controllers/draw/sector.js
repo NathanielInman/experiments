@@ -1,8 +1,8 @@
-import { floor } from 'engine/database/floor';
-import { wall } from 'engine/database/wall';
-import { map } from 'engine/map/collection';
-import { hex2rgba } from 'engine/draw/hex2rgba';
-import { sizes } from 'engine/draw/sizes';
+import { hex2rgba } from 'engine/controllers/draw/hex2rgba';
+import { sizes    } from 'engine/controllers/draw/sizes';
+import { map      } from 'engine/controllers/map/collection';
+import { floor    } from 'engine/data-model/floor';
+import { wall     } from 'engine/data-model/wall';
 
 export var sector = {
   base:function(sector){

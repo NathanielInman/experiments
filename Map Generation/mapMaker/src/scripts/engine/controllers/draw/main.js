@@ -1,7 +1,7 @@
 // Main import statements required for this module
-import { sector } from 'engine/draw/sector';
-import { map } from 'engine/map/collection';
-import { sizes } from 'engine/draw/sizes';
+import { sector } from 'engine/controllers/draw/sector';
+import { sizes  } from 'engine/controllers/draw/sizes';
+import { map    } from 'engine/controllers/map/collection';
 
 // Main draw function that calls all the other draw functions
 export function draw(){

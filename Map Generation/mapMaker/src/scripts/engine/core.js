@@ -1,17 +1,16 @@
 // Import all the deliverable components of the engine
-import { draw } from 'engine/draw/main';
-import { sector } from 'engine/draw/sector';
-import { mousedown } from 'engine/input/mousedown';
-import { mouseup } from 'engine/input/mouseup';
-import { keydown } from 'engine/input/keydown';
-import { location } from 'engine/input/mouselocation';
-import { map  } from 'engine/map/collection';
-import { creature } from 'engine/database/creature';
-import { environment } from 'engine/database/environment';
-import { floor } from 'engine/database/floor';
-import { wall } from 'engine/database/wall';
-import { hex2rgba } from 'engine/draw/hex2rgba'; //utility only
-import { sizes } from 'engine/draw/sizes';
+import { draw        } from 'engine/controllers/draw/main';
+import { sector      } from 'engine/controllers/draw/sector';
+import { sizes       } from 'engine/controllers/draw/sizes';
+import { keydown     } from 'engine/controllers/input/keydown';
+import { mousedown   } from 'engine/controllers/input/mousedown';
+import { mouseup     } from 'engine/controllers/input/mouseup';
+import { location    } from 'engine/controllers/input/mouselocation';
+import { map         } from 'engine/controllers/map/collection';
+import { creature    } from 'engine/data-model/creature';
+import { environment } from 'engine/data-model/environment';
+import { floor       } from 'engine/data-model/floor';
+import { wall        } from 'engine/data-model/wall';
 
 // Create the deliverable structure for the engine.
 var Engine = function(){};
@@ -29,8 +28,6 @@ Engine.prototype.database.creature = creature;
 Engine.prototype.database.environment = environment;
 Engine.prototype.database.floor = floor;
 Engine.prototype.database.wall = wall;
-Engine.prototype.hex2rgba = hex2rgba; //utility only
-
 
 // Export the engine
 export { Engine };
