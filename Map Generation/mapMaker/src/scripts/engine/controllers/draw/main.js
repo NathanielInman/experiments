@@ -44,9 +44,9 @@ export function draw(){
     ctx.strokeStyle='#000';
     var color = map.environment.background.value;
     var grd = ctx.createLinearGradient(0, y2, 0, h+y2);
-    grd.addColorStop('0.00', hex2rgba(color,{r:1.5,g:1.5,b:1.5}));
-    grd.addColorStop('0.30', color);
-    grd.addColorStop('0.60', hex2rgba(color,{r:0.6,g:0.6,b:0.5}));
+    grd.addColorStop('0.00', hex2rgba(color,{r:1.5,g:1.5,b:1.5},0.5));
+    grd.addColorStop('0.30', hex2rgba(color,{r:1.0,g:1.0,b:1.0},0.5));
+    grd.addColorStop('0.60', hex2rgba(color,{r:0.6,g:0.6,b:0.5},0.5));
     return grd
   })(sizes.sideBar.title.top,sizes.sideBar.title.height);
   ctx.roundRect(sizes.sideBar.left+sizes.sideBar.padding*2-2,
