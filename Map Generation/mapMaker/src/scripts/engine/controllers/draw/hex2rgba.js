@@ -19,7 +19,7 @@
 export function hex2rgba(hex,options,lt,ut){
   var r,g,b,o=options||1,result = /^#?([a-f\d]{2}|[a-f\d]{1})([a-f\d]{2}|[a-f\d]{1})([a-f\d]{2}|[a-f\d]{1})$/i.exec(hex);
   var clt = function(){ return !lt || (r+g+b)/3/255 >= lt; };
-  var cut = function(){ return !ut || (r+g+b)/3/255 <= gt; };
+  var cut = function(){ return !ut || (r+g+b)/3/255 <= ut; };
   var cot = function(){ if(r>255)r=255;if(g>255)g=255;if(b>255)b=255; };
   if(!result)return 'rgba(0,0,0,0)';
   result.forEach(function(i,j,k){ if(i.length==1)k[j]=i+i; });

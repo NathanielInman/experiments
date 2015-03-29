@@ -15,5 +15,4 @@ export function draw(){
     if(r.type=='mapper'    )mapper.draw(r,map.getActiveSector());
     if(r.type=='button'    )button.draw(r);
   });
-  console.log('draw');
 } //end function

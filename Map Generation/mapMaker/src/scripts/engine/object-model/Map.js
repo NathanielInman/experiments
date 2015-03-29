@@ -4,6 +4,7 @@ export class Map{
   constructor(){
     this.totalVnums = 0;
     this.environment = environment[Math.floor(Math.random()*environment.length)]; //randomly choose one
+    console.log(this.environment.name);
     this.sector = {
       active: {x: 0, y: 0}
     };

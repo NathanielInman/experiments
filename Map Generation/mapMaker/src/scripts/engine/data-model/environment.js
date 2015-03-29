@@ -92,8 +92,8 @@ export var environment = [
   },{	name:      "charnel house",
       floor:     [10],
       wall:      [6],
-    background:{value:"#4F1A1A",strength:0.0},
-    visited:   {floor:"#5F2A2A",    wall:"#6F3A3A"}
+    background:{value:"#4F2A0A",strength:0.1},
+    visited:   {floor:"#5F3A1A",    wall:"#6F4A2A"}
   },{	name:      "artic tundra",
       floor:     [3,5,15],
       wall:      [9],
