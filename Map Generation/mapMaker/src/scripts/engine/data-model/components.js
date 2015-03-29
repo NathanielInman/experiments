@@ -45,8 +45,8 @@ export var components = [
   function(){
     return {
       type : 'button',
-      x    : (v.w<v.h?v.w:v.h)+4,
-      y    : 10,
+      x    : (v.w<v.h?v.w:v.h)+15,
+      y    : 15,
       w    : 200,
       h    : 40,
       r    : 20,

@@ -34,6 +34,6 @@ export var button = {
     ctx.fillStyle='#000';
     ctx.textAlign = 'center';
     ctx.font = '30px Courier New';
-    ctx.fillText(t,x+w/2,h-2);
+    ctx.fillText(t,x+w/2,y+30);
   }
 };
