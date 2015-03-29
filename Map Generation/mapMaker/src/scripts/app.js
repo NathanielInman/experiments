@@ -22,7 +22,6 @@ if(!Easel.activated){
   // When resizing or reloading canvas re-configure the font sizes
   // and other factors that are lost at reload
   Easel.config=function(){
-    window.engine.draw.sizes.recalculate();
     window.fontRatio = 0.02; //scale the font to the size of the window
     window.fontSize = (v.w * fontRatio)|0; //scale size based solely on viewport width
     window.scrollOffset = 0; //this is used to scroll the main text during overflow
@@ -39,6 +38,7 @@ if(!Easel.activated){
   // Add an event listener to the canvas so we can pass clicked sectors
   C.addEventListener('mousedown', engine.input.mousedown);
   C.addEventListener('mouseup', engine.input.mouseup);
+  C.addEventListener('mousemove', engine.input.mousemove);
   D.addEventListener('keydown', engine.input.keydown);
 
   // Go ahead and draw

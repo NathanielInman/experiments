@@ -18,11 +18,11 @@
  */
 export function hex2rgba(hex,options,lt,ut){
   var r,g,b,o=options||1,result = /^#?([a-f\d]{2}|[a-f\d]{1})([a-f\d]{2}|[a-f\d]{1})([a-f\d]{2}|[a-f\d]{1})$/i.exec(hex);
-  var clt = function(){ return !lt || (r+g+b)/3/255 >= lt; }
-  var cut = function(){ return !ut || (r+g+b)/3/255 <= gt; }
-  var cot = function(){ if(r>255)r=255;if(g>255)g=255;if(b>255)b=255; }
+  var clt = function(){ return !lt || (r+g+b)/3/255 >= lt; };
+  var cut = function(){ return !ut || (r+g+b)/3/255 <= gt; };
+  var cot = function(){ if(r>255)r=255;if(g>255)g=255;if(b>255)b=255; };
   if(!result)return 'rgba(0,0,0,0)';
-  result.forEach(function(i,j,k){ if(i.length==1)k[j]=i+i; })
+  result.forEach(function(i,j,k){ if(i.length==1)k[j]=i+i; });
   r = parseInt(result[1],16); g = parseInt(result[2],16); b = parseInt(result[3],16);
   if(!(clt()&&cut())&&!clt()||!cut())(function(){
     for(let i=0;i<1000&&(!clt()||!cut());i++){
@@ -41,7 +41,7 @@ export function hex2rgba(hex,options,lt,ut){
   }else if(typeof o=='object'){
     r=parseInt(r*o.r);g=parseInt(g*o.g);b=parseInt(b*o.b);o=o.a||1;
     cot();
-    return 'rgba('+r+','+g+','+b+','+o+')'
+    return 'rgba('+r+','+g+','+b+','+o+')';
 	}else{
 		return 'rgba(0,0,0,0)';
 	} //end if

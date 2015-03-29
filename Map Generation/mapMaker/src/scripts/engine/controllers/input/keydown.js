@@ -1,36 +1,38 @@
 import { draw  } from 'engine/controllers/draw/main';
-import { sizes } from 'engine/controllers/draw/sizes';
-import { map   } from 'engine/controllers/map/collection';
+import { map   } from 'engine/data-model/map';
 
 export function keydown(e){
-  var sector = map.getActiveSector();
-  console.log(e);
-  if(e.keyIdentifier=='Down'&&sector.y<sizes.number-1){
+  var sector = map.getActiveSector(),
+      x = sector.x,
+      y = sector.y,
+      n = 15;
+
+  if(e.keyIdentifier=='Down'&&y<n-1){
     if(this.toggledLink){
-      map.linkSector(sector.x,sector.y,sector.x,sector.y+1);
+      map.linkSector(x,y,x,y+1);
     }else{
-      map.setActiveSector(sector.x,sector.y+1);
+      map.setActiveSector(x,y+1);
     } //end if
-  }else if(e.keyIdentifier=='Right'&&sector.x<sizes.number-1){
+  }else if(e.keyIdentifier=='Right'&&x<n-1){
     if(this.toggledLink){
-      map.linkSector(sector.x,sector.y,sector.x+1,sector.y);
+      map.linkSector(x,y,x+1,y);
     }else{
-      map.setActiveSector(sector.x+1,sector.y);
+      map.setActiveSector(x+1,y);
     } //end if
-  }else if(e.keyIdentifier=='Left'&&sector.x>0){
+  }else if(e.keyIdentifier=='Left'&&x>0){
     if(this.toggledLink){
-      map.linkSector(sector.x,sector.y,sector.x-1,sector.y);
+      map.linkSector(x,y,x-1,y);
     }else{
-      map.setActiveSector(sector.x-1,sector.y);
+      map.setActiveSector(x-1,y);
     } //end if
-  }else if(e.keyIdentifier=='Up'&&sector.y>0){
+  }else if(e.keyIdentifier=='Up'&&y>0){
     if(this.toggledLink){
-      map.linkSector(sector.x,sector.y,sector.x,sector.y-1);
+      map.linkSector(x,y,x,y-1);
     }else{
-      map.setActiveSector(sector.x,sector.y-1);
+      map.setActiveSector(x,y-1);
     } //end if
   }else if(e.keyIdentifier=='Enter'){
-    map.addSector(sector.x,sector.y);
+    map.addSector(x,y);
   }else if(e.keyIdentifier=='U+0020'){
     if(!this.toggledLink){
       this.toggledLink=sector;
