@@ -1,5 +1,6 @@
 import { components } from 'engine/data-model/components';
-import { button } from 'engine/controllers/components/button';
+import { button     } from 'engine/controllers/components/button';
+import { combobox   } from 'engine/controllers/components/combobox';
 
 export function mousemove(e){
   components.forEach(function(c,i){
@@ -8,10 +9,12 @@ export function mousemove(e){
       if(!c.v){
         c.v=r.v=true;
         if(r.type=='button')button.draw(r);
+        if(r.type=='combobox')combobox.draw(r);
       } //end if
     }else if(c.v){
       c.v=r.v=false;
       if(r.type=='button')button.draw(r);
+      if(r.type=='combobox')combobox.draw(r);
     }
   });
 }

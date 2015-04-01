@@ -1,6 +1,7 @@
+import { location   } from 'engine/controllers/input/mouselocation';
+import { button     } from 'engine/controllers/components/button';
+import { combobox   } from 'engine/controllers/components/combobox';
 import { components } from 'engine/data-model/components';
-import { button } from 'engine/controllers/components/button';
-import { location } from 'engine/controllers/input/mouselocation';
 
 export function mousedown(e){
   components.forEach(function(c,i){
@@ -9,10 +10,12 @@ export function mousedown(e){
       if(!c.d){
         c.d=r.d=true;
         if(r.type=='button')button.draw(r);
+        if(r.type=='combobox')combobox.draw(r);
       } //end if
     }else if(c.d){
       c.d=r.d=false;
       if(r.type=='button')button.draw(r);
+      if(r.type=='combobox')combobox.draw(r);
     } //end if
   });
 

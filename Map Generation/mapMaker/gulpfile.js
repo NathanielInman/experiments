@@ -4,7 +4,6 @@ var gulp = require('gulp'), // This streaming build system
     reload = browserSync.reload, // Ensure the event emitter is set
     stylus = require('gulp-stylus'), // CSS Pre-processor
     ks = require('kouto-swiss'),
-
     jade = require('gulp-jade'), // Template language for HTML5
     notify = require('gulp-notify'), // Give notification on updates
     babel = require('gulp-babel'), // Babel (formerly 6to5) ECMAScript transpiler
@@ -18,11 +17,10 @@ var gulp = require('gulp'), // This streaming build system
 
 // Styles - pre-process all styles and push the css to dist
 gulp.task('styles', function(){
-  gulp.src('src/styles/*.styl')
+  return gulp.src('src/styles/*.styl')
     .pipe(concat('app.min.styl'))
     .pipe(stylus({
       use: ks(),
-
       compress: true
     }))
     .pipe(minifycss())
@@ -32,7 +30,7 @@ gulp.task('styles', function(){
 
 // Jade - convert Jade to HTML
 gulp.task('jade', function(){
-  gulp.src('src/views/*.jade')
+  return gulp.src('src/views/*.jade')
     .pipe(jade()) //compressed
     .pipe(gulp.dest('dist/'))
     .pipe(notify({ message: 'Jade finished compiling to <%= file.relative %>.' }));
@@ -40,7 +38,7 @@ gulp.task('jade', function(){
 
 // Scripts - concatenate & Minify Javascript
 gulp.task('scripts', function(){
-  gulp.src('src/scripts/**/*.js')
+  return gulp.src('src/scripts/**/*.js')
     .pipe(jshint({ esnext: true }))
     .pipe(jshint.reporter(stylish))
     .pipe(babel({
@@ -49,15 +47,18 @@ gulp.task('scripts', function(){
       moduleIds: true
     }))
     .pipe(optimize('app'))
-    //.pipe(minifyjs())
+    .pipe(minifyjs())
     .pipe(concat('runtime.min.js'))
     .pipe(append('\nrequire(["app"]);'))
     .pipe(gulp.dest('dist/'))
     .pipe(notify({ message: 'Scripts finished compiling to <%= file.relative %>.' }));
 }); //end 'scripts' task
 
+// Adding all asynchronous build steps into one task
+gulp.task('build',['styles','jade','scripts']);
+
 // The browser-sync task will start a server but not watch any files.
-gulp.task('browser-sync', function(){
+gulp.task('browser-sync', ['build'], function(){
   browserSync({
     server:{
       baseDir: 'dist/'
@@ -78,6 +79,5 @@ gulp.task('watch', ['browser-sync'], function(){
   gulp.watch('src/views/**/*.jade', ['jade', reload]);
 }); //end 'watch' task
 
-// Main tasks
-gulp.task('build',['styles','scripts','jade'])
-gulp.task('default', ['build','watch']);
+// Main task entrypoint, requirement chains upward to build, then back down to watch
+gulp.task('default', ['watch']);

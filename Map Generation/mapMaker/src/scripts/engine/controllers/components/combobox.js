@@ -1,6 +1,6 @@
 import { hex2rgba } from 'engine/controllers/draw/hex2rgba';
 
-export var button = {
+export var combobox = {
   draw:function(options){
     // Initialize variables
     var x = options.x||0,
@@ -8,14 +8,26 @@ export var button = {
         w = options.w||200,
         h = options.h||40,
         r = options.r||20,
-        t = options.t||'default',
+        t = options.t||['default'],
         c = options.c||'#999',
         o = options.o||'#000',
+        i = options.i||0,  //index of the text array
         v = options.v||false;
         d = options.d||false;
 
-    // Acquire the appropriate colors for the button
+    // Now draw the menu if the down arrow was pressed
     ctx.strokeStyle=o;
+    if(d)(function(){
+      var n = i - 2 < 0 ? 0 : i - 2,j=0;
+      ctx.fillStyle=hex2rgba(c,1,0.1,0.2);
+      if(t.length>5)ctx.roundRect(x,y+h,w,5*h,r,true); //draw background
+      ctx.fillStyle=hex2rgba(c,1,0.7,0.9);
+      for(;n<t.length&&j<=5;n++,j++){
+        ctx.fillText(t[n],x+w/2,y+h+30*j+30);
+      } //end for
+    })();
+
+    // Acquire the appropriate colors for the button
     ctx.fillStyle=(function(){
       var s1=1.5,s2=1,s3=0.6;
       var grd = ctx.createLinearGradient(0, y, 0, h+y);
@@ -30,13 +42,19 @@ export var button = {
     // Draw button
     ctx.roundRect(x,y,w,h,r,true);
 
+    // Draw the down arrow
+    ctx.beginPath();
+    ctx.fillStyle='#000';
+    ctx.moveTo(x+w-35,y+  10);
+    ctx.lineTo(x+w-25,y+h-10);
+    ctx.lineTo(x+w-15,y+  10);
+    ctx.lineTo(x+w-35,y+  10);
+    ctx.fill();
+
     // Setup and draw the button text
     ctx.fillStyle='#000';
     ctx.textAlign = 'center';
     ctx.font = '30px Courier New';
-    ctx.fillText(t,x+w/2,y+30);
-
-    // Complete any listeners that were applied to the button
-    if(d&&options.onClick)options.onClick(); 
+    ctx.fillText(t[i]+'['+(i+1)+'/'+t.length+']',x+w/2,y+30);
   }
 };

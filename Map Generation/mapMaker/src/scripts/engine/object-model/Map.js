@@ -2,12 +2,26 @@ import { environment } from 'engine/data-model/environment';
 
 export class Map{
   constructor(){
+    var index = Math.floor(Math.random()*environment.length); //acquire index
     this.totalVnums = 0;
-    this.environment = environment[Math.floor(Math.random()*environment.length)]; //randomly choose one
-    console.log(this.environment.name);
     this.sector = {
       active: {x: 0, y: 0}
     };
+    this.setEnvironment(index);
+  }
+  setEnvironment(index){
+    console.log(index);
+    if(index>=0&&index<environment.length){
+      console.log(environment[index]);
+      this.environmentIndex = index;
+      this.environment = environment[index];
+    } //end if
+  }
+  getEnvironment(){
+    return this.environment;
+  }
+  getEnvironmentIndex(){
+    return this.environmentIndex;
   }
   setActiveSector(x,y){
     this.sector.active = {x:x,y:y};

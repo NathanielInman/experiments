@@ -39,6 +39,8 @@ export function keydown(e){
     }else{
       this.toggledLink=false;
     } //end if
+  }else{
+    console.log(e.keyIdentifier);
   } //end if
   draw();
 } //end if
