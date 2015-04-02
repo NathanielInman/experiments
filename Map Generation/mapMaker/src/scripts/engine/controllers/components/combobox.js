@@ -18,11 +18,11 @@ export var combobox = {
     // Now draw the menu if the down arrow was pressed
     ctx.strokeStyle=o;
     if(d)(function(){
-      var n = i - 2 < 0 ? 0 : i - 2,j=0;
+      var n = i - 5 < 0 ? 0 : i - 5,j=0;
       ctx.fillStyle=hex2rgba(c,1,0.1,0.2);
-      if(t.length>5)ctx.roundRect(x,y+h,w,5*h,r,true); //draw background
+      if(t.length>10)ctx.roundRect(x,y+h,w,11*30+12,r,true); //draw background
       ctx.fillStyle=hex2rgba(c,1,0.7,0.9);
-      for(;n<t.length&&j<=5;n++,j++){
+      for(;n<t.length&&j<=10;n++,j++){
         ctx.fillText(t[n],x+w/2,y+h+30*j+30);
       } //end for
     })();
