@@ -6,6 +6,8 @@ import { button     } from 'engine/controllers/components/button';
 import { combobox   } from 'engine/controllers/components/combobox';
 
 export function mouseup(e){
+  e.x = e.x || e.clientX || e.offsetX;
+  e.y = e.y || e.clientY || e.offsetY;
   // initialize variables
   var dX = location.x; //mouse down x
   var dY = location.y; //mouse down y

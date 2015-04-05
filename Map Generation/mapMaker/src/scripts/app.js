@@ -1,5 +1,6 @@
-import { Easel } from 'common/easel';
+import { Easel  } from 'common/easel';
 import { Engine } from 'engine/core';
+import { jQuery } from 'vendor/jquery-2.1.3.min';
 
 if(!Easel.activated){
   document.getElementById('noscript').innerHTML =
@@ -16,8 +17,8 @@ if(!Easel.activated){
   // Establish an instance of the engine
   window.engine = new Engine();
 
-  // Hide the no script overlay
-  document.getElementById('noscript').style.visibility='hidden';
+  // remove the no script overlay
+  $('#noscript').remove();
 
   // When resizing or reloading canvas re-configure the font sizes
   // and other factors that are lost at reload
@@ -36,17 +37,16 @@ if(!Easel.activated){
   };
 
   // Add an event listener to the canvas so we can pass clicked sectors
-  C.addEventListener('mousedown', engine.input.mousedown);
-  C.addEventListener('mouseup', engine.input.mouseup);
-  C.addEventListener('mousemove', engine.input.mousemove);
-  D.addEventListener('keydown', engine.input.keydown);
-  document.getElementById('environments').addEventListener('click',engine.input.environmentClick);
-  document.getElementById('changeEnvironment').addEventListener('click',function(){
-    var e = document.getElementById('environments');
-    if(e.style.visibility=='hidden'){
-      e.style.visibility='visible';
+  $(C).on('mousedown', engine.input.mousedown);
+  $(C).on('mouseup', engine.input.mouseup);
+  $(C).on('mousemove', engine.input.mousemove);
+  $(D).keydown(engine.input.keydown);
+  $('#environments').click(engine.input.environmentClick);
+  $('#changeEnvironment').click(function(){
+    if($('#environment').is(':visible')){
+      $('#environment').hide();
     }else{
-      e.style.visibility='hidden';
+      $('#environment').show();
     } //end if
   });
   // Go ahead and draw
