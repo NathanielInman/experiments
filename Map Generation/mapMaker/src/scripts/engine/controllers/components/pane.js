@@ -14,4 +14,4 @@ export var pane = {
     ctx.fillStyle=c;ctx.strokeStyle=o;
     ctx.roundRect(x,y,w,h,r,true);
   }
-}
+};

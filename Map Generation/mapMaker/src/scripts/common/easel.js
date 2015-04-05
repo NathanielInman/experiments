@@ -71,7 +71,7 @@ export var Easel=(function(a) {
     d = document.createElement("style");
     d.type = "text/css";
     d.rel = "stylesheet";
-    d.innerHTML = "body{background-color:" + a.background + ";margin:0;}canvas{position:fixed;left:0;top:0;right:0;bottom:0;}";
+    d.innerHTML = "body{background-color:" + a.background + ";margin:0;}canvas{position:fixed;left:0;top:0;right:0;bottom:0;z-index:-1;}";
     D.getElementsByTagName("head")[0].appendChild(d);
     q();
     return a;

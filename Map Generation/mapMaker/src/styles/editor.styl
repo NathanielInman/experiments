@@ -1,0 +1,41 @@
+.combo
+  font-family 'Source Code Pro', sans
+  font-size 2em
+  position absolute
+  right 15px
+  top 85px
+  padding 10px
+  margin 10px
+  border-radius 10px
+  height auto
+  max-height 300px
+  overflow-x hidden
+  overflow-y scroll
+  display block
+  float left
+  min-width 160px
+  list-style none
+  border 1px solid rgba(0,0,0,0.15)
+  box-shadow 0 6px 12px rgba(0,0,0,.175)
+  box-sizing border-box
+  li
+    box-sizing border-box
+    display list-item
+    width 100%
+    text-align -webkit-match-parent
+    list-style none
+    &:focus
+      //outline -webkit-focus-ring-color auto 5px
+    a:focus
+      background-color rgba(255,255,255,0.2)
+    a:hover
+      text-decoration none
+      background-color rgba(255,255,255,0.1)
+    a
+      display block
+      clear both
+      color #aaa
+      font-weight 400
+      whitespace no-wrap
+      text-decoration none
+      cursor auto

@@ -40,7 +40,15 @@ if(!Easel.activated){
   C.addEventListener('mouseup', engine.input.mouseup);
   C.addEventListener('mousemove', engine.input.mousemove);
   D.addEventListener('keydown', engine.input.keydown);
-
+  document.getElementById('environments').addEventListener('click',engine.input.environmentClick);
+  document.getElementById('changeEnvironment').addEventListener('click',function(){
+    var e = document.getElementById('environments');
+    if(e.style.visibility=='hidden'){
+      e.style.visibility='visible';
+    }else{
+      e.style.visibility='hidden';
+    } //end if
+  });
   // Go ahead and draw
   Easel.redraw();
 } //end if

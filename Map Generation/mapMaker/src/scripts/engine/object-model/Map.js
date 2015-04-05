@@ -2,17 +2,18 @@ import { environment } from 'engine/data-model/environment';
 
 export class Map{
   constructor(){
-    var index = Math.floor(Math.random()*environment.length); //acquire index
     this.totalVnums = 0;
-    this.sector = {
-      active: {x: 0, y: 0}
-    };
-    this.setEnvironment(index);
+    this.sector = { active: {x: 0, y: 0} };
+    this.setEnvironment(0);
+    var select = document.getElementById('environments');
+    for (let i = 0; i<environment.length; i++){
+        var opt = document.createElement('li');
+        opt.innerHTML = '<a href="#'+i+'">['+(1+i)+'/'+environment.length+'] '+environment[i].name+'</a>';
+        select.appendChild(opt);
+    } //end for
   }
   setEnvironment(index){
-    console.log(index);
     if(index>=0&&index<environment.length){
-      console.log(environment[index]);
       this.environmentIndex = index;
       this.environment = environment[index];
     } //end if

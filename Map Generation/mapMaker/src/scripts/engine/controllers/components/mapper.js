@@ -19,9 +19,9 @@ export var mapper = {
     // Draw the outlines and then draw the selected squares
     ctx.strokeStyle=map.environment.visited.floor;
     ctx.beginPath();ctx.lineWidth=1;
-    for(let x=0,z=0;x<v.w&&z<=n;x+=k,z++){ ctx.moveTo(x,0);ctx.lineTo(x,n*k); }
-    for(let y=0,z=0;y<v.h&&z<=n;y+=k,z++){ ctx.moveTo(0,y);ctx.lineTo(n*k,y); }
+    for(let i=0,z=0;i<v.w&&z<=n;i+=k,z++){ ctx.moveTo(i,0);ctx.lineTo(i,n*k); }
+    for(let i=0,z=0;i<v.h&&z<=n;i+=k,z++){ ctx.moveTo(0,i);ctx.lineTo(n*k,i); }
     ctx.stroke();
     sector.outline(activeSector,{s:k});
   }
-}
+};

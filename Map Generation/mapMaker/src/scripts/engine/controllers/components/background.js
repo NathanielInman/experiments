@@ -12,4 +12,4 @@ export var background = {
     ctx.fillStyle=c;
     ctx.fillRect(x,y,w,h);
   }
-}
+};

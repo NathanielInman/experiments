@@ -10,7 +10,7 @@ export var components = [
       w    : v.w,
       h    : v.h,
       c    : map.getEnvironment().background.value
-    }
+    };
   },
   function(){
     return {
@@ -19,7 +19,7 @@ export var components = [
       y    : 0,
       w    : (v.w<v.h?v.w:v.h), //needs to be a box, w&&h are equal take smallest
       h    : (v.w<v.h?v.w:v.h) //needs to be a box, w&&h are equal take smallest
-    }
+    };
   },
   function(){
     return {
@@ -29,7 +29,7 @@ export var components = [
       w    : v.w-(v.w<v.h?v.w:v.h),
       h    : v.h,
       c    : 'rgba(0,0,0,0.2)'
-    }
+    };
   },
   function(){
     return {
@@ -41,7 +41,7 @@ export var components = [
       r    : 20,
       c    : '#222',
       o    : '#333'
-    }
+    };
   },
   function(){
     return {
@@ -73,7 +73,7 @@ export var components = [
       onClick:function(){
         map.setEnvironment(map.getEnvironmentIndex()+1);
       }
-    }
+    };
   },
   function(){
     return {
@@ -85,12 +85,12 @@ export var components = [
       r    : 20,
       t    : (function(e){
                var result=[];
-               e.forEach(function(k){ result.push(k.name); })
+               e.forEach(function(k){ result.push(k.name); });
                return result;
              })(environment),
       i    : map.getEnvironmentIndex(),
       c    : map.getEnvironment().background.value,
       v    : !(this instanceof window.constructor)?this.v:false
-    }
+    };
   }
 ];

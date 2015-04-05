@@ -26,6 +26,9 @@ export var combobox = {
         ctx.fillText(t[n],x+w/2,y+h+30*j+30);
       } //end for
     })();
+    let combo = document.getElementById('environments');
+    combo.style.backgroundColor = hex2rgba(c,1,0.1,0.2);
+    combo.style.color = hex2rgba(c,1,0.7,0.9);
 
     // Acquire the appropriate colors for the button
     ctx.fillStyle=(function(){

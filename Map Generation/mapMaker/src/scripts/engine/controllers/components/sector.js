@@ -78,8 +78,8 @@ export var sector = {
         ctx.beginPath();
         ctx.rect(x*s,y*s,s,s);
         ctx.stroke();
-        ctx.strokeStyle = hex2rgba(map.environment.visited.wall)
+        ctx.strokeStyle = hex2rgba(map.environment.visited.wall);
         ctx.lineWidth=3;
       } //end for
     }
-}
+};
