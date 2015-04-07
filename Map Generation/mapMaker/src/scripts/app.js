@@ -41,14 +41,11 @@ if(!Easel.activated){
   $(C).on('mouseup', engine.input.mouseup);
   $(C).on('mousemove', engine.input.mousemove);
   $(D).keydown(engine.input.keydown);
-  $('#environments').click(engine.input.environmentClick);
-  $('#changeEnvironment').click(function(){
-    if($('#environments').is(':visible')){
-      $('#environments').hide();
-    }else{
-      $('#environments').show();
-    } //end if
-  });
+  $('#environments').click(engine.input.environmentListClick);
+  $('#changeEnvironment').click(engine.input.environmentBtnClick);
+  $('#changeEnvironment').on('mousedown',engine.input.environmentBtnDown);
+  $('#changeEnvironment').on('mouseover mouseup',engine.input.environmentBtnOver);
+  $('#changeEnvironment').on('mouseout',engine.input.environmentBtnOut);
   // Go ahead and draw
   Easel.redraw();
 } //end if

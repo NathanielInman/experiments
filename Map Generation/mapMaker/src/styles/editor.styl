@@ -1,5 +1,6 @@
 
 button.combo
+  border 2px solid black
   &:hover
     background red
 ul.combo
@@ -29,17 +30,14 @@ ul.combo
     width 100%
     text-align -webkit-match-parent
     list-style none
-    &:focus
-      //outline -webkit-focus-ring-color auto 5px
-    a:focus
-      background-color rgba(255,255,255,0.2)
+    .selected
+      background-color rgba(255,255,255,0.1)
     a:hover
       text-decoration none
-      background-color rgba(255,255,255,0.1)
+      background-color rgba(255,255,255,0.2)
     a
       display block
       clear both
-      color #aaa
       font-weight 400
       whitespace no-wrap
       text-decoration none

@@ -28,22 +28,22 @@ export var combobox = {
     })();
     let combo = $('#environments');
     combo.css('background',hex2rgba(c,1,0.1,0.2));
-    combo.css('color',hex2rgba(c,1,0.7,0.9));
+    combo.find('a').css('color',hex2rgba(c,1,0.7,0.9));
     combo.css('left',x+'px');
     combo.css('top',y+'px');
-    let comboHover = $('')
+    let comboHover = $('');
     let comboButton = $('#changeEnvironment');
-    comboButton.css('background',hex2rgba(c,1,0.5,0.7));
-    comboButton.css('color',hex2rgba(c,1,0.1,0.4));
+    var s1 = 1.5,s2=1,s3=0.6;
+    if(v){ s1*=1.2;s2*=1.2;s3*=1.2; } //if we're hovering, raise the shading levels
+    if(d){ s1*=0.9;s2*=0.9;s3*=0.9; } //if we're being pressed, lower the shading levels
+    comboButton.css('background','-webkit-linear-gradient(-90deg,'+hex2rgba(c,{r:s1,g:s1,b:s1},0.5)+','+hex2rgba(c,{r:s2,g:s2,b:s2},0.5)+' 30%,'+hex2rgba(c,{r:s3,g:s3,b:s3},0.5)+' 50%)');
+    comboButton.css('color','#000');
     comboButton.css('left',x+'px');
     comboButton.css('width',w+'px');
 
     // Acquire the appropriate colors for the button
     ctx.fillStyle=(function(){
-      var s1=1.5,s2=1,s3=0.6;
       var grd = ctx.createLinearGradient(0, y, 0, h+y);
-      if(v){ s1*=1.2;s2*=1.2;s3*=1.2; } //if we're hovering, raise the shading levels
-      if(d){ s1*=0.9;s2*=0.9;s3*=0.9; } //if we're being pressed, lower the shading levels
       grd.addColorStop('0.00', hex2rgba(c,{r:s1,g:s1,b:s1},0.5));
       grd.addColorStop('0.30', hex2rgba(c,{r:s2,g:s2,b:s2},0.5));
       grd.addColorStop('0.60', hex2rgba(c,{r:s3,g:s3,b:s3},0.5));
