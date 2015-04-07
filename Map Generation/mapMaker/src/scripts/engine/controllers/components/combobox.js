@@ -15,57 +15,21 @@ export var combobox = {
         v = options.v||false;
         d = options.d||false;
 
-    // Now draw the menu if the down arrow was pressed
-    ctx.strokeStyle=o;
-    if(d)(function(){
-      var n = i - 5 < 0 ? 0 : i - 5,j=0;
-      ctx.fillStyle=hex2rgba(c,1,0.1,0.2);
-      if(t.length>10)ctx.roundRect(x,y+h,w,11*30+12,r,true); //draw background
-      ctx.fillStyle=hex2rgba(c,1,0.7,0.9);
-      for(;n<t.length&&j<=10;n++,j++){
-        ctx.fillText(t[n],x+w/2,y+h+30*j+30);
-      } //end for
-    })();
     let combo = $('#environments');
     combo.css('background',hex2rgba(c,1,0.1,0.2));
     combo.find('a').css('color',hex2rgba(c,1,0.7,0.9));
     combo.css('left',x+'px');
-    combo.css('top',y+'px');
-    let comboHover = $('');
+    combo.css('top',(y+h-31)+'px'); //the 23 comes from 2*10 padding plus border
     let comboButton = $('#changeEnvironment');
-    var s1 = 1.5,s2=1,s3=0.6;
-    if(v){ s1*=1.2;s2*=1.2;s3*=1.2; } //if we're hovering, raise the shading levels
-    if(d){ s1*=0.9;s2*=0.9;s3*=0.9; } //if we're being pressed, lower the shading levels
-    comboButton.css('background','-webkit-linear-gradient(-90deg,'+hex2rgba(c,{r:s1,g:s1,b:s1},0.5)+','+hex2rgba(c,{r:s2,g:s2,b:s2},0.5)+' 30%,'+hex2rgba(c,{r:s3,g:s3,b:s3},0.5)+' 50%)');
     comboButton.css('color','#000');
     comboButton.css('left',x+'px');
+    comboButton.css('top',y+'px');
+    comboButton.css('height',h+'px');
     comboButton.css('width',w+'px');
-
-    // Acquire the appropriate colors for the button
-    ctx.fillStyle=(function(){
-      var grd = ctx.createLinearGradient(0, y, 0, h+y);
-      grd.addColorStop('0.00', hex2rgba(c,{r:s1,g:s1,b:s1},0.5));
-      grd.addColorStop('0.30', hex2rgba(c,{r:s2,g:s2,b:s2},0.5));
-      grd.addColorStop('0.60', hex2rgba(c,{r:s3,g:s3,b:s3},0.5));
-      return grd;
-    })();
-
-    // Draw button
-    ctx.roundRect(x,y,w,h,r,true);
-
-    // Draw the down arrow
-    ctx.beginPath();
-    ctx.fillStyle='#000';
-    ctx.moveTo(x+w-35,y+  10);
-    ctx.lineTo(x+w-25,y+h-10);
-    ctx.lineTo(x+w-15,y+  10);
-    ctx.lineTo(x+w-35,y+  10);
-    ctx.fill();
-
-    // Setup and draw the button text
-    ctx.fillStyle='#000';
-    ctx.textAlign = 'center';
-    ctx.font = '30px Courier New';
-    ctx.fillText(t[i]+'['+(i+1)+'/'+t.length+']',x+w/2,y+30);
+    var s1 = 1.5,s2=1,s3=0.6;
+    if(d){ s1*=0.9;s2*=0.9;s3*=0.9; } //if we're being pressed, lower the shading levels
+    if(v){ s1*=1.2;s2*=1.2;s3*=1.2; } //if we're hovering, raise the shading levels
+    comboButton.css('background','-webkit-linear-gradient(-90deg,'+hex2rgba(c,{r:s1,g:s1,b:s1},0.5)+','+hex2rgba(c,{r:s2,g:s2,b:s2},0.5)+' 30%,'+hex2rgba(c,{r:s3,g:s3,b:s3},0.5)+' 50%)');
+    comboButton.css('color','#000');
   }
 };

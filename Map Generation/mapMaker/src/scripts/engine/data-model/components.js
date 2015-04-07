@@ -45,43 +45,11 @@ export var components = [
   },
   function(){
     return {
-      type : 'button',
-      x    : (v.w<v.h?v.w:v.h)+15,
-      y    : 15,
-      w    : (v.w-(v.w<v.h?v.w:v.h)-15)/2-10,
-      h    : 40,
-      r    : 20,
-      t    : 'Previous',
-      c    : map.getEnvironment().background.value,
-      v    : !(this instanceof window.constructor)?this.v:false,
-      onClick:function(){
-        map.setEnvironment(map.getEnvironmentIndex()-1);
-      }
-    };
-  },
-  function(){
-    return {
-      type : 'button',
-      x    : (v.w<v.h?v.w:v.h)+15+(v.w-(v.w<v.h?v.w:v.h)-15)/2-5,
-      y    : 15,
-      w    : (v.w-(v.w<v.h?v.w:v.h)-15)/2-10,
-      h    : 40,
-      r    : 20,
-      t    : 'Next',
-      c    : map.getEnvironment().background.value,
-      v    : !(this instanceof window.constructor)?this.v:false,
-      onClick:function(){
-        map.setEnvironment(map.getEnvironmentIndex()+1);
-      }
-    };
-  },
-  function(){
-    return {
       type : 'combobox',
       x    : (v.w<v.h?v.w:v.h)+15,
-      y    : 60,
+      y    : 15,
       w    : v.w-(v.w<v.h?v.w:v.h)-30,
-      h    : 40,
+      h    : 80,
       r    : 20,
       t    : (function(e){
                var result=[];
