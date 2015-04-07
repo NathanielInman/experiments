@@ -26,9 +26,17 @@ export var combobox = {
         ctx.fillText(t[n],x+w/2,y+h+30*j+30);
       } //end for
     })();
-    let combo = document.getElementById('environments');
-    combo.style.backgroundColor = hex2rgba(c,1,0.1,0.2);
-    combo.style.color = hex2rgba(c,1,0.7,0.9);
+    let combo = $('#environments');
+    combo.css('background',hex2rgba(c,1,0.1,0.2));
+    combo.css('color',hex2rgba(c,1,0.7,0.9));
+    combo.css('left',x+'px');
+    combo.css('top',y+'px');
+    let comboHover = $('')
+    let comboButton = $('#changeEnvironment');
+    comboButton.css('background',hex2rgba(c,1,0.5,0.7));
+    comboButton.css('color',hex2rgba(c,1,0.1,0.4));
+    comboButton.css('left',x+'px');
+    comboButton.css('width',w+'px');
 
     // Acquire the appropriate colors for the button
     ctx.fillStyle=(function(){

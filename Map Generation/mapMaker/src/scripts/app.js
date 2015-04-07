@@ -43,10 +43,10 @@ if(!Easel.activated){
   $(D).keydown(engine.input.keydown);
   $('#environments').click(engine.input.environmentClick);
   $('#changeEnvironment').click(function(){
-    if($('#environment').is(':visible')){
-      $('#environment').hide();
+    if($('#environments').is(':visible')){
+      $('#environments').hide();
     }else{
-      $('#environment').show();
+      $('#environments').show();
     } //end if
   });
   // Go ahead and draw
