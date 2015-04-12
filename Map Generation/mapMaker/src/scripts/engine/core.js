@@ -10,6 +10,7 @@ import { environmentBtnClick  } from 'engine/controllers/input/environmentClick'
 import { environmentBtnDown   } from 'engine/controllers/input/environmentClick';
 import { environmentBtnOver   } from 'engine/controllers/input/environmentClick';
 import { environmentBtnOut    } from 'engine/controllers/input/environmentClick';
+import { Map                  } from 'engine/object-model/Map';
 import { map                  } from 'engine/data-model/map';
 import { creature             } from 'engine/data-model/creature';
 import { environment          } from 'engine/data-model/environment';
@@ -18,7 +19,6 @@ import { wall                 } from 'engine/data-model/wall';
 import { components           } from 'engine/data-model/components';
 import { ajax                 } from 'engine/controllers/input/ajax';
 
-// Create the deliverable structure for the engine.
 var Engine = function(){};
 Engine.prototype.draw = draw;
 Engine.prototype.input = {};
@@ -39,6 +39,10 @@ Engine.prototype.database.environment = environment;
 Engine.prototype.database.floor = floor;
 Engine.prototype.database.wall = wall;
 Engine.prototype.ajax = ajax;
+Engine.prototype.initialize = function(){
+  this.map = new Map();
+  this.draw();
+} //end if
 
 // Export the engine
 export { Engine };

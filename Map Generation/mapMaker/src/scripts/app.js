@@ -47,5 +47,15 @@ if(!Easel.activated){
   $('#changeEnvironment').on('mouseover mouseup',engine.input.environmentBtnOver);
   $('#changeEnvironment').on('mouseout',engine.input.environmentBtnOut);
   // Go ahead and draw
-  Easel.redraw();
+  $.ajax('http://localhost:5000/world/environments/')
+    .done(function(res,status){
+      if(status=='success'){
+        obj = res;
+        console.log(res);
+        engine.database.environment = res;
+        Easel.redraw();
+      }else{
+        console.log(arguments);
+      } //end if
+    });// Create the deliverable structure for the engine.
 } //end if

@@ -1,3 +1,3 @@
 import { Map } from 'engine/object-model/Map';
 
-export var map = new Map();
+export var map;

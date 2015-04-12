@@ -47,7 +47,7 @@ gulp.task('scripts', function(){
       moduleIds: true
     }))
     .pipe(optimize('app'))
-    .pipe(minifyjs())
+    //.pipe(minifyjs())
     .pipe(concat('runtime.min.js'))
     .pipe(append('\nrequire(["app"]);'))
     .pipe(gulp.dest('dist/'))
