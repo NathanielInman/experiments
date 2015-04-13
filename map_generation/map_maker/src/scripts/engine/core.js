@@ -10,6 +10,7 @@ import { environmentBtnClick  } from 'engine/controllers/input/environmentClick'
 import { environmentBtnDown   } from 'engine/controllers/input/environmentClick';
 import { environmentBtnOver   } from 'engine/controllers/input/environmentClick';
 import { environmentBtnOut    } from 'engine/controllers/input/environmentClick';
+import { map                  } from 'engine/data-model/map';
 import { creature             } from 'engine/data-model/creature';
 import { environment          } from 'engine/data-model/environment';
 import { floor                } from 'engine/data-model/floor';
@@ -32,23 +33,11 @@ Engine.prototype.input.environmentBtnOut = environmentBtnOut;
 Engine.prototype.database = {};
 Engine.prototype.database.creature = creature;
 Engine.prototype.database.environment = environment;
-$.ajax('http://localhost:5000/world/environments/')
-  .done(function(res,status){
-    console.log('ENGINE!! after ajax');
-    if(status=='success'){
-      obj = res;
-      console.log('ENGINE !!',res);
-      engine.database.environment = res;
-      engine.initialize();
-      Easel.redraw();
-    }else{
-      console.log(arguments);
-    } //end if
 Engine.prototype.database.floor = floor;
 Engine.prototype.database.wall = wall;
 Engine.prototype.onReady = function(){
   console.log('on-ready of engine called');
-  map = this.map = new Map(); //make sure to change the engine link and the actual map location
+  this.map = map; //make sure to link the map after everything is loaded
   this.draw();
 } //end if
 

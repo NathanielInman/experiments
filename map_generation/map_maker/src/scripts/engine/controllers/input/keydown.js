@@ -1,5 +1,5 @@
-import { draw  } from 'engine/controllers/draw/main';
-import { map   } from 'engine/data-model/map';
+import { draw       } from 'engine/controllers/draw/main';
+import { map        } from 'engine/data-model/map';
 
 export function keydown(e){
   var sector = map.getActiveSector(),

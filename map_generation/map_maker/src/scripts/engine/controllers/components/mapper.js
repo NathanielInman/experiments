@@ -1,5 +1,5 @@
-import { map } from 'engine/data-model/map';
-import { sector } from 'engine/controllers/components/sector';
+import { map        } from 'engine/data-model/map';
+import { sector     } from 'engine/controllers/components/sector';
 
 export var mapper = {
   draw:function(options,activeSector){
@@ -11,9 +11,9 @@ export var mapper = {
         n = options.n||15, //default to 15x15 sectors
         k = w/n; //same as h/n
 
-    for(let i in map.sector){
-      if(map.sector[i].enabled){
-        sector.draw(map.sector[i],{s:k});
+    for(let i in Engine.map.sector){
+      if(Engine.map.sector[i].enabled){
+        sector.draw(Engine.map.sector[i],{s:k});
       } //end if
     } //end for
     // Draw the outlines and then draw the selected squares
