@@ -1,5 +1,3 @@
-import { map } from 'engine/data-model/map';
-
 export var pane = {
   draw:function(options){
     // Initialize variables

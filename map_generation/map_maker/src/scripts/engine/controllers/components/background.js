@@ -1,5 +1,3 @@
-import { map } from 'engine/data-model/map';
-
 export var background = {
   draw:function(options){
     // Initialize variables
