@@ -5,16 +5,22 @@ import { background } from 'engine/controllers/components/background';
 import { mapper     } from 'engine/controllers/components/mapper';
 import { button     } from 'engine/controllers/components/button';
 import { combobox   } from 'engine/controllers/components/combobox';
+import { loader     } from 'engine/controllers/components/loader';
 import { components } from 'engine/data-model/components';
 
 // Main draw function that calls all the other draw functions
 export function draw(){
-  components.forEach(function(e){
-    var r=e();
-    if(r.type=='background')background.draw(r);
-    if(r.type=='pane'      )pane.draw(r);
-    if(r.type=='mapper'    )mapper.draw(r,map.getActiveSector());
-    if(r.type=='button'    )button.draw(r);
-    if(r.type=='combobox'  )combobox.draw(r);
-  });
+  if(!loader.evaluate()){
+    console.log('Tried to draw but not ready.');
+    setTimeout(draw,1000);
+  }else{
+    components.forEach(function(e){
+      var r=e();
+      if(r.type=='background')background.draw(r);
+      if(r.type=='pane'      )pane.draw(r);
+      if(r.type=='mapper'    )mapper.draw(r,map.getActiveSector());
+      if(r.type=='button'    )button.draw(r);
+      if(r.type=='combobox'  )combobox.draw(r);
+    });
+  } //end if
 } //end function

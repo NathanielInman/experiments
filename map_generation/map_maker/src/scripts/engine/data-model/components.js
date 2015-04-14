@@ -3,6 +3,7 @@ import { environment } from 'engine/data-model/environment';
 
 export var components = [
   function(){
+    console.log(map);
     return {
       type : 'background',
       x    : 0,
