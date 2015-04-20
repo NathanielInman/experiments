@@ -16,7 +16,8 @@
  * @param  {Float} ut                       Optional upper brightness threshold
  * @return {String}                         The rgba converted value from hex
  */
-export function hex2rgba(hex,options,lt,ut){
+ console.log('loading controllers/draw/hex2rgba.js');
+ export function hex2rgba(hex,options,lt,ut){
   var r,g,b,o=options||1,result = /^#?([a-f\d]{2}|[a-f\d]{1})([a-f\d]{2}|[a-f\d]{1})([a-f\d]{2}|[a-f\d]{1})$/i.exec(hex);
   var clt = function(){ return !lt || (r+g+b)/3/255 >= lt; };
   var cut = function(){ return !ut || (r+g+b)/3/255 <= ut; };

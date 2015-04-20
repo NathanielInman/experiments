@@ -1,3 +1,4 @@
+console.log('loading controllers/components/pane.js');
 export var pane = {
   draw:function(options){
     // Initialize variables

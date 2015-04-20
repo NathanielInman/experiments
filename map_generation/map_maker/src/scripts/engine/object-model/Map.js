@@ -1,20 +1,14 @@
+console.log('loading object-model/Map.js');
+console.log('>> environment');
 import { environment } from 'engine/data-model/environment';
-
 export class Map{
   constructor(){
     console.log('creating map');
     this.totalVnums = 0;
     this.sector = { active: {x: 0, y: 0} };
-    this.setEnvironment(0);
-    console.log('mmmm...',environment);
-    var select = document.getElementById('environments');
-    for (let i = 0; i<environment.length; i++){
-        var opt = document.createElement('li');
-        opt.innerHTML = '<a href="#'+i+'">['+(1+i)+'/'+environment.length+'] '+environment[i].name+'</a>';
-        select.appendChild(opt);
-    } //end for
   }
   setEnvironment(index){
+    console.log('mmmm...',environment);
     if(index>=0&&index<environment.length){
       this.environmentIndex = index;
       this.environment = environment[index];

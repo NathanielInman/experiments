@@ -1,6 +1,8 @@
+console.log('loading controllers/components/mapper.js');
+console.log('>> map');
+console.log('>> sector');
 import { map        } from 'engine/data-model/map';
 import { sector     } from 'engine/controllers/components/sector';
-
 export var mapper = {
   draw:function(options,activeSector){
     // Initialize variables

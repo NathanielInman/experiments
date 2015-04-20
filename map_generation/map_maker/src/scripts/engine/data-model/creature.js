@@ -1,3 +1,4 @@
+console.log('loading data-model/creature.js');
 export var creature = [{
   name:        'Abada',
   weight:      175,

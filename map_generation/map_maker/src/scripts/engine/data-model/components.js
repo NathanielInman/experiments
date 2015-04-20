@@ -1,6 +1,8 @@
+console.log('loading data-model/components.js');
+console.log('>> map');
+console.log('>> environment');
 import { map         } from 'engine/data-model/map';
 import { environment } from 'engine/data-model/environment';
-
 export var components = [
   function(){
     console.log(map);

@@ -20,6 +20,7 @@ import { components           } from 'engine/data-model/components';
 console.log('creating engine');
 var Engine = function(){};
 Engine.prototype.loader = loader;
+Engine.prototype.loader.parent = Engine; //link parent to loader
 Engine.prototype.draw = draw;
 Engine.prototype.input = {};
 Engine.prototype.input.mousedown = mousedown;

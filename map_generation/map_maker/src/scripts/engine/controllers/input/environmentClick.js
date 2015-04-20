@@ -1,8 +1,12 @@
+console.log('loading controllers/input/environmentClick.js');
+console.log('>> map');
+console.log('>> draw');
+console.log('>> hex2rgba');
+console.log('>> environment');
 import { map         } from 'engine/data-model/map';
 import { draw        } from 'engine/controllers/draw/main';
 import { hex2rgba    } from 'engine/controllers/draw/hex2rgba';
 import { environment } from 'engine/data-model/environment';
-
 export function environmentListClick(e){
   if(e.target.hash){
     // First start off by seeing if the new index is different from

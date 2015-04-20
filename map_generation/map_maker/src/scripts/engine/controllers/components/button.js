@@ -1,5 +1,6 @@
+console.log('loading controllers/components/button.js');
+console.log('>> hex2rgba');
 import { hex2rgba } from 'engine/controllers/draw/hex2rgba';
-
 export var button = {
   draw:function(options){
     // Initialize variables
@@ -37,6 +38,6 @@ export var button = {
     ctx.fillText(t,x+w/2,y+30);
 
     // Complete any listeners that were applied to the button
-    if(d&&options.onClick)options.onClick(); 
+    if(d&&options.onClick)options.onClick();
   }
 };

@@ -1,8 +1,12 @@
+console.log('loading controllers/components/sector.js');
+console.log('>> map');
+console.log('>> floor');
+console.log('>> wall');
+console.log('>> hex2rgba');
 import { map        } from 'engine/data-model/map';
 import { floor      } from 'engine/data-model/floor';
 import { wall       } from 'engine/data-model/wall';
 import { hex2rgba   } from 'engine/controllers/draw/hex2rgba';
-
 export var sector = {
     draw:function(sector,options){
       var x = sector.x    ||0,

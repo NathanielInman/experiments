@@ -1,3 +1,12 @@
+console.log('loading controllers/draw/main.js');
+console.log('>> map');
+console.log('>> pane');
+console.log('>> background');
+console.log('>> mapper');
+console.log('>> button');
+console.log('>> combobox');
+console.log('>> loader');
+console.log('>> components');
 // Main import statements required for this module
 import { map        } from 'engine/data-model/map';
 import { pane       } from 'engine/controllers/components/pane';
@@ -7,7 +16,6 @@ import { button     } from 'engine/controllers/components/button';
 import { combobox   } from 'engine/controllers/components/combobox';
 import { loader     } from 'engine/controllers/components/loader';
 import { components } from 'engine/data-model/components';
-
 // Main draw function that calls all the other draw functions
 export function draw(){
   if(!loader.evaluate()){

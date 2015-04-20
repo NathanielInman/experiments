@@ -1,3 +1,4 @@
+console.log('loading controllers/components/background.js');
 export var background = {
   draw:function(options){
     // Initialize variables

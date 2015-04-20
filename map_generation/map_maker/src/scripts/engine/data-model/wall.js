@@ -1,3 +1,4 @@
+console.log('loading data-model/wall.js');
 export var wall = [
   {id:0, name:'empty',         character:'?', color:'#F00',background:'#000'},
   {id:1, name:'dirt',          character:'%', color:'#974',background:'#752'},

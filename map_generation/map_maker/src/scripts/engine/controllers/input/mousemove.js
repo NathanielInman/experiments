@@ -1,7 +1,10 @@
+console.log('loading controllers/input/mousemove.js');
+console.log('>> components');
+console.log('>> button');
+console.log('>> combobox');
 import { components } from 'engine/data-model/components';
 import { button     } from 'engine/controllers/components/button';
 import { combobox   } from 'engine/controllers/components/combobox';
-
 export function mousemove(e){
   e.x = e.x || e.clientX || e.offsetX;
   e.y = e.y || e.clientY || e.offsetY;
