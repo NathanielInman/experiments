@@ -6,7 +6,7 @@ export class Map{
     this.totalVnums = 0;
     this.sector = { active: {x: 0, y: 0} };
     this.setEnvironment(0);
-    console.log('mmmm...',environment,arguments.callee.caller);
+    console.log('mmmm...',environment);
     var select = document.getElementById('environments');
     for (let i = 0; i<environment.length; i++){
         var opt = document.createElement('li');
