@@ -1,4 +1,7 @@
+// Notate that the module loaded
 console.log('loading data-model/floor.js');
+
+// Export the floor database
 export var floor = [
   {id:0, name:'empty',        character:' ',color:'#000',background:'#000',liquid:false,emitLight:false,string:'move', damage:false},
   {id:1, name:'dirt',         character:'.',color:'#210',background:'#431',liquid:false,emitLight:false,string:'walk', damage:false},

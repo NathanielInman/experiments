@@ -1,4 +1,7 @@
+// Declare that the module loaded
 console.log('loading data-model/creature.js');
+
+// Begin the exporting of the database creatures
 export var creature = [{
   name:        'Abada',
   weight:      175,

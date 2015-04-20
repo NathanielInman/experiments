@@ -1,12 +1,13 @@
-console.log('loading controllers/input/mousedown.js');
-console.log('>> location');
-console.log('>> button');
-console.log('>> combobox');
-console.log('>> components');
+// Declare that the module loaded and its requirements
+console.log('loading controllers/input/mousedown.js [::location,button,combobox,components]');
+
+// Begin the actual module by importing its requirements
 import { location   } from 'engine/controllers/input/mouselocation';
 import { button     } from 'engine/controllers/components/button';
 import { combobox   } from 'engine/controllers/components/combobox';
 import { components } from 'engine/data-model/components';
+
+// The mousedown event on the canvas exports
 export function mousedown(e){
   e.x = e.x || e.clientX || e.offsetX;
   e.y = e.y || e.clientY || e.offsetY;

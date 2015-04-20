@@ -1,17 +1,22 @@
-console.log('loading object-model/Map.js');
-console.log('>> environment');
+// Notate the loading of the module and declare its imports
+console.log('loading object-model/Map.js [::environment]');
+
+// Begin the actual imports and module
 import { environment } from 'engine/data-model/environment';
+import { loader      } from 'engine/controllers/components/loader';
+
+// Export the main map class
 export class Map{
   constructor(){
     console.log('creating map');
     this.totalVnums = 0;
     this.sector = { active: {x: 0, y: 0} };
+    loader.environments.onLoad = () => this.setEnvironment(0);
   }
   setEnvironment(index){
-    console.log('mmmm...',environment);
-    if(index>=0&&index<environment.length){
+    if(index>=0&&index<environment.data.length){
       this.environmentIndex = index;
-      this.environment = environment[index];
+      this.environment = environment.data[index];
     } //end if
   }
   getEnvironment(){
@@ -61,8 +66,8 @@ export class Map{
         this.sector[this.getKey(x,y)]=sector={
           x: x,
           y: y,
-          floor: this.environment.floor[Math.floor(this.environment.floor.length*Math.random())],
-          wall: this.environment.wall[Math.floor(this.environment.wall.length*Math.random())],
+          floor: this.environment.floors[Math.floor(this.environment.floors.length*Math.random())],
+          wall: this.environment.walls[Math.floor(this.environment.walls.length*Math.random())],
           enabled: true,
           north: false,
           south: false,

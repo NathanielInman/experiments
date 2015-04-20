@@ -1,4 +1,7 @@
+// Begin the module by notating it loaded to the client
 console.log('loading controllers/components/pane.js');
+
+// Start the actual module by exporting the main function pane
 export var pane = {
   draw:function(options){
     // Initialize variables

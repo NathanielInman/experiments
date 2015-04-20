@@ -11,6 +11,7 @@ if(!Easel.activated){
     <span style="color:red;"><br/>Canvas isn't supported in your browser.</span>
   </p>`;
 }else{
+
   // Debugging variables
   window.easel = Easel; //pull to outer scope
 

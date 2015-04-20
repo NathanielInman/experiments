@@ -1,18 +1,20 @@
-console.log('loading data-model/components.js');
-console.log('>> map');
-console.log('>> environment');
+// Declare the module loaded and its imports
+console.log('loading data-model/components.js [::map,environment]');
+
+// Begin the actual module by importing its requirements
 import { map         } from 'engine/data-model/map';
 import { environment } from 'engine/data-model/environment';
+
+// A list of visual components that will be drawn on the canvas
 export var components = [
   function(){
-    console.log(map);
     return {
       type : 'background',
       x    : 0,
       y    : 0,
       w    : v.w,
       h    : v.h,
-      c    : map.getEnvironment().background.value
+      c    : map.getEnvironment().color.value
     };
   },
   function(){
@@ -58,9 +60,9 @@ export var components = [
                var result=[];
                e.forEach(function(k){ result.push(k.name); });
                return result;
-             })(environment),
+             })(environment.data),
       i    : map.getEnvironmentIndex(),
-      c    : map.getEnvironment().background.value,
+      c    : map.getEnvironment().color.value,
       v    : !(this instanceof window.constructor)?this.v:false
     };
   }

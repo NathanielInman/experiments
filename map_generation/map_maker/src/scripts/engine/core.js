@@ -1,4 +1,4 @@
-// Import all the deliverable components of the engine
+console.log('loading engine modules...');
 import { draw                 } from 'engine/controllers/draw/main';
 import { loader               } from 'engine/controllers/components/loader';
 import { keydown              } from 'engine/controllers/input/keydown';
@@ -40,4 +40,5 @@ Engine.prototype.database.floor = floor;
 Engine.prototype.database.wall = wall;
 
 // Export the engine
+console.log('exporting engine');
 export { Engine };

@@ -1,6 +1,10 @@
-console.log('loading controllers/components/button.js');
-console.log('>> hex2rgba');
+// Notate the loading of the module and it's imports
+console.log('loading controllers/components/button.js [::hex2rgba]');
+
+// Begin the actual module by importing modules
 import { hex2rgba } from 'engine/controllers/draw/hex2rgba';
+
+// All exports
 export var button = {
   draw:function(options){
     // Initialize variables

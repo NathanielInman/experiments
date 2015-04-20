@@ -1,3 +1,6 @@
+// Begin the module by notating it's loading
+console.log('loading controllers/draw/hex2rgba.js');
+
 /**
  * hex2rgb takes a hex value and converts it to an rgb. Optionally an alpha value
  * may be passed in the options variable as a string or decimal (i.e. 0-1) to apply
@@ -16,7 +19,6 @@
  * @param  {Float} ut                       Optional upper brightness threshold
  * @return {String}                         The rgba converted value from hex
  */
- console.log('loading controllers/draw/hex2rgba.js');
  export function hex2rgba(hex,options,lt,ut){
   var r,g,b,o=options||1,result = /^#?([a-f\d]{2}|[a-f\d]{1})([a-f\d]{2}|[a-f\d]{1})([a-f\d]{2}|[a-f\d]{1})$/i.exec(hex);
   var clt = function(){ return !lt || (r+g+b)/3/255 >= lt; };

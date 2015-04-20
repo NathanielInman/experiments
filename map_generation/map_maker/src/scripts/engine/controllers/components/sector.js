@@ -1,12 +1,13 @@
-console.log('loading controllers/components/sector.js');
-console.log('>> map');
-console.log('>> floor');
-console.log('>> wall');
-console.log('>> hex2rgba');
+// Begin the module by noting it loaded and then show it's imports as well
+console.log('loading controllers/components/sector.js [::map,floor,wall,hex2rgba]');
+
+// Begin the actual module by importing it's requirements
 import { map        } from 'engine/data-model/map';
 import { floor      } from 'engine/data-model/floor';
 import { wall       } from 'engine/data-model/wall';
 import { hex2rgba   } from 'engine/controllers/draw/hex2rgba';
+
+// Export the main part of this module, sector
 export var sector = {
     draw:function(sector,options){
       var x = sector.x    ||0,
@@ -21,7 +22,7 @@ export var sector = {
       // fill square background
       ctx.fillStyle=floor[f].background;
       ctx.fillRect(x*s,y*s,s,s);
-      ctx.fillStyle=hex2rgba(map.environment.background.value,map.environment.background.strength);
+      ctx.fillStyle=hex2rgba(map.environment.color.value,map.environment.color.strength);
       ctx.fillRect(x*s,y*s,s,s);
 
       // draw exit arrows
@@ -82,7 +83,7 @@ export var sector = {
         ctx.beginPath();
         ctx.rect(x*s,y*s,s,s);
         ctx.stroke();
-        ctx.strokeStyle = hex2rgba(map.environment.visited.wall);
+        ctx.strokeStyle = ctx.strokeStyle=hex2rgba(map.environment.color.value,{r:1.3,g:1.3,b:1.3});
         ctx.lineWidth=3;
       } //end for
     }

@@ -1,6 +1,10 @@
-console.log('loading controllers/components/combobox.js');
-console.log('>> hex2rgba');
+// Notate the loading of the module and the imports specific to that module
+console.log('loading controllers/components/combobox.js [::hex2rgba]');
+
+// Begin the actual module by import it's requirements
 import { hex2rgba } from 'engine/controllers/draw/hex2rgba';
+
+// Begin the actual module by exporting the combobox
 export var combobox = {
   draw:function(options){
     // Initialize variables

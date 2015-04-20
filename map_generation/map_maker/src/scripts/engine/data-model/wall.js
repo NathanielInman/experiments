@@ -1,4 +1,7 @@
+// Notate that the module loaded
 console.log('loading data-model/wall.js');
+
+// begin the actual module by exporting the wall database
 export var wall = [
   {id:0, name:'empty',         character:'?', color:'#F00',background:'#000'},
   {id:1, name:'dirt',          character:'%', color:'#974',background:'#752'},
