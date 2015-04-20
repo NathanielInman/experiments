@@ -83,7 +83,7 @@ export var sector = {
         ctx.beginPath();
         ctx.rect(x*s,y*s,s,s);
         ctx.stroke();
-        ctx.strokeStyle = ctx.strokeStyle=hex2rgba(map.environment.color.value,{r:1.3,g:1.3,b:1.3});
+        ctx.strokeStyle = ctx.strokeStyle=hex2rgba(map.environment.color.value,{r:2,g:2,b:2});
         ctx.lineWidth=3;
       } //end for
     }
