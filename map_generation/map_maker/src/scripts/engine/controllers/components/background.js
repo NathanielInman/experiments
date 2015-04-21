@@ -1,5 +1,5 @@
 // Notate the loading of the module and it's imports
-console.log('loading controllers/components/background.js');
+$('.debug').append('<br/>loading controllers/components/background.js');
 
 // Begin the actual module
 export var background = {

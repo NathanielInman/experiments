@@ -1,10 +1,10 @@
-// Declare that the module loaded and its imports that will occur
-console.log('loading controllers/input/mousemove.js [::components,button,combobox]');
-
 // Begin the actual module by importing the requirements for the module
 import { components } from 'engine/data-model/components';
 import { button     } from 'engine/controllers/components/button';
 import { combobox   } from 'engine/controllers/components/combobox';
+
+// Declare that the module loaded and its imports that will occur
+$('.debug').append('<br/>loading controllers/input/mousemove.js [::components,button,combobox]');
 
 // Keep track of the mouse location on the canvas
 export function mousemove(e){

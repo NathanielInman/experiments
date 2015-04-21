@@ -1,9 +1,9 @@
-// Notate the loading of the module and declare its imports
-console.log('loading object-model/Map.js [::environment]');
-
 // Begin the actual imports and module
 import { environment } from 'engine/data-model/environment';
 import { loader      } from 'engine/controllers/components/loader';
+
+// Notate the loading of the module and declare its imports
+$('.debug').append('<br/>loading object-model/Map.js [::environment]');
 
 // Export the main map class
 export class Map{

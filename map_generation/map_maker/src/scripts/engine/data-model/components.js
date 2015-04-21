@@ -1,9 +1,9 @@
-// Declare the module loaded and its imports
-console.log('loading data-model/components.js [::map,environment]');
-
 // Begin the actual module by importing its requirements
 import { map         } from 'engine/data-model/map';
 import { environment } from 'engine/data-model/environment';
+
+// Declare the module loaded and its imports
+$('.debug').append('<br/>loading data-model/components.js [::map,environment]');
 
 // A list of visual components that will be drawn on the canvas
 export var components = [

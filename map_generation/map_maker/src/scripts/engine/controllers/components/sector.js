@@ -1,11 +1,11 @@
-// Begin the module by noting it loaded and then show it's imports as well
-console.log('loading controllers/components/sector.js [::map,floor,wall,hex2rgba]');
-
 // Begin the actual module by importing it's requirements
 import { map        } from 'engine/data-model/map';
 import { floor      } from 'engine/data-model/floor';
 import { wall       } from 'engine/data-model/wall';
 import { hex2rgba   } from 'engine/controllers/draw/hex2rgba';
+
+// Notate the loading of the module in the debugger
+$('.debug').append('<br/>loading controllers/components/sector.js [::map,floor,wall,hex2rgba]');
 
 // Export the main part of this module, sector
 export var sector = {
@@ -20,7 +20,7 @@ export var sector = {
           p = options.p   ||4; //padding size
 
       // fill square background
-      ctx.fillStyle=floor[f].background;
+      ctx.fillStyle=floor.data[f].background;
       ctx.fillRect(x*s,y*s,s,s);
       ctx.fillStyle=hex2rgba(map.environment.color.value,map.environment.color.strength);
       ctx.fillRect(x*s,y*s,s,s);
@@ -60,13 +60,13 @@ export var sector = {
           ctx.lineTo(x*s+s-p-a,y*s+s/2+a);
         } //end if
         ctx.stroke();
-        ctx.strokeStyle = hex2rgba(wall[w].color,1,0.5);
+        ctx.strokeStyle = hex2rgba(wall.data[w].color,1,0.5);
         ctx.lineWidth=3;
       } //end for
 
       // draw the vnum on the bottom left of the square
       ctx.strokeStyle='rgba(0,0,0,0.8)';
-      ctx.fillStyle=hex2rgba(wall[w].color,1,0.6,0.8);
+      ctx.fillStyle=hex2rgba(wall.data[w].color,1,0.6,0.8);
       ctx.font = '900 10px Arial';
       ctx.textAlign = 'left';
       ctx.strokeText(v,3+x*s,(1+y)*s-3);

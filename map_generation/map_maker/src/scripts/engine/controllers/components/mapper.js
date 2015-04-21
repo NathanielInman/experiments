@@ -1,10 +1,10 @@
-// Notate the loading of the module and it's imports
-console.log('loading controllers/components/mapper.js [::map,sector,hex2rgba]');
-
 // Begin the actual module by importing it's requriements
 import { map        } from 'engine/data-model/map';
 import { sector     } from 'engine/controllers/components/sector';
 import { hex2rgba   } from 'engine/controllers/draw/hex2rgba';
+
+// Notate the loading of the module and it's imports in the debugger
+$('.debug').append('<br/>loading controllers/components/mapper.js [::map,sector,hex2rgba]');
 
 // Export the main mapper module
 export var mapper = {

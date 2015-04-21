@@ -1,5 +1,5 @@
-// Notate the module loaded and declare it's imports
-console.log('loading controllers/draw/main.js [::map,pane,background,mapper,button,combobox,loader,components]');
+// Notate the module loaded and declare it's imports in the debugger
+$('.debug').append('<br/>loading controllers/draw/main.js [::map,pane,background,mapper,button,combobox,loader,components]');
 
 // Main import statements required for this module
 import { map        } from 'engine/data-model/map';

@@ -1,4 +1,3 @@
-console.log('loading engine modules...');
 import { draw                 } from 'engine/controllers/draw/main';
 import { loader               } from 'engine/controllers/components/loader';
 import { keydown              } from 'engine/controllers/input/keydown';
@@ -17,7 +16,9 @@ import { floor                } from 'engine/data-model/floor';
 import { wall                 } from 'engine/data-model/wall';
 import { components           } from 'engine/data-model/components';
 
-console.log('creating engine');
+$('.debug').append('<br/>loading engine modules...');
+$('.debug').append('<br/>creating engine...');
+
 var Engine = function(){};
 Engine.prototype.loader = loader;
 Engine.prototype.loader.parent = Engine; //link parent to loader
@@ -40,5 +41,5 @@ Engine.prototype.database.floor = floor;
 Engine.prototype.database.wall = wall;
 
 // Export the engine
-console.log('exporting engine');
+$('.debug').append('<br/>exporting engine...');
 export { Engine };

@@ -1,9 +1,9 @@
-// Declare the loading of the module and it's imports
-console.log('loading controllers/input/keydown.js [::draw,map]');
-
 // Begin the actual module by importing its requirements
 import { draw       } from 'engine/controllers/draw/main';
 import { map        } from 'engine/data-model/map';
+
+// Declare the loading of the module and it's imports in the debugger
+$('.debug').append('<br/>loading controllers/input/keydown.js [::draw,map]');
 
 export function keydown(e){
   var sector = map.getActiveSector(),

@@ -1,6 +1,3 @@
-// Notate that the module loaded and its imports
-console.log('loading controllers/input/mouseup.js [:: map,components,draw,location,button,combobox]');
-
 // Begin the actual module by importing its requirements
 import { map        } from 'engine/data-model/map';
 import { components } from 'engine/data-model/components';
@@ -8,6 +5,9 @@ import { draw       } from 'engine/controllers/draw/main';
 import { location   } from 'engine/controllers/input/mouselocation';
 import { button     } from 'engine/controllers/components/button';
 import { combobox   } from 'engine/controllers/components/combobox';
+
+// Notate that the module loaded and its imports
+$('.debug').append('<br/>loading controllers/input/mouseup.js [:: map,components,draw,location,button,combobox]');
 
 export function mouseup(e){
   e.x = e.x || e.clientX || e.offsetX;

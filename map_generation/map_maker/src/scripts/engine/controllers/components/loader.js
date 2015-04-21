@@ -1,8 +1,7 @@
-// Notate the loading of the module
-console.log('loading controllers/components/loader.js');
+// Notate the loading of the module in the debugger
+$('.debug').append('loading controllers/components/loader.js');
 
-// Begin the actual module. We use a function so we can extend the function
-// dynamically
+// Begin the actual module. We use a function so we can extend the function dynamically
 var loader = function(){};
 loader.environments = {
   get:function(){ return loader.environments.status; },
@@ -20,10 +19,31 @@ loader.environments = {
     loader.environments.status=true;
     loader.evaluate();
   },
-  status: false //indicates whether it's done loading or not (true = finished)
+  status: false
 };
+loader.walls = {
+  get:function(){ return loader.walls.status; },
+  done:function(res){
+    console.log('Finished loading walls.');
+    if(typeof loader.walls.onLoad === 'function')loader.walls.onLoad();
+    loader.walls.status=true;
+    loader.evaluate();
+  },
+  status: false
+};
+loader.floors = {
+  get:function(){ return loader.floors.status; },
+  done:function(res){
+    console.log('Finished loading floors.');
+    if(typeof loader.floors.onLoad === 'function')loader.floors.onLoad();
+    loader.floors.status=true;
+    loader.evaluate();
+  }
+}
 loader.evaluate = function(){
-  if(loader.environments.get()){
+  if(loader.environments.get() &&
+     loader.walls.get() &&
+     loader.floors.get()){
     return true;
   }else{
     return false;

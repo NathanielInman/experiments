@@ -1,11 +1,11 @@
-// At the beginning of the module notate it loaded and it's imports
-console.log('loading controllers/input/environmentClick.js [::map,draw,hex2rgba,environment]');
-
 // Begin the actual module by importing its requirements
 import { map         } from 'engine/data-model/map';
 import { draw        } from 'engine/controllers/draw/main';
 import { hex2rgba    } from 'engine/controllers/draw/hex2rgba';
 import { environment } from 'engine/data-model/environment';
+
+// Notate the loading of the module and its imports
+$('.debug').append('<br/>loading controllers/input/environmentClick.js [::map,draw,hex2rgba,environment]');
 
 export function environmentListClick(e){
   if(e.target.hash){

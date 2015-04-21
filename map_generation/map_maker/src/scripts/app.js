@@ -50,4 +50,12 @@ if(!Easel.activated){
   $('#changeEnvironment').on('mousedown',engine.input.environmentBtnDown);
   $('#changeEnvironment').on('mouseover mouseup',engine.input.environmentBtnOver);
   $('#changeEnvironment').on('mouseout',engine.input.environmentBtnOut);
+  $('.debug').click(function(){
+    var that = $(this);
+    if(that.css('width')==='40px'){
+      that.css({width:'auto',height:'auto',left:'0px'}).removeClass('button');
+    }else{
+      that.css({left:'auto',width:'40px',height:'10px'}).addClass('button');
+    } //end if
+  });
 } //end if
