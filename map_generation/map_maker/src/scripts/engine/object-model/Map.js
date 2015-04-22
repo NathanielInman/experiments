@@ -13,21 +13,20 @@ export class Map{
     this.totalVnums = 0;
     this.sector = { active: {x: 0, y: 0} };
     loader.environments.onLoad = () => {
-      var that =this;
       this.setEnvironment(0);
-      testMap.mapper.forEach(function(row,rIndex){
-        row.forEach(function(col,cIndex){
-          if(col!==0){ //not empty, lets find and draw sector
-            let sector = testMap.sectors[col-1];
-            that.addSector(cIndex,rIndex);
-            that.getSector(cIndex,rIndex).north=!!sector.exits[0];
-            that.getSector(cIndex,rIndex).south=!!sector.exits[1];
-            that.getSector(cIndex,rIndex).east =!!sector.exits[2];
-            that.getSector(cIndex,rIndex).west =!!sector.exits[3];
-          } //end if
-        })
-      });
-    }
+      for(index in testMap.sectors){
+        let source = testMap.sectors[index],
+            key = index.split(':'),
+            x = key[0],
+            y = key[1],
+            sector = this.addSector(x,y);
+
+        sector.north=!!source.exits[0];
+        sector.south=!!source.exits[1];
+        sector.east =!!source.exits[2];
+        sector.west =!!source.exits[3];
+      } //end for
+    } //end loader.environments.onLoad()
   }
   setEnvironment(index){
     if(index>=0&&index<environment.data.length){
