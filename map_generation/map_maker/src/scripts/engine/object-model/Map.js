@@ -1,6 +1,7 @@
 // Begin the actual imports and module
 import { environment } from 'engine/data-model/environment';
 import { loader      } from 'engine/controllers/components/loader';
+import { testMap     } from 'engine/data-model/ingestion';
 
 // Notate the loading of the module and declare its imports
 $('.debug').append('<br/>loading object-model/Map.js [::environment]');
@@ -8,10 +9,25 @@ $('.debug').append('<br/>loading object-model/Map.js [::environment]');
 // Export the main map class
 export class Map{
   constructor(){
-    console.log('creating map');
+    $('.debug').append('<br/>Creating map.');
     this.totalVnums = 0;
     this.sector = { active: {x: 0, y: 0} };
-    loader.environments.onLoad = () => this.setEnvironment(0);
+    loader.environments.onLoad = () => {
+      var that =this;
+      this.setEnvironment(0);
+      testMap.mapper.forEach(function(row,rIndex){
+        row.forEach(function(col,cIndex){
+          if(col!==0){ //not empty, lets find and draw sector
+            let sector = testMap.sectors[col-1];
+            that.addSector(cIndex,rIndex);
+            that.getSector(cIndex,rIndex).north=!!sector.exits[0];
+            that.getSector(cIndex,rIndex).south=!!sector.exits[1];
+            that.getSector(cIndex,rIndex).east =!!sector.exits[2];
+            that.getSector(cIndex,rIndex).west =!!sector.exits[3];
+          } //end if
+        })
+      });
+    }
   }
   setEnvironment(index){
     if(index>=0&&index<environment.data.length){

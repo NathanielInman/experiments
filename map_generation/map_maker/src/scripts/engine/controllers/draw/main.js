@@ -14,7 +14,7 @@ import { components } from 'engine/data-model/components';
 // Main draw function that calls all the other draw functions
 export function draw(){
   if(!loader.evaluate()){
-    console.log('Tried to draw but not ready.');
+    $('.debug').append('<br/>Tried to draw but not ready.');
     setTimeout(draw,1000);
   }else{
     components.forEach(function(e){

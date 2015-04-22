@@ -4,10 +4,10 @@ $('.debug').append('loading controllers/components/loader.js');
 // Begin the actual module. We use a function so we can extend the function dynamically
 var loader = function(){};
 loader.environments = {
-  get:function(){ return loader.environments.status; },
-  done:function(res){
-    console.log('Finished loading environments.');
-    console.log('Populating environment combobox.');
+  get(){ return loader.environments.status; },
+  done(res){
+    $('.debug').append('<br/>Finished loading environments.');
+    $('.debug').append('<br/>Populating environment combobox...');
     var select = document.getElementById('environments');
     for (let i = 0; i<res.length; i++){
         var opt = document.createElement('li');
@@ -15,16 +15,16 @@ loader.environments = {
         select.appendChild(opt);
     } //end for
     if(typeof loader.environments.onLoad === 'function')loader.environments.onLoad(); //callback attached
-    console.log('Environment combobox populated.');
+    $('.debug').append('<br/>Environment combobox populated.');
     loader.environments.status=true;
     loader.evaluate();
   },
   status: false
 };
 loader.walls = {
-  get:function(){ return loader.walls.status; },
-  done:function(res){
-    console.log('Finished loading walls.');
+  get(){ return loader.walls.status; },
+  done(res){
+    $('.debug').append('<br/>Finished loading walls.');
     if(typeof loader.walls.onLoad === 'function')loader.walls.onLoad();
     loader.walls.status=true;
     loader.evaluate();
@@ -32,9 +32,9 @@ loader.walls = {
   status: false
 };
 loader.floors = {
-  get:function(){ return loader.floors.status; },
-  done:function(res){
-    console.log('Finished loading floors.');
+  get(){ return loader.floors.status; },
+  done(res){
+    $('.debug').append('<br/>Finished loading floors.');
     if(typeof loader.floors.onLoad === 'function')loader.floors.onLoad();
     loader.floors.status=true;
     loader.evaluate();

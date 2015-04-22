@@ -3,7 +3,7 @@ $('.debug').append('<br/>loading controllers/components/background.js');
 
 // Begin the actual module
 export var background = {
-  draw:function(options){
+  draw(options){
     // Initialize variables
     var x = options.x||0,
         y = options.y||0,

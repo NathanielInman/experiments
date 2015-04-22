@@ -3,7 +3,7 @@ $('.debug').append('<br/>loading controllers/components/pane.js');
 
 // Start the actual module by exporting the main function pane
 export var pane = {
-  draw:function(options){
+  draw(options){
     // Initialize variables
     var x = options.x||0, //origin x location
         y = options.y||0, //origin y location

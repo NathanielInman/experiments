@@ -6,7 +6,7 @@ $('.debug').append('<br/>loading controllers/components/combobox.js [::hex2rgba]
 
 // Begin the actual module by exporting the combobox
 export var combobox = {
-  draw:function(options){
+  draw(options){
     // Initialize variables
     var x = options.x||0,
         y = options.y||0,

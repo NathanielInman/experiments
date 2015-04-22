@@ -6,7 +6,7 @@ $('.debug').append('<br/>loading controllers/components/button.js [::hex2rgba]')
 
 // All exports
 export var button = {
-  draw:function(options){
+  draw(options){
     // Initialize variables
     var x = options.x||0,
         y = options.y||0,

@@ -15,6 +15,7 @@ import { environment          } from 'engine/data-model/environment';
 import { floor                } from 'engine/data-model/floor';
 import { wall                 } from 'engine/data-model/wall';
 import { components           } from 'engine/data-model/components';
+import { testMap              } from 'engine/data-model/ingestion';
 
 $('.debug').append('<br/>loading engine modules...');
 $('.debug').append('<br/>creating engine...');
@@ -39,6 +40,7 @@ Engine.prototype.database.creature = creature;
 Engine.prototype.database.environment = environment;
 Engine.prototype.database.floor = floor;
 Engine.prototype.database.wall = wall;
+Engine.prototype.database.testMap = testMap;
 
 // Export the engine
 $('.debug').append('<br/>exporting engine...');

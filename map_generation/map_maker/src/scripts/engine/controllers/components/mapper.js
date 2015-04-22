@@ -8,7 +8,7 @@ $('.debug').append('<br/>loading controllers/components/mapper.js [::map,sector,
 
 // Export the main mapper module
 export var mapper = {
-  draw:function(options,activeSector){
+  draw(options,activeSector){
     // Initialize variables
     var x = options.x||0,
         y = options.y||0,

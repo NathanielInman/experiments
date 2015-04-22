@@ -9,7 +9,7 @@ $('.debug').append('<br/>loading controllers/components/sector.js [::map,floor,w
 
 // Export the main part of this module, sector
 export var sector = {
-    draw:function(sector,options){
+    draw(sector,options){
       var x = sector.x    ||0,
           y = sector.y    ||0,
           f = sector.floor||0, //floor type
@@ -72,7 +72,7 @@ export var sector = {
       ctx.strokeText(v,3+x*s,(1+y)*s-3);
       ctx.fillText(v,3+x*s,(1+y)*s-3);
     },
-    outline:function(sector,options){
+    outline(sector,options){
       var x = sector.x   ||0,
           y = sector.y   ||0,
           s = options.s  ||10; // size of cell
