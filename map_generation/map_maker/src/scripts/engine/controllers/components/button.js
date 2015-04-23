@@ -2,7 +2,7 @@
 import { hex2rgba } from 'engine/controllers/draw/hex2rgba';
 
 // Notate the loading of the module in the debugger
-$('.debug').append('<br/>loading controllers/components/button.js [::hex2rgba]');
+$('.rollbar').append('<br/>loading controllers/components/button.js [::hex2rgba]');
 
 // All exports
 export var button = {

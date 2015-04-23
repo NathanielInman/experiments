@@ -1,3 +1,18 @@
+//- 
+  This combobox consists of a button which is highlighted using the colors
+  of the environment as well as a combo-list which is also highlighted using
+  the colors of the environment.
 button.combo(id='changeEnvironment') Change Environment
 ul.combo(id='environments',tabindex='-1')
-.debug
+
+//- 
+  The following is components of a sector which can be edited if the current
+  sector is active
+input(id='sectorTitle')
+input(id='sectorProps')
+input(id='sectorItems')
+input(id='sectorSafe')
+input(id='sectorNpcs')
+
+//- The debug panel is simple and can be toggled to be minimized to a tiny button
+.rollbar.button

@@ -44,7 +44,7 @@ ul.combo
       cursor auto
 
 // Debug container
-.debug
+.rollbar
   margin 5px
   background-color dark-color
   transition all 1s ease
@@ -52,7 +52,8 @@ ul.combo
   overflow-y scroll
   white-space nowrap
   max-height 50%
-  @extend .border, .anchor-fill-bottom
+  width 40px; height 10px
+  @extend .border,.anchor-bottom-right
   rounded(15px) //border radius on all sides
   inner-shadow(0,0,25px,0.5)
   &.button
@@ -60,13 +61,12 @@ ul.combo
     border-bottom 10px solid base-color + #101030
     border-left 10px solid base-color + #101030
     border-right 10px solid base-color + #101030
-    color dark-color
+    color rgba(0,0,0,0) !important
     &:hover
       background-color dark-color + #303060
-      color dark-color + #303060
   &:hover
     background-color dark-color + #050513
     border-color     base-color + #303060
     cursor           pointer
-    transition all 0.5s ease
+    transition border 0.5s ease
     user-select none

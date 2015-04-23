@@ -5,7 +5,7 @@ import { wall       } from 'engine/data-model/wall';
 import { hex2rgba   } from 'engine/controllers/draw/hex2rgba';
 
 // Notate the loading of the module in the debugger
-$('.debug').append('<br/>loading controllers/components/sector.js [::map,floor,wall,hex2rgba]');
+$('.rollbar').append('<br/>loading controllers/components/sector.js [::map,floor,wall,hex2rgba]');
 
 // Export the main part of this module, sector
 export var sector = {
@@ -71,6 +71,22 @@ export var sector = {
       ctx.textAlign = 'left';
       ctx.strokeText(v,3+x*s,(1+y)*s-3);
       ctx.fillText(v,3+x*s,(1+y)*s-3);
+
+      // draw the safe status if it's true
+      if(sector.safe){
+        ctx.strokeText("S",3+x*s,y*s+10);
+        ctx.fillText("S",3+x*s,y*s+10);
+      } //end if
+
+      ctx.textAlign = 'right';
+      if(sector.down){
+        ctx.strokeText('D',(1+x)*s-3,(1+y)*s-3);
+        ctx.fillText('D',(1+x)*s-3,(1+y)*s-3);
+      } //end if
+      if(sector.up){
+        ctx.strokeText('U',(1+x)*s-3,y*s+10);
+        ctx.fillText('U',(1+x)*s-3,y*s+10);
+      } //end if
     },
     outline(sector,options){
       var x = sector.x   ||0,

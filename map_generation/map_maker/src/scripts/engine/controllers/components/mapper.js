@@ -4,7 +4,7 @@ import { sector     } from 'engine/controllers/components/sector';
 import { hex2rgba   } from 'engine/controllers/draw/hex2rgba';
 
 // Notate the loading of the module and it's imports in the debugger
-$('.debug').append('<br/>loading controllers/components/mapper.js [::map,sector,hex2rgba]');
+$('.rollbar').append('<br/>loading controllers/components/mapper.js [::map,sector,hex2rgba]');
 
 // Export the main mapper module
 export var mapper = {

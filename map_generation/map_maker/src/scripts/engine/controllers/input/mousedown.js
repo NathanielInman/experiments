@@ -5,7 +5,7 @@ import { combobox   } from 'engine/controllers/components/combobox';
 import { components } from 'engine/data-model/components';
 
 // Declare that the module loaded and its requirements
-$('.debug').append('<br/>loading controllers/input/mousedown.js [::location,button,combobox,components]');
+$('.rollbar').append('<br/>loading controllers/input/mousedown.js [::location,button,combobox,components]');
 
 // The mousedown event on the canvas exports
 export function mousedown(e){

@@ -7,7 +7,7 @@ import { button     } from 'engine/controllers/components/button';
 import { combobox   } from 'engine/controllers/components/combobox';
 
 // Notate that the module loaded and its imports
-$('.debug').append('<br/>loading controllers/input/mouseup.js [:: map,components,draw,location,button,combobox]');
+$('.rollbar').append('<br/>loading controllers/input/mouseup.js [:: map,components,draw,location,button,combobox]');
 
 export function mouseup(e){
   e.x = e.x || e.clientX || e.offsetX;

@@ -1,5 +1,5 @@
 // Notate the loading of the module in the debugger
-$('.debug').append('loading controllers/components/loader.js');
+$('.rollbar').append('loading controllers/components/loader.js');
 
 // Begin the actual module. We use a function so we can extend the function dynamically
 var loader = function(){};

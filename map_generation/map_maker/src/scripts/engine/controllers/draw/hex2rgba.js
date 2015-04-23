@@ -1,5 +1,5 @@
 // Begin the module by notating it's loading in the debugger
-$('.debug').append('<br/>loading controllers/draw/hex2rgba.js');
+$('.rollbar').append('<br/>loading controllers/draw/hex2rgba.js');
 
 /**
  * hex2rgb takes a hex value and converts it to an rgb. Optionally an alpha value

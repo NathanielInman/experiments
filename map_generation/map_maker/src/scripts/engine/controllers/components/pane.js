@@ -1,5 +1,5 @@
 // Begin the module by notating it loaded in the debugger
-$('.debug').append('<br/>loading controllers/components/pane.js');
+$('.rollbar').append('<br/>loading controllers/components/pane.js');
 
 // Start the actual module by exporting the main function pane
 export var pane = {

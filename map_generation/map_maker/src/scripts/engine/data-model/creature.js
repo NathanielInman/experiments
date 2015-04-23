@@ -1,5 +1,5 @@
 // Declare that the module loaded
-$('.debug').append('<br/>loading data-model/creature.js');
+$('.rollbar').append('<br/>loading data-model/creature.js');
 
 // Begin the exporting of the database creatures
 export var creature = [{

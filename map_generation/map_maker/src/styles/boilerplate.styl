@@ -34,17 +34,41 @@ body
   border 2px solid dark-color + #111
 .border-thin
   border 1px solid dark-color + #111
+
+// Anchor sides
+.anchor-top
+  top 0
+  @extend .absolute
+.anchor-bottom
+  bottom 0
+  @extend .absolute
+.anchor-left
+  left 0
+  @extend .absolute
+.anchor-right
+  right 0
+  @extend .absolute
+
+// Anchor corners
+.anchor-bottom-right
+  @extend .anchor-bottom,.anchor-right
+.anchor-bottom-left
+  @extend .anchor-bottom,.anchor-left
+.anchor-top-left
+  @extend .anchor-top,.anchor-left
+.anchor-top-right
+  @extend .anchor-top,.anchor-right
+
+// Anchor fill side
 .anchor-fill-top
-  left 0; top 0; right 0
-  @extend .absolute
+  @extend .anchor-top-left,.anchor-right
 .anchor-fill-bottom
-  left 0; bottom 0; right 0
-  @extend .absolute
+  @extend .anchor-bottom-right,.anchor-left
 .anchor-fill-right
-  right 0; top 0; bottom 0
-  @extend .absolute
+  @extend .anchor-bottom-right,.anchor-top
 .anchor-fill-left
-  left 0; top 0; bottom 0
-  @extend .absolute
+  @extend .anchor-top-left,.anchor-bottom
+
+// Anchor fill screen
 .anchor-fill
-  left 0; top 0; right 0; bottom 0
+  @extend .anchor-top-left,.anchor-bottom-right

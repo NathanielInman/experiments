@@ -1,5 +1,5 @@
 // Notate the loading of the module and it's imports
-$('.debug').append('<br/>loading controllers/components/background.js');
+$('.rollbar').append('<br/>loading controllers/components/background.js');
 
 // Begin the actual module
 export var background = {

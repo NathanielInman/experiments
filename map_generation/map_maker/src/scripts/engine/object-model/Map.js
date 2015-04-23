@@ -4,7 +4,7 @@ import { loader      } from 'engine/controllers/components/loader';
 import { testMap     } from 'engine/data-model/ingestion';
 
 // Notate the loading of the module and declare its imports
-$('.debug').append('<br/>loading object-model/Map.js [::environment]');
+$('.rollbar').append('<br/>loading object-model/Map.js [::environment]');
 
 // Export the main map class
 export class Map{
@@ -17,14 +17,22 @@ export class Map{
       for(index in testMap.sectors){
         let source = testMap.sectors[index],
             key = index.split(':'),
-            x = key[0],
-            y = key[1],
+            x = parseInt(key[0]),
+            y = parseInt(key[1]),
             sector = this.addSector(x,y);
 
-        sector.north=!!source.exits[0];
-        sector.south=!!source.exits[1];
-        sector.east =!!source.exits[2];
-        sector.west =!!source.exits[3];
+        sector.north=source.exits[0];
+        sector.south=source.exits[1];
+        sector.east =source.exits[2];
+        sector.west =source.exits[3];
+        sector.up   =source.exits[4];
+        sector.down =source.exits[5];
+        sector.title=source.title;
+        sector.props=source.props;
+        sector.npcs =source.npcs;
+        sector.items=source.items;
+        sector.safe =!!source.safe;
+        console.log(source,sector);
       } //end for
     } //end loader.environments.onLoad()
   }
@@ -83,11 +91,14 @@ export class Map{
           y: y,
           floor: this.environment.floors[Math.floor(this.environment.floors.length*Math.random())],
           wall: this.environment.walls[Math.floor(this.environment.walls.length*Math.random())],
+          safe: false,
           enabled: true,
           north: false,
           south: false,
           east: false,
           west: false,
+          up: false,
+          down: false,
           vnum: this.totalVnums
         };
       }else{ //created previously but disabled, re-enable it

@@ -50,12 +50,8 @@ if(!Easel.activated){
   $('#changeEnvironment').on('mousedown',engine.input.environmentBtnDown);
   $('#changeEnvironment').on('mouseover mouseup',engine.input.environmentBtnOver);
   $('#changeEnvironment').on('mouseout',engine.input.environmentBtnOut);
-  $('.debug').click(function(){
-    var that = $(this);
-    if(that.css('width')==='40px'){
-      that.css({width:'auto',height:'auto',left:'0px'}).removeClass('button');
-    }else{
-      that.css({left:'auto',width:'40px',height:'10px'}).addClass('button');
-    } //end if
-  });
+  $('.rollbar').click(engine.input.rollbarBtnClick);
+  $('.rollbar').on('mousedown',engine.input.rollbarBtnDown);
+  $('.rollbar').on('mouseover mouseup',engine.input.rollbarBtnOver);
+  $('.rollbar').on('mouseout',engine.input.rollbarBtnOut);
 } //end if

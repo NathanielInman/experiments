@@ -5,7 +5,7 @@ import { hex2rgba    } from 'engine/controllers/draw/hex2rgba';
 import { environment } from 'engine/data-model/environment';
 
 // Notate the loading of the module and its imports
-$('.debug').append('<br/>loading controllers/input/environmentClick.js [::map,draw,hex2rgba,environment]');
+$('.rollbar').append('<br/>loading controllers/input/environmentClick.js [::map,draw,hex2rgba,environment]');
 
 export function environmentListClick(e){
   if(e.target.hash){

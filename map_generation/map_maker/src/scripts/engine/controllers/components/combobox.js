@@ -2,11 +2,12 @@
 import { hex2rgba } from 'engine/controllers/draw/hex2rgba';
 
 // Notate the loading of the module in the debugger
-$('.debug').append('<br/>loading controllers/components/combobox.js [::hex2rgba]');
+$('.rollbar').append('<br/>loading controllers/components/combobox.js [::hex2rgba]');
 
 // Begin the actual module by exporting the combobox
 export var combobox = {
   draw(options){
+    console.log('redrawn');
     // Initialize variables
     var x = options.x||0,
         y = options.y||0,

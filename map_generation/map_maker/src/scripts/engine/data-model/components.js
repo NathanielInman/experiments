@@ -3,7 +3,7 @@ import { map         } from 'engine/data-model/map';
 import { environment } from 'engine/data-model/environment';
 
 // Declare the module loaded and its imports
-$('.debug').append('<br/>loading data-model/components.js [::map,environment]');
+$('.rollbar').append('<br/>loading data-model/components.js [::map,environment]');
 
 // A list of visual components that will be drawn on the canvas
 export var components = [
@@ -62,6 +62,13 @@ export var components = [
                return result;
              })(environment.data),
       i    : map.getEnvironmentIndex(),
+      c    : map.getEnvironment().color.value,
+      v    : !(this instanceof window.constructor)?this.v:false
+    };
+  },
+  function(){
+    return {
+      type : 'rollbar',
       c    : map.getEnvironment().color.value,
       v    : !(this instanceof window.constructor)?this.v:false
     };

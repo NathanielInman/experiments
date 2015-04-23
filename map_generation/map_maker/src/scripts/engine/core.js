@@ -10,6 +10,10 @@ import { environmentBtnClick  } from 'engine/controllers/input/environmentClick'
 import { environmentBtnDown   } from 'engine/controllers/input/environmentClick';
 import { environmentBtnOver   } from 'engine/controllers/input/environmentClick';
 import { environmentBtnOut    } from 'engine/controllers/input/environmentClick';
+import { rollbarBtnClick      } from 'engine/controllers/input/rollbar';
+import { rollbarBtnDown       } from 'engine/controllers/input/rollbar';
+import { rollbarBtnOver       } from 'engine/controllers/input/rollbar';
+import { rollbarBtnOut        } from 'engine/controllers/input/rollbar';
 import { creature             } from 'engine/data-model/creature';
 import { environment          } from 'engine/data-model/environment';
 import { floor                } from 'engine/data-model/floor';
@@ -17,8 +21,8 @@ import { wall                 } from 'engine/data-model/wall';
 import { components           } from 'engine/data-model/components';
 import { testMap              } from 'engine/data-model/ingestion';
 
-$('.debug').append('<br/>loading engine modules...');
-$('.debug').append('<br/>creating engine...');
+$('.rollbar').append('<br/>loading engine modules...');
+$('.rollbar').append('<br/>creating engine...');
 
 var Engine = function(){};
 Engine.prototype.loader = loader;
@@ -35,6 +39,10 @@ Engine.prototype.input.environmentBtnClick = environmentBtnClick;
 Engine.prototype.input.environmentBtnDown = environmentBtnDown;
 Engine.prototype.input.environmentBtnOver = environmentBtnOver;
 Engine.prototype.input.environmentBtnOut = environmentBtnOut;
+Engine.prototype.input.rollbarBtnClick = rollbarBtnClick;
+Engine.prototype.input.rollbarBtnDown = rollbarBtnDown;
+Engine.prototype.input.rollbarBtnOver = rollbarBtnOver;
+Engine.prototype.input.rollbarBtnOut = rollbarBtnOut;
 Engine.prototype.database = {};
 Engine.prototype.database.creature = creature;
 Engine.prototype.database.environment = environment;
@@ -43,5 +51,5 @@ Engine.prototype.database.wall = wall;
 Engine.prototype.database.testMap = testMap;
 
 // Export the engine
-$('.debug').append('<br/>exporting engine...');
+$('.rollbar').append('<br/>exporting engine...');
 export { Engine };

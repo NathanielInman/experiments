@@ -3,7 +3,7 @@ import { draw       } from 'engine/controllers/draw/main';
 import { map        } from 'engine/data-model/map';
 
 // Declare the loading of the module and it's imports in the debugger
-$('.debug').append('<br/>loading controllers/input/keydown.js [::draw,map]');
+$('.rollbar').append('<br/>loading controllers/input/keydown.js [::draw,map]');
 
 export function keydown(e){
   var sector = map.getActiveSector(),

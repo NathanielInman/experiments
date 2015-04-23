@@ -3,7 +3,7 @@ import { jQuery } from 'vendor/jquery-2.1.3.min';
 import { loader } from 'engine/controllers/components/loader';
 
 // Declare that the module loaded and its imports
-$('.debug').append('<br/>loading data-model/environment.js [::jQuery,loader]');
+$('.rollbar').append('<br/>loading data-model/environment.js [::jQuery,loader]');
 
 // Export the environment which is asynchronously loaded from the server
 var environment = function(){};

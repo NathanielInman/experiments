@@ -10,7 +10,7 @@ export var testMap = {
   "sectors": {
     "5:1":{
       "safe": 0,
-      "exits": [0,5,2,0,0,0],
+      "exits": [0,5,2,0,"3.5","1.1"],
       "title": "A Small Cove",
       "props": [],
       "npcs": [],
