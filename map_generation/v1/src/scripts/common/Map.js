@@ -6,10 +6,9 @@ class Sector{
     this.floor = r(1)<0.90?1:0;
     if(!this.floor){
       this.water = {
-        water: true,
-        cur:   100+r(105),
-        max:   100+r(105),
-        dir:   r(2)
+        cur:   100+r(105,0,1),
+        max:   100+r(105,0,1),
+        dir:   r(2,0,1)
       };
     } //end if
   }
@@ -29,26 +28,28 @@ class Map{
     } //end for
   }
   draw(){
+    var sector; //used as a temporary variable
     for(let i=0;i<this.width;i++){
       for(let j=0;j<this.height;j++){
-        if(this.sector[i][j].wall){
-          ctx.fillStyle='#333';
-        }else if(this.sector[i][j].water){
-          if(this.sector[i][j].water.dir===0){
-            this.sector[i][j].water.cur--;
+        sector = this.sector[i][j];
+        if(sector.water){
+          if(sector.water.dir===0){
+            sector.water.cur--;
           }else{
-            this.sector[i][j].water.cur++;
+            sector.water.cur++;
           } //end if
-          if(this.sector[i][j].water.max-50==this.water[i][j].water.cur||
-             this.sector[i][j].water.max+50==this.water[i][j].water.cur){
-            this.sector[i][j].water.dir^=1;
+          if(sector.water.max-50==sector.water.cur||
+             sector.water.max+50==sector.water.cur){
+            sector.water.dir^=1;
            } //end if
-          ctx.fillStyle='rgb(0,0,'+this.sector[i][j].water.cur+')';
+          ctx.fillStyle='rgb(0,0,'+sector.water.cur+')';
+        }else if(sector.floor){
+          ctx.fillStyle='#333';
         }else{
           ctx.fillStyle='#888';
         } //end if
         ctx.fillRect(i*v.w/this.width,j*v.h/this.height,v.w/this.width+1,v.h/this.height+1);
-        if(this.sector[i][j].wall){
+        if(sector.wall){
           ctx.fillStyle='#888';
           ctx.fillRect(i*v.w/this.width+v.w/this.width*0.1,j*v.h/this.height+v.h/this.height*0.1,v.w/this.width*0.8,v.h/this.height*0.8);
         } //end if
@@ -60,6 +61,6 @@ class Map{
     this.generate();
     setInterval(function redraw(){
       that.draw();
-    },1600);
+    },16);
   }
 }
