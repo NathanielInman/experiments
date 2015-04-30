@@ -11,29 +11,28 @@ var core=new (function(){ //call new so we're not building on the window scope
 		this.wall= Math.random()<0.05?1:0;
 		this.floor=Math.random()<1?1:0;
 		this.active=false;
-		if(this.floor==0){
-			(function(){
-				var startColor=100+r(105);
-				_.water.push({x:x,y:y,cur:startColor,max:startColor,dir:r(2)});
-			})();
-		} //end if
 	};
 	_.water=[];
 	_.map={
-		width:300,
-		height:250,
+		width:3000,
+		height:2500,
 		sector:[],
+		size:0,
+		drawn:0,
 		generate:function(){
 			for(var i=0;i<_.map.width;i++){
 				_.map.sector[i]=[];
 				for(var j=0;j<_.map.height;j++){
 					_.map.sector[i][j]=new _.sector(i,j);
+					_.map.size++;
 				} //end for
 			} //end for
 		}, //end generate()
 		draw:function(i,j){
 			var ci=i,cj=j;i=i||0,j=j||0; //initialize if necessary
-			for(;j<_.map.height-1&&j<cj+_.map.height+1;j++){
+			//for(;j<_.map.height-1&&j<cj+_.map.height+1;j++){
+			for(i=0;i<_.map.width-1;i++){
+			for(j=0;j<_.map.height-1;j++){
 				if(i==0&&j==0){ctx.fillStyle="#070";ctx.fillRect(0,0,v.w,v.h);}
 				if(_.map.sector[i][j].wall){ctx.fillStyle="#333";
 				}else if(_.map.sector[i][j].floor){ctx.fillStyle="#0"+parseInt(r(3,6),16)+"0";
@@ -45,8 +44,11 @@ var core=new (function(){ //call new so we're not building on the window scope
 						ctx.fillRect(i*v.w/_.map.width+v.w/_.map.width*.1,j*v.h/_.map.height+v.h/_.map.height*.1,v.w/_.map.width*.8,v.h/_.map.height*.8);
 					} //end if
 				} //end if
+				_.map.drawn++;
 				_.map.sector[i][j].active=true;
 			} //end for
+			}
+			return
 			if(i<_.map.width-1){
 				if(j<_.map.height-1){
 					setTimeout("core.map.draw("+i+","+j+")",1);
@@ -62,15 +64,14 @@ var core=new (function(){ //call new so we're not building on the window scope
 })();
 (function(){
 	core.map.generate();
+	setTimeout(function(){
+		console.log(core.map.drawn,core.map.size)
+	},1);
+	setTimeout(function(){
+		console.log(core.map.drawn,core.map.size)
+	},15);
+	setTimeout(function(){
+		console.log(core.map.drawn,core.map.size)
+	},1005);
 	core.map.draw();
-	setInterval(function(){
-		var water=core.water; //grab an easier reference to the water
-		for(var i=0;i<water.length;i++){
-			if(!core.map.sector[water[i].x][water[i].y].active)continue;
-			if(water[i].dir==0){water[i].cur--;}else{water[i].cur++;}
-			if(water[i].max-50==water[i].cur||water[i].max+50==water[i].cur)water[i].dir^=1;
-			ctx.fillStyle="rgb(0,0,"+water[i].cur+')';
-			ctx.fillRect(water[i].x*v.w/core.map.width,water[i].y*v.h/core.map.height,v.w/core.map.width+1,v.h/core.map.height+1);
-		} //end for
-	},10);
 })();
