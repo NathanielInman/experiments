@@ -5,76 +5,100 @@ var gulp = require('gulp'), // This streaming build system
     addsrc = require('gulp-add-src'), // Add more source files after init
     stylus = require('gulp-stylus'), // CSS Pre-processor
     ks = require('kouto-swiss'),
+
     jade = require('gulp-jade'), // Template language for HTML5
     rename = require('gulp-rename'), // Change filenames
     notify = require('gulp-notify'), // Give notification on updates
     babel = require('gulp-babel'), // Babel ECMAScript transpiler (formerly 6to5)
     concat = require('gulp-concat'), // Concatenate files together
-    uglify = require('gulp-uglify'), // Make js smaller and more digestable
+    minifycss = require('gulp-minify-css'), // Make css smaller and more digestable
+    minifyjs = require('gulp-uglify'), // Make js smaller and more digestable
     jshint = require('gulp-jshint'), // Linter for javascript
     stylish = require('jshint-stylish'); // Makes jshints output pretty
 
+// Resources - ensure root resources are moved to dist
+gulp.task('resources',function(){
+  return gulp.src('src/*')
+    .pipe(gulp.dest('dist/'));
+}); //end 'resources' task
+
 // Styles - pre-process all styles and push the css to dist
 gulp.task('styles', function(){
-  return gulp.src('src/styles/**/!(_)*.styl')
+  return gulp.src('src/styles/*.styl')
+    .pipe(concat('app.styl'))
     .pipe(stylus({
       use: ks(),
+
       compress: true
     }))
-    .pipe(gulp.dest('dist/styles/'))
+    .pipe(rename({suffix: '.min'}))
+    .pipe(minifycss())
+    .pipe(gulp.dest('dist/styles'))
     .pipe(notify({ message: 'Stylus finished compiling to <%= file.relative %>.' }));
 }); //end 'styles' task
 
 // Jade - convert Jade to HTML
 gulp.task('jade', function(){
-  return gulp.src('src/views/**/!(_)*.jade')
+  return gulp.src('src/views/*.jade')
     .pipe(jade()) //compressed
     .pipe(gulp.dest('dist/'))
     .pipe(notify({ message: 'Jade finished compiling to <%= file.relative %>.' }));
 }); //end 'jade' task
 
 // Scripts - concatenate & Minify Javascript
-gulp.task('scripts', function(){
+gulp.task('runtime scripts', function(){
   // Runtime Scripts
   return gulp.src([
-    'src/scripts/**/*.js'
+    'src/scripts/common/*.js'
   ])
     .pipe(jshint({ esnext: true }))
     .pipe(jshint.reporter(stylish))
     .pipe(babel({ blacklist: ["useStrict"] }))
-    .pipe(uglify())
+    .pipe(addsrc([
+      'src/scripts/lib/*.js',
+      'src/scripts/vendor/*.js'
+    ]))
+    .pipe(concat('runtime.js'))
+    .pipe(rename({suffix: '.min'}))
+    .pipe(minifyjs())
     .pipe(gulp.dest('dist/scripts'))
     .pipe(notify({ message: 'Script <%= file.relative %> complete.' }));
 });
-
-// Assets - ensure root resources are moved to dist
-gulp.task('assets',function(){
-  return gulp.src('src/assets/**/*')
-    .pipe(gulp.dest('dist/'));
-}); //end 'resources' task
+gulp.task('app scripts',function(){
+  // Entry script app.js [Executes runtime]
+  return gulp.src('src/scripts/app.js')
+    .pipe(jshint({ esnext: true }))
+    .pipe(jshint.reporter(stylish))
+    .pipe(babel({ blacklist: ['useStrict'] }))
+    .pipe(rename({ suffix: '.min'}))
+    .pipe(minifyjs())
+    .pipe(gulp.dest('dist/scripts'))
+    .pipe(notify({ message: 'Script <%= file.relative %> complete.' }));
+}); //end 'scripts' task
 
 // Put all the build  tasks into one task
-gulp.task('build', ['styles','jade','assets','scripts']);
+gulp.task('build', ['styles','jade','resources','app scripts','runtime scripts']);
 
 // The browser-sync task will start a server but not watch any files.
 gulp.task('browser-sync', ['build'], function(){
   browserSync({
     server:{
       baseDir: 'dist/'
-    }
+    },
+    port:3000
   });
 }); //end 'browser-sync' task
 
 // Watch
 gulp.task('watch', ['browser-sync'], function(){
-  // Watch all assets
-  gulp.watch('src/assets/**/*',['assets', reload]);
+  // Watch resource files
+  gulp.watch('src/*',['resources', reload]);
 
   // Watch stylus files
   gulp.watch('src/styles/**/*.styl', ['styles', reload]);
 
   // Watch javascript files
-  gulp.watch('src/scripts/**/*.js', ['scripts', reload]);
+  gulp.watch('src/scripts/**/*.js', ['app scripts','runtime scripts', reload]);
 
   // Watch jade files
   gulp.watch('src/templates/**/*.jade', ['jade', reload]);
