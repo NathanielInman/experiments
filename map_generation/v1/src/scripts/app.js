@@ -1,3 +1,5 @@
+/* global ETB */
+/* global Modernizr */
 /**
  * Main anonymous function that launches the web application
  */

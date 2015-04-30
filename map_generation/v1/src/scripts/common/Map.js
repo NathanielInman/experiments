@@ -1,3 +1,5 @@
+/* global ctx */
+/* global v */
 class Sector{
   constructor(x,y){
     this.x = x;
@@ -20,17 +22,18 @@ class Map{
     this.sector=[];
   }
   generate(){
-    for(let i=0;i<this.width;i++){
+    var i,j;
+    for(i=0;i<this.width;i++){
       this.sector[i]=[];
-      for(let j=0;j<this.height;j++){
+      for(j=0;j<this.height;j++){
         this.sector[i][j]=new Sector(i,j);
       } //end for
     } //end for
   }
   draw(){
-    var sector; //used as a temporary variable
-    for(let i=0;i<this.width;i++){
-      for(let j=0;j<this.height;j++){
+    var sector,i,j,c1,c2; //used as a temporary variable
+    for(i=0;i<this.width;i++){
+      for(j=0;j<this.height;j++){
         sector = this.sector[i][j];
         if(sector.water){
           if(sector.water.dir===0){
@@ -38,13 +41,15 @@ class Map{
           }else{
             sector.water.cur++;
           } //end if
-          if(sector.water.max-50==sector.water.cur||
-             sector.water.max+50==sector.water.cur){
+          if(sector.water.max-50>=sector.water.cur||
+             sector.water.max+50<=sector.water.cur){
             sector.water.dir^=1;
            } //end if
-          ctx.fillStyle='rgb(0,0,'+sector.water.cur+')';
+           c1=sector.water.cur;
+           c2=Math.floor(c1*0.5);
+          ctx.fillStyle='rgb('+c2+','+c2+','+c1+')';
         }else if(sector.floor){
-          ctx.fillStyle='#333';
+          ctx.fillStyle='#232';
         }else{
           ctx.fillStyle='#888';
         } //end if
