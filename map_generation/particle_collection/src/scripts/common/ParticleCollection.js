@@ -11,6 +11,7 @@ class ParticleCollection{
     this.max = { row: height||15, col: width||10 };
     this.particleSize = size||3;
     this.maxConnect = v.w<v.h?v.w/4:v.h/4;
+    this.connections = 3;
     this.get = [];
     this.initialize();
     this.loop(); //start the main loop 
@@ -90,13 +91,14 @@ class ParticleCollection{
    * of connected particles
    */
   connect(){
-    var sId1, sAmt1, sId2, sAmt2, //distinguishers reset on pass 
-        i, j, amt1, amt2, res, p1, p2; //temp variables
+    var sId=[], sAmt=[], //distinguishers reset on pass 
+        i, j, k, amt1, amt2, res, p1, p2; //temp variables
 
     for(i=0;i<this.get.length;i++){
-      sAmt1 = sAmt2 = this.maxConnect; sId1 = sId2 = null; p1 = this.get[i];
+      p1 = this.get[i]; //shorten particle name
+      for(k=0;k<this.connections;k++){ sAmt[k]=this.maxConnect; sId[k]=null; } //init
       for(j=this.get.length-1;j>=0;j--){
-        p2 = this.get[j];
+        p2 = this.get[j]; //shorten particle name
         
         // Hypotenuse = sqrt(a^2 + b^2) such that
         // a^2 + b^2 = c^2 is pythagorean theorem
@@ -104,44 +106,28 @@ class ParticleCollection{
         amt2 = M.pow(p2.y-p1.y,2);
         res = M.sqrt(amt1+amt2);
 
-        // Attempt to connect the particle to one other particle
-        if(j!==i&&j!==p1.f1&&res<this.maxConnect){ //can't be itself or too far
-          if(res<sAmt1&&!p2.c1||sId1===null&&!p2.c1){
-            sAmt1=res;sId1=j;
-          } //end if
-        } //end if
-
-        // Attempt to connect the particle to a second particle
-        if(j!==i&&j!==p1.f1&&j!==p1.f2&&j!==sId1&&res<this.maxConnect){
-          if(res<sAmt2&&!p2.c2||sId2===null&&!p2.c2){
-            sAmt2=res;sId2=j;
+        // Attempt to connect the particle to others
+        for(k=0;k<this.connections;k++){
+          if(j!==i&&j!==p1.f1&&res<this.maxConnect&&sId.indexOf(j)<0){
+            if(res<sAmt[k]&&!p2.c1||sId[k]===null&&!p2.c1){
+              sAmt[k]=res;sId[k]=j;
+            } //end if
           } //end if
         } //end if
       } //end for
 
-      // If we were able to connect it to one particle
-      if(sId1!==null){
-        p2 = this.get[sId1]; //shorten the name of particle2
-        ctx.strokeStyle='#0F0';
-        ctx.beginPath();
-        ctx.moveTo(p1.x,p1.y); //move to current particle
-        ctx.lineTo(p2.x,p2.y);
-        ctx.stroke();
-        p2.c1=true; //dot is now connected
-        p2.f1=i; //apply an imprint of what marked it
-      } //end if
-
-      // If we were able to connect it to the second particle
-      if(sId2!==null){
-        p2 = this.get[sId2]; //shorten the name of particle2
-        ctx.strokeStyle='#FF0';
-        ctx.beginPath();
-        ctx.moveTo(p1.x,p1.y); //move to current particle
-        ctx.lineTo(p2.x,p2.y);
-        ctx.stroke();
-        p2.c2=true; //dot is now connected
-        p2.f2=i; //apply an imprint of what marked it
-      } //end if
+      for(k=0;k<this.connections;k++){
+        if(sId[k]!==null){
+          p2 = this.get[sId[k]]; //shorten the name of particle2
+          ctx.strokeStyle='#0'+(3+k*3)+'0';
+          ctx.beginPath();
+          ctx.moveTo(p1.x,p1.y); //move to current particle
+          ctx.lineTo(p2.x,p2.y);
+          ctx.stroke();
+          p2.c1=true; //dot is now connected
+          p2.f1=i; //apply an imprint of what marked it
+        } //end if
+      } //end for
     } //end for
   }
 }
