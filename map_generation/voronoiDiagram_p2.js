@@ -21,7 +21,7 @@ var VEdge=function(s,a,b){
 	this.direction = new Point(b.y-a.y, -(b.x - a.x));
 	this.B = new Point(s.x+this.direction.x, s.y + this.direction.y);	// second point of line
 	this.intersected = false;
-	this.iCounted = false;	
+	this.iCounted = false;
 	this.neighbour = null;
 }; //end VEdge()
 var VEvent=function(p, pe){
@@ -90,7 +90,7 @@ Voronoi.prototype.Compute = function(p, width, height){
 	var lasty = Number.MAX_VALUE;
 	var num = 0;
 	while(!this.queue.isEmpty()){
-		var e = this.queue.dequeue();  
+		var e = this.queue.dequeue();
 		this.ly = e.point.y;
 		if(e.pe) this.InsertParabola(e.point);
 		else this.RemoveParabola(e);
@@ -140,7 +140,7 @@ Voronoi.prototype.InsertParabola = function(p){
 	this.CheckCircle(p0);
 	this.CheckCircle(p2);
 }; //end Voronoi.InsertParabola()
-Voronoi.prototype.RemoveParabola = function(e){						
+Voronoi.prototype.RemoveParabola = function(e){
 	var p1 = e.arch;
 	var xl = this.GetLeftParent(p1);
 	var xr = this.GetRightParent(p1);
@@ -148,7 +148,7 @@ Voronoi.prototype.RemoveParabola = function(e){
 	var p2 = this.GetRightChild(xr);
 	if(p0.cEvent){this.queue.remove(p0.cEvent); p0.cEvent = null;}
 	if(p2.cEvent){this.queue.remove(p2.cEvent); p2.cEvent = null;}
-	var p = new Point(e.point.x, this.GetY(p1.site, e.point.x));	
+	var p = new Point(e.point.x, this.GetY(p1.site, e.point.x));
 	if(p0.site.cell.last == p1.site.cell.first ) p1.site.cell.addLeft(p);
 	else p1.site.cell.addRight(p);
 	p0.site.cell.addRight(p);
@@ -217,7 +217,7 @@ Voronoi.prototype.GetParabolaByX = function(xx){
 	while(!par.isLeaf)	{
 		x = this.GetXOfEdge(par, this.ly);
 		if(x>xx) par = par.left;
-		else par = par.right;				
+		else par = par.right;
 	}; //end while
 	return par;
 }; //end Voronoi.GetParabolaByX()
@@ -244,8 +244,8 @@ Voronoi.prototype.CheckCircle = function(b){
 }; //end Voronoi.CheckCircle()
 Voronoi.prototype.GetEdgeIntersection = function(a, b){
 	var I = GetLineIntersection(a.start, a.B, b.start, b.B);
-	var wd = 	(I.x - a.start.x)*a.direction.x<0 || (I.y - a.start.y)*a.direction.y<0	
-			 ||	(I.x - b.start.x)*b.direction.x<0 || (I.y - b.start.y)*b.direction.y<0;	
+	var wd = 	(I.x - a.start.x)*a.direction.x<0 || (I.y - a.start.y)*a.direction.y<0
+			 ||	(I.x - b.start.x)*b.direction.x<0 || (I.y - b.start.y)*b.direction.y<0;
 	if(wd) return null;
 	return I;
 }; //end Voronoi.GetEdgeIntersection
@@ -258,18 +258,18 @@ Voronoi.prototype.GetRight = function(n){
 Voronoi.prototype.GetLeftParent = function(n){
 	var par = n.parent;
 	var pLast = n;
-	while(par.left == pLast){ 
+	while(par.left == pLast){
 		if(!par.parent) return null;
-		pLast = par; par = par.parent; 
+		pLast = par; par = par.parent;
 	} //end while
 	return par;
 }; //end Voronoi.GetLeftParent()
 Voronoi.prototype.GetRightParent = function(n){
 	var par = n.parent;
 	var pLast = n;
-	while(par.right == pLast){	
+	while(par.right == pLast){
 		if(!par.parent) return null;
-		pLast = par; par = par.parent;	
+		pLast = par; par = par.parent;
 	} //end while
 	return par;
 }; //end Voronoi.GetRightParent()
@@ -285,7 +285,7 @@ Voronoi.prototype.GetRightChild = function(n){
 	while(!par.isLeaf) par = par.left;
 	return par;
 }; //end Voronoi.GetRightChild()
-var GetLineIntersection=function(a1, a2, b1, b2){			
+var GetLineIntersection=function(a1, a2, b1, b2){
 	var dax = (a1.x-a2.x), dbx = (b1.x-b2.x);
 	var day = (a1.y-a2.y), dby = (b1.y-b2.y);
 	var Den = dax*dby - day*dbx;
@@ -366,16 +366,50 @@ var resetPoints=function(){
 	points = [points[points.length-1]];
 	draw();
 }; //end resetPoints()
+var hex2rgba = function(hex,options,lt,ut){
+  var r,g,b,o=options||1,result = /^#?([a-f\d]{2}|[a-f\d]{1})([a-f\d]{2}|[a-f\d]{1})([a-f\d]{2}|[a-f\d]{1})$/i.exec(hex);
+  var clt = function(){ return !lt || (r+g+b)/3/255 >= lt; };
+  var cut = function(){ return !ut || (r+g+b)/3/255 <= ut; };
+  var cot = function(){ if(r>255)r=255;if(g>255)g=255;if(b>255)b=255; };
+  if(!result)return 'rgba(0,0,0,0)';
+  result.forEach(function(i,j,k){ if(i.length==1)k[j]=i+i; });
+  r = parseInt(result[1],16); g = parseInt(result[2],16); b = parseInt(result[3],16);
+  if(!(clt()&&cut())&&!clt()||!cut())(function(){
+    for(i=0;i<1000&&(!clt()||!cut());i++){
+      if(!clt()){
+        r*=1.01;g*=1.01;b*=1.01;
+      } //end if
+      if(!cut()){
+        r*=0.99;g*=0.99;b*=0.99;
+      }//end if
+      cot();
+    } //end for
+    r=parseInt(r);g=parseInt(g);b=parseInt(b);
+  })();
+	if(typeof o=='string'||typeof o=='number'){
+		return 'rgba('+r+','+g+','+b+','+o+')';
+  }else if(typeof o=='object'){
+    r=parseInt(r*o.r);g=parseInt(g*o.g);b=parseInt(b*o.b);o=o.a||1;
+    cot();
+    return 'rgba('+r+','+g+','+b+','+o+')';
+	}else{
+		return 'rgba(0,0,0,0)';
+	} //end if
+}
 var draw=function(){
-var w=window.innerWidth;
+	var oc = rndCol(),
+	    fg = hex2rgba(oc,0,0.5,0.6),
+	    bg = hex2rgba(oc,0,0.2,0.3);
+
+	var w=window.innerWidth;
 	var h=window.innerHeight;
-	c.fillStyle = "#040";
+	c.fillStyle = bg;
 	c.fillRect (0, 0, w, h);
 	map.Compute(points, w, h);
 	edges = map.GetEdges();
 	cells = map.GetCells();
 	c.lineWidth = 2;
-	c.strokeStyle = "#0F0";
+	c.strokeStyle = fg;
 	for(i=0; i<edges.length; i++){
 		var e = edges[i];
 		c.beginPath();
