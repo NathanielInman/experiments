@@ -2,12 +2,13 @@ var Phaser=function(interval,state,color,context,properties,makeGradient){
 	interval=interval||100; //handle undefined or incorrect interval
 	color=color||[{current:{r:0,g:0,b:0},first:{r:50,g:50,b:50},last:{r:255,g:255,b:255}}]; //handle empty color error
 	if(!makeGradient||!context||!properties){console.log('Phaser improperly installed.');return;}
-	
+
 	var _=this;
 	_.colorD=[];
 	_.frame=interval;
 	//Dynamically Pulls the next state name regardless of the size of the prime color tags
 	_.getNextState=function(){
+		console.log('getnextstate')
 		var found=0,newState="";
 		for(key in color[0]){
 			if(found){newState=key;break;}
@@ -24,6 +25,7 @@ var Phaser=function(interval,state,color,context,properties,makeGradient){
 
 	//Main Loop
 	_.drawNext=function(redraw){
+		console.log('drawnext')
 		var grd=makeGradient();
 		var p=properties();
 		for(stops in color){
@@ -58,6 +60,7 @@ var Phaser=function(interval,state,color,context,properties,makeGradient){
 			colorDif[firstName]={r:first.r-curColor.r,g:first.g-curColor.g,b:first.b-curColor.b};
 			_.colorD[stops]=colorDif;
 		} //end for
-		_.drawNext();
+		console.log(color,_.colorD)
+		//_.drawNext();
 	})();
 };
