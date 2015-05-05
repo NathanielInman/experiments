@@ -1,40 +1,40 @@
 /**
  * Generically convert a hex to rgb using three-character format
- * dye('#fff')    //-------------------- outputs 'rgba(255,255,255,1)'
+ * ink('#fff')    //-------------------- outputs 'rgba(255,255,255,1)'
  *
  * Also supports full six-character format
- * dye('#ffffff') //-------------------- outputs 'rgba(255,255,255,1)'
+ * ink('#ffffff') //-------------------- outputs 'rgba(255,255,255,1)'
  *
  * Give the converted rgb an alpha value
- * dye('#fff',0.5) //------------------- outputs 'rgba(255,255,255,0.5)'
+ * ink('#fff',0.5) //------------------- outputs 'rgba(255,255,255,0.5)'
  *
  * Apply modifiers to each color output
- * dye('#fff',{r:0.5,g:1,b:0.5}) //----- outputs 'rgba(127,255,127,1)'
+ * ink('#fff',{r:0.5,g:1,b:0.5}) //----- outputs 'rgba(127,255,127,1)'
  *
  * Supports adding an alpha to the modifier
- * dye('#fff',{r:0.6,g:1,b:0.5,a:0.5}) //outputs 'rgba(127,255,127,0.5)'
+ * ink('#fff',{r:0.6,g:1,b:0.5,a:0.5}) //outputs 'rgba(127,255,127,0.5)'
  *
  * Supports returning the value as an object for further manipulation
- * dye('#fff',{o:1}) //------------------outputs {r:255,g:255,b:255,o:1}
+ * ink('#fff',{o:1}) //------------------outputs {r:255,g:255,b:255,o:1}
  *
  * Safely modifies values, preventing invalid values
- * dye('#3f3',{r:1.2,g:1.2,b:1.0}) //--- outputs 'rgba( 61,255, 51,1)'
+ * ink('#3f3',{r:1.2,g:1.2,b:1.0}) //--- outputs 'rgba( 61,255, 51,1)'
  *
  * Modify each value and then require it to meet a lower threshold
  * for brightness. If it doesn't meet the lower threshold then it scales
  * all colors up to meet it
- * dye('#333',{r:1.2,g:1.2,b:1.2},0.3) //outputs 'rgba( 91, 91, 91,1)'
+ * ink('#333',{r:1.2,g:1.2,b:1.2},0.3) //outputs 'rgba( 91, 91, 91,1)'
  *
  * Convert the color and give it both a lower and upper threshold for
  * brightness - note that it only alters color strengths if black was
  * given when threshold isn't met; otherwise, all zero-color factors
  * aren't scaled.
- * dye('#fff',1,0.3,0.8) //--------------outputs 'rgba(202,202,202,1)'
- * dye('#000',1,0.3,0.8) //--------------outputs 'rgba( 76, 76, 76,1)'
- * dye('#011',1,0.3,0.8) //--------------outputs 'rgba(114,114,114,1)'
- * dye('#248',1,0  ,0.3) //--------------outputs 'rgba( 32, 65,130,1)'
+ * ink('#fff',1,0.3,0.8) //--------------outputs 'rgba(202,202,202,1)'
+ * ink('#000',1,0.3,0.8) //--------------outputs 'rgba( 76, 76, 76,1)'
+ * ink('#011',1,0.3,0.8) //--------------outputs 'rgba(114,114,114,1)'
+ * ink('#248',1,0  ,0.3) //--------------outputs 'rgba( 32, 65,130,1)'
  */
-var dye = function(hex,options,lt,ut){
+var ink = function(hex,options,lt,ut){
   var r,g,b,
      o=options||1,
      _h=hex.split(/[,()]/g),
