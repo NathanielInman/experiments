@@ -31,11 +31,18 @@
  * h2r('#011',1,0.3,0.8) //--------------outputs 'rgba(114,114,114,1)'
  * h2r('#248',1,0  ,0.3) //--------------outputs 'rgba( 32, 65,130,1)'
  */
+var r2h = function(){ return h2r.apply(this,arguments); };
 var h2r = function(hex,options,lt,ut){
   var r,g,b,
      o=options||1,
      _h=hex.split(/[,()]/g),
-     hex=hex.indexOf('rgb')>-1?rgb2hex(hex):hex, //jshint ignore: line
+     hex=hex.indexOf('rgb')>-1?(function(rgba){ //jshint ignore: line
+       var terms = rgba.split(/[,()]/g);
+       return '#'+
+              parseInt(terms[1]).toString(16)+
+              parseInt(terms[2]).toString(16)+
+              parseInt(terms[3]).toString(16);
+     })(hex):hex,
      result = /^#?([a-f\d]{2}|[a-f\d]{1})([a-f\d]{2}|[a-f\d]{1})([a-f\d]{2}|[a-f\d]{1})$/i.exec(hex),
      clt = ()=> !lt || (r+g+b)/3/255 >= lt,
      cut = ()=> !ut || (r+g+b)/3/255 <= ut,
@@ -69,26 +76,20 @@ var h2r = function(hex,options,lt,ut){
   } //end if
 };
 
-var r2h = function(){
-  h2r.apply(this,arguments);
-};
 
-var rgb2hex = function(rgba){
-  var terms = rgba.split(/[,()]/g);
-  return '#'+
-         parseInt(terms[1]).toString(16)+
-         parseInt(terms[2]).toString(16)+
-         parseInt(terms[3]).toString(16);
-};
-
+/**
+ * generate a random hex color and return it
+ */
 var rndHex = function(){
-	var l = '0123456789abcdef'.split(''),
-	    c = '#';
-
+	var l = '0123456789abcdef'.split(''), c = '#';
 	for (var i = 0; i < 6; i++ ) c += l[r(15,0,1)];
 	return c;
 };
 
+
+/**
+ * generate and return a random rgb color
+ */
 var rndRgb = function(){
   return 'rgb('+r(255,0,1)+','+r(255,0,1)+','+r(255,0,1)+')';
 };

@@ -12,10 +12,10 @@ Easel.onDraw = function(){
   ctx.fillText(color.cur,v.w/2,v.h/2+ctx.fontSize/4);
 };
 
-color = {
+var color = {
   cur: rndHex(),
   tar: rndHex()
-}
+};
 
 /**
  * app - main entry point into the application, calls the initial render
