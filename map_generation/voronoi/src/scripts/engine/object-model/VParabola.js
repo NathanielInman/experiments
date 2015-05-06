@@ -1,11 +1,11 @@
-class VParabola{
+export class VParabola{
   constructor(s){
     this.cEvent = null;
     this.parent = null;
     this._left = null;
     this._right = null;
     this.site = s;
-    this.isLeaf = (this.site !== null);
+    this.isLeaf = (this.site != null);
   }
   get left(){
     return this._left;

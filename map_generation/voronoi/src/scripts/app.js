@@ -1,5 +1,7 @@
-import { Easel } from 'common/easel';
-import { Engine } from 'engine/core';
+import { Easel  } from 'common/easel';
+import { map    } from 'engine/core';
+import { ink    } from 'common/ink';
+import { rndHex } from 'common/ink';
 
 if(!Easel.activated){
   document.getElementById('noscript').innerHTML =
@@ -27,46 +29,72 @@ if(!Easel.activated){
   // When the browser requires a redraw, or information is changed and
   // the app needs to update the view, call this function
   Easel.onDraw=function(){
-    window.draw(); //pass in the custom drawing loop
+    let oc = Easel.color.cur,
+        fg = ink(oc,0,0.5,0.6),
+        bg = ink(oc,0,0.2,0.3),
+        lc = ink(oc,0,0.7,0.8);
+
+    ctx.fillStyle = bg;
+    ctx.fillRect(0,0,v.w,v.h);
+    map.compute(map.points,v.w,v.h);
+
+    let edges = map.getEdges(),
+        cells = map.getCells();
+
+    // Draw the line connections
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = fg;
+    for(let i=0,e;i<edges.length;i++){
+      e = edges[i];
+      ctx.beginPath();
+      ctx.moveTo(e.start.x, e.start.y);
+      ctx.lineTo(e.end.x,e.end.y);
+      ctx.closePath();
+      ctx.stroke();
+    } //end for
+
+    // Draw the points
+    ctx.fillStyle = lc;
+    for(let i=0,p;i<map.points.length;i++){
+      p = map.points[i];
+      ctx.beginPath();
+      ctx.fillRect(p.x,p.y,3,3);
+      ctx.closePath();
+      ctx.fill();
+    } //end for
   };
 
-  // Instantiate the game engine
-  window.engine = new Engine();
-
-  // Image library
-  window.library = {};
-  window.library.logo = new Image();
-  window.library.logo.src = 'http://imgur.com/eWA73Yo.png';
-  window.library.logo.size = 150;
-  window.library.logo.onload = function(){ Easel.redraw(); };
-
-  // Instantiate the drawing loop
-  window.draw = function(){
-    "use strict";
-    
-    var cHeight=0;
-    var print=function(str){
-      ctx.fillText(str,v.w/2,window.library.logo.size+fontSize*(++cHeight));
-    };//'http://i.imgur.com/McLpC3c.png
-
-    ctx.drawImage(
-      window.library.logo, //the image
-      v.w/2-window.library.logo.size/2, //x
-      0, //y
-      window.library.logo.size, //width
-      window.library.logo.size //height
-    );
-    ctx.fillStyle='#FFF';
-    print('voronoi Version 0.1.0 by Nathaniel Inman');
-    print('[[ ENGINE STATUS ]]');
-    print('a   : '+window.engine.a());
-    print('b   : '+window.engine.b());
-    print('c   : '+window.engine.c());
-    print('d   : '+window.engine.d());
-    print('c.e : '+window.engine.c.e());
-    print('c.f : '+window.engine.c.f());
+  // Give current and destination target colors so we can loop and
+  // draw these for the map for added flavorz
+  Easel.color = {
+    cur: rndHex(),
+    tar: rndHex()
   };
 
-  // Go ahead and draw
-  Easel.redraw();
+  // Apply a listener to the canvas to have a point move around
+  // with the mouse for added effect
+  Easel.C.onmousemove = function(e){
+    var last = map.points[map.points.length-1];
+    last.x = e.clientX - e.target.offsetLeft;
+    last.y = e.clientY - e.target.offsetTop;
+    Easel.redraw();
+  };
+
+  // The main loop consists of transitioning colors of the map
+  // while drawing the voronoi diagram
+  (function mainLoop(){
+    if(Easel.color.cur!==Easel.color.tar){
+      let c = ink(Easel.color.cur,{o:1});
+      let t = ink(Easel.color.tar,{o:1});
+      c.r=c.r<t.r?++c.r:c.r>t.r?--c.r:c.r;
+      c.g=c.g<t.g?++c.g:c.g>t.g?--c.g:c.g;
+      c.b=c.b<t.b?++c.b:c.b>t.b?--c.b:c.b;
+      Easel.color.cur='#'+[c.r,c.g,c.b].map((x)=>x.toString(16)).map((x)=>x.length<2?'0'+x:x).join('');
+      if(!(c.r^t.r&&c.g^t.g&&c.b^t.b))Easel.color.tar=rndHex();
+    }else{
+      Easel.color.tar=rndHex();
+    } //end if
+    Easel.redraw();
+    setTimeout(mainLoop,16);
+  })();
 } //end if

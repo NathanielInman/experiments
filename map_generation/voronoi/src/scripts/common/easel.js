@@ -35,6 +35,7 @@ export var Easel=(function(a) {
       a.onDraw();
     };
     a.started = false;
+    a.C = C;
     a.config = function(){};
     a.onDraw = function(){
       ctx.fillStyle = a.background;

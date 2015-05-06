@@ -1,14 +1,9 @@
-import { a } from 'engine/r1/a';
-import { b } from 'engine/r1/b';
-import { c } from 'engine/r2/c';
-  import { e } from 'engine/r2/r2c/e';
-  import { f } from 'engine/r2/r2c/f';
-import { d } from 'engine/r2/d';
-var Engine = function(){};
-Engine.prototype.a = a;
-Engine.prototype.b = b;
-Engine.prototype.c = c;
-Engine.prototype.c.e = e;
-Engine.prototype.c.f = f;
-Engine.prototype.d = d;
-export { Engine };
+import { Voronoi } from 'engine/object-model/Voronoi';
+import { Point   } from 'engine/object-model/Point';
+
+var map = new Voronoi();
+    map.points = [];
+
+for(let i=0;i<100;i++) map.points.push(new Point(r(v.w),r(v.h)));
+
+export { map };

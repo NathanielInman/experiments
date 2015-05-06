@@ -1,4 +1,4 @@
-class VEvent{
+export class VEvent{
   constructor(p, pe){
     this.point = p;
     this.pe = pe;
