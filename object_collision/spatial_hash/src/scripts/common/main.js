@@ -1,9 +1,20 @@
+/**
+ * This class given an accuracy when created will hold objects and create
+ * hashes for objects that are given to it if they don't exist. Hashes that
+ * already exist will have those new objects applied to them, indicating that
+ * those objects are sharing the same area (overlapping)
+ */
 class SpatialHash{
   constructor(accuracy){
     this.accuracy = accuracy || 5;
     this.hash = {};
     this.list = [];
   }
+
+  // perhaps makeKeys would be more accurate, as it makes the
+  // keys and then returns them for the object that's passed.
+  // it makes the keys based upon the x&ylocation of the object
+  // and creates them out to the width and height
   getKeys(obj){
     var shift = this.accuracy, //name it appropriately
         sx = obj.x >> shift,
@@ -19,6 +30,8 @@ class SpatialHash{
     } //end for
     return keys;
   }
+
+  // Remove the hashed tree and list
   clear(){
     var key;
     for(key in this.hash){
@@ -30,17 +43,10 @@ class SpatialHash{
     } //end for
     this.list.length = 0;
   }
-  getNumBuckets(){
-    var key, count = 0;
-    for(key in this.hash){
-      if(this.hash.hasOwnProperty(key)){
-        if(this.hash[key].length > 0){
-          count++;
-        } //end if
-      } //end if
-    } //end for
-    return count;
-  }
+
+  // Insert an object into the tree by first adding it to the list, and then
+  // computing(and creating) the hash keys to that object if it doesn't exist
+  // already
   insert(obj, rect){
     var keys = this.getKeys(rect || obj), key, i;
     this.list.push(obj);
@@ -53,6 +59,10 @@ class SpatialHash{
       } //end if
     } //end for
   }
+
+  // Retrieve the objects that share the same hash as the specified object.
+  // It's important to note that it will also contain the object you're looking
+  // for if that object was placed in the spatial hash already
   retrieve(obj, rect){
     var ret = [], keys, i, key;
     if(!obj && !rect) return this.list;
@@ -63,10 +73,15 @@ class SpatialHash{
         ret = ret.concat(this.hash[key]);
       } //end if
     } //end for
-    return ret
+    return ret;
   }
 }
 
+/**
+ * The entities in this demonstration are just rectangles with random width
+ * and heights, random velocities on two axis and hold ids and the last objects
+ * they interacted with.
+ */
 class Entity{
   constructor(x,y,id){
     this.id = id;
@@ -90,12 +105,20 @@ class Entity{
     if(this.y>v.h*0.99&&this.vy>0||this.y<v.h*0.01&&this.vy<0)this.vy*=-1;
   }
 }
+
+/**
+ * Mapper is a generic class that holds a collection of entities and a tree
+ * for which to relate them to. It initializes the collection, then starts
+ * the main loop which tells the entities to move, then calculates their hash
+ * and after performing any bouncing interactions, it will draw it and then
+ * request a new animation frame from the browser and loop continuously
+ */
 class Mapper{
   constructor(){
     this.total = 500; //total number of entities we'll draw
     this.collection = []; //holds all of the entities
     this.accuracy = 3; //lower = more accurate = slower
-    this.tree = new SpatialHash(this.accuracy)
+    this.tree = new SpatialHash(this.accuracy);
     this.start();
   }
 
@@ -133,6 +156,7 @@ class Mapper{
     var overlapping; //holds all overlapping entities
 
     ctx.clearRect(0,0,v.w,v.h);
+    this.draw();
     this.tree.clear(); //clear the tree and rebuild it
     this.collection.forEach((current)=>{
       current.move(); //move the current entity
@@ -162,7 +186,6 @@ class Mapper{
         } //end if
       });
     });
-    this.draw();
     requestAnimationFrame(()=>this.loop());
   }
 }
