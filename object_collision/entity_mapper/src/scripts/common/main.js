@@ -10,6 +10,10 @@ class Entity{
     this.sx = r(1,5); //speed of x value
     this.sy = r(1,5); //speed of y value
   }
+
+  // Each entity knows not the locations of other entities, and
+  // moves blindly. The EntityMapper tells it when it has collided
+  // with another entity and in what direction it should flee to
   move(){
     this.x=this.dx?this.x+=this.sx:this.x-=this.sx;
     this.y=this.dy?this.y+=this.sy:this.y-=this.sy;
@@ -23,12 +27,20 @@ class EntityMapper{
     this.collection = []; //holds all of the entities
     this.start();
   }
+
+  // Start the demonstration off by populating a collection of
+  // entities up to the total threshold. After everything is populated
+  // it calls the main loop function
   start(){
     for(let i=0;i<this.total;i++){
-      this.collection.push(new Entity(r(v.w),r(v.h)));
+      this.collection.push(new Entity(r(v.w),r(v.h),i));
     } //end for
     this.loop();
   }
+
+  // The main loop function begins by clearing the scene and then
+  // draws each entity before it checks their collisions and moves
+  // them coorespondingly.
   loop(){
     ctx.fillStyle='#000';
     ctx.fillRect(0,0,v.w,v.h);
@@ -40,6 +52,13 @@ class EntityMapper{
     });
     setTimeout(()=>this.loop(),16);
   }
+
+  // The entity mapper checks the collisions of each entity, not
+  // the entities themselves. It iterates through the entire
+  // collection to see if another entity is within the same constraints
+  // as the checking entity (and that we're not checking it with
+  // itself) This function is slightly more accurate than the spatial
+  // mapper but magnitudes slower.
   checkBounce(entity){
     var i=0,c=entity,t;
 

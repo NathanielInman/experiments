@@ -11,6 +11,10 @@ class Entity{
     this.sx = r(1,5); //speed of x value
     this.sy = r(1,5); //speed of y value
   }
+
+  // Each entity blindly moves and knows not of other entities around
+  // it. They are puppets where the SpatialMapper container is the
+  // puppet master, computing the entities collisions.
   move(){
     this.x=this.dx?this.x+=this.sx:this.x-=this.sx;
     this.y=this.dy?this.y+=this.sy:this.y-=this.sy;
@@ -30,9 +34,15 @@ class SpatialMapper{
     })(this.mapperSize);
     this.start();
   }
+
+  // Start by creating all of the entities that will be used in
+  // the demonstration. When we create an entity, we get it's
+  // coordinates and see if there exists an entity already in that
+  // spatial cell, if it does we count the number of entities
+  // in the cell and use that number as the index identification
   start(){
-    for(let i=0;i<this.total;i++){
-      let e = new Entity(r(v.w),r(v.h)),
+    for(let n=0;n<this.total;n++){
+      let e = new Entity(r(v.w),r(v.h),n),
           i = this.getMapperIndex(e);
 
       i.push(e.id);
@@ -41,6 +51,11 @@ class SpatialMapper{
     } //end for
     this.loop();
   }
+
+  // Loop through all of the entities in the collection, check to
+  // see if they bounce with other entities in their spatial cell,
+  // compute their movement, update their spatial index identifier.
+  // We also draw each entity before their computation occurs
   loop(){
     ctx.fillStyle='#000';
     ctx.fillRect(0,0,v.w,v.h);
@@ -59,24 +74,45 @@ class SpatialMapper{
     });
     setTimeout(()=>this.loop(),16);
   }
+
+  // Acquire the spatial cell where this entity resides and return
+  // it. It uses getXIndex and getYIndex as helper functions
   getMapperIndex(e){
     return this.mapper[this.getXIndex(e)][this.getYIndex(e)];
   }
-  getXIndex(e){
-    return M.floor(e.x/v.w*this.mapperSize);
-  }
-  getYIndex(e){
-    return M.floor(e.y/v.h*this.mapperSize);
-  }
-  checkBounce(e){
-    var i=0,c=e,t;
 
-    // Iterate through the collection and check for collisions
-    for(;i<this.getMapperIndex(entity).length;i++){
-      t=this.collection[i];
+  // Get the X spatial cell index by correlating the size of the
+  // viewport width with the width of the mapper. It's important
+  // to also make sure we don't exceed the constraints of the
+  // array.
+  getXIndex(e){
+    let s = this.mapperSize;
+    let i = M.floor(e.x/v.w*s);
+    return i<0?0:i>s-1?s-1:i;
+  }
+
+  // Get the Y spatial cell index by correlating the size of the
+  // viewport height wiht the height of the mapper. It's important
+  // to also make sure we don't exceed the constraints of the array
+  getYIndex(e){
+    let s = this.mapperSize;
+    let i = M.floor(e.y/v.h*s);
+    return i<0?0:i>s-1?s-1:i;
+  }
+
+  // Check the current entities spatial cell to see if other
+  // entities are there and thereby compute their collisions
+  checkBounce(e){
+    var i=0,c=e,t,gi = this.getMapperIndex, //shorten names
+        sameCell=this.getMapperIndex(e);
+
+    // Iterate through the nearby and occupied collections
+    // and check for other entities. This will warrant a collision
+    for(;i<sameCell.length;i++){
+      t=this.collection[sameCell[i]];
 
       // Make sure target entity isn't current entity also
-      if(i!==t.id&&Math.abs(c.x-t.x)/10<1&&Math.abs(c.y-t.y)/10<1){
+      if(i!==t.id&&M.abs(c.x-t.x)/10<1&&M.abs(c.y-t.y)/10<1){
         // We have a collision, detect which axis will be
         // repelled so we have a directional movement
         if(t.dx!=c.dx==1&&t.dy!=c.dy){
