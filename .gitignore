@@ -1,5 +1,5 @@
 **/.idea/
 **/node_modules/
-**/jspm_modules/
+**/jspm_packages/
 **/dist
 **/.DS_Store
