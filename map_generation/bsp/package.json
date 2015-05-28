@@ -1,4 +1,36 @@
 {
+  "readme": "README.md",
+  "name": "bsp",
+  "version": "1.0.0",
+  "description": "Binary Space Partitioning Example",
+  "main": "dist/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "serve src/ --port 8080",
+    "build": "jspm bundle-sfx --"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NathanielInman/Experiments"
+  },
+  "keywords": [
+    "binary",
+    "space",
+    "partitioning",
+    "bsp",
+    "map",
+    "generation",
+    "random"
+  ],
+  "author": "Nathaniel Inman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NathanielInman/Experiments/issues"
+  },
+  "homepage": "https://github.com/NathanielInman/Experiments",
+  "dev-dependencies": {
+    "serve": "^1.4.0"
+  },
   "jspm": {
     "directories": {
       "baseURL": "src"

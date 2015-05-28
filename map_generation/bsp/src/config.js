@@ -9,18 +9,6 @@ System.config({
     "*": "*.js",
     "github:*": "jspm_packages/github/*.js",
     "npm:*": "jspm_packages/npm/*.js"
-  },
-  "bundles": {
-    "build": [
-      "npm:core-js@0.9.13/library/modules/$.fw",
-      "npm:babel-runtime@5.4.7/helpers/class-call-check",
-      "npm:core-js@0.9.13/library/modules/$",
-      "npm:core-js@0.9.13/library/fn/object/define-property",
-      "npm:babel-runtime@5.4.7/core-js/object/define-property",
-      "npm:babel-runtime@5.4.7/helpers/create-class",
-      "lib/easel",
-      "app"
-    ]
   }
 });
 
