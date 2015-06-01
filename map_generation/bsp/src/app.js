@@ -1,18 +1,34 @@
 import { easel } from "lib/easel";
 
-setTimeout(function(){
-ctx.font = '62px "icomoon"'
-  ctx.fillStyle='red';
-  ctx.fillText('\ue617',200,200);
-},300);
+console.log('hmm')
+for(var i=1;i<101;++i)console.log('k',(i%5?'Fizz':0)+(i%3?'Buzz':i));
+(function drawLoop(){
+  // clear screen
+  ctx.fillStyle='black';
+  ctx.fillRect(0,0,v.w,v.h);
 
-setTimeout(function(){
-ctx.font = '62px "icomoon"'
-  ctx.fillStyle='blue';
-  ctx.fillText('\ue617',300,200);
-},1401);
-setTimeout(function(){
-  ctx.fillStyle='green';
-  ctx.fillText('\ue617',400,200);
-},1800);
-console.log('Application started');
+  // draw logo
+  ctx.strokeStyle='#959595';
+  ctx.fillStyle='#EDDA8D';
+  ctx.lineWidth=20;
+  ctx.lineCap='round';
+  ctx.moveTo(v.w/2,v.h/2+v.h/4);
+  ctx.lineTo(v.w/2-v.w/8,v.h/2+v.h/8);
+  ctx.lineTo(v.w/2-v.w/8,v.h/2-v.h/8);
+  ctx.lineTo(v.w/2,v.h/2-v.h/4);
+  ctx.lineTo(v.w/2+v.w/8,v.h/2-v.h/8);
+  ctx.lineTo(v.w/2+v.w/8,v.h/2+v.h/8);
+  ctx.lineTo(v.w/2,v.h/2+v.h/4);
+  ctx.moveTo(v.w/2,v.h/2);
+  ctx.lineTo(v.w/2-v.w/8,v.h/2-v.h/8);
+  ctx.moveTo(v.w/2,v.h/2);
+  ctx.lineTo(v.w/2+v.w/8,v.h/2-v.h/8);
+  ctx.moveTo(v.w/2,v.h/2);
+  ctx.lineTo(v.w/2,v.h/2+v.h/4);
+  ctx.fill();
+  ctx.stroke();
+
+  // Loop to 60fps
+  setTimeout(drawLoop,16);
+})();
+
