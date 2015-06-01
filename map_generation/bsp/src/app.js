@@ -1,7 +1,7 @@
+/* global v */
+/* global ctx */
 import { easel } from "lib/easel";
 
-console.log('hmm')
-for(var i=1;i<101;++i)console.log('k',(i%5?'Fizz':0)+(i%3?'Buzz':i));
 (function drawLoop(){
   // clear screen
   ctx.fillStyle='black';
