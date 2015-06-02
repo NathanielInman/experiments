@@ -75,4 +75,4 @@ class Easel{
     ctx.fillRect(0, 0, v.w, v.h);
   }
 }
-export default new Easel();
+export var easel = new Easel();

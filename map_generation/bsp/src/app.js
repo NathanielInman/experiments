@@ -1,13 +1,18 @@
-/* global v */
-/* global ctx */
 import { easel } from "lib/easel";
 
-(function drawLoop(){
+var headerText = '  Version 0.1.0 by Nathaniel Inman';
+
+easel.config = function(){
+  ctx.textAlign = 'center';
+  ctx.font = '24px Impact';
+};
+
+easel.redraw = function(){
   // clear screen
   ctx.fillStyle='black';
   ctx.fillRect(0,0,v.w,v.h);
 
-  // draw logo
+  // draw jspm logo
   ctx.strokeStyle='#959595';
   ctx.fillStyle='#EDDA8D';
   ctx.lineWidth=20;
@@ -28,7 +33,10 @@ import { easel } from "lib/easel";
   ctx.fill();
   ctx.stroke();
 
-  // Loop to 60fps
-  setTimeout(drawLoop,16);
-})();
+  // Draw developer name and app version
+  ctx.fillText(headerText, v.w/2, v.h-5);
+};
+
+easel.config(); // this is called every time window resizes
+easel.redraw(); // this is called every time window resizes
 

@@ -1,4 +1,4 @@
-# Binary Space Partitioning Experiment
+bsp
+===================
 
-This experiment aims at providing an ES6 alternative to creating bsp map generations
-while remaining decoupled from the application object model.
+[![Build Status](https://travis-ci.org/Nathaniel Inman/bsp.svg?branch=master)](https://travis-ci.org/Nathaniel Inman/bsp) [![dependency Status](https://david-dm.org/Nathaniel Inman/bsp/status.svg?style=flat)](https://david-dm.org/Nathaniel Inman/bsp) [![devDependency Status](https://david-dm.org/Nathaniel Inman/bsp/dev-status.svg?style=flat)](https://david-dm.org/Nathaniel Inman/bsp#info=devDependencies)
