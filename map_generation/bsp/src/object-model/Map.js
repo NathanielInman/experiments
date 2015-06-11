@@ -5,6 +5,7 @@ export class Map{
     this.width=w||10;
     this.height=h||10;
     this.sector=[];
+    this.generate();
   }
   generate(){
     var i,j;
