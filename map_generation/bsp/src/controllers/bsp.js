@@ -1,6 +1,6 @@
 const tinSize = 3;
-const minSize = 6;
-const maxSize = 10;
+const minSize = 2*tinSize;
+const maxSize = 3*tinSize;
 class Partition{
   constructor(map,x1,x2,y1,y2){
     this.width=x2-x1;
@@ -25,14 +25,21 @@ class Partition{
     } //end if
   }
   fill(map,x1,x2,y1,y2){
-    var i,j;
+    var i,j,w=x2-x1,h=y2-y1;
+    if(w<tinSize||h<tinSize){
+      for(i=x1;i<x2;i++)for(j=y1;j<y2;j++)map.sector[i][j].setEmpty();
+    } //end if
+    if(w>minSize){
+      x1=r(x1,x1+tinSize,1);
+      x2=r(x2-tinSize,x2+1,1);
+    } //end if
+    if(h>minSize){
+      y1=r(y1,y1+tinSize,1);
+      y2=r(y2-tinSize,y2+1,1);
+    } //end if
     for(i=x1;i<x2;i++){
       for(j=y1;j<y2;j++){
-        if(x2-x1<tinSize||y2-y1<tinSize){ //too small
-          map.sector[i][j].setEmpty();
-        }else{
-          map.sector[i][j].setFloor();
-        } //end if
+        map.sector[i][j].setFloor();
       } //end for
     } //end for
   }
