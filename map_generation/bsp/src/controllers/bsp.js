@@ -1,5 +1,6 @@
-const minSize = 4;
-const maxSize = 9;
+const tinSize = 3;
+const minSize = 6;
+const maxSize = 10;
 class Partition{
   constructor(map,x1,x2,y1,y2){
     this.width=x2-x1;
@@ -25,15 +26,18 @@ class Partition{
   }
   fill(map,x1,x2,y1,y2){
     var i,j;
-    console.log(map,x1,x2,y1,y2);
     for(i=x1;i<x2;i++){
       for(j=y1;j<y2;j++){
-        map.sector[i][j].setFloor();
+        if(x2-x1<tinSize||y2-y1<tinSize){ //too small
+          map.sector[i][j].setEmpty();
+        }else{
+          map.sector[i][j].setFloor();
+        } //end if
       } //end for
     } //end for
   }
 }
 export var bsp = function(map){
-  var tree = new Partition(map,0,map.width,0,map.height);
+  var tree = new Partition(map,1,map.width-1,1,map.height-1);
   console.log('Ran bsp.');
 };
