@@ -28,18 +28,31 @@ class Partition{
     var i,j,w=x2-x1,h=y2-y1;
     if(w<tinSize||h<tinSize){
       for(i=x1;i<x2;i++)for(j=y1;j<y2;j++)map.sector[i][j].setEmpty();
+      return
     } //end if
     if(w>minSize){
       x1=r(x1,x1+tinSize,1);
+      x2=r(x2-tinSize,x2+1,1);
+    }else if(w>minSize/2&&r(0,2,1)===1){
+      x1=r(x1,x1+tinSize,1);
+    }else if(w>minSize/2){
       x2=r(x2-tinSize,x2+1,1);
     } //end if
     if(h>minSize){
       y1=r(y1,y1+tinSize,1);
       y2=r(y2-tinSize,y2+1,1);
+    }else if(h>minSize/2&&r(0,2,1)===1){
+      y1=r(y1,y1+tinSize,1);
+    }else if(h>minSize/2){
+      y2=r(y2-tinSize,y2+1,1);
     } //end if
-    for(i=x1;i<x2;i++){
-      for(j=y1;j<y2;j++){
-        map.sector[i][j].setFloor();
+    for(i=x1-1;i<=x2;i++){
+      for(j=y1-1;j<=y2;j++){
+        if(i==x1-1||i==x2||j==y1-1||j==y2){
+          map.sector[i][j].setWall();
+        }else{
+          map.sector[i][j].setFloor(); 
+        } //end if
       } //end for
     } //end for
   }
