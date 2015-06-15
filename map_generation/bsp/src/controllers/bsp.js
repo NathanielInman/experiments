@@ -1,6 +1,15 @@
+// These three constants control the size of the rooms
 const tinSize = 3;
 const minSize = 2*tinSize;
 const maxSize = 3*tinSize;
+
+/**
+ * The partition class is essentially a binary tree with tiny controller
+ * logic to handle partition sizes and closing of partitions that don't
+ * meet the size requirements. After the tree is constructed, there's a 
+ * connect method that walks up the tree from the bottom nodes recursively
+ * connecting sister leaves together with hallways.
+ */
 class Partition{
 
   /**
@@ -45,7 +54,7 @@ class Partition{
     if(w<tinSize||h<tinSize){
       for(i=x1;i<x2;i++)for(j=y1;j<y2;j++)map.sector[i][j].setEmpty();
       this.closed=true; //This node can't be connected to
-      return
+      return; //make sure to exit early
     } //end if
 
     // Make sure we randomly place the room in the allocated space, not using
@@ -78,6 +87,15 @@ class Partition{
         } //end if
       } //end for
     } //end for
+  }
+
+  /**
+   * Connect is called after all the partitions are finished. It loops through
+   * the partitions and connects all the sisters together that are still living
+   * and works it's way up the the root node.
+   */
+  connect(){
+    console.log('Connecting ',this.left,this.right);
   }
 }
 export var bsp = function(map){
