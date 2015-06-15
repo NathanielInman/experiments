@@ -21,6 +21,8 @@ class Partition{
     this.width=x2-x1;
     this.height=y2-y1;
     this.parent=parent||false;
+    this.closed=false;
+    this.opened=false;
     this.size=r(this.size,this.size+1,1);
     if(this.width>=this.height){
       if(this.width>minSize*2){
@@ -28,6 +30,8 @@ class Partition{
         this.left = new Partition(map,x1,split,y1,y2,this);
         this.right = new Partition(map,split+1,x2,y1,y2,this);
       }else{
+        this.left =  {closed:true};
+        this.right = {closed:true};
         this.fill(map,x1,x2,y1,y2);
       } //end if
     }else{
@@ -36,6 +40,8 @@ class Partition{
         this.left = new Partition(map,x1,x2,y1,split,this);
         this.right = new Partition(map,x1,x2,split+1,y2,this);
       }else{
+        this.left =  {closed:true};
+        this.right = {closed:true};
         this.fill(map,x1,x2,y1,y2);
       } //end if
     } //end if
@@ -96,28 +102,29 @@ class Partition{
    * the partitions and connects all the sisters together that are still living
    * and works it's way up the the root node.
    */
-  connect(node){
-    if(this.left&&this.left.opened&&this.right&&this.right.opened){
+  connect(){
+    console.log(this);
+    if(this.left.opened&&this.right.opened){
       //connect child rooms
       this.opened=true; //mark node as leaf
-      this.left.closed=true;
-      this.right.closed=true;
+      this.left.opened=false;
+      this.right.opened=false;
       console.log('connected: ',this.left,this.right);
-    }else if(this.left&&this.left.closed&&this.right&&this.right.opened){
-      this.right.closed=true;
+    }else if(this.left.closed&&this.right.opened){
+      this.right.opened=false;
       this.opened=true; //mark node as leaf
       //connect right with current
       console.log('connected: ',this.right,this)
-    }else if(this.left&&this.left.opened&&this.right&&this.right.closed){
-      this.left.closed=true;
+    }else if(this.left.opened&&this.right.closed){
+      this.left.opened=true;
       this.opened=true; //mark node as leaf
       //connect left with current
       console.log('connected: ',this.left,this);
-    }else if(this.left&&this.left.closed&&this.right&&this.right.closed){
+    }else if(this.left.closed&&this.right.closed){
       this.opened=true; //mark node as leaf
-    }else if(this.left&&!this.left.opened&&!this.left.closed){
+    }else if(!this.left.opened&&!this.left.closed){
       this.left.connect(); //recursively call left
-    }else if(this.right&&!this.right.opened&&!this.left.closed){
+    }else if(!this.right.opened&&!this.left.closed){
       this.right.connect(); //recursively call right
     } //end if
     if(this.parent)this.parent.connect(); //walk upwards
