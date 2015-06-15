@@ -20,7 +20,9 @@ export class Map{
     var i,j,w=v.w/this.width,h=v.h/this.height;
     for(i=0;i<this.width;i++){
       for(j=0;j<this.height;j++){
-        if(this.sector[i][j].wall){
+        if(this.sector[i][j].active){
+          ctx.fillStyle='#099';
+        }else if(this.sector[i][j].wall){
           ctx.fillStyle='#888';
         }else if(this.sector[i][j].floor){
           ctx.fillStyle='#030';

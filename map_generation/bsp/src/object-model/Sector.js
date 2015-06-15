@@ -26,4 +26,7 @@ export class Sector{
     this.wall=0;
     this.floor=0;
   }
+  setActive(){
+    this.active=1;
+  }
 }
