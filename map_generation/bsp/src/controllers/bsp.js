@@ -88,6 +88,7 @@ class Partition{
         } //end if
       } //end for
     } //end for
+    this.opened=true; //this is a pathable partition
   }
 
   /**
@@ -95,13 +96,31 @@ class Partition{
    * the partitions and connects all the sisters together that are still living
    * and works it's way up the the root node.
    */
-  connect(){
-    if(this.left&&!this.left.closed){
-      this.left.connect();
-    }else if(this.right){
-      
+  connect(node){
+    if(this.left&&this.left.opened&&this.right&&this.right.opened){
+      //connect child rooms
+      this.opened=true; //mark node as leaf
+      this.left.closed=true;
+      this.right.closed=true;
+      console.log('connected: ',this.left,this.right);
+    }else if(this.left&&this.left.closed&&this.right&&this.right.opened){
+      this.right.closed=true;
+      this.opened=true; //mark node as leaf
+      //connect right with current
+      console.log('connected: ',this.right,this)
+    }else if(this.left&&this.left.opened&&this.right&&this.right.closed){
+      this.left.closed=true;
+      this.opened=true; //mark node as leaf
+      //connect left with current
+      console.log('connected: ',this.left,this);
+    }else if(this.left&&this.left.closed&&this.right&&this.right.closed){
+      this.opened=true; //mark node as leaf
+    }else if(this.left&&!this.left.opened&&!this.left.closed){
+      this.left.connect(); //recursively call left
+    }else if(this.right&&!this.right.opened&&!this.left.closed){
+      this.right.connect(); //recursively call right
     } //end if
-    console.log('Connecting ',this.left,this.right);
+    if(this.parent)this.parent.connect(); //walk upwards
   }
 }
 export var bsp = function(map){
