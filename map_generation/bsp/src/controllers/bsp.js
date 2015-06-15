@@ -2,6 +2,12 @@ const tinSize = 3;
 const minSize = 2*tinSize;
 const maxSize = 3*tinSize;
 class Partition{
+
+  /**
+   * This constructor creates a partitioned map down to the smallest 
+   * available size. The rooms are constructed with walls. After initialization
+   * The connect function is called to build out hallways.
+   */
   constructor(map,x1,x2,y1,y2){
     this.width=x2-x1;
     this.height=y2-y1;
@@ -24,12 +30,27 @@ class Partition{
       } //end if
     } //end if
   }
+
+  /**
+   * Fill is called when the partition can no longer be broken down into
+   * smaller partitions. It fills the floor and walls if it meets the size
+   * requirement. If the room is way too small, it's emptied and set to closed
+   * so we know not to connect this location with a hallway
+   */
   fill(map,x1,x2,y1,y2){
     var i,j,w=x2-x1,h=y2-y1;
+
+    // If the room is smaller than it's allowed to be then we need to close
+    // it off and prevent it from being connected by a hallway
     if(w<tinSize||h<tinSize){
       for(i=x1;i<x2;i++)for(j=y1;j<y2;j++)map.sector[i][j].setEmpty();
+      this.closed=true; //This node can't be connected to
       return
     } //end if
+
+    // Make sure we randomly place the room in the allocated space, not using
+    // the whole space allocated or it will look entirely too generic and
+    // repeated
     if(w>minSize){
       x1=r(x1,x1+tinSize,1);
       x2=r(x2-tinSize,x2+1,1);
@@ -46,6 +67,8 @@ class Partition{
     }else if(h>minSize/2){
       y2=r(y2-tinSize,y2+1,1);
     } //end if
+
+    // Carve the floors and walls surrounding the room
     for(i=x1-1;i<=x2;i++){
       for(j=y1-1;j<=y2;j++){
         if(i==x1-1||i==x2||j==y1-1||j==y2){
@@ -59,5 +82,6 @@ class Partition{
 }
 export var bsp = function(map){
   var tree = new Partition(map,1,map.width-1,1,map.height-1);
+  tree.connect();
   console.log('Ran bsp.');
 };
