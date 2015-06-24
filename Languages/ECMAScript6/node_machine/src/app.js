@@ -1,5 +1,5 @@
 import { easel } from "lib/easel";
-import { Datetime } from "jspm_packages/npm/machinepack-datetime@1.2.0"
+import Datetime from "jspm_packages/npm/machinepack-datetime@1.2.0";
 
 var headerText = '  Version 0.1.0 by Nathaniel Inman';
 console.log(Datetime);
