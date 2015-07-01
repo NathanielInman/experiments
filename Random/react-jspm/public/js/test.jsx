@@ -4,7 +4,7 @@ export default React.createClass({
     displayName: 'Test'
   , render: function () {
       return (
-        <div>Awesome Test!</div>
+        <div>react-jspm test worked, yay!</div>
       )
     }
 })
