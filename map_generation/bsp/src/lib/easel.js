@@ -1,3 +1,4 @@
+/* global C, M, D, W, v, ctx */
 class Easel{
   constructor(){
     // Easel public variables
@@ -9,7 +10,7 @@ class Easel{
       this.activated = true;
     }else{
       this.activated = false;
-      return false;
+      return;
     } //end if
 
     // Helpful global hoisting
@@ -20,16 +21,17 @@ class Easel{
     window.ctx = C.getContext('2d');
     window.v = this.acquireViewport();
     window.r = function(f, g, e) {
-        f = !g ? 0 * (g = f) : f > g ? g + (d = f) - g : f;
-        e = e || 0;
-        g = M.random() * (g - f) + f;
-        return e ? g | 0 : g;
+      var d;
+      f = !g ? 0 * (g = f) : f > g ? g + (d = f) - g : f;
+      e = e || 0;
+      g = M.random() * (g - f) + f;
+      return e ? g | 0 : g;
     };
     window.onresize = ()=>{
-        W.v = this.acquireViewport();
-        this.resizeCanvas();
-        this.config();
-        this.redraw();
+      W.v = this.acquireViewport();
+      this.resizeCanvas();
+      this.config();
+      this.redraw();
     };
 
     // Create the actual canvas object and styling

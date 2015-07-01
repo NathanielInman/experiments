@@ -1,3 +1,5 @@
+/* global ctx */
+
 import { easel } from 'lib/easel';
 import { Map   } from 'object-model/Map';
 import { bsp   } from 'controllers/bsp';
