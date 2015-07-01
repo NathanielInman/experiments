@@ -1,0 +1,30 @@
+{
+  "name": "react-jspm",
+  "version": "0.1.1",
+  "description": "a sample app in es6 making use of systemjs, react, jspm",
+  "main": "server.js",
+  "dependencies": {
+    "express": "4.12.4",
+    "finalhandler": "0.3.3",
+    "serve-static": "1.8.1"
+  },
+  "devDependencies": {
+    "jspm": "0.10.6"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "postinstall": "./node_modules/.bin/jspm install"
+  },
+  "author": "Nathaniel Inman <nate@theoestudio.com>",
+  "license": "MIT",
+  "jspm": {
+    "directories": {
+      "baseURL": "public"
+    },
+    "dependencies": {
+      "jsx": "1.1.0",
+      "react": "0.13.3"
+    }
+  }
+}
