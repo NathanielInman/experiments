@@ -1,64 +1,55 @@
-/**
- * This makeItRain demo constantly keeps 100 particles (dollars) on the screen
- *
- * @type {Class} Ion utilizes the ion.js library
- */
+// Random number function that returns a random integer between min and max
+// generator is INCLUSIVE not exclusive on upperbound like some generators
+function r(min,max){
+  return Math.floor(min+Math.random()*(1+max-min))
+} //end r()
+
+// Creates the entire matrix for the arcade character
+function generateIcon(){
+  return [
+    [a=r(0,1),b=r(0,1),c=r(0,1),r(0,1),c,b,a],
+    [a=r(0,1),b=r(0,1),c=r(0,1),r(0,1),c,b,a],
+    [a=r(0,1),b=r(0,1),c=r(0,1),r(0,1),c,b,a],
+    [a=r(0,1),b=r(0,1),c=r(0,1),r(0,1),c,b,a],
+    [a=r(0,1),b=r(0,1),c=r(0,1),r(0,1),c,b,a],
+    [a=r(0,1),b=r(0,1),c=r(0,1),r(0,1),c,b,a],
+    [a=r(0,1),b=r(0,1),c=r(0,1),r(0,1),c,b,a]
+  ];
+} //end generateMatrix()
+
 function app() {
-  "use strict";
+  'use strict';
 
-  // The following will show at the bottom left of the screen
-  var headerText = 'arcadeIcons Version 0.1.0 by Nathaniel Inman';
+  var arcadeIcon,
+      color,
+      columns = 10,
+      rows = 5,
+      cellWidth = v.w/columns,
+      cellHeight = v.h/rows,
+      pointWidth = cellWidth/9,
+      pointHeight = cellHeight/9;
 
-  // Load the resources required for display
-  var shirtWidth = 0, shirtLeft = 0; // ease logical checks at runtime by
-  var logoWidth = 0, logoHeight = 0; // preprocessing the sizes of the images
-  var shirt = new Image();
-  shirt.src = 'http://i.imgur.com/Nvfvy87.png';
-  shirt.onload = function () {
-    shirtWidth = v.h / shirt.height * shirt.width;
-    shirtLeft = v.w / 2 - shirtWidth / 2;
+  for(var x=0;x<columns;x++){
+    for(var y=0;y<rows;y++){
+      arcadeIcon = generateIcon();
+      color = 'rgb('+r(100,255)+','+r(100,255)+','+r(100,255)+')';
+      for(var col=0;col<arcadeIcon.length;col++){
+        for(var row=0;row<arcadeIcon[col].length;row++){
+          if(arcadeIcon[col][row]){
+            ctx.fillStyle=color;
+          }else{
+            ctx.fillStyle='#000';
+          } //end if
+          ctx.fillRect(x*cellWidth+row*pointWidth+pointWidth,
+                       y*cellHeight+col*pointHeight+pointHeight,
+                       pointWidth+1,pointHeight+1);
+        } //end for
+      } //end for
+    } //end for
+  } //end for
+  Easel.onDraw=function(){
+    ctx.fillStyle='#000';
+    ctx.fillRect(0,0,v.w,v.h);
+    app();
   };
-  var logo = new Image();
-  logo.src = 'http://i.imgur.com/dlwtnzo.png';
-  logo.onload = function recheck() {
-    if(!shirtWidth){ //need shirt to load first
-      setTimeout(function(){recheck();},1); //keep checking until shirt loads
-    }else{
-      logoWidth = shirtWidth / 6;
-      logoHeight = shirtWidth / logo.width * logo.height / 6;
-    } //end if
-  };
-  var dollar = new Image();
-  dollar.src = 'http://i.imgur.com/nLTCnEP.png';
-
-  // Declare and initialize the scene
-  var makeItRain = new Ion(100);
-  makeItRain.sx = function () {return r(1, v.w);}; //start x location
-  makeItRain.sy = 15; //start y location
-  makeItRain.dx = function () {return r(1, v.w);}; //destination x location (minus wind factor)
-  makeItRain.dy = v.h; //destination y location (minus wind factor)
-  makeItRain.wx = function () {return r(0, 0.5) - 0.25;}; // wind-x variant factor
-  makeItRain.wy = 0; //wind-y variant factor
-  makeItRain.image = dollar; //pass an image for the particle
-  makeItRain.imageWidth = 25; //lets override the width of the image
-  makeItRain.imageHeight = 50; //lets override the height of the image
-  makeItRain.d = 2000; //number of frames allowed until destination is considered reached anyways
-  makeItRain.tween_type = 0; //set it to a linear tween (tween_type is 0-32, see documentation)
-  makeItRain.onEnd = function (id) { //on particle ending (d=2000), remove it and replace with a new particle
-    this.particle.splice(id, 1, this.getNew(id));
-  };
-  makeItRain.onEscape = function (id) { //if particle escapes scene, remove it and replace with a new particle
-    this.particle.splice(id, 1, this.getNew(id));
-  };
-  makeItRain.clear = function () { //overriding the clear frame function
-    ctx.fillStyle = '#000';
-    ctx.fillRect(0, 0, v.w, v.h);
-    ctx.font = '18px Courier New';
-    ctx.drawImage(shirt, shirtLeft, 0, shirtWidth, v.h);
-    ctx.drawImage(logo, v.w / 2 - logoWidth / 2, v.h / 2 - logoHeight / 2, logoWidth, logoHeight);
-    ctx.fillStyle = 'rgb(255,255,0)';
-    ctx.fillText(headerText, 5, v.h - 5);
-  };
-  makeItRain.populate(function(){return r(200,500);}); //pass a custom wait function between particles
-  makeItRain.process(); //begin processing the scene
 } //end app()
