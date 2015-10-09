@@ -15,10 +15,9 @@ easel.onDraw = function draw(cur){
   ctx.fillStyle='#0F0';
   for(var i=cur,k=0;i<totalPoints&&i<cur+1000;i++){
     k=r(100);
-    if(k<=fp[0]){f1();}else if(k<=fp[1]){f2();}else if(k<=fp[2]){f3();}else{f4();}
+    k<=fp[0]?f1():k<=fp[1]?f2():k<=fp[2]?f3():f4();
     ctx.fillRect(pen.x*v.w/10+v.w/4,pen.y*v.h/10,2,2);
   } //end for
-  if(cur<totalPoints)setTimeout(function(){draw(++cur)},1);
+  if(cur<totalPoints) easel.redraw(++cur);
 };
 easel.redraw();
-//mainLoop(0); //initialize
