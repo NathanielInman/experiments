@@ -1,7 +1,14 @@
-**/.idea
-**/node_modules
-**/jspm_packages
-**/dist
+# General javascript
+node_modules
+jspm_packages
+dist
+
+# OSX
 .DS_Store
+
+# Vim
 *.swp
 *.swo
+
+# Jetbrains IDE
+.idea
