@@ -1,15 +1,8 @@
-var v,w=function(){var e=window,a='inner';if(!(e.innerWidth)){a='client';e=document.documentElement||document.body;}return {w:e[a+'Width'],h:e[a+'Height']};},v=w();
-var $=function(o){return document.getElementById(o);};
-var sa=function(o,a){for(var i=0;i<a.length;i++){$(o).setAttribute(a[i][0],a[i][1]);}};
-var ctx,r=function(){ctx=$('canvas').getContext("2d");},q=function(){sa('canvas',[['width',v.w+'px'],['height',v.h+'px']]);};q();r();
-window.onresize=function(){v=w();r();q();ctx.fillStyle='#000';ctx.fillRect(0,0,v.w,v.h);};
-var ds=function(x,y,c){ctx.fillStyle=c;ctx.fillRect(x*v.w/size,y*v.h/size,v.w/size,v.h/size);};
-var random=function(n,p){return (p||0)+Math.random()*n|0;};
-ctx.fillStyle='#000';ctx.fillRect(0,0,v.w,v.h);
 /* Constants */
 var systemSize=60,kTimeStep=1,alpha=1.5,epsilon=0.3,
     kTimeStepOnScreen=100,totalTimeStep=1000000,
 	processing=true;
+
 // Initialize map
 var map1=(function(){
 	var map=[];
@@ -18,6 +11,7 @@ var map1=(function(){
 	} //end for
 	return map;
 })();
+
 // Assistant function for mapping
 var logMap=function(amp,alp){
 	return 1-amp*amp*alp;
