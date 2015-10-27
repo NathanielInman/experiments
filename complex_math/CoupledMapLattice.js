@@ -21,19 +21,6 @@ function logMap(amp,alp){
   return 1-amp*amp*alp;
 } //end logMap()
 
-function draw(){
-  ctx.fillColor="#000";
-  ctx.fillRect(0,0,v.w,v.h);
-  ctx.strokeStyle="#F00";
-  ctx.lineWidth=3;
-  ctx.beginPath();
-  ctx.moveTo(0,v.h/2);
-  for(var i=0;i<systemSize;i++){
-    ctx.lineTo(v.w/60*(i+1),(1+map1[i])/2*v.h);
-  } //end for
-  ctx.stroke();
-} //end draw()
-
 easel.onDraw = function process(i){
   var j,k,m;
 
@@ -52,7 +39,16 @@ easel.onDraw = function process(i){
     } //end for
     //
   } //end for
-  draw();
+  ctx.fillColor="#000";
+  ctx.fillRect(0,0,v.w,v.h);
+  ctx.strokeStyle="#F00";
+  ctx.lineWidth=3;
+  ctx.beginPath();
+  ctx.moveTo(0,v.h/2);
+  for(var i=0;i<systemSize;i++){
+    ctx.lineTo(v.w/60*(i+1),(1+map1[i])/2*v.h);
+  } //end for
+  ctx.stroke();
   easel.redraw();
 };
 easel.redraw();
