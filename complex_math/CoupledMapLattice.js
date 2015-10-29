@@ -22,9 +22,9 @@ function logMap(amp,alp){
 } //end logMap()
 
 easel.onDraw = function process(i){
-  var j,k,m;
+  var j,k,m,t = totalTimeStep/kTimeStep*kTimeStepOnScreen;
 
-  if(i>=(totalTimeStep/(kTimeStep*kTimeStepOnScreen)))return; //done
+  if(i>=t)return; //done
   for(j=0;j<kTimeStepOnScreen;j++){
     //process CML for kTimeStep
     var map2=[]
@@ -37,7 +37,6 @@ easel.onDraw = function process(i){
       for(m=0;m<map1.length;m++)
         map1[m]=map2[m];
     } //end for
-    //
   } //end for
   ctx.fillColor="#000";
   ctx.fillRect(0,0,v.w,v.h);
