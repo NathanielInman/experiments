@@ -10,7 +10,8 @@ var map=(function(){
   } //end for
   return map;
 })();
-var mainLoop=function(x,y){
+
+easel.onDraw = function main(x,y){
   var cornerDistance1,cornerDistance2,cornerDistance3,cornerDistance4,
       cornerWeight1,cornerWeight2,cornerWeight3,cornerWeight4,
     cornerColor1,cornerColor2,cornerColor3,cornerColor4,
@@ -32,19 +33,20 @@ var mainLoop=function(x,y){
       cornerColor3=y<mapHeight-1?map[y+1][x]:0;
       cornerColor4=x<mapWidth-1&&y<mapHeight-1?map[y+1][x+1]:0;
       color=Math.floor(cornerColor1*cornerWeight1+
-            cornerColor2*cornerWeight2+
-          cornerColor3*cornerWeight3+
-          cornerColor4*cornerWeight4);
+        cornerColor2*cornerWeight2+
+        cornerColor3*cornerWeight3+
+        cornerColor4*cornerWeight4);
       ctx.fillStyle='rgb('+color+','+color+','+color+')';
       ctx.fillRect(v.w/mapWidth*x+i,v.h/mapHeight*y+j,1,1);
     } //end for
   } //end for
   ctx.fillStyle='rgb('+map[y][x]+','+map[y][x]+','+map[y][x]+')';
-  //ctx.fillRect(v.w/mapWidth*x,v.h/mapHeight*y,5,5);
   if(x<mapWidth-1&&y<=mapHeight-1){
-    setTimeout("mainLoop("+(++x)+","+(y)+")",1);
+    easel.redraw(++x,y);
   }else if(y<mapHeight-1){
-    setTimeout("mainLoop(0,"+(++y)+")",1);
+    easel.redraw(0,++y);
   } //end if
+  easel.redraw
 };
+easel.redraw(0,0);
 mainLoop(0,0);
