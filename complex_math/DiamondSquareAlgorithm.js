@@ -1,5 +1,5 @@
 // Public Constants
-var mapWidth,mapHeight,map=[];
+var mapWidth,mapHeight,map;
 
 // Variable Configuration
 easel.config = function(){
