@@ -40,10 +40,7 @@ easel.onDraw = function main(x,y){
       cc2=x<mapWidth-1?map[y][x+1]:0;
       cc3=y<mapHeight-1?map[y+1][x]:0;
       cc4=x<mapWidth-1&&y<mapHeight-1?map[y+1][x+1]:0;
-      color=Math.floor(cc1*cw1+
-        cc2*cw2+
-        cc3*cw3+
-        cc4*cw4);
+      color=Math.floor(cc1*cw1+cc2*cw2+cc3*cw3+cc4*cw4);
       ctx.fillStyle='rgb('+color+','+color+','+color+')';
       ctx.fillRect(v.w/mapWidth*x+i,v.h/mapHeight*y+j,1,1);
     } //end for
