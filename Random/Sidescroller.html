@@ -4,105 +4,112 @@
 <script type='text/javascript' src='libs/mousetrap.min.js'></script>
 <script>
 var assets={
-	brick:[[0,   0,0.5,0.3],[0.55,   0,0.45,0.3],
-           [0,0.35,0.2,0.3],[0.25,0.35,0.5,0.3],[0.8,0.35,0.2,0.3],
-           [0, 0.7,0.5,0.3],[0.55, 0.7,0.45,0.3]]
+  brick:[
+    [0,0,0.5,0.3],
+    [0.55,0,0.45,0.3],
+    [0,0.35,0.2,0.3],
+    [0.25,0.35,0.5,0.3],
+    [0.8,0.35,0.2,0.3],
+    [0, 0.7,0.5,0.3],
+    [0.55, 0.7,0.45,0.3]
+  ]
 };
 var scale=50;
 var drawAsset=function(o,x,y){
-	for(var i=0;i<o.length;i++){
-		ctx.fillRect(o[i][0]*scale+x,o[i][1]*scale+y,o[i][2]*scale,o[i][3]*scale);
-	} //end for
+  for(var i=0;i<o.length;i++){
+    ctx.fillRect(o[i][0]*scale+x,o[i][1]*scale+y,o[i][2]*scale,o[i][3]*scale);
+  } //end for
 };
 //The player object
 var player={
-	x:v.w/2, //x location
-	y:0, //y location
-	w:50, //width of player
-	h:50, //height of player
-	s:1, //speed of the player
-	c:'#BDB', //color of player
-	key:{ //key activation must be smooth and staged so multiple keys can be pressed at the same time
-		right:false,
-		up:false,
-		left:false
-	},
-	jump:{
-		is:false, //are we currently jumping
-		d:1, //direction of jump
-		a:100, //destination jump value
-		c:0,  //current jump value
-		s:0.1 //speed of the
-	},
-	dirty:[]
+  x:v.w/2, //x location
+  y:0, //y location
+  w:50, //width of player
+  h:50, //height of player
+  s:1, //speed of the player
+  c:'#BDB', //color of player
+  key:{ //key activation must be smooth and staged so multiple keys can be pressed at the same time
+    right:false,
+    up:false,
+    left:false
+  },
+  jump:{
+    is:false, //are we currently jumping
+    d:1, //direction of jump
+    a:100, //destination jump value
+    c:0,  //current jump value
+    s:0.1 //speed of the
+  },
+  dirty:[]
 };
 //All actions
 var action={
-	jump:function(object){
-		if(object.jump.d==1){
-			object.jump.is=true;
-			object.dirty.push(function(){object.jump.c++;});
-			if(object.jump.c==object.jump.a)object.jump.d=0;
-		}else{
-			object.dirty.push(function(){object.jump.c--;});
-		} //end if
-		if(object.jump.c!==0||object.jump.d==1){
-			setTimeout(function(){action.jump(object);},1);
-		}else{
-			object.jump.is=false;object.jump.d=1;
-		} //end if
-	}
+  jump:function(object){
+    if(object.jump.d==1){
+      object.jump.is=true;
+      object.dirty.push(function(){object.jump.c++;});
+      if(object.jump.c==object.jump.a)object.jump.d=0;
+    }else{
+      object.dirty.push(function(){object.jump.c--;});
+    } //end if
+    if(object.jump.c!==0||object.jump.d==1){
+      setTimeout(function(){action.jump(object);},1);
+    }else{
+      object.jump.is=false;object.jump.d=1;
+    } //end if
+  }
 };
 //The grass object
 var grass={
-	h:50, //height of grass from bottom of the screen
-	c:'#F82' //color of the grass
+  h:50, //height of grass from bottom of the screen
+  c:'#F82' //color of the grass
 };
 //the main drawing function
 var draw=function(){
-	//Handle the key staging
-	if(player.key.left){
-		if(player.x-player.w/2-1>0){ //player can't walk off the screen
-			player.dirty.push(function(){player.x-=player.s;});
-		} //end if
-	} //end if
-	if(player.key.right){
-		if(player.x+player.w/2+1<v.w){ //player can't walk off the screen
-			player.dirty.push(function(){player.x+=player.s;});
-		} //end if
-	} //end if
-	if(player.key.up){
-		if(!player.jump.is)action.jump(player);
-	} //end if
-	//draw the ground
-	for(var i=0;i<v.w/scale;i++){
-		ctx.fillStyle='#833';
-		ctx.fillRect(i*scale,v.h-scale,50,50);
-		ctx.fillStyle=grass.c;
-		drawAsset(assets.brick,i*scale,v.h-scale);
-	} //end for
-	//draw the player
-	if(player.dirty.length>0){
-		ctx.fillStyle='#000';
-		ctx.fillRect(player.x-player.w/2,v.h-grass.h-player.h-player.y-player.jump.c,player.w,player.h);
-		for(operation in player.dirty){
-			player.dirty[operation]();
-		} //end for
-		player.dirty=[];
-	} //end if
-	ctx.fillStyle=player.c;
-	ctx.fillRect(player.x-player.w/2,v.h-grass.h-player.h-player.y-player.jump.c,player.w,player.h);
-	setTimeout('draw()',1);
+  //Handle the key staging
+  if(player.key.left){
+    if(player.x-player.w/2-1>0){ //player can't walk off the screen
+      player.dirty.push(function(){player.x-=player.s;});
+    } //end if
+  } //end if
+  if(player.key.right){
+    if(player.x+player.w/2+1<v.w){ //player can't walk off the screen
+      player.dirty.push(function(){player.x+=player.s;});
+    } //end if
+  } //end if
+  if(player.key.up){
+    if(!player.jump.is)action.jump(player);
+  } //end if
+  //draw the ground
+  for(var i=0;i<v.w/scale;i++){
+    ctx.fillStyle='#833';
+    ctx.fillRect(i*scale,v.h-scale,50,50);
+    ctx.fillStyle=grass.c;
+    drawAsset(assets.brick,i*scale,v.h-scale);
+  } //end for
+  //draw the player
+  if(player.dirty.length>0){
+    ctx.fillStyle='#000';
+    ctx.fillRect(player.x-player.w/2,v.h-grass.h-player.h-player.y-player.jump.c,player.w,player.h);
+    for(operation in player.dirty){
+      player.dirty[operation]();
+    } //end for
+    player.dirty=[];
+  } //end if
+  ctx.fillStyle=player.c;
+  ctx.fillRect(player.x-player.w/2,v.h-grass.h-player.h-player.y-player.jump.c,player.w,player.h);
+  setTimeout('draw()',1);
 };
+
+//Event handlers
 (function(){
-	//Event handlers
-	Mousetrap.bind(['w','up'],function(){player.key.up=true;});
-	Mousetrap.bind(['w','up'],function(){player.key.up=false;},'keyup');
-	Mousetrap.bind(['d','right'],function(){player.key.right=true;});
-	Mousetrap.bind(['d','right'],function(){player.key.right=false;},'keyup');
-	Mousetrap.bind(['a','left'],function(){player.key.left=true;});
-	Mousetrap.bind(['a','left'],function(){player.key.left=false;},'keyup');
-	draw();
+  Mousetrap.bind(['w','up'],function(){player.key.up=true;});
+  Mousetrap.bind(['w','up'],function(){player.key.up=false;},'keyup');
+  Mousetrap.bind(['d','right'],function(){player.key.right=true;});
+  Mousetrap.bind(['d','right'],function(){player.key.right=false;},'keyup');
+  Mousetrap.bind(['a','left'],function(){player.key.left=true;});
+  Mousetrap.bind(['a','left'],function(){player.key.left=false;},'keyup');
+  draw();
 })();
 </script>
 </body></html>
