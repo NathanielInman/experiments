@@ -15,8 +15,10 @@ var assets={
   ]
 };
 var scale=50;
-var drawAsset=function(o,x,y){
-  for(var i=0;i<o.length;i++){
+function drawAsset(o,x,y){
+  var i=0;
+
+  for(;i<o.length;i++){
     ctx.fillRect(o[i][0]*scale+x,o[i][1]*scale+y,o[i][2]*scale,o[i][3]*scale);
   } //end for
 };
@@ -44,7 +46,7 @@ var player={
 };
 //All actions
 var action={
-  jump:function(object){
+  jump:function jump(object){
     if(object.jump.d==1){
       object.jump.is=true;
       object.dirty.push(function(){object.jump.c++;});
@@ -65,7 +67,7 @@ var grass={
   c:'#F82' //color of the grass
 };
 //the main drawing function
-var draw=function(){
+var draw=function draw(){
   //Handle the key staging
   if(player.key.left){
     if(player.x-player.w/2-1>0){ //player can't walk off the screen
