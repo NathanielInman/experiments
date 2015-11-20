@@ -1,35 +1,81 @@
-<!doctype html><head><title>Machine Learning</title>
-<style>div{position:absolute;overflow:hidden;width:100%;height:100%;background-color:#000;}</style>
+<!doctype html>
+<html>
+  <head>
+    <title>Machine Learning</title>
+    <style>
+      div{
+        position:absolute;
+        overflow:hidden;
+        width:100%;
+        height:100%;
+        background-color:#000;
+      }
+      #frame{
+        top: 0;left: 0;min-width:700px;
+      }
+      #frame,#output{
+        background-clor: #333;
+      }
+      #output{
+        overflow-y: scroll;
+        top:1%;
+        left:1%;
+        width:98%;
+        height:95%;
+        color:white;
+        font-family:"Courier New";
+        font-size:1em;
+      }
+      #cmd{
+        position:absolute;
+        left:0;
+        bottom:-2px;
+        width:90%;
+        height:25px;
+        border:0;
+        border-top:2px solid #333;
+        background-color:#111;
+        color:#FFF;
+      }
+      #enter{
+        position:absolute;
+        left:90%;
+        bottom:0px;
+        width:10%;
+        height:25px;
+        border-left:2px solid #333;
+        border-top:2px solid #333;
+        color:#FFF;      
+        background-color:#222;
+        text-align:center;
+        line-height:1.5;
+      }
+      #enter:hover{
+        background-color:#444;
+      }
+    </style>
 </head>
 <body>
-<div id='frame'
-     style='top:0;left:0;min-width:700px;'>
-	<input id='cmd'
-		   style='position:absolute;left:0;bottom:-2px;width:90%;
-				  height:25px;border:0;border-top:2px solid #333;
-				  background-color:#111;color:#FFF;'
-		   onkeydown='if(event.keyCode==13){
-						var message=document.getElementById("cmd").value;
-						document.getElementById("cmd").value="";
-						core.process(message);
-					  }'
-	>
-	<div id='enter'
-		 style='position:absolute;left:90%;bottom:0px;width:10%;height:25px;
-				border-left:2px solid #333;border-top:2px solid #333;color:#FFF;
-				background-color:#222;text-align:center;line-height:1.5;'
-		 onmouseover='this.style.backgroundColor="#444";'
-		 onmouseout='this.style.backgroundColor="#222";'
-		 onmousedown='this.style.backgroundColor="#3F3";
-					  var message=document.getElementById("cmd").value;
-					  document.getElementById("cmd").value="";
-					  core.process(message);'>Send
-	</div>
-	<div id='output'
-	     style='top:1%;left:1%;width:98%;height:95%;color:white;
-		        font-family:"Courier New";font-size:1em;'>
-	</div>
+  <div id='frame'>
+  <input id='cmd' onkeydown='cmdKeyDown()'>
+  <div id='enter' onmousedown='enterKeyDown()'>Send
+  </div>
+  <div id='output'></div>
 </div>
+<script>
+function cmdKeyDown(){
+  if(event.keyCode==13){
+    var message=document.getElementById("cmd").value;
+    document.getElementById("cmd").value="";
+    core.process(message);
+  } //end if
+} //end cmdKeyDown()
+function enterKeyDown(){
+  var message=document.getElementById("cmd").value;
+  document.getElementById("cmd").value=""; 
+  core.process(message);
+} //end enterKeyDown(){
+</script>
 <script src='GrammerProcessing_Purpose.js'></script>
 </body>
 </html>
