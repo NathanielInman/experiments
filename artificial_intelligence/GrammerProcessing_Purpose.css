@@ -1,0 +1,51 @@
+div{
+  position:absolute;
+  overflow:hidden;
+  width:100%;
+  height:100%;
+  background-color:#000;
+}
+#frame{
+  top: 0;left: 0;min-width:700px;
+}
+#frame,#output{
+  background-clor: #333;
+}
+#output{
+  overflow-y: scroll;
+  top:1%;
+  left:1%;
+  width:98%;
+  height:95%;
+  color:white;
+  font-family:"Courier New";
+  font-size:1em;
+}
+#cmd{
+  position:absolute;
+  left:0;
+  bottom:-2px;
+  width:90%;
+  height:25px;
+  border:0;
+  border-top:2px solid #333;
+  background-color:#111;
+  color:#FFF;
+}
+#enter{
+  position:absolute;
+  left:90%;
+  bottom:0px;
+  width:10%;
+  height:25px;
+  border-left:2px solid #333;
+  border-top:2px solid #333;
+  color:#FFF;      
+  background-color:#222;
+  text-align:center;
+  line-height:1.5;
+}
+#enter:hover{
+  background-color:#444;
+}
+
