@@ -17,10 +17,15 @@ var assets={
   grass:{ color: '#F82' }
 };
 function drawAsset(o,x,y){
-  var i=0;
+  var i=0,
+      x,y,w,h;
 
   for(;i<o.length;i++){
-    ctx.fillRect(o[i][0]*assets.scale+x,o[i][1]*assets.scale+y,o[i][2]*assets.scale,o[i][3]*assets.scale);
+    x = o[i][0]*assets.scale+x;
+    y = o[i][1]*assets.scale+y;
+    w = o[i][2]*assets.scale;
+    h = o[i][3]*assets.scale
+    ctx.fillRect(x,y,w,h);
   } //end for
 };
 //The player object
