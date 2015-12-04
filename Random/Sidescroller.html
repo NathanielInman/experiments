@@ -30,23 +30,23 @@ function drawAsset(o,x,y){
 };
 //The player object
 var player={
-  x:v.w/2, //x location
-  y:0, //y location
-  w:50, //width of player
-  h:50, //height of player
-  s:1, //speed of the player
-  c:'#BDB', //color of player
+  x: v.w/2, //x location
+  y: 0, //y location
+  w: 50, //width of player
+  h: 50, //height of player
+  s: 1, //speed of the player
+  c: '#BDB', //color of player
   key:{ //key activation must be smooth and staged so multiple keys can be pressed at the same time
-    right:false,
-    up:false,
-    left:false
+    right: false,
+    up: false,
+    left: false
   },
   jump:{
-    is:false, //are we currently jumping
-    d:1, //direction of jump
-    a:100, //destination jump value
-    c:0,  //current jump value
-    s:0.1 //speed of the
+    is: false, //are we currently jumping
+    d: 1, //direction of jump
+    a: 100, //destination jump value
+    c: 0,  //current jump value
+    s: 0.1 //speed of the
   },
   dirty:[]
 };
