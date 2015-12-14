@@ -48,23 +48,22 @@ var player={
     c: 0,  //current jump value
     s: 0.1 //speed of the
   },
-  dirty:[]
-};
-//All actions
-var action={
-  jump:function jump(object){
-    if(object.jump.d==1){
-      object.jump.is=true;
-      object.dirty.push(function(){object.jump.c++;});
-      if(object.jump.c==object.jump.a)object.jump.d=0;
-    }else{
-      object.dirty.push(function(){object.jump.c--;});
-    } //end if
-    if(object.jump.c!==0||object.jump.d==1){
-      setTimeout(function(){action.jump(object);},1);
-    }else{
-      object.jump.is=false;object.jump.d=1;
-    } //end if
+  dirty:[],
+  perform:{
+    jump:function jump(object){
+      if(object.jump.d==1){
+        object.jump.is=true;
+        object.dirty.push(function(){object.jump.c++;});
+        if(object.jump.c==object.jump.a)object.jump.d=0;
+      }else{
+        object.dirty.push(function(){object.jump.c--;});
+      } //end if
+      if(object.jump.c!==0||object.jump.d==1){
+        setTimeout(function(){jump(object)},1);
+      }else{
+        object.jump.is=false;object.jump.d=1;
+      } //end if
+    }
   }
 };
 //the main drawing function
@@ -81,7 +80,7 @@ var draw=function draw(){
     } //end if
   } //end if
   if(player.key.up){
-    if(!player.jump.is)action.jump(player);
+    if(!player.jump.is)player.perform.jump(player);
   } //end if
   //draw the ground
   for(var i=0;i<v.w/assets.scale;i++){
