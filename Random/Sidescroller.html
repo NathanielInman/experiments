@@ -67,7 +67,7 @@ var player={
   }
 };
 //the main drawing function
-var draw=function draw(){
+function draw(){
   //Handle the key staging
   if(player.key.left){
     if(player.x-player.w/2-1>0){ //player can't walk off the screen
@@ -100,7 +100,7 @@ var draw=function draw(){
   } //end if
   ctx.fillStyle=player.c;
   ctx.fillRect(player.x-player.w/2,v.h-assets.scale-player.h-player.y-player.jump.c,player.w,player.h);
-  setTimeout('draw()',1);
+  setTimeout(draw,1);
 };
 
 //Event handlers
