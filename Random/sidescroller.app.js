@@ -12,6 +12,8 @@ function drawAsset(o,ox,oy){
 };
 //the main drawing function
 function draw(){
+  var x,y,w,h;
+
   //Handle the key staging
   if(player.key.left){
     if(player.x-player.w/2-1>0){ //player can't walk off the screen
@@ -35,15 +37,23 @@ function draw(){
   } //end for
   //draw the player
   if(player.dirty.length>0){
+    x = player.x-player.w/2;
+    y = v.h-assets.scale-player.h-player.y-player.jump.c;
+    w = player.w;
+    h = player.h;
     ctx.fillStyle='#000';
-    ctx.fillRect(player.x-player.w/2,v.h-assets.scale-player.h-player.y-player.jump.c,player.w,player.h);
+    ctx.fillRect(x,y,w,h);
     for(operation in player.dirty){
       player.dirty[operation]();
     } //end for
     player.dirty=[];
   } //end if
   ctx.fillStyle=player.c;
-  ctx.fillRect(player.x-player.w/2,v.h-assets.scale-player.h-player.y-player.jump.c,player.w,player.h);
+  x = player.x - player.w/2;
+  y = v.h-assets.scale-player.h-player.y-player.jump.c;
+  w = player.w;
+  h = player.h;
+  ctx.fillRect(x,y,w,h);
   setTimeout(draw,1);
 };
 
