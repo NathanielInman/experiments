@@ -37,10 +37,10 @@ function draw(){
   } //end for
   //draw the player
   if(player.dirty.length>0){
-    x = player.x-player.w/2;
-    y = v.h-assets.scale-player.h-player.y-player.jump.c;
-    w = player.w;
-    h = player.h;
+    x = player.x-player.w/2-1;
+    y = v.h-assets.scale-player.h-player.y-player.jump.c-1;
+    w = player.w+2;
+    h = player.h+1;
     ctx.fillStyle='#000';
     ctx.fillRect(x,y,w,h);
     for(operation in player.dirty){
