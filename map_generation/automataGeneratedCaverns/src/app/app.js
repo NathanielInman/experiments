@@ -34,6 +34,8 @@ import {AGC} from './common/main';
             ctx.fillStyle='#000';
           }else if(map[i][j].type===2){
             ctx.fillStyle='#333';
+          }else if(map[i][j].type===3){
+            ctx.fillStyle='#F00';
           }else{
             ctx.fillStyle='#383';
           } //end if

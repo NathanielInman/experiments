@@ -36,6 +36,7 @@
  * map.type  - Alters from intial value to one of the required*
  *             constants visible above                        *
 \**************************************************************/
+const tileRemoved = 3;
 const tileDirtWall = 2;
 const tileDirtFloor = 1;
 const tileUnused = 0;
@@ -82,7 +83,7 @@ export function AGC(map,size,type){
   runIterations(1,2);
   runIterations(1,1);
   runIterations(1,0);
-  //clipOrphaned();
+  clipOrphaned();
   buildWalls();
   return true;
 
@@ -154,7 +155,7 @@ export function AGC(map,size,type){
         node={x:i+1,y:j};
         unmapped.push(node);map[i+1][j].loc=-1;
       } //end if
-      if(j<size&&map[i][j+1].type==tileDirtFloor&&!map[i][j+1].loc==0){
+      if(j<size&&map[i][j+1].type==tileDirtFloor&&!map[i][j+1].loc){
         node={x:i,y:j+1};
         unmapped.push(node);map[i][j+1].loc=-1;
       } //end if
@@ -179,7 +180,7 @@ export function AGC(map,size,type){
     };
     for(var i=0;i<size;i++){
       for(var j=0;j<size;j++){
-        if(map[i][j].type==tileDirtFloor&&map[i][j].loc==0){
+        if(map[i][j].type==tileDirtFloor&&!map[i][j].loc){
           traverse(++loc_max.cur,i,j);
         } //end if
       } //end for
@@ -187,7 +188,7 @@ export function AGC(map,size,type){
     for(var i=0;i<size;i++){
       for(var j=0;j<size;j++){
         if(map[i][j].type==tileDirtFloor&&map[i][j].loc!=loc_max.num){
-          map[i][j].type=tileUnused;
+          map[i][j].type=tileRemoved;
         } //end if
       } //end for
     } //end for
