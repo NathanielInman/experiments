@@ -19,6 +19,7 @@ import {AGC} from './common/main';
         map = [];
 
     const tileDirtFloor = 1;
+    const tileUnused = 0;
 
     class Sector{
       constructor(){
@@ -27,6 +28,9 @@ import {AGC} from './common/main';
       }
       isFloor(){
         return this.type === tileDirtFloor;
+      }
+      isEmpty(){
+        return this.type === tileUnused;
       }
     }
     for (let i=0;i<=size;i++){

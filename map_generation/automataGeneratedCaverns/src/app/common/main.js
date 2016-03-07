@@ -58,9 +58,9 @@ export function AGC(map,size,type){
       iterations = 1,
       randomTile; //helps with noise
 
-  for(i=0;i<=size;i++){
+  for(let i=0;i<=size;i++){
     map2[i] = [];
-    for(j=0;j<=size;j++){
+    for(let j=0;j<=size;j++){
       map2[i][j]= new Sector();
     } //end for
   } //end for
