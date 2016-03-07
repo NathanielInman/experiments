@@ -95,7 +95,7 @@ export function AGC(map,size,type){
     var result=0,
         i = iterations%2===0;
 
-    if(x>0&&y>0&&type!=2){
+    if(x>0&&y>0&&type!==2){
       if(i&&map[x-1][y-1].isFloor()||!i&&map2[x-1][y-1].isFloor()){
         result++;
       } //end if
@@ -105,7 +105,7 @@ export function AGC(map,size,type){
         result++;
       } //end if
     } //end if
-    if(x>0&&y<size&&type!=2){
+    if(x>0&&y<size&&type!==2){
       if(i&&map[x-1][y+1].isFloor()||!i&&map2[x-1][y+1].isFloor()){
         result++;
       } //end if
@@ -120,7 +120,7 @@ export function AGC(map,size,type){
         result++;
       } //end if
     } //end if
-    if(x<size&&y>0&&type!=2){
+    if(x<size&&y>0&&type!==2){
       if(i&&map[x+1][y-1].isFloor()||!i&&map2[x+1][y-1].isFloor()){
         result++;
       } //end if
@@ -130,13 +130,13 @@ export function AGC(map,size,type){
         result++;
       } //end if
     } //end if
-    if(x<size&&y<size&&type!=2){
+    if(x<size&&y<size&&type!==2){
       if(i&&map[x+1][y+1].isFloor()||!i&&map2[x+1][y+1].isFloor()){
         result++;
       } //end if
     } //end if
     return result;
-  };
+  } //end testSides()
 
   // Remove orphaned locations
   function clipOrphaned(){
@@ -144,58 +144,63 @@ export function AGC(map,size,type){
         loc_max = {val:0,cur:0,num:0,max:0},
         unmapped=[];
 
+    for(let i=0;i<size;i++){
+      for(let j=0;j<size;j++){
+        if(map[i][j].isFloor()&&!map[i][j].loc){
+          traverse(++loc_max.cur,i,j);
+        } //end if
+      } //end for
+    } //end for
+    for(let i=0;i<size;i++){
+      for(let j=0;j<size;j++){
+        if(map[i][j].isFloor()&&map[i][j].loc!==loc_max.num){
+          map[i][j].type=tileRemoved;
+        } //end if
+      } //end for
+    } //end for
+
     //look around at location and push unmapped nodes to stack
     function traverse_look(i,j){
       if(i>0&&map[i-1][j].isFloor()&&!map[i-1][j].loc){
-        node={x:i-1,y:j};
+        node={x: i-1,y: j};
         unmapped.push(node);map[i-1][j].loc=-1;
       } //end if
       if(j>0&&map[i][j-1].isFloor()&&!map[i][j-1].loc){
-        node={x:i,y:j-1};
+        node={x: i,y: j-1};
         unmapped.push(node);map[i][j-1].loc=-1;
       } //end if
       if(i<size&&map[i+1][j].isFloor()&&!map[i+1][j].loc){
-        node={x:i+1,y:j};
+        node={x: i+1, y:j};
         unmapped.push(node);map[i+1][j].loc=-1;
       } //end if
       if(j<size&&map[i][j+1].isFloor()&&!map[i][j+1].loc){
-        node={x:i,y:j+1};
+        node={x: i,y: j+1};
         unmapped.push(node);map[i][j+1].loc=-1;
       } //end if
     } //end traverse_look()
 
     // Traverse a location completely
     function traverse(curLoc,i,j){
-      var newLoc = node;
+      var newLoc = node,
+          x = i, y = j;
+
       loc_max.val=1; //set the current mas size to 1
-      map[i][j].loc=curLoc;
-      traverse_look(i,j);
+      map[x][y].loc=curLoc;
+      traverse_look(x,y);
       while(unmapped.length>0){
-        newLoc=unmapped.pop();i=newLoc.x;j=newLoc.y;
-        traverse_look(i,j);
-        map[i][j].loc=curLoc;
+        newLoc=unmapped.pop();
+        x=newLoc.x;
+        y=newLoc.y;
+        traverse_look(x,y);
+        map[x][y].loc=curLoc;
         loc_max.val++;
         if(loc_max.val>loc_max.max){
           loc_max.max=loc_max.val;
           loc_max.num=loc_max.cur;
         } //end manage maximum mass
       } //end while
-    };
-    for(var i=0;i<size;i++){
-      for(var j=0;j<size;j++){
-        if(map[i][j].isFloor()&&!map[i][j].loc){
-          traverse(++loc_max.cur,i,j);
-        } //end if
-      } //end for
-    } //end for
-    for(var i=0;i<size;i++){
-      for(var j=0;j<size;j++){
-        if(map[i][j].isFloor()&&map[i][j].loc!=loc_max.num){
-          map[i][j].type=tileRemoved;
-        } //end if
-      } //end for
-    } //end for
-  }; //end function
+    } //end traverse()
+  } //end function
 
   // Cavern generation
   function runIterations(iterations,type){
@@ -207,7 +212,7 @@ export function AGC(map,size,type){
       for(let i=0;i<size;i++){
         for(let j=0;j<size;j++){
           mooresNeighborhood=testSides(i,j,size,type);
-          if(type==0){
+          if(type===0){
             if(t&&map[i][j].isFloor()||!t&&map2[i][j].isFloor()){
               if(mooresNeighborhood>=4){
                 if(t){
@@ -223,7 +228,7 @@ export function AGC(map,size,type){
                 } //end if
               } //end if
             }else{
-              if(mooresNeighborhood>=5){ 
+              if(mooresNeighborhood>=5){
                 if(t){
                   map2[i][j].type=tileDirtFloor;
                 }else{
@@ -237,10 +242,10 @@ export function AGC(map,size,type){
                 } //end if
               } //end if
             } //end if
-          }else if(type==1){
+          }else if(type===1){
             if(t&&map[i][j].isFloor()||!t&&map2[i][j].isFloor()){
-               if(mooresNeighborhood>=4){
-                 if(t){
+              if(mooresNeighborhood>=4){
+                if(t){
                    map2[i][j].type=tileDirtFloor;
                  }else{
                    map[i][j].type=tileDirtFloor;
@@ -267,9 +272,9 @@ export function AGC(map,size,type){
                 } //end if
               } //end if
             } //end if
-          }else if(type==2){
+          }else if(type===2){
             if(t&&map[i][j].isEmpty()||!t&&map2[i][j].isEmpty()){
-              if(mooresNeighborhood==4){
+              if(mooresNeighborhood===4){
                 if(t){
                   map2[i][j].type=tileDirtFloor;
                 }else{
@@ -290,12 +295,12 @@ export function AGC(map,size,type){
       } //end for
       iterations--;
     }while(iterations>0);
-  }; //end runIterations
+  } //end runIterations
 
   function buildWalls(){
-    for(var i=0;i<size;i++){
-      for(var j=0;j<size;j++){
-        if(map[i][j].type==tileDirtFloor){
+    for(let i=0;i<size;i++){
+      for(let j=0;j<size;j++){
+        if(map[i][j].isFloor()){
           if(i>0){ //to the left
             if(map[i-1][j].isEmpty())map[i-1][j].type=tileDirtWall;
           } //end if
