@@ -58,7 +58,6 @@ export function AGC(map,size,type){
       iterations = 1,
       randomTile; //helps with noise
 
-  console.log('agc');
   for(i=0;i<=size;i++){
     map2[i] = [];
     for(j=0;j<=size;j++){
@@ -69,8 +68,8 @@ export function AGC(map,size,type){
   // Start off by creating the secondary map
   // and generating some noise on the map specifying if the
   // iteration is odd or even
-  for(var i=0;i<size;i++){
-    for(var j=0;j<size;j++){
+  for(let i=0;i<size;i++){
+    for(let j=0;j<size;j++){
       randomTile = Math.floor(Math.random()*99);
       randomTile = randomTile<45?tileUnused:tileDirtFloor;
       if(iterations%2===0){
@@ -140,8 +139,8 @@ export function AGC(map,size,type){
 
   // Remove orphaned locations
   function clipOrphaned(){
-    var node = {x:0,y:0},
-        loc_max = {val:0,cur:0,num:0,max:0},
+    var node = {x: 0,y: 0},
+        loc_max = {val: 0,cur: 0,num: 0,max: 0},
         unmapped=[];
 
     for(let i=0;i<size;i++){
@@ -170,7 +169,7 @@ export function AGC(map,size,type){
         unmapped.push(node);map[i][j-1].loc=-1;
       } //end if
       if(i<size&&map[i+1][j].isFloor()&&!map[i+1][j].loc){
-        node={x: i+1, y:j};
+        node={x: i+1,y: j};
         unmapped.push(node);map[i+1][j].loc=-1;
       } //end if
       if(j<size&&map[i][j+1].isFloor()&&!map[i][j+1].loc){
@@ -220,57 +219,45 @@ export function AGC(map,size,type){
                 }else{
                   map[i][j].type=tileDirtFloor;
                 } //end if
+              }else if(t){
+                map2[i][j].type=tileUnused;
               }else{
-                if(t){
-                  map2[i][j].type=tileUnused;
-                }else{
-                  map[i][j].type=tileUnused;
-                } //end if
+                map[i][j].type=tileUnused;
               } //end if
+            }else if(mooresNeighborhood>=5){
+              if(t){
+                map2[i][j].type=tileDirtFloor;
+              }else{
+                map[i][j].type=tileDirtFloor;
+              } //end if
+            }else if(t){
+              map2[i][j].type=tileUnused;
             }else{
-              if(mooresNeighborhood>=5){
-                if(t){
-                  map2[i][j].type=tileDirtFloor;
-                }else{
-                  map[i][j].type=tileDirtFloor;
-                } //end if
-              }else{
-                if(t){
-                  map2[i][j].type=tileUnused;
-                }else{
-                  map[i][j].type=tileUnused;
-                } //end if
-              } //end if
+              map[i][j].type=tileUnused;
             } //end if
           }else if(type===1){
             if(t&&map[i][j].isFloor()||!t&&map2[i][j].isFloor()){
               if(mooresNeighborhood>=4){
                 if(t){
-                   map2[i][j].type=tileDirtFloor;
-                 }else{
-                   map[i][j].type=tileDirtFloor;
-                 } //end if
-              }else{
-                if(t){
-                  map2[i][j].type=tileUnused;
-                }else{
-                  map[i][j].type=tileUnused;
-                } //end if
-              } //end if
-            }else{
-              if(mooresNeighborhood>=5){ 
-                if(t){
                   map2[i][j].type=tileDirtFloor;
                 }else{
                   map[i][j].type=tileDirtFloor;
                 } //end if
+              }else if(t){
+                map2[i][j].type=tileUnused;
               }else{
-                if(t){
-                  map2[i][j].type=tileUnused;
-                }else{
-                  map[i][j].type=tileUnused;
-                } //end if
+                map[i][j].type=tileUnused;
               } //end if
+            }else if(mooresNeighborhood>=5){
+              if(t){
+                map2[i][j].type=tileDirtFloor;
+              }else{
+                map[i][j].type=tileDirtFloor;
+              } //end if
+            }else if(t){
+              map2[i][j].type=tileUnused;
+            }else{
+              map[i][j].type=tileUnused;
             } //end if
           }else if(type===2){
             if(t&&map[i][j].isEmpty()||!t&&map2[i][j].isEmpty()){
@@ -293,8 +280,8 @@ export function AGC(map,size,type){
           } //end if
         } //end for
       } //end for
-      iterations--;
-    }while(iterations>0);
+      t--;
+    }while(t>0);
   } //end runIterations
 
   function buildWalls(){
