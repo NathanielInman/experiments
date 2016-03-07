@@ -15,13 +15,24 @@ import {AGC} from './common/main';
       <span style="color:red;"><br/>Canvas isn't supported in your browser.</span>
     </p>`;
   }else{
-    var size = 41,
-        map = new Array(size);
+    let size = 41,
+        map = [];
 
+    const tileDirtFloor = 1;
+
+    class Sector{
+      constructor(){
+        this.type = 0;
+        this.loc = 0;
+      }
+      isFloor(){
+        return this.type === tileDirtFloor;
+      }
+    }
     for (let i=0;i<=size;i++){
-      map[i] = new Array(size);
+      map[i] = [];
       for(let j=0;j<=size;j++){
-        map[i][j]={type:0};
+        map[i][j]= new Sector();
       } //end for
     } //end for
     if(AGC(map,size,3)){

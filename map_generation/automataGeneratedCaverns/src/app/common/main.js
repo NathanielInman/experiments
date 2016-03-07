@@ -47,7 +47,10 @@ class Sector{
     this.loc = 0;
   }
   isFloor(){
-    return this.type == tileDirtFloor;
+    return this.type === tileDirtFloor;
+  }
+  isEmpty(){
+    return this.type === tileUnused;
   }
 }
 export function AGC(map,size,type){
@@ -143,19 +146,19 @@ export function AGC(map,size,type){
 
     //look around at location and push unmapped nodes to stack
     function traverse_look(i,j){
-      if(i>0&&map[i-1][j].type==tileDirtFloor&&!map[i-1][j].loc){
+      if(i>0&&map[i-1][j].isFloor()&&!map[i-1][j].loc){
         node={x:i-1,y:j};
         unmapped.push(node);map[i-1][j].loc=-1;
       } //end if
-      if(j>0&&map[i][j-1].type==tileDirtFloor&&!map[i][j-1].loc){
+      if(j>0&&map[i][j-1].isFloor()&&!map[i][j-1].loc){
         node={x:i,y:j-1};
         unmapped.push(node);map[i][j-1].loc=-1;
       } //end if
-      if(i<size&&map[i+1][j].type==tileDirtFloor&&!map[i+1][j].loc){
+      if(i<size&&map[i+1][j].isFloor()&&!map[i+1][j].loc){
         node={x:i+1,y:j};
         unmapped.push(node);map[i+1][j].loc=-1;
       } //end if
-      if(j<size&&map[i][j+1].type==tileDirtFloor&&!map[i][j+1].loc){
+      if(j<size&&map[i][j+1].isFloor()&&!map[i][j+1].loc){
         node={x:i,y:j+1};
         unmapped.push(node);map[i][j+1].loc=-1;
       } //end if
@@ -180,14 +183,14 @@ export function AGC(map,size,type){
     };
     for(var i=0;i<size;i++){
       for(var j=0;j<size;j++){
-        if(map[i][j].type==tileDirtFloor&&!map[i][j].loc){
+        if(map[i][j].isFloor()&&!map[i][j].loc){
           traverse(++loc_max.cur,i,j);
         } //end if
       } //end for
     } //end for
     for(var i=0;i<size;i++){
       for(var j=0;j<size;j++){
-        if(map[i][j].type==tileDirtFloor&&map[i][j].loc!=loc_max.num){
+        if(map[i][j].isFloor()&&map[i][j].loc!=loc_max.num){
           map[i][j].type=tileRemoved;
         } //end if
       } //end for
@@ -198,23 +201,22 @@ export function AGC(map,size,type){
   function runIterations(iterations,type){
     var procedure=0,
         mooresNeighborhood,
-        evenIteration = iterations%2===0;
+        t = iterations%2===0;
 
     do{
       for(let i=0;i<size;i++){
         for(let j=0;j<size;j++){
           mooresNeighborhood=testSides(i,j,size,type);
           if(type==0){
-            if(evenIteration&&map[i][j].type==tileDirtFloor||
-               !evenIteration&&map2[i][j].type==tileDirtFloor){
+            if(t&&map[i][j].isFloor()||!t&&map2[i][j].isFloor()){
               if(mooresNeighborhood>=4){
-                if(evenIteration){
+                if(t){
                   map2[i][j].type=tileDirtFloor;
                 }else{
                   map[i][j].type=tileDirtFloor;
                 } //end if
               }else{
-                if(evenIteration){
+                if(t){
                   map2[i][j].type=tileUnused;
                 }else{
                   map[i][j].type=tileUnused;
@@ -222,13 +224,13 @@ export function AGC(map,size,type){
               } //end if
             }else{
               if(mooresNeighborhood>=5){ 
-                if(evenIteration){
+                if(t){
                   map2[i][j].type=tileDirtFloor;
                 }else{
                   map[i][j].type=tileDirtFloor;
                 } //end if
               }else{
-                if(evenIteration){
+                if(t){
                   map2[i][j].type=tileUnused;
                 }else{
                   map[i][j].type=tileUnused;
@@ -236,16 +238,15 @@ export function AGC(map,size,type){
               } //end if
             } //end if
           }else if(type==1){
-            if(evenIteration&&map[i][j].type==tileDirtFloor||
-               !evenIteration&&map2[i][j].type==tileDirtFloor){
+            if(t&&map[i][j].isFloor()||!t&&map2[i][j].isFloor()){
                if(mooresNeighborhood>=4){
-                 if(evenIteration){
+                 if(t){
                    map2[i][j].type=tileDirtFloor;
                  }else{
                    map[i][j].type=tileDirtFloor;
                  } //end if
               }else{
-                if(evenIteration){
+                if(t){
                   map2[i][j].type=tileUnused;
                 }else{
                   map[i][j].type=tileUnused;
@@ -253,13 +254,13 @@ export function AGC(map,size,type){
               } //end if
             }else{
               if(mooresNeighborhood>=5){ 
-                if(evenIteration){
+                if(t){
                   map2[i][j].type=tileDirtFloor;
                 }else{
                   map[i][j].type=tileDirtFloor;
                 } //end if
               }else{
-                if(evenIteration){
+                if(t){
                   map2[i][j].type=tileUnused;
                 }else{
                   map[i][j].type=tileUnused;
@@ -267,19 +268,17 @@ export function AGC(map,size,type){
               } //end if
             } //end if
           }else if(type==2){
-            if(evenIteration&&map[i][j].type==tileUnused||
-               !evenIteration&&map2[i][j].type==tileUnused){
+            if(t&&map[i][j].isEmpty()||!t&&map2[i][j].isEmpty()){
               if(mooresNeighborhood==4){
-                if(evenIteration){
+                if(t){
                   map2[i][j].type=tileDirtFloor;
                 }else{
                   map[i][j].type=tileDirtFloor;
                 } //end if
               } //end if
-            }else if(evenIteration&&map[i][j].type==tileDirtFloor||
-                     !evenIteration&&map2[i][j].type==tileDirtFloor){
+            }else if(t&&map[i][j].isFloor()||!t&&map2[i][j].isFloor()){
               if(mooresNeighborhood<=2){
-                if(evenIteration){
+                if(t){
                   map2[i][j].type=tileUnused;
                 }else{
                   map[i][j].type=tileUnused;
@@ -298,15 +297,35 @@ export function AGC(map,size,type){
       for(var j=0;j<size;j++){
         if(map[i][j].type==tileDirtFloor){
           if(i>0){ //to the left
-            if(map[i-1][j].type==tileUnused)map[i-1][j  ].type=tileDirtWall;
+            if(map[i-1][j].isEmpty())map[i-1][j].type=tileDirtWall;
           } //end if
-          if(i<size         ){if(map[i+1][j  ].type==tileUnused)map[i+1][j  ].type=tileDirtWall;} //to the right
-          if(j>0            ){if(map[i  ][j-1].type==tileUnused)map[i  ][j-1].type=tileDirtWall;} //top
-          if(j<size         ){if(map[i  ][j+1].type==tileUnused)map[i  ][j+1].type=tileDirtWall;} //bottom
-          if(i>0&&j>0       ){if(map[i-1][j-1].type==tileUnused)map[i-1][j-1].type=tileDirtWall;} //topleft
-          if(i<size&&j<size ){if(map[i+1][j+1].type==tileUnused)map[i+1][j+1].type=tileDirtWall;} //bottomright
-          if(i>0&&j<size    ){if(map[i-1][j+1].type==tileUnused)map[i-1][j+1].type=tileDirtWall;} //bottomleft
-          if(i<size&&j>0    ){if(map[i+1][j-1].type==tileUnused)map[i+1][j-1].type=tileDirtWall;} //topright
+          if(i<size){ //to the right
+            if(map[i+1][j].isEmpty())map[i+1][j].type=tileDirtWall;
+          } // end if
+          if(j>0){ //top
+            if(map[i][j-1].isEmpty())map[i][j-1].type=tileDirtWall;
+          } // end if
+          if(j<size){ //bottom
+            if(map[i][j+1].isEmpty())map[i][j+1].type=tileDirtWall;
+          } // end if
+          if(i>0&&j>0){ //topleft
+            if(map[i-1][j-1].isEmpty())map[i-1][j-1].type=tileDirtWall;
+          } // end if
+          if(i<size&&j<size){ //bottomright
+            if(map[i+1][j+1].isEmpty())map[i+1][j+1].type=tileDirtWall;
+          } // end if
+          if(i>0&&j<size){ //bottomleft
+            if(map[i-1][j+1].isEmpty())map[i-1][j+1].type=tileDirtWall;
+          } // end if
+          if(i<size&&j>0){ //topright
+            if(map[i+1][j-1].isEmpty())map[i+1][j-1].type=tileDirtWall;
+          } // end if
+          if(i===0&&map[i][j].isFloor()||
+             i===size-1&map[i][j].isFloor()||
+             j===0&&map[i][j].isFloor()||
+             j===size-1&&map[i][j].isFloor()){
+            map[i][j].type=tileDirtWall;
+          } //end if
         } //end if
       } //end for
     } //end for
