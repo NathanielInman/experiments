@@ -45,19 +45,19 @@ import {PHS} from './common/main';
         return this.type === tileCorridor;
       }
       setEmpty(){
-        return this.type = tileUnused;
+        this.type = tileUnused;
       }
       setFloor(){
-        return this.type = tileDirtFloor;
+        this.type = tileDirtFloor;
       }
       setWall(){
-        return this.type = tileDirtWall;
+        this.type = tileDirtWall;
       }
       setDoor(){
-        return this.type = tileDoor;
+        this.type = tileDoor;
       }
       setCorridor(){
-        return this.type = tileCorridor;
+        this.type = tileCorridor;
       }
       isWalkable(){
         var walkable = false;
