@@ -1,5 +1,5 @@
 import {Easel} from './vendor/easel';
-import {AGC} from './common/main';
+import {PHS} from './common/main';
 
 // Launch application if easel was able to create a canvas,
 // if it wasn't then we know canvas isn't supported
@@ -39,7 +39,7 @@ import {AGC} from './common/main';
         map[i][j]= new Sector();
       } //end for
     } //end for
-    if(AGC(map,size,3)){
+    if(PHS(map,size,Math.floor(size*.3))){
       let rw = v.w/size,
           rh = v.h/size;
 

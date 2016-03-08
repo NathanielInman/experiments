@@ -1,325 +1,381 @@
-/**************************************************************\
- * This function was created by Nathaniel Inman of The Other  *
- * Experiment Studio for use in the 2013 7DRL Three.RL. This  *
- * function performs Cellular Automata using 4:5r on a map    *
- * while saving the variables to the multidimensional map and *
- * returning a boolean on whether the map was made            *
- * successfully or not.                                       *
- * Originally I had to use a map array and then a secondary   *
- * map array to hold the upcoming map so that the current map *
- * information isn't conflicting with itself. This is because *
- * automata relies entirely on the entire maps state. The     *
- * problem with this is performance issues when iterating     *
- * through the entire secondary map information to throw onto *
- * the primary with each pull. To avoid this, i'll alternate  *
- * which map is the primary map each round. This effectively  *
- * just increases the required memory for the function to     *
- * operate instead of increasing additional processing time.  *
- *------------------------------------------------------------*
- *           R E Q U I R E D      C O N S T A N T S           *
- *------------------------------------------------------------*
- * tileUnused - Specifies which tile is the initialized value *
- * tileDirtFloor - The walkable areas of the map              *
- *------------------------------------------------------------*
- *           F U N C T I O N S    C O N T A I N E D           *
- *------------------------------------------------------------*
- * map_generateAGC() returns true/false on success            *
- *------------------------------------------------------------*
- *           R E Q U I R E D      V A R I A B L E S           *
- *------------------------------------------------------------*
- * map  - the main 2 dimensional array                        *
- *  | .type - distinguishes the tile type at the coordinate   *
- * size - the max size of x and y coordinates                 *
- *------------------------------------------------------------*
- *           R E T U R N E D      V A R I A B L E S           *
- *------------------------------------------------------------*
- * map.type  - Alters from intial value to one of the required*
- *             constants visible above                        *
-\**************************************************************/
-const tileRemoved = 3;
-const tileDirtWall = 2;
-const tileDirtFloor = 1;
 const tileUnused = 0;
+const tileDirtFloor = 1;
+const tileDirtWall = 2;
+const tileError = 3;
+const tileCorridor = 4;
+const tileDoor = 5;
+export function PHS(map,osize,deviation){
+  var cx=Math.floor(size/2),cy=Math.floor(size/2),
+      size=osize-Math.floor(Math.random()*deviation),
+      fail=0,win=0,val=0,roomNum;
 
-class Sector{
-  constructor(){
-    this.type = 0;
-    this.loc = 0;
-  }
-  isFloor(){
-    return this.type === tileDirtFloor;
-  }
-  isEmpty(){
-    return this.type === tileUnused;
-  }
-}
-export function AGC(map,size,type){
-  var map2 = [],
-      iterations = 1,
-      randomTile; //helps with noise
-
-  for(let i=0;i<=size;i++){
-    map2[i] = [];
-    for(let j=0;j<=size;j++){
-      map2[i][j]= new Sector();
-    } //end for
-  } //end for
-
-  // Start off by creating the secondary map
-  // and generating some noise on the map specifying if the
-  // iteration is odd or even
-  for(let i=0;i<size;i++){
-    for(let j=0;j<size;j++){
-      randomTile = Math.floor(Math.random()*99);
-      randomTile = randomTile<45?tileUnused:tileDirtFloor;
-      if(iterations%2===0){
-        map[i][j].type=randomTile;
-        map2[i][j].type=tileUnused;
+  if(size%2==0)size++;
+  var roomNum={
+    num:1,
+    done:[true], //add index 0 because num starts at 1
+    topLeftX:[0], //add index 0 because num starts at 1
+    topLeftY:[0], //add index 0 because num starts at 1
+    bottomRightX:[0], //add index 0 because num starts at 1
+    bottomRightY:[0] //add index 0 because num starts at 1
+  };
+  var direction=0;
+  /* functions */
+  var isRoomEqual=function(x,y,x2,y2){return map[x][y].roomNum==map[x2][y2].roomNum;};
+  var isRoom=function(x,y){return map[x][y].roomNum>0;};
+  var istileEmpty=function(x,y){return map[x][y].type==tileUnused||map[x][y].type==tileError;};
+  var istileCorridor=function(x,y){return map[x][y].type==tileCorridor;};
+  var istileDoor=function(x,y){return map[x][y].type==tileDoor;};
+  var istileDirtWall=function(x,y){return map[x][y].type==tileDirtWall;};
+  var isEmpty=function(x,y){return map[x][y].type==tileUnused;};
+  var setRoom=function(x,y,room){map[x][y].roomNum=room;map[x][y].type=tileDirtFloor;};
+  var setRoomType=function(x,y,type){map[x][y].name=type;};
+  var settileCorridor=function(x,y){map[x][y].type=tileCorridor;map[x][y].roomNum=0;};
+  var settileDoor=function(x,y){map[x][y].type=tileDoor;map[x][y].roomNum=0;};
+  var settileDirtWall=function(x,y){map[x][y].type=tileDirtWall;map[x][y].roomNum=0;};
+  var settileUnused=function(x,y){map[x][y].type=tileUnused;map[x][y].roomNum=0;};
+  var setEmpty=function(x,y){map[x][y].type=tileUnused;};
+  var getRoom=function(x,y){return map[x][y].roomNum;};
+  /* This function checks to see if the tileCorridors will create a square (we can't allow this, so we
+   * return true if they will, and prevent it in the move function */
+  var blocked=function(direction){
+    if(direction==NORTH||direction==SOUTH){
+      if(cx-6>=0){ //westward block
+        if(istileCorridor(cx-1,cy)&&istileCorridor(cx-6,cy+(direction==NORTH?-1:1))&&istileCorridor(cx-1,cy+(direction==NORTH?-6:6)))return true;
+      } //end if
+      if(cx+6<size){ //eastward block
+        if(istileCorridor(cx+1,cy)&&istileCorridor(cx+6,cy+(direction==NORTH?-1:1))&&istileCorridor(cx+1,cy+(direction==NORTH?-6:6)))return true;
+      } //end if
+    }else if(direction==EAST||direction==WEST){
+      if(cy-6>=0){ //northward block
+        if(istileCorridor(cx,cy-1)&&istileCorridor(cx+(direction==WEST?-1:1),cy-6)&&istileCorridor(cx+(direction==WEST?-6:6),cy-1))return true;
+      } //end if
+      if(cy+6<size){ //southward block
+        if(istileCorridor(cx,cy+1)&&istileCorridor(cx+(direction==WEST?-1:1),cy+6)&&istileCorridor(cx+(direction==WEST?-6:6),cy+1))return true;
+      } //end if
+    } //end if
+    return false;
+  }; //end function
+  /* Carve out a path for the player in the direction specified*/
+  var move=function(direction){
+    if(direction==NORTH && !blocked(NORTH)){
+      if(istileCorridor(cx,cy-6)){
+        cy-=6;
+        return 2;
       }else{
-        map2[i][j].type=randomTile;
-        map[i][j].type=tileUnused;
-      } //end if
+        for(var i=cy;i>=cy-5;i--){
+          settileCorridor(cx,i);
+        } //end for
+        cy=i;
+      }return 1;
+    }else if(direction==EAST && !blocked(EAST)){
+      if(istileCorridor(cx+6,cy)){
+        cx+=6;
+        return 2;
+      }else{
+        for(var i=cx;i<=cx+5;i++){
+          settileCorridor(i,cy);
+        } //end for
+        cx=i;
+      }return 1;
+    }else if(direction==SOUTH && !blocked(SOUTH)){
+      if(istileCorridor(cx,cy+6)){
+        cy+=6;
+        return 2;
+      }else{
+        for(var i=cy;i<=cy+5;i++){
+          settileCorridor(cx,i);
+        } //end for
+        cy=i;
+      }return 1;
+    }else if(direction==WEST && !blocked(WEST)){
+      if(istileCorridor(cx-6,cy)){
+        cx-=6;
+        return 2;
+      }else{
+        for(var i=cx;i>=cx-5;i--){
+          settileCorridor(i,cy);
+        } //end for
+        cx=i;
+      }return 1;
+    } //end function
+    return 0;
+  }; //end move function
+  var generateRoomType=function(){
+    var roomType=Math.floor(Math.random()*25);
+    if(roomType==0){return "Bedroom";
+    }else if(roomType==1){return "Bathroom";
+    }else if(roomType==2){return "Lavatory";
+    }else if(roomType==3){return "Prison<br/>Block";
+    }else if(roomType==4){return "Kitchen";
+    }else if(roomType==5){return "Meat<br/>Hall";
+    }else if(roomType==6){return "Armory";
+    }else if(roomType==7){return "Barracks";
+    }else if(roomType==8){return "Library";
+    }else if(roomType==9){return "Storage";
+    }else if(roomType==10){return "Meeting<br/>Room";
+    }else if(roomType==11){return "Great<br/>Hall";
+    }else if(roomType==12){return "Cellar";
+    }else if(roomType==13){return "Pantry";
+    }else if(roomType==14){return "Larder";
+    }else if(roomType==15){return "Buttery";
+    }else if(roomType==16){return "Linen<br/>Room";
+    }else if(roomType==17){return "Wine<br/>Cellar";
+    }else if(roomType==18){return "Bar";
+    }else if(roomType==19){return "Servant<br/>Quarters";
+    }else if(roomType==20){return "Cooks<br/>Quarters";
+    }else if(roomType==21){return "Scullions<br/>Quarters";
+    }else if(roomType==22){return "Lauderer<br/>Quarters";
+    }else if(roomType==23){return "Cellerer<br/>Quarters";
+    }else if(roomType==24){return "Chapel";
+    }else{return "Unknown";}
+  }; //end generateRoomType function
+  var nextTotileCorridor=function(x,y){
+    if(x>0){if(istileCorridor(x-1,y))return true;}
+    if(y>0){if(istileCorridor(x,y-1))return true;}
+    if(x<size-1){if(istileCorridor(x+1,y))return true;}
+    if(y<size-1){if(istileCorridor(x,y+1))return true;}
+    if(x>0&&y>0){if(istileCorridor(x-1,y-1))return true;}
+    if(x>0&&y<size-1){if(istileCorridor(x-1,y+1))return true;}
+    if(x<size-1&&y>0){if(istileCorridor(x+1,y-1))return true;}
+    if(x<size-1&&y<size-1){if(istileCorridor(x+1,y+1))return true;}
+    return false;
+  }; //end nextToTileCorridor function
+  var drawtileDirtWalls=function(){
+    for(var i=0;i<size;i++){
+      for(var j=0;j<size;j++){
+        if(i==0&&!istileCorridor(i,j)){settileDirtWall(i,j);
+        }else if(j==0&&!istileCorridor(i,j)){settileDirtWall(i,j);
+        }else if(i==size-1&&!istileCorridor(i,j)){settileDirtWall(i,j);
+        }else if(j==size-1&&!istileCorridor(i,j)){settileDirtWall(i,j);
+        }else if(isEmpty(i,j)&&nextTotileCorridor(i,j)){settileDirtWall(i,j);}
+      } //end for
     } //end for
-  } //end for
-  runIterations(1,1);
-  runIterations(1,2);
-  runIterations(1,1);
-  runIterations(1,0);
-  clipOrphaned();
-  buildWalls();
-  return true;
-
-  // testSides determines moores neighborhood
-  function testSides(x,y,size){
-    var result=0,
-        i = iterations%2===0;
-
-    if(x>0&&y>0&&type!==2){
-      if(i&&map[x-1][y-1].isFloor()||!i&&map2[x-1][y-1].isFloor()){
-        result++;
-      } //end if
+  }; //end drawtileDirtWalls function
+  var fillRoom=function(x,y,x2,y2){
+    var fail=false;
+    var drawn=false;
+    var roomName=generateRoomType();
+    for(var j=y;j<=y2;j++){
+      for(var i=x;i<=x2;i++){
+        if(isEmpty(i,j)){
+          drawn=true;
+          setRoomType(i,j,roomName);
+          setRoom(i,j,roomNum.num);
+        }else{
+          fail=true;
+          break;
+        } //end if
+      } //end for
+      if(fail)break;
+    } //end for
+    if(drawn){
+      roomNum.topLeftX.push(x);roomNum.bottomRightX.push(x2);
+      roomNum.topLeftY.push(y);roomNum.bottomRightY.push(y2);
+      roomNum.done.push(false);
+      roomNum.num++;
     } //end if
-    if(x>0){
-      if(i&&map[x-1][y].isFloor()||!i&&map2[x-1][y].isFloor()){
-        result++;
-      } //end if
-    } //end if
-    if(x>0&&y<size&&type!==2){
-      if(i&&map[x-1][y+1].isFloor()||!i&&map2[x-1][y+1].isFloor()){
-        result++;
-      } //end if
-    } //end if
-    if(y>0){
-      if(i&&map[x][y-1].isFloor()||!i&&map2[x][y-1].isFloor()){
-        result++;
-      } //end if
-    } //end if
-    if(y<size){
-      if(i&&map[x][y+1].isFloor()||!i&&map2[x][y+1].isFloor()){
-        result++;
-      } //end if
-    } //end if
-    if(x<size&&y>0&&type!==2){
-      if(i&&map[x+1][y-1].isFloor()||!i&&map2[x+1][y-1].isFloor()){
-        result++;
-      } //end if
-    } //end if
-    if(x<size){
-      if(i&&map[x+1][y].isFloor()||!i&&map2[x+1][y].isFloor()){
-        result++;
-      } //end if
-    } //end if
-    if(x<size&&y<size&&type!==2){
-      if(i&&map[x+1][y+1].isFloor()||!i&&map2[x+1][y+1].isFloor()){
-        result++;
-      } //end if
-    } //end if
-    return result;
-  } //end testSides()
-
-  // Remove orphaned locations
-  function clipOrphaned(){
-    var node = {x: 0,y: 0},
-        loc_max = {val: 0,cur: 0,num: 0,max: 0},
-        unmapped=[];
-
-    for(let i=0;i<size;i++){
-      for(let j=0;j<size;j++){
-        if(map[i][j].isFloor()&&!map[i][j].loc){
-          traverse(++loc_max.cur,i,j);
+  }; //end fillRoom function
+  var allocateRooms=function(){
+    var minWidth=0,minHeight=0;
+    var maxWidth=5,maxHeight=5;
+    for(var i=0;i<size;i++){
+      for(var j=0;j<size;j++){
+        if(isEmpty(i,j)){
+          minWidth=0;minHeight=0;
+          main:
+          for(var y=i;y<size;y++){
+            for(var x=j;x<size;x++){
+              if(!isEmpty(y,x)){
+                if(y==i){
+                  if(x-j<3){
+                    break main;
+                  }else{
+                    minWidth=x-j;
+                  } //end if
+                }else if(x-j<minWidth&&y-i>=3){
+                  fillRoom(i,j,y-1,j+minWidth-1);
+                  break main;
+                }else{
+                  break main;
+                } //end if
+                break;
+              }else if(y-i>maxHeight){
+                fillRoom(i,j,y-1,j+minWidth-1);
+                break main;
+              }else if(x>minWidth&&minWidth!=0){ //out of bounds
+                break;
+              }else if(x-j>maxWidth && y==i){
+                minWidth=maxWidth-1;
+                break;
+              }//end if
+            } //end for
+          } //end for
         } //end if
       } //end for
     } //end for
-    for(let i=0;i<size;i++){
-      for(let j=0;j<size;j++){
-        if(map[i][j].isFloor()&&map[i][j].loc!==loc_max.num){
-          map[i][j].type=tileRemoved;
+  }; //end allocateRooms function
+  var partitionRooms=function(){
+    for(var i=1;i<size-1;i++){
+      for(var j=1;j<size-1;j++){
+        if(isRoom(i,j)&&isRoom(i,j-1)&&!isRoomEqual(i,j,i,j-1)){
+          settileDirtWall(i,j-1); //set the previous rooms tile to a wall instead
+        } //end if
+        if(isRoom(i,j)&&isRoom(i-1,j)&&!isRoomEqual(i,j,i-1,j)){
+          settileDirtWall(i-1,j); //set the previous rooms tile to a wall instead
+        } //end if
+        if(isRoom(i,j)&&isRoom(i+1,j+1)&&!isRoomEqual(i,j,i+1,j+1)){
+          settileDirtWall(i,j);
+        } //end if
+        if(isRoom(i,j-1)&&isRoom(i-1,j)&&!isRoom(i,j)&&!isRoomEqual(i,j-1,i-1,j)){
+          settileDirtWall(i-1,j);
+        } //end if
+        if(isEmpty(i,j)){
+          settileDirtWall(i,j); //set the to a wall
         } //end if
       } //end for
     } //end for
-
-    //look around at location and push unmapped nodes to stack
-    function traverse_look(i,j){
-      if(i>0&&map[i-1][j].isFloor()&&!map[i-1][j].loc){
-        node={x: i-1,y: j};
-        unmapped.push(node);map[i-1][j].loc=-1;
-      } //end if
-      if(j>0&&map[i][j-1].isFloor()&&!map[i][j-1].loc){
-        node={x: i,y: j-1};
-        unmapped.push(node);map[i][j-1].loc=-1;
-      } //end if
-      if(i<size&&map[i+1][j].isFloor()&&!map[i+1][j].loc){
-        node={x: i+1,y: j};
-        unmapped.push(node);map[i+1][j].loc=-1;
-      } //end if
-      if(j<size&&map[i][j+1].isFloor()&&!map[i][j+1].loc){
-        node={x: i,y: j+1};
-        unmapped.push(node);map[i][j+1].loc=-1;
-      } //end if
-    } //end traverse_look()
-
-    // Traverse a location completely
-    function traverse(curLoc,i,j){
-      var newLoc = node,
-          x = i, y = j;
-
-      loc_max.val=1; //set the current mas size to 1
-      map[x][y].loc=curLoc;
-      traverse_look(x,y);
-      while(unmapped.length>0){
-        newLoc=unmapped.pop();
-        x=newLoc.x;
-        y=newLoc.y;
-        traverse_look(x,y);
-        map[x][y].loc=curLoc;
-        loc_max.val++;
-        if(loc_max.val>loc_max.max){
-          loc_max.max=loc_max.val;
-          loc_max.num=loc_max.cur;
-        } //end manage maximum mass
-      } //end while
-    } //end traverse()
-  } //end function
-
-  // Cavern generation
-  function runIterations(iterations,type){
-    var procedure=0,
-        mooresNeighborhood,
-        t = iterations%2===0;
-
-    do{
-      for(let i=0;i<size;i++){
-        for(let j=0;j<size;j++){
-          mooresNeighborhood=testSides(i,j,size,type);
-          if(type===0){
-            if(t&&map[i][j].isFloor()||!t&&map2[i][j].isFloor()){
-              if(mooresNeighborhood>=4){
-                if(t){
-                  map2[i][j].type=tileDirtFloor;
-                }else{
-                  map[i][j].type=tileDirtFloor;
-                } //end if
-              }else if(t){
-                map2[i][j].type=tileUnused;
-              }else{
-                map[i][j].type=tileUnused;
-              } //end if
-            }else if(mooresNeighborhood>=5){
-              if(t){
-                map2[i][j].type=tileDirtFloor;
-              }else{
-                map[i][j].type=tileDirtFloor;
-              } //end if
-            }else if(t){
-              map2[i][j].type=tileUnused;
+  }; //end partitionRooms function
+  var drawtileDoors=function(){
+    var chance;
+    for(var i=1;i<size-1;i++){
+      for(var j=1;j<size-1;j++){
+        if(istileCorridor(i,j)){
+          if(i<size-2)if(istileDirtWall(i+1,j)&&isRoom(i+2,j)){ //South tileDirtWall room
+            /* check to see if there's another place for the tileDoor, and give *
+             * it a chance to be spawned instead of at the current location */
+            if(istileCorridor(i,j+1)&&istileDirtWall(i+1,j+1)&&isRoomEqual(i+2,j+1,i+2,j)){
+              chance=Math.floor(Math.random()*100);
             }else{
-              map[i][j].type=tileUnused;
+              chance=0;
+            }//end if
+            /* The tileDoor will be spawned here at a 50% chance if there's another *
+             * location for the tileDoor, elseif there is no other location for the *
+             * tileDoor, then it will be spawned here with a 100% chance            */
+            if(chance>80){
+              if(roomNum.done[getRoom(i+2,j)]==false){
+                roomNum.done[getRoom(i+2,j)]=true;
+                settileDoor(i+1,j);
+              } //end if
             } //end if
-          }else if(type===1){
-            if(t&&map[i][j].isFloor()||!t&&map2[i][j].isFloor()){
-              if(mooresNeighborhood>=4){
-                if(t){
-                  map2[i][j].type=tileDirtFloor;
-                }else{
-                  map[i][j].type=tileDirtFloor;
-                } //end if
-              }else if(t){
-                map2[i][j].type=tileUnused;
-              }else{
-                map[i][j].type=tileUnused;
-              } //end if
-            }else if(mooresNeighborhood>=5){
-              if(t){
-                map2[i][j].type=tileDirtFloor;
-              }else{
-                map[i][j].type=tileDirtFloor;
-              } //end if
-            }else if(t){
-              map2[i][j].type=tileUnused;
+          } //end if
+          if(j<size-2)if(istileDirtWall(i,j+1)&&isRoom(i,j+2)){ //East tileDirtWall room
+            /* check to see if there's another place for the tileDoor, and give *
+             * it a chance to be spawned instead of at the current location */
+            if(istileCorridor(i+1,j)&&istileDirtWall(i+1,j+1)&&isRoomEqual(i+1,j+2,i,j+2)){
+              chance=Math.floor(Math.random()*100);
             }else{
-              map[i][j].type=tileUnused;
-            } //end if
-          }else if(type===2){
-            if(t&&map[i][j].isEmpty()||!t&&map2[i][j].isEmpty()){
-              if(mooresNeighborhood===4){
-                if(t){
-                  map2[i][j].type=tileDirtFloor;
-                }else{
-                  map[i][j].type=tileDirtFloor;
-                } //end if
+              chance=100;
+            }//end if
+            /* The tileDoor will be spawned here at a 50% chance if there's another *
+             * location for the tileDoor, elseif there is no other location for the *
+             * tileDoor, then it will be spawned here with a 100% chance            */
+            if(chance>60){
+              if(roomNum.done[getRoom(i,j+2)]==false){
+                roomNum.done[getRoom(i,j+2)]=true;
+                settileDoor(i,j+1);
               } //end if
-            }else if(t&&map[i][j].isFloor()||!t&&map2[i][j].isFloor()){
-              if(mooresNeighborhood<=2){
-                if(t){
-                  map2[i][j].type=tileUnused;
-                }else{
-                  map[i][j].type=tileUnused;
-                } //end if
-              } //end if
+            }//end if
+          } //end if
+          if(i>2)if(istileDirtWall(i-1,j)&&isRoom(i-2,j)){ //west tileDirtWall room
+            /* check to see if there's another place for the tileDoor, and give *
+             * it a chance to be spawned instead of at the current location */
+            if(roomNum.done[getRoom(i-2,j)]==false){
+              roomNum.done[getRoom(i-2,j)]=true;
+              settileDoor(i-1,j);
             } //end if
+          } //end if
+          if(j>2)if(istileDirtWall(i,j-1)&&isRoom(i,j-2)){ //north tileDirtWall room
+            if(roomNum.done[getRoom(i,j-2)]==false){
+              roomNum.done[getRoom(i,j-2)]=true;
+              settileDoor(i,j-1);
+            } //end if
+          } //end if
+        } //end if
+      } //end for
+    } //end for
+  }; //end drawtileDoors function
+  var cleanMap=function(){
+    var isAbandoned=false;
+    
+    for(var q=1;q<roomNum.num;q++){
+      if(roomNum.done[q]==false){ //room was a failure, remove it
+        for(var i=roomNum.topLeftX[q];i<=roomNum.bottomRightX[q];i++){
+          for(var j=roomNum.topLeftY[q];j<=roomNum.bottomRightY[q];j++){
+            isAbandoned=true;
+            if(istileDirtWall(i,j)){
+              if(i>0)if(!istileDirtWall(i-1,j)&&!istileEmpty(i-1,j))isAbandoned=false; //check west
+              if(j>0)if(!istileDirtWall(i,j-1)&&!istileEmpty(i,j-1))isAbandoned=false; //check north
+              if(i<size-1)if(!istileDirtWall(i+1,j)&&!istileEmpty(i+1,j))isAbandoned=false; //check east
+              if(j<size-1)if(!istileDirtWall(i,j+1)&&!istileEmpty(i,j+1))isAbandoned=false; //check south
+              if(i>0&&j>0)if(!istileDirtWall(i-1,j-1)&&!istileEmpty(i-1,j-1))isAbandoned=false; //check northwest
+              if(i>0&&j<size-1)if(!istileDirtWall(i-1,j+1)&&!istileEmpty(i-1,j+1))isAbandoned=false; //check southwest
+              if(i<size-1&&j>0)if(!istileDirtWall(i+1,j-1)&&!istileEmpty(i+1,j-1))isAbandoned=false; //check northeast
+              if(i<size-1&&j<size-1)if(!istileDirtWall(i+1,j+1)&&!istileEmpty(i+1,j+1))isAbandoned=false; //check southeast
+            } //end if
+            if(map[i][j].type==tileDoor||map){map[i][j].type=tileDirtWall;isAbandoned=false;}
+            if(isAbandoned)map[i][j].type=tileError; //clear the current tile
+          } //end for
+        } //end for
+      }//end if
+    } //end if 
+    for(var i=0;i<size;i++){
+      for(var j=0;j<size;j++){
+        isAbandoned=true;
+        if(i>0)if(!istileDirtWall(i-1,j)&&!istileEmpty(i-1,j))isAbandoned=false; //check west
+        if(j>0)if(!istileDirtWall(i,j-1)&&!istileEmpty(i,j-1))isAbandoned=false; //check north
+        if(i<size-1)if(!istileDirtWall(i+1,j)&&!istileEmpty(i+1,j))isAbandoned=false; //check east
+        if(j<size-1)if(!istileDirtWall(i,j+1)&&!istileEmpty(i,j+1))isAbandoned=false; //check south
+        if(i>0&&j>0)if(!istileDirtWall(i-1,j-1)&&!istileEmpty(i-1,j-1))isAbandoned=false; //check northwest
+        if(i>0&&j<size-1)if(!istileDirtWall(i-1,j+1)&&!istileEmpty(i-1,j+1))isAbandoned=false; //check southwest
+        if(i<size-1&&j>0)if(!istileDirtWall(i+1,j-1)&&!istileEmpty(i+1,j-1))isAbandoned=false; //check northeast
+        if(i<size-1&&j<size-1)if(!istileDirtWall(i+1,j+1)&&!istileEmpty(i+1,j+1))isAbandoned=false; //check southeast
+        if(isAbandoned)settileUnused(i,j); //clear the current tile
+      } //end for
+    } //end for 
+  }; //end cleanMap function
+  var print=function(str){
+    if(str.length==1){return "0"+str;}else{return str;}
+  }; //end print function
+  var createCorridors=function(){
+    var carveDeadEnds=function(){
+      for(var i=1;i<size-1;i++){
+        for(var j=1;j<size-1;j++){
+          if(isEmpty(i,j) && istileCorridor(i-1,j) && istileCorridor(i+1,j)||
+          isEmpty(i,j) && istileCorridor(i,j-1) && istileCorridor(i,j+1)||
+          isEmpty(i,j) && istileCorridor(i-1,j) && istileCorridor(i,j+1) && istileCorridor(i-2,j) && istileCorridor(i,j+2)||
+          isEmpty(i,j) && istileCorridor(i,j+1) && istileCorridor(i+1,j) && istileCorridor(i,j+2) && istileCorridor(i+2,j)||
+          isEmpty(i,j) && istileCorridor(i+1,j) && istileCorridor(i,j-1) && istileCorridor(i+2,j) && istileCorridor(i,j-2)||
+          isEmpty(i,j) && istileCorridor(i,j-1) && istileCorridor(i-1,j) && istileCorridor(i,j-2) && istileCorridor(i-2,j)){
+            setEmpty(i-1,j);setEmpty(i-1,j-1);setEmpty(i-1,j+1);
+            setEmpty(i,j+1);setEmpty(i+1,j+1);setEmpty(i+1,j);
+            setEmpty(i+1,j-1);setEmpty(i,j-1);
           } //end if
         } //end for
       } //end for
-      t--;
-    }while(t>0);
-  } //end runIterations
-
-  function buildWalls(){
-    for(let i=0;i<size;i++){
-      for(let j=0;j<size;j++){
-        if(map[i][j].isFloor()){
-          if(i>0){ //to the left
-            if(map[i-1][j].isEmpty())map[i-1][j].type=tileDirtWall;
-          } //end if
-          if(i<size){ //to the right
-            if(map[i+1][j].isEmpty())map[i+1][j].type=tileDirtWall;
-          } // end if
-          if(j>0){ //top
-            if(map[i][j-1].isEmpty())map[i][j-1].type=tileDirtWall;
-          } // end if
-          if(j<size){ //bottom
-            if(map[i][j+1].isEmpty())map[i][j+1].type=tileDirtWall;
-          } // end if
-          if(i>0&&j>0){ //topleft
-            if(map[i-1][j-1].isEmpty())map[i-1][j-1].type=tileDirtWall;
-          } // end if
-          if(i<size&&j<size){ //bottomright
-            if(map[i+1][j+1].isEmpty())map[i+1][j+1].type=tileDirtWall;
-          } // end if
-          if(i>0&&j<size){ //bottomleft
-            if(map[i-1][j+1].isEmpty())map[i-1][j+1].type=tileDirtWall;
-          } // end if
-          if(i<size&&j>0){ //topright
-            if(map[i+1][j-1].isEmpty())map[i+1][j-1].type=tileDirtWall;
-          } // end if
-          if(i===0&&map[i][j].isFloor()||
-             i===size-1&map[i][j].isFloor()||
-             j===0&&map[i][j].isFloor()||
-             j===size-1&&map[i][j].isFloor()){
-            map[i][j].type=tileDirtWall;
-          } //end if
-        } //end if
-      } //end for
-    } //end for
-  } //end buildWalls()
+    }; //end carveDeadEnds function
+    while(fail<75&&win<size*3){
+      direction=Math.floor(Math.random()*4);
+      if(direction==0){//north
+        if(cy-7>=0){val=move(NORTH);if(val==0){fail++}else if(val==1){win++;}
+        }else{fail++;}
+      }else if(direction==1){//east
+        if(cx+7<size){val=move(EAST);if(val==0){fail++}else if(val==1){win++;}
+        }else{fail++;}
+      }else if(direction==2){//south
+        if(cy+7<size){val=move(SOUTH);if(val==0){fail++}else if(val==1){win++;}
+        }else{fail++;}
+      }else if(direction==3){//west
+        if(cx-7>=0){val=move(WEST);if(val==0){fail++}else if(val==1){win++;}
+        }else{fail++;}
+      } //end if
+    } //end while
+    carveDeadEnds();
+  } //end if
+  createCorridors();
+  drawtileDirtWalls();
+  allocateRooms();
+  partitionRooms();
+  drawtileDoors();
+  cleanMap();
+  return true;
 } //end function
