@@ -18,8 +18,12 @@ import {PHS} from './common/main';
     let size = 41,
         map = [];
 
-    const tileDirtFloor = 1;
     const tileUnused = 0;
+    const tileDirtFloor = 1;
+    const tileDirtWall = 2;
+    const tileError = 3;
+    const tileCorridor = 4;
+    const tileDoor = 5;
 
     class Sector{
       constructor(){
@@ -28,6 +32,14 @@ import {PHS} from './common/main';
       }
       isFloor(){
         return this.type === tileDirtFloor;
+      }
+      isWalkable(){
+        var walkable = false;
+
+        if(this.type===tileDirtFloor)walkable = true;
+        if(this.type===tileCorridor)walkable = true;
+        if(this.type===tileDoor)walkable = true;
+        return walkable;
       }
       isEmpty(){
         return this.type === tileUnused;
@@ -39,7 +51,7 @@ import {PHS} from './common/main';
         map[i][j]= new Sector();
       } //end for
     } //end for
-    if(PHS(map,size,Math.floor(size*.3))){
+    if(PHS(map,size,Math.floor(size*0.3))){
       let rw = v.w/size,
           rh = v.h/size;
 
@@ -51,6 +63,8 @@ import {PHS} from './common/main';
             ctx.fillStyle='#333';
           }else if(map[i][j].type===3){
             ctx.fillStyle='#F00';
+          }else if(map[i][j].type===5){
+            ctx.fillStyle='#F84';
           }else{
             ctx.fillStyle='#383';
           } //end if
