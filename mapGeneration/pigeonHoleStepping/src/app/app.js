@@ -21,7 +21,6 @@ import {PHS} from './common/main';
     const tileUnused = 0;
     const tileDirtFloor = 1;
     const tileDirtWall = 2;
-    const tileError = 3;
     const tileCorridor = 4;
     const tileDoor = 5;
 
@@ -30,8 +29,35 @@ import {PHS} from './common/main';
         this.type = 0;
         this.loc = 0;
       }
+      isEmpty(){
+        return this.type === tileUnused;
+      }
       isFloor(){
         return this.type === tileDirtFloor;
+      }
+      isWall(){
+        return this.type === tileDirtWall;
+      }
+      isDoor(){
+        return this.type === tileDoor;
+      }
+      isCorridor(){
+        return this.type === tileCorridor;
+      }
+      setEmpty(){
+        return this.type = tileUnused;
+      }
+      setFloor(){
+        return this.type = tileDirtFloor;
+      }
+      setWall(){
+        return this.type = tileDirtWall;
+      }
+      setDoor(){
+        return this.type = tileDoor;
+      }
+      setCorridor(){
+        return this.type = tileCorridor;
       }
       isWalkable(){
         var walkable = false;
@@ -57,16 +83,16 @@ import {PHS} from './common/main';
 
       for(let i=0;i<size;i++){
         for(let j=0;j<=size;j++){
-          if(map[i][j].type===0){
-            ctx.fillStyle='#000';
-          }else if(map[i][j].type===2){
-            ctx.fillStyle='#333';
-          }else if(map[i][j].type===3){
-            ctx.fillStyle='#F00';
-          }else if(map[i][j].type===5){
-            ctx.fillStyle='#F84';
-          }else{
+          if(map[i][j].isFloor()){
             ctx.fillStyle='#383';
+          }else if(map[i][j].isWall()){
+            ctx.fillStyle='#333';
+          }else if(map[i][j].isDoor()){
+            ctx.fillStyle='#F84';
+          }else if(map[i][j].isCorridor()){
+            ctx.fillStyle='#883';
+          }else{
+            ctx.fillStyle='#000';
           } //end if
           ctx.fillRect(i*rw,j*rh,rw,rh);
         } //end for

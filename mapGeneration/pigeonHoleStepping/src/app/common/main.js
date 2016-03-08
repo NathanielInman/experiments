@@ -12,17 +12,17 @@ const SOUTH = 3;
 export function PHS(map,osize,deviation){
   var isRoomEqual=(x,y,x2,y2)=> map[x][y].roomNum===map[x2][y2].roomNum,
       isRoom=(x,y)=> map[x][y].roomNum>0,
-      isTileEmpty=(x,y)=> map[x][y].type===tileUnused||map[x][y].type===tileError,
-      isTileCorridor=(x,y)=> map[x][y].type===tileCorridor,
-      isTileDirtWall=(x,y)=> map[x][y].type===tileDirtWall,
-      isEmpty=(x,y)=> map[x][y].type===tileUnused,
-      setRoom=(x,y,room)=>{map[x][y].roomNum=room;map[x][y].type=tileDirtFloor;},
-      setRoomType=(x,y,type)=> map[x][y].name=type,
-      setTileCorridor=(x,y)=>{map[x][y].type=tileCorridor;map[x][y].roomNum=0;},
-      setTileDoor=(x,y)=>{map[x][y].type=tileDoor;map[x][y].roomNum=0;},
-      setTileDirtWall=(x,y)=>{map[x][y].type=tileDirtWall;map[x][y].roomNum=0;},
-      setTileUnused=(x,y)=>{map[x][y].type=tileUnused;map[x][y].roomNum=0;},
-      setEmpty=(x,y)=>{map[x][y].type=tileUnused;},
+      isTileEmpty=(x,y)=> map[x][y].isEmpty(),
+      isTileCorridor=(x,y)=> map[x][y].isCorridor(),
+      isTileDirtWall=(x,y)=> map[x][y].isWall(),
+      isEmpty=(x,y)=> map[x][y].isEmpty(),
+      setRoom=(x,y,room)=>{map[x][y].roomNum=room;map[x][y].setFloor()},
+      setRoomType=(x,y,type)=> map[x][y].roomName=type,
+      setTileCorridor=(x,y)=>{map[x][y].setCorridor();map[x][y].roomNum=0;},
+      setTileDoor=(x,y)=>{map[x][y].setDoor();map[x][y].roomNum=0;},
+      setTileDirtWall=(x,y)=>{map[x][y].setWall();map[x][y].roomNum=0;},
+      setTileUnused=(x,y)=>{map[x][y].setEmpty();map[x][y].roomNum=0;},
+      setEmpty=(x,y)=> map[x][y].setEmpty(),
       getRoom=(x,y)=> map[x][y].roomNum,
       size=osize-Math.floor(Math.random()*deviation),
       cx=Math.floor(size/2),cy=Math.floor(size/2),
@@ -44,6 +44,7 @@ export function PHS(map,osize,deviation){
   allocateRooms();
   partitionRooms();
   drawTileDoors();
+  pruneMap();
   cleanMap();
   return true;
 
@@ -53,17 +54,25 @@ export function PHS(map,osize,deviation){
   function blocked(direction){
     if(direction===NORTH||direction===SOUTH){
       if(cx-6>=0){ //westward block
-        if(isTileCorridor(cx-1,cy)&&isTileCorridor(cx-6,cy+(direction===NORTH?-1:1))&&isTileCorridor(cx-1,cy+(direction===NORTH?-6:6)))return true;
+        if(isTileCorridor(cx-1,cy)&&
+           isTileCorridor(cx-6,cy+(direction===NORTH?-1:1))&&
+           isTileCorridor(cx-1,cy+(direction===NORTH?-6:6)))return true;
       } //end if
       if(cx+6<size){ //eastward block
-        if(isTileCorridor(cx+1,cy)&&isTileCorridor(cx+6,cy+(direction===NORTH?-1:1))&&isTileCorridor(cx+1,cy+(direction===NORTH?-6:6)))return true;
+        if(isTileCorridor(cx+1,cy)&&
+           isTileCorridor(cx+6,cy+(direction===NORTH?-1:1))&&
+           isTileCorridor(cx+1,cy+(direction===NORTH?-6:6)))return true;
       } //end if
     }else if(direction===EAST||direction===WEST){
       if(cy-6>=0){ //northward block
-        if(isTileCorridor(cx,cy-1)&&isTileCorridor(cx+(direction===WEST?-1:1),cy-6)&&isTileCorridor(cx+(direction===WEST?-6:6),cy-1))return true;
+        if(isTileCorridor(cx,cy-1)&&
+           isTileCorridor(cx+(direction===WEST?-1:1),cy-6)&&
+           isTileCorridor(cx+(direction===WEST?-6:6),cy-1))return true;
       } //end if
       if(cy+6<size){ //southward block
-        if(isTileCorridor(cx,cy+1)&&isTileCorridor(cx+(direction===WEST?-1:1),cy+6)&&isTileCorridor(cx+(direction===WEST?-6:6),cy+1))return true;
+        if(isTileCorridor(cx,cy+1)&&
+           isTileCorridor(cx+(direction===WEST?-1:1),cy+6)&&
+           isTileCorridor(cx+(direction===WEST?-6:6),cy+1))return true;
       } //end if
     } //end if
     return false;
@@ -242,15 +251,16 @@ export function PHS(map,osize,deviation){
     for(let i=1;i<size-1;i++){
       for(let j=1;j<size-1;j++){
         if(isRoom(i,j)&&isRoom(i,j-1)&&!isRoomEqual(i,j,i,j-1)){
-          setTileDirtWall(i,j-1); //set the previous rooms tile to a wall instead
+          setTileDirtWall(i,j-1);
         } //end if
         if(isRoom(i,j)&&isRoom(i-1,j)&&!isRoomEqual(i,j,i-1,j)){
-          setTileDirtWall(i-1,j); //set the previous rooms tile to a wall instead
+          setTileDirtWall(i-1,j);
         } //end if
         if(isRoom(i,j)&&isRoom(i+1,j+1)&&!isRoomEqual(i,j,i+1,j+1)){
           setTileDirtWall(i,j);
         } //end if
-        if(isRoom(i,j-1)&&isRoom(i-1,j)&&!isRoom(i,j)&&!isRoomEqual(i,j-1,i-1,j)){
+        if(isRoom(i,j-1)&&isRoom(i-1,j)&&!isRoom(i,j)&&
+           !isRoomEqual(i,j-1,i-1,j)){
           setTileDirtWall(i-1,j);
         } //end if
         if(isEmpty(i,j)){
@@ -271,15 +281,17 @@ export function PHS(map,osize,deviation){
 
             // check to see if there's another place for the tileDoor, and give
             // it a chance to be spawned instead of at the current location
-            if(isTileCorridor(i,j+1)&&isTileDirtWall(i+1,j+1)&&isRoomEqual(i+2,j+1,i+2,j)){
+            if(isTileCorridor(i,j+1)&&isTileDirtWall(i+1,j+1)&&
+               isRoomEqual(i+2,j+1,i+2,j)){
               chance=Math.floor(Math.random()*100);
             }else{
               chance=0;
             }//end if
 
-            // The tileDoor wil be spawned here at a 50% chance if there's another
-            // location for the tileDoor, elseif there is no other location for the
-            // tileDoor, then it will be spawned here with a 100% chance
+            // The tileDoor wil be spawned here at a 50% chance if there's
+            // another location for the tileDoor, elseif there is no other
+            // location for the tileDoor, then it will be spawned here with
+            // a 100% chance
             if(chance>80){
               if(roomNum.done[getRoom(i+2,j)]===false){
                 roomNum.done[getRoom(i+2,j)]=true;
@@ -293,15 +305,17 @@ export function PHS(map,osize,deviation){
 
             // check to see if there's another place for the tileDoor, and give
             // it a chance to be spawned instead of at the current location
-            if(isTileCorridor(i+1,j)&&isTileDirtWall(i+1,j+1)&&isRoomEqual(i+1,j+2,i,j+2)){
+            if(isTileCorridor(i+1,j)&&isTileDirtWall(i+1,j+1)&&
+               isRoomEqual(i+1,j+2,i,j+2)){
               chance=Math.floor(Math.random()*100);
             }else{
               chance=100;
             }//end if
 
-            // The tileDoor wil be spawned here at a 50% chance if there's another
-            // location for the tileDoor, elseif there is no other location for the
-            // tileDoor, then it will be spawned here with a 100% chance
+            // The tileDoor wil be spawned here at a 50% chance if there's
+            // another location for the tileDoor, elseif there is no other
+            // location for the tileDoor, then it will be spawned here with
+            // a 100% chance
             if(chance>60){
               if(roomNum.done[getRoom(i,j+2)]===false){
                 roomNum.done[getRoom(i,j+2)]=true;
@@ -311,7 +325,7 @@ export function PHS(map,osize,deviation){
           } //end if
 
           // west tileDirtWall room
-          if(i>2&&isTileDirtWall(i-1,j)&&isRoom(i-2,j)){ //west tileDirtWall room
+          if(i>2&&isTileDirtWall(i-1,j)&&isRoom(i-2,j)){
 
             // check to see if there's another place for the tileDoor, and give
             // it a chance to be spawned instead of at the current location
@@ -320,7 +334,7 @@ export function PHS(map,osize,deviation){
               setTileDoor(i-1,j);
             } //end if
           } //end if
-          if(j>2&&isTileDirtWall(i,j-1)&&isRoom(i,j-2)){ //north tileDirtWall room
+          if(j>2&&isTileDirtWall(i,j-1)&&isRoom(i,j-2)){
             if(roomNum.done[getRoom(i,j-2)]===false){
               roomNum.done[getRoom(i,j-2)]=true;
               setTileDoor(i,j-1);
@@ -331,10 +345,40 @@ export function PHS(map,osize,deviation){
     } //end for
   } //end drawTileDoors()
   function cleanMap(){
+    var isUseful; //details whether wall is useful
+
+    for(let i=0;i<size;i++){
+      for(let j=0;j<size;j++){
+        if(map[i][j].isWall()){
+          isUseful = false;
+          if(i>0&&map[i-1][j].isWalkable()) isUseful = true;
+          if(j>0&&map[i][j-1].isWalkable()) isUseful = true;
+          if(i<size-1&&map[i+1][j].isWalkable()) isUseful = true;
+          if(j<size-1&&map[i][j+1].isWalkable()) isUseful = true;
+          if(i>0&&j>0&&map[i-1][j-1].isWalkable()) isUseful = true;
+          if(i>0&&j<size-1&&map[i-1][j+1].isWalkable()) isUseful = true;
+          if(i<size-1&&j>0&&map[i+1][j-1].isWalkable()) isUseful = true;
+          if(i<size-1&&j<size-1&&map[i+1][j+1].isWalkable()) isUseful = true;
+          if(!isUseful) map[i][j].setEmpty();
+        } //end if
+      } //end for
+    } //end for
+  } //end cleanMap()
+
+  // We are able to prune the map by iterating one-by-one through the
+  // map and if the cell we're currently is one is walkable, then we
+  // iterate through all nearby walkable floors, marking that floor as
+  // seen and giving it the same identifier room number, keeping track
+  // of the number or rooms per room identifier. Then we loop
+  // through the entire map and remove cells that are of a room number
+  // that isn't the largest size (thus keeping the largest room only)
+  function pruneMap(){
     var node = {x: 0,y: 0},
         loc_max = {val: 0,cur: 0,num: 0,max: 0},
         unmapped=[];
 
+    // iterate through all cells once, marking their location number
+    // which is the number all nearby walkable cells will share
     for(let i=0;i<size;i++){
       for(let j=0;j<size;j++){
         if(map[i][j].isWalkable()&&!map[i][j].loc){
@@ -342,6 +386,9 @@ export function PHS(map,osize,deviation){
         } //end if
       } //end for
     } //end for
+
+    // loop through all the cells, clearing them if they don't share the
+    // location id of the most-touching or largest area we found
     for(let i=0;i<size;i++){
       for(let j=0;j<size;j++){
         if(map[i][j].isWalkable()&&map[i][j].loc!==loc_max.num){
@@ -392,14 +439,9 @@ export function PHS(map,osize,deviation){
       } //end while
     } //end traverse()
   } //end cleanMap()
-  function print(str){
-    var result = str;
 
-    if(str.length===1){
-      result = '0'+str;
-    } //end if
-    return result;
-  } //end print function
+  // Drunk walker makes corridors according to the
+  // restriction that we need to leave enough space for rooms
   function createCorridors(){
     while(fail<75&&win<size*3){
       direction=Math.floor(Math.random()*4);
@@ -454,16 +496,16 @@ export function PHS(map,osize,deviation){
     function carveDeadEnds(){
       for(let i=1;i<size-1;i++){
         for(let j=1;j<size-1;j++){
-          if(isEmpty(i,j) && isTileCorridor(i-1,j) && isTileCorridor(i+1,j)||
-             isEmpty(i,j) && isTileCorridor(i,j-1) && isTileCorridor(i,j+1)||
-             isEmpty(i,j) && isTileCorridor(i-1,j) && isTileCorridor(i,j+1) &&
-               isTileCorridor(i-2,j) && isTileCorridor(i,j+2)||
-             isEmpty(i,j) && isTileCorridor(i,j+1) && isTileCorridor(i+1,j) &&
-               isTileCorridor(i,j+2) && isTileCorridor(i+2,j)||
-             isEmpty(i,j) && isTileCorridor(i+1,j) && isTileCorridor(i,j-1) &&
-               isTileCorridor(i+2,j) && isTileCorridor(i,j-2)||
-             isEmpty(i,j) && isTileCorridor(i,j-1) && isTileCorridor(i-1,j) &&
-               isTileCorridor(i,j-2) && isTileCorridor(i-2,j)){
+          if(isEmpty(i,j)&&isTileCorridor(i-1,j)&&isTileCorridor(i+1,j)||
+             isEmpty(i,j)&&isTileCorridor(i,j-1)&&isTileCorridor(i,j+1)||
+             isEmpty(i,j)&&isTileCorridor(i-1,j)&&isTileCorridor(i,j+1)&&
+               isTileCorridor(i-2,j)&&isTileCorridor(i,j+2)||
+             isEmpty(i,j)&&isTileCorridor(i,j+1)&&isTileCorridor(i+1,j)&&
+               isTileCorridor(i,j+2)&&isTileCorridor(i+2,j)||
+             isEmpty(i,j)&&isTileCorridor(i+1,j)&&isTileCorridor(i,j-1)&&
+               isTileCorridor(i+2,j)&&isTileCorridor(i,j-2)||
+             isEmpty(i,j)&&isTileCorridor(i,j-1)&&isTileCorridor(i-1,j)&&
+               isTileCorridor(i,j-2)&&isTileCorridor(i-2,j)){
             setEmpty(i-1,j);setEmpty(i-1,j-1);setEmpty(i-1,j+1);
             setEmpty(i,j+1);setEmpty(i+1,j+1);setEmpty(i+1,j);
             setEmpty(i+1,j-1);setEmpty(i,j-1);
