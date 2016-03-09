@@ -71,13 +71,11 @@ import {PCG} from './common/main';
       isWalkable(){
         var walkable = false;
 
-        if(this.type===tileDirtFloor)walkable = true;
-        if(this.type===tileCorridor)walkable = true;
-        if(this.type===tileDoor)walkable = true;
+        if(this.isFloor())walkable = true;
+        if(this.isWater())walkable = true;
+        if(this.isDoor())walkable = true;
+        if(this.isCorridor())walkable = true;
         return walkable;
-      }
-      isEmpty(){
-        return this.type === tileUnused;
       }
     }
     for (let i=0;i<=size;i++){
@@ -102,6 +100,8 @@ import {PCG} from './common/main';
             ctx.fillStyle='#883';
           }else if(map[i][j].isWater()){
             ctx.fillStyle='#36F';
+          }else if(map[i][j].type===3){
+            ctx.fillStyle='#F00';
           }else{
             ctx.fillStyle='#000';
           } //end if
