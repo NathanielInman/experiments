@@ -86,12 +86,12 @@ import {PCG} from './common/main';
         map[i][j]= new Sector();
       } //end for
     } //end for
-    if(PCG(map,size,4)){
+    if(PCG(map,size,5)){
       let rw = v.w/size,
           rh = v.h/size;
 
       for(let i=0;i<size;i++){
-        for(let j=0;j<=size;j++){
+        for(let j=0;j<size;j++){
           if(map[i][j].isFloor()){
             ctx.fillStyle='#383';
           }else if(map[i][j].isWall()){
@@ -100,6 +100,8 @@ import {PCG} from './common/main';
             ctx.fillStyle='#F84';
           }else if(map[i][j].isCorridor()){
             ctx.fillStyle='#883';
+          }else if(map[i][j].isWater()){
+            ctx.fillStyle='#36F';
           }else{
             ctx.fillStyle='#000';
           } //end if
