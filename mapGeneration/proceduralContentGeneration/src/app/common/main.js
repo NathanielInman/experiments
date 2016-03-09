@@ -181,7 +181,7 @@ export function PCG(map,size,proceduralType){
   function checkSpaceEmpty(x,y,x2,y2){
     for(let i=x;i<=x2;i++){
       for(let j=y;j<=y2;j++){
-        if(!map[i][j].isEmpty()){
+        if(i<0||j<0||i>=size||j>=size||!map[i][j].isEmpty()){
           return false;
         } //end if
       } //end for
@@ -211,23 +211,40 @@ export function PCG(map,size,proceduralType){
         roomSize = arguments[2],
         direction = arguments[3],
         drawPathway = arguments[4],
-        type = 2, //arguments[5],
+        type = arguments[5],
         floorType = arguments[6],
         i,j,startX,startY,endX,endY,
         centerX,centerY,radius=roomSize/2;
 
+    console.log(type);
     function drawSpecialty(x,y,startX,startY,endX,endY){
       var halfX = (endX-startX)/2,
           halfY = (endY-startY)/2;
 
-      // island with random dispersion that always touches
+      // random dispersion carvings
       if(type===1){
         map[x][y].setFloor();
         if(!rf(2)){ //50% chance
-          if(!rf(2))map[x-1][y-1].setFloor();
-          if(!rf(2))map[x+1][y-1].setFloor();
-          if(!rf(2))map[x-1][y+1].setFloor();
-          if(!rf(2))map[x+1][y+1].setFloor();
+          if(!rf(2)){
+            map[x-1][y].setFloor();
+            if(!rf(2)) map[x-1][y-1].setFloor();
+            if(!rf(2)) map[x-1][y+1].setFloor();
+          } //end if
+          if(!rf(2)){
+            map[x+1][y].setFloor();
+            if(!rf(2)) map[x+1][y-1].setFloor();
+            if(!rf(2)) map[x+1][y+1].setFloor();
+          } //end if
+          if(!rf(2)){
+            map[x][y-1].setFloor();
+            if(!rf(2)) map[x+1][y-1].setFloor();
+            if(!rf(2)) map[x-1][y-1].setFloor();
+          } //end if
+          if(!rf(2)){
+            map[x][y+1].setFloor();
+            if(!rf(2)) map[x+1][y+1].setFloor();
+            if(!rf(2)) map[x-1][y+1].setFloor();
+          } //end if
         } //end if
 
       // Completely random dispersion islands
@@ -257,6 +274,8 @@ export function PCG(map,size,proceduralType){
         }else{
           map[x][y].setWater();
         } //end if
+      }else{
+        map[x][y].setFloor();
       } //end if
       return true;
     } //end drawSpecialty()
