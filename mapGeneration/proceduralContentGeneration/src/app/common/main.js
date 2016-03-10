@@ -30,14 +30,13 @@ export function PCG(map,size,proceduralType){
       todo=[], //holds the list of directions that need to be searched and tried
       floorType=tileDirtFloor,
       bossSpawned=false,
-      lootSpawned=false,
-      useWater=true;
+      lootSpawned=false
 
-  if(proceduralType===CRYPT_STANDARD||
-     proceduralType===CRYPT_ANCIENT||
-     proceduralType===CRYPT_CATACOMBS||
-     proceduralType===MARSHY_DREDGE||
-     proceduralType===WIDE_PASSAGES) useWater = false;
+  if(proceduralType===CRYPT_STANDARD) waterChance = 5; //5 percent
+  if(proceduralType===CRYPT_ANCIENT) waterChance = 10; //10 percent
+  if(proceduralType===CRYPT_CATACOMBS) waterChance = 15; //15 percent
+  if(proceduralType===MARSHY_DREDGE) waterChance = 85; //85 percent
+  if(proceduralType===WIDE_PASSAGES) waterChance = 35; //35 percent
   do{
     step++; //increase the number of times we've iterated by one.
     rs=rf(100); //roll a percentage dice.
@@ -124,9 +123,12 @@ export function PCG(map,size,proceduralType){
         floorType=tileDirtFloor;
       }//end if
       if(rt===1){
+        let useWater = rf(100)<waterChance,
+            roomType = useWater?rf(3)+2:rf(2),
+            drawPathway = step===1?false:true;
 
         //only draw a door after the first iteration
-        if(buildSphereRoom(cx,cy,rs,rd,step===1?false:true,useWater===true?rf(5):5)){
+        if(buildSphereRoom(cx,cy,rs,rd,drawPathway,roomType)){
           successfulRooms++;
         }else if(!rf(2)){
           rs=2;rt=0; //sphere room failed, try a square room before moving on
@@ -212,7 +214,6 @@ export function PCG(map,size,proceduralType){
         direction = arguments[3],
         drawPathway = arguments[4],
         type = arguments[5],
-        floorType = arguments[6],
         i,j,startX,startY,endX,endY,
         centerX,centerY,radius=roomSize/2;
 
