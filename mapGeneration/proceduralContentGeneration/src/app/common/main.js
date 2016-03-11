@@ -34,11 +34,12 @@ export function PCG(map,size){
       proceduralType=rf(6);
 
   if(proceduralType===CRYPT_STANDARD) waterChance = 5;
-  if(proceduralType===CRYPT_ANCIENT) waterChance = 10;
+  if(proceduralType===CRYPT_ANCIENT) waterChance = 85;
   if(proceduralType===CRYPT_CATACOMBS) waterChance = 15;
   if(proceduralType===MARSHY_DREDGE) waterChance = 85;
   if(proceduralType===WIDE_PASSAGES) waterChance = 35;
   if(proceduralType===DEEP_PASSAGES) waterChance = 60;
+  if(proceduralType===CRYPT_ANCIENT) alert('yes')
   do{
     step++; //increase the number of times we've iterated by one.
 
@@ -46,7 +47,13 @@ export function PCG(map,size){
     // by creating a room in the center of the entire map, else we will use
     // one of the starting points our last room left for us
     if(step!==1){
-      next=todo.pop();
+      for (let i = todo.length,j,x; i; i -= 1) { //shuffle the array
+        j = rf(i);
+        x = todo[i - 1];
+        todo[i - 1] = todo[j];
+        todo[j] = x;
+      } //end for
+      next=todo.pop(); //now it's shuffled, take a todo off list and start
       cx=next.x;
       cy=next.y;
       roomDirection=next.rd;
@@ -58,11 +65,21 @@ export function PCG(map,size){
       roomType=ROOMTYPE_SPHERICAL;
     }else{
       let d100 = rf(100);
-
-      if(d100<50){
-        roomType = ROOMTYPE_SQUARE;
+      if(proceduralType===CRYPT_STANDARD) waterChance = 5;
+      if(proceduralType===CRYPT_ANCIENT) waterChance = 85;
+      if(proceduralType===CRYPT_CATACOMBS) waterChance = 15;
+      if(proceduralType===MARSHY_DREDGE) waterChance = 85;
+      if(proceduralType===WIDE_PASSAGES) waterChance = 35;
+      if(proceduralType===DEEP_PASSAGES) waterChance = 60;
+      if(d100<20){
+        if(proceduralType===CRYPT_STANDARD||
+           proceduralType===CRYPT_ANCIENT){
+          roomType = ROOMTYPE_SPHERICAL;
+        }else{
+          roomType = ROOMTYPE_SQUARE;
+        } //end if
       }else{
-        roomType = ROOMTYPE_SPHERICAL;
+        roomType = ROOMTYPE_SQUARE;
       } //end if
     } //end if
 
@@ -110,14 +127,14 @@ export function PCG(map,size){
         } //end if
       } //end if
       if(roomType===ROOMTYPE_SQUARE){
-        if(buildSquareRoom(cx,cy,roomSize,roomDirection,drawPathway)){
+        if(buildSquareRoom(cx,cy,roomSize,roomDirection,drawPathway,generateType)){
           successfulRooms++;
         } //end if
       } //end if
     } //end if
     if(todo.length===0 && successfulRooms<15){
       for(let i=0;i<size;i++)for(let j=0;j<size;j++){cs(i,j);successfulRooms=1;}
-      step=0;
+      step=0;cx = Math.floor(size/6);cy = Math.floor(size/6);
     } //end if
   }while(todo.length>0||step===0);
 
@@ -213,7 +230,13 @@ export function PCG(map,size){
         map[x][y].setWater();
       } //end if
     }else if(type===ROOM_ISLAND_WALKWAYS){
-      if(x>=sx+halfX&&x<=ex-halfX||y>=sy+halfY&&y<=ey-halfY){
+      let n=!rf(2),s=!rf(2),e=!rf(2),w=!rf(2),
+          na = x>=sx+halfX-1&&x<=ex-halfX&&y<=ey-halfY,
+          sa = x>=sx+halfX-1&&x<=ex-halfX&&y>=sy+halfY-1,
+          wa = x<=ex-halfX&&y>=sy+halfY-1&&y<=ey-halfY,
+          ea = x>=sx+halfX-1&&y>=sy+halfY-1&&y<=ey-halfY;
+
+      if(n&&na||s&&sa||w&&wa||e&&ea){
         map[x][y].setFloor();
         if(!rf(3))if(map[x-1][y-1].isWater())map[x-1][y-1].setFloor();
         if(!rf(3))if(map[x+1][y-1].isWater())map[x+1][y-1].setFloor();
