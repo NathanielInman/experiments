@@ -5,139 +5,112 @@ const MARSHY_DREDGE = 3;
 const WIDE_PASSAGES = 4;
 const DEEP_PASSAGES = 5;
 
-const tileUnused = 0;
-const tileDirtFloor = 1;
-const tileDirtWall = 2;
-const tileCorridor = 4;
-const tileDoor = 5;
-const tileBossFloor = 6;
-const tileLootFloor = 7;
+const ROOMTYPE_SQUARE = 0;
+const ROOMTYPE_SPHERICAL = 1;
+
+const ROOM_NORMAL = 0;
+const ROOM_DISPERSION = 1;
+const ROOM_ISLANDS = 2;
+const ROOM_ISLAND_WALKWAYS = 3;
+const ROOM_ISLAND = 4;
+const ROOM_POOL = 5;
 
 const N = 0;
 const S = 1;
 const E = 2;
 const W = 3;
 
-export function PCG(map,size,proceduralType){
+export function PCG(map,size){
   var i,j, //used as temporary iterators.
-      cx,cy, //center x and y
-      rd, //room direction to build
-      rs, //room size of which to try to build.
-      rt, //room type of which to build
+      cx = Math.floor(size/6),cy = Math.floor(size/6), //center x and y
+      roomDirection, //room direction to build
+      roomSize, //room size of which to try to build.
+      roomType, //room type of which to build
       step=0, //number of times of which we've iterated.
       next, //this holds the next set of information pulled from the todo array
       successfulRooms=1, //this is used for the roomNum as well as debugging
       todo=[], //holds the list of directions that need to be searched and tried
-      floorType=tileDirtFloor,
-      bossSpawned=false,
-      lootSpawned=false
+      waterChance, //hold the chance of water appearing
+      proceduralType=rf(6);
 
-  if(proceduralType===CRYPT_STANDARD) waterChance = 5; //5 percent
-  if(proceduralType===CRYPT_ANCIENT) waterChance = 10; //10 percent
-  if(proceduralType===CRYPT_CATACOMBS) waterChance = 15; //15 percent
-  if(proceduralType===MARSHY_DREDGE) waterChance = 85; //85 percent
-  if(proceduralType===WIDE_PASSAGES) waterChance = 35; //35 percent
+  if(proceduralType===CRYPT_STANDARD) waterChance = 5;
+  if(proceduralType===CRYPT_ANCIENT) waterChance = 10;
+  if(proceduralType===CRYPT_CATACOMBS) waterChance = 15;
+  if(proceduralType===MARSHY_DREDGE) waterChance = 85;
+  if(proceduralType===WIDE_PASSAGES) waterChance = 35;
+  if(proceduralType===DEEP_PASSAGES) waterChance = 60;
   do{
     step++; //increase the number of times we've iterated by one.
-    rs=rf(100); //roll a percentage dice.
-    rt=rf(100); //randomly choose a room type
+
+    // First see if it's the first round, if so then we will start out
+    // by creating a room in the center of the entire map, else we will use
+    // one of the starting points our last room left for us
     if(step!==1){
       next=todo.pop();
-      cx=next.x;cy=next.y;rd=next.rd;
-    }else{
-      cx=Math.floor(size/6);
-      cy=Math.floor(size/6);
+      cx=next.x;
+      cy=next.y;
+      roomDirection=next.rd;
     } //end if
+
+    // Certain procedural types have roomType restrictions or preferances,
+    // we pply those here
     if(proceduralType===DEEP_PASSAGES){
-      rt=1; //100% sphere
+      roomType=ROOMTYPE_SPHERICAL;
     }else{
-      rt=rt<50?0:1;
-    } //end if
-    if(step===1){ //highest chance for the highest room sizes
-      rd=rf(4); //choose a random direction to build a room into
-      if(rt===0){
-        if(rs<40){rs=5; //room size of 7x7 including walls
-        }else if(rs<80){rs=4; //room size of 6x6 including walls
-        }else if(rs<90){rs=3; //room size of 5x5 including walls
-        }else{rs=2;} //room size of 4x4 including walls
-      }else if(rt===1){ //initial room if sphere is likely very large
-        if(rs<20){rs=15;
-        }else if(rs<28){rs=14;
-        }else if(rs<36){rs=13;
-        }else if(rs<44){rs=12;
-        }else if(rs<52){rs=11;
-        }else if(rs<60){rs=10;
-        }else if(rs<68){rs=9;
-        }else if(rs<76){rs=8;
-        }else if(rs<84){rs=7;
-        }else{rs=6;}
-        if(proceduralType===CRYPT_STANDARD||
-           proceduralType===CRYPT_ANCIENT||
-           proceduralType===CRYPT_CATACOMBS){
-          rs=3;
-        }else if(proceduralType===MARSHY_DREDGE||
-                 proceduralType===WIDE_PASSAGES){
-          rs=4;
-        }//end if
+      let d100 = rf(100);
+
+      if(d100<50){
+        roomType = ROOMTYPE_SQUARE;
+      }else{
+        roomType = ROOMTYPE_SPHERICAL;
       } //end if
-    }else if(step>=2){ //second highest chance for the highest room sizes
-      if(rt===0){
-        if(rs<10){rs=5; //room size of 7x7 including walls
-        }else if(rs<35){rs=4; //room size of 6x6 including walls
-        }else if(rs<70){rs=3; //room size of 5x5 including walls
-        }else{rs=2;} //room size of 4x4 including walls
-      }else if(rt===1){
-        if(rs<2){rs=15;
-        }else if(rs<4){rs=14;
-        }else if(rs<6){rs=13;
-        }else if(rs<8){rs=12;
-        }else if(rs<10){rs=11;
-        }else if(rs<12){rs=10;
-        }else if(rs<14){rs=9;
-        }else if(rs<16){rs=8;
-        }else if(rs<18){rs=7;
-        }else if(rs<20){rs=6;
-        }else if(rs<45){rs=5;
-        }else if(rs<70){rs=4;
-        }else{rs=3;}
-        if(proceduralType===CRYPT_STANDARD||
-           proceduralType===CRYPT_ANCIENT||
-           proceduralType===CRYPT_CATACOMBS){
-          rs=3;
-        }else if(proceduralType===MARSHY_DREDGE||
-                 proceduralType===WIDE_PASSAGES){
-          rs=4;
-        } //end if
+    } //end if
+
+    // If we are first starting out the generation, then we need to have a
+    // starting direction to begin building. Randomly choose that direction
+    if(step===1) roomDirection = rf(4);
+
+    // Square and spherical rooms have different size metrics. Depending on
+    // which type the room is, acquire the room size
+    if(roomType===ROOMTYPE_SQUARE){
+      let d100 = rf(100), //roll a 100 sided die
+          sizeChart = [[10,5],[35,4],[70,3],[100,2]]; //(percent,size) pairs
+
+      sizeChart.some(pair=> roomSize = d100<pair[0]?pair[1]:false);
+    }else if(roomType===ROOMTYPE_SPHERICAL){
+      let d100 = rf(100), //roll a 100 sided die
+          sizeChart = [
+            [2,15],[4,14],[6,13],[8,12],[10,11],[12,10],[14,9],
+            [16,8],[18,7],[20,6],[45,5],[70,4],[100,3]
+          ];
+
+      sizeChart.some(pair=> roomSize = d100<pair[0]?pair[1]:false);
+      if(proceduralType===CRYPT_STANDARD||
+         proceduralType===CRYPT_ANCIENT||
+         proceduralType===CRYPT_CATACOMBS){
+        roomSize = 3;
+      }else if(proceduralType===MARSHY_DREDGE||
+               proceduralType===WIDE_PASSAGES){
+        roomSize = 4;
       } //end if
     } //end if
     if(step>=500){
       todo.length=0;
     }else{
-      if(bossSpawned===false&&rf(100)<20){
-        bossSpawned=true;
-        floorType=tileBossFloor;
-      }else if(lootSpawned===false&&rf(100)<10||lootSpawned===true&&rf(100)<5){
-        lootSpawned=true;
-        floorType=tileLootFloor;
-      }else{
-        floorType=tileDirtFloor;
-      }//end if
-      if(rt===1){
-        let useWater = rf(100)<waterChance,
-            roomType = useWater?rf(3)+2:rf(2),
-            drawPathway = step===1?false:true;
+      let useWater = rf(100)<waterChance,
+          generateType = useWater?rf(3)+2:rf(2),
+          drawPathway = step===1?false:true;
 
-        //only draw a door after the first iteration
-        if(buildSphereRoom(cx,cy,rs,rd,drawPathway,roomType)){
+      if(roomType===ROOMTYPE_SPHERICAL){
+        if(buildSphereRoom(cx,cy,roomSize,roomDirection,drawPathway,generateType)){
           successfulRooms++;
         }else if(!rf(2)){
-          rs=2;rt=0; //sphere room failed, try a square room before moving on
+          roomSize=2;
+          roomType=ROOMTYPE_SQUARE; //try a square room before moving on
         } //end if
       } //end if
-      if(rt===0){
-
-        // only draw a door after the first iteration
-        if(buildSquareRoom(cx,cy,rs,rd,step===1?false:true)){
+      if(roomType===ROOMTYPE_SQUARE){
+        if(buildSquareRoom(cx,cy,roomSize,roomDirection,drawPathway)){
           successfulRooms++;
         } //end if
       } //end if
@@ -194,7 +167,7 @@ export function PCG(map,size,proceduralType){
   // set cooridor of x,y location
   function sc(x,y){
     map[x][y].setCorridor();
-    map[x][y].loc=rd;
+    map[x][y].loc=roomDirection;
     map[x][y].roomNum=successfulRooms;
   } //end sc()
 
@@ -205,87 +178,86 @@ export function PCG(map,size,proceduralType){
     map[x][y].roomNum=0;
   } //end cs()
 
-  // given a specified x and y coordinate, roomsize, direction and type
-  // we will draw a spherical room
-  function buildSphereRoom(){
-    var x = arguments[0],
-        y = arguments[1],
-        roomSize = arguments[2],
-        direction = arguments[3],
-        drawPathway = arguments[4],
-        type = arguments[5],
-        i,j,startX,startY,endX,endY,
-        centerX,centerY,radius=roomSize/2;
+  function drawSpecialty(x,y,sx,sy,ex,ey,type){
+    var halfX = (ex-sx)/2,
+        halfY = (ey-sy)/2;
 
-    console.log(type);
-    function drawSpecialty(x,y,startX,startY,endX,endY){
-      var halfX = (endX-startX)/2,
-          halfY = (endY-startY)/2;
-
-      // random dispersion carvings
-      if(type===1){
+    if(type===ROOM_DISPERSION){
+      map[x][y].setFloor();
+      if(!rf(2)){ //50% chance
+        if(!rf(2)){
+          map[x-1][y].setFloor();
+          if(!rf(2)) map[x-1][y-1].setFloor();
+          if(!rf(2)) map[x-1][y+1].setFloor();
+        } //end if
+        if(!rf(2)){
+          map[x+1][y].setFloor();
+          if(!rf(2)) map[x+1][y-1].setFloor();
+          if(!rf(2)) map[x+1][y+1].setFloor();
+        } //end if
+        if(!rf(2)){
+          map[x][y-1].setFloor();
+          if(!rf(2)) map[x+1][y-1].setFloor();
+          if(!rf(2)) map[x-1][y-1].setFloor();
+        } //end if
+        if(!rf(2)){
+          map[x][y+1].setFloor();
+          if(!rf(2)) map[x+1][y+1].setFloor();
+          if(!rf(2)) map[x-1][y+1].setFloor();
+        } //end if
+      } //end if
+    }else if(type===ROOM_ISLANDS){
+      if(!rf(2)){ //50% chance
         map[x][y].setFloor();
-        if(!rf(2)){ //50% chance
-          if(!rf(2)){
-            map[x-1][y].setFloor();
-            if(!rf(2)) map[x-1][y-1].setFloor();
-            if(!rf(2)) map[x-1][y+1].setFloor();
-          } //end if
-          if(!rf(2)){
-            map[x+1][y].setFloor();
-            if(!rf(2)) map[x+1][y-1].setFloor();
-            if(!rf(2)) map[x+1][y+1].setFloor();
-          } //end if
-          if(!rf(2)){
-            map[x][y-1].setFloor();
-            if(!rf(2)) map[x+1][y-1].setFloor();
-            if(!rf(2)) map[x-1][y-1].setFloor();
-          } //end if
-          if(!rf(2)){
-            map[x][y+1].setFloor();
-            if(!rf(2)) map[x+1][y+1].setFloor();
-            if(!rf(2)) map[x-1][y+1].setFloor();
-          } //end if
-        } //end if
-
-      // Completely random dispersion islands
-      }else if(type===2){
-        if(!rf(2)){ //50% chance
-          map[x][y].setFloor();
-        }else{
-          map[x][y].setWater();
-        } //end if
-
-      // Walkways to all cardinal directions with dispersed dirt nearby touching
-      }else if(type===3){
-        if(x>=startX+halfX&&x<=endX-halfX||y>=startY+halfY&&y<=endY-halfY){
-          map[x][y].setFloor();
-          if(!rf(3))if(map[x-1][y-1].isWater())map[x-1][y-1].setFloor();
-          if(!rf(3))if(map[x+1][y-1].isWater())map[x+1][y-1].setFloor();
-          if(!rf(3))if(map[x-1][y+1].isWater())map[x-1][y+1].setFloor();
-          if(!rf(3))if(map[x+1][y+1].isWater())map[x+1][y+1].setFloor();
-        }else{
-          map[x][y].setWater();
-        } //end if
-
-      // Dispersed pool of water in the center of the room
-      }else if(type===4){
-        if(x>=startX+halfX/2&&x<=endX-halfX/2&&y>=startY+halfY/2&&y<=endY-halfY/2){
-          map[x][y].setFloor();
-        }else{
-          map[x][y].setWater();
-        } //end if
+      }else{
+        map[x][y].setWater();
+      } //end if
+    }else if(type===ROOM_ISLAND_WALKWAYS){
+      if(x>=sx+halfX&&x<=ex-halfX||y>=sy+halfY&&y<=ey-halfY){
+        map[x][y].setFloor();
+        if(!rf(3))if(map[x-1][y-1].isWater())map[x-1][y-1].setFloor();
+        if(!rf(3))if(map[x+1][y-1].isWater())map[x+1][y-1].setFloor();
+        if(!rf(3))if(map[x-1][y+1].isWater())map[x-1][y+1].setFloor();
+        if(!rf(3))if(map[x+1][y+1].isWater())map[x+1][y+1].setFloor();
+      }else{
+        map[x][y].setWater();
+      } //end if
+    }else if(type===ROOM_ISLAND){
+      if(x>=sx+halfX/2&&x<=ex-halfX/2&&y>=sy+halfY/2&&y<=ey-halfY/2){
+        map[x][y].setFloor();
+      }else{
+        map[x][y].setWater();
+      } //end if
+    }else if(type===ROOM_POOL){
+      if(x>=sx+halfX/2&&x<=ex-halfX/2&&y>=sy+halfY/2&&y<=ey-halfY/2){
+        map[x][y].setWater();
       }else{
         map[x][y].setFloor();
       } //end if
-      return true;
-    } //end drawSpecialty()
+    }else{
+      map[x][y].setFloor();
+    } //end if
+    return true;
+  } //end drawSpecialty()
+
+  // given a specified x and y coordinate, roomsize, direction and type
+  // we will draw a spherical room
+  function buildSphereRoom(x,y,roomSize,roomDirection,drawPathway,type){
+    var i,j,sx,sy,ex,ey,
+        centerX,centerY,r = roomSize/2,
+        offset = roomSize%2===0?2:1,
+        lx = x-(r)|0-offset>=0,
+        ly = y-(r)|0-offset>=0,
+        rn = lx && x+Math.ceil(r)+offset<size&&y-roomSize-offset>=0,
+        re = ly && y+Math.ceil(r)+offset<size&&x+roomSize+offset<size,
+        rs = lx && x+Math.ceil(r)+offset<size&&y+roomSize+offset<size,
+        rw = ly && y+Math.ceil(r)+offset<size&&x-roomSize-offset>=0;
 
     if(roomSize===5){
-      if(rd===N && x-(roomSize/2)|0-1>=0 && x+Math.ceil(roomSize/2)+1<size&&y-roomSize-1>=0){
+      if(roomDirection===N && rn){
         if(!checkSpaceEmpty(x-3,y-6,x+3,y))return false;
         if(drawPathway)sc(x,y);
-        startX = x-2; startY=y-5; endX = x+2; endY=y-1;
+        sx = x-2; sy=y-5; ex = x+2; ey=y-1;
         /*eslint-disable */
         [
                               [x,y-5],
@@ -293,15 +265,15 @@ export function PCG(map,size,proceduralType){
           [x-2,y-3],[x-1,y-3],[x,y-3],[x+1,y-3],[x+2,y-3],
                     [x-1,y-2],[x,y-2],[x+1,y-2],
                               [x,y-1]
-        ].forEach(arr=> drawSpecialty(arr[0],arr[1],startX,startY,endX,endY));
+        ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
         /*eslint-enable */
         todo.push({rd: N,x: x,y: y-6});
         todo.push({rd: W,x: x-3,y: y-3});
         todo.push({rd: E,x: x+3,y: y-3});
-      }else if(rd===E && y-(roomSize/2)|0-1>=0 && y+Math.ceil(roomSize/2)+1<size&&x+roomSize+1<size){
+      }else if(roomDirection===E && re){
         if(!checkSpaceEmpty(x,y-3,x+6,y+3))return false;
         if(drawPathway)sc(x,y);
-        startX = x+1; endX = x+5; startY = y-2; endY = y+2;
+        sx = x+1; ex = x+5; sy = y-2; ey = y+2;
         /*eslint-disable */
         [
                               [x+3,y-2],
@@ -309,15 +281,15 @@ export function PCG(map,size,proceduralType){
           [x+1,y  ],[x+2,y  ],[x+3,y  ],[x+4,y  ],[x+5,y  ],
                     [x+2,y+1],[x+3,y+1],[x+4,y+1],
                               [x+3,y+2]
-        ].forEach(arr=> drawSpecialty(arr[0],arr[1],startX,startY,endX,endY));
+        ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
         /*eslint-enable */
         todo.push({rd: N,x: x+3,y: y-3});
         todo.push({rd: E,x: x+6,y: y});
         todo.push({rd: S,x: x+3,y: y+3});
-      }else if(rd===S && x-(roomSize/2)|0-1>=0 && x+Math.ceil(roomSize/2)+1<size&&y+roomSize+1<size){
+      }else if(roomDirection===S && rs){
         if(!checkSpaceEmpty(x-3,y,x+3,y+6))return false;
         if(drawPathway)sc(x,y);
-        startX = x-2; startY = y+1; endX = x+2; endY = y+5;
+        sx = x-2; sy = y+1; ex = x+2; ey = y+5;
         /*eslint-disable */
         [
                               [x  ,y+1],
@@ -325,15 +297,15 @@ export function PCG(map,size,proceduralType){
           [x-2,y+3],[x-1,y+3],[x  ,y+3],[x+1,y+3],[x+2,y+3],
                     [x-1,y+4],[x  ,y+4],[x+1,y+4],
                               [x  ,y+5]
-        ].forEach(arr=> drawSpecialty(arr[0],arr[1],startX,startY,endX,endY));
+        ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
         /*eslint-enable */
         todo.push({rd: S,x: x,y: y+6});
         todo.push({rd: W,x: x-3,y: y+3});
         todo.push({rd: E,x: x+3,y: y+3});
-      }else if(rd===W && y-(roomSize/2)|0-1>=0 && y+Math.ceil(roomSize/2)+1<size&&x-roomSize-1>=0){
+      }else if(roomDirection===W && rw){
         if(!checkSpaceEmpty(x-6,y-3,x,y+3))return false;
         if(drawPathway)sc(x,y);
-        startX = x-5; endX = x-1; startY = y-2; endY = y+2;
+        sx = x-5; ex = x-1; sy = y-2; ey = y+2;
         /*eslint-disable */
         [
                               [x-3,y-2],
@@ -341,25 +313,25 @@ export function PCG(map,size,proceduralType){
           [x-5,y  ],[x-4,y  ],[x-3,y  ],[x-2,y  ],[x-1,y  ],
                     [x-4,y+1],[x-3,y+1],[x-2,y+1],
                               [x-3,y+2]
-        ].forEach(arr=> drawSpecialty(arr[0],arr[1],startX,startY,endX,endY));
+        ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
         /*eslint-enable */
         todo.push({rd: N,x: x-3,y: y-3});
         todo.push({rd: W,x: x-6,y: y});
         todo.push({rd: S,x: x-3,y: y+3});
       } //end if
     }else if(roomSize===4){
-      if(rd===N && x-(roomSize/2)|0-2>=0 && x+Math.ceil(roomSize/2)+2<size&&y-roomSize-2>=0){
+      if(roomDirection===N && rn){
         if(Math.floor(Math.random()*2)===0){
           if(!checkSpaceEmpty(x-2,y-5,x+3,y))return false;
           if(drawPathway)sc(x,y);
-          startX = x-1; endX = x+2; startY = y-4; endY = y-1;
+          sx = x-1; ex = x+2; sy = y-4; ey = y-1;
           /*eslint-disable */
           [
                       [x,y-4],[x+1,y-4],
             [x-1,y-3],[x,y-3],[x+1,y-3],[x+2,y-3],
             [x-1,y-2],[x,y-2],[x+1,y-2],[x+2,y-2],
                       [x,y-1],[x+1,y-1]
-          ].forEach(arr=> drawSpecialty(arr[0],arr[1],startX,startY,endX,endY));
+          ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
           /*eslint-enable */
           if(!rf(2)){ //50% chance
             todo.push({rd: E,x: x+3,y: y-2});
@@ -379,14 +351,14 @@ export function PCG(map,size,proceduralType){
         }else{
           if(!checkSpaceEmpty(x-3,y-5,x+2,y))return false;
           if(drawPathway)sc(x,y);
-          startX = x-2; startY = y-4; endX = x+1; endY= y-1;
+          sx = x-2; sy = y-4; ex = x+1; ey= y-1;
           /*eslint-disable */
           [
                       [x-1,y-4],[x,y-4],
             [x-2,y-3],[x-1,y-3],[x,y-3],[x+1,y-3],
             [x-2,y-2],[x-1,y-2],[x,y-2],[x+1,y-2],
                       [x-1,y-1],[x,y-1]
-          ].forEach(arr=> drawSpecialty(arr[0],arr[1],startX,startY,endX,endY));
+          ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
           /*eslint-enable */
           if(!rf(2)){
             todo.push({rd: E,x: x+2,y: y-2});
@@ -404,18 +376,18 @@ export function PCG(map,size,proceduralType){
             todo.push({rd: N,x: x,y: y-5});
           } //end if
         } //end if
-      }else if(rd===E && y-Math.floor(roomSize/2)-2>=0 && y+Math.ceil(roomSize/2)+2<size&&x+roomSize+2<size){
+      }else if(roomDirection===E && re){
         if(!rf(2)){
           if(!checkSpaceEmpty(x,y-2,x+5,y+3))return false;
           if(drawPathway)sc(x,y);
-          startX = x+1; endX = x+4; startY = y-1; endY = y+2;
+          sx = x+1; ex = x+4; sy = y-1; ey = y+2;
           /*eslint-disable */
           [
                       [x+2,y-1],[x+3,y-1],
             [x+1,y  ],[x+2,y  ],[x+3,y  ],[x+4,y  ],
             [x+1,y+1],[x+2,y+1],[x+3,y+1],[x+4,y+1],
                       [x+2,y+2],[x+3,y+2]
-          ].forEach(arr=> drawSpecialty(arr[0],arr[1],startX,startY,endX,endY));
+          ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
           /*eslint-enable */
           if(!rf(2)){
             todo.push({rd: N,x: x+2,y: y-2});
@@ -435,14 +407,14 @@ export function PCG(map,size,proceduralType){
         }else{
           if(!checkSpaceEmpty(x,y-3,x+5,y+2))return false;
           if(drawPathway)sc(x,y);
-          startX = x+1; endX = x+4; startY = y-2; endY = y+1;
+          sx = x+1; ex = x+4; sy = y-2; ey = y+1;
           /*eslint-disable */
           [
                       [x+2,y-2],[x+3,y-2],
             [x+1,y-1],[x+2,y-1],[x+3,y-1],[x+4,y-1],
             [x+1,y  ],[x+2,y  ],[x+3,y  ],[x+4,y  ],
                       [x+2,y+1],[x+3,y+1]
-          ].forEach(arr=> drawSpecialty(arr[0],arr[1],startX,startY,endX,endY));
+          ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
           /*eslint-enable */
           if(!rf(2)){
             todo.push({rd: N,x: x+2,y: y-3});
@@ -460,18 +432,18 @@ export function PCG(map,size,proceduralType){
             todo.push({rd: S,x: x+3,y: y+2});
           } //end if
         } //end if
-      }else if(rd===S && x-Math.floor(roomSize/2)-2>=0 && x+Math.ceil(roomSize/2)+2<size&&y+roomSize+2<size){
+      }else if(roomDirection===S && rs){
         if(Math.floor(Math.random()*2)===0){
           if(!checkSpaceEmpty(x-2,y,x+3,y+5))return false;
           if(drawPathway)sc(x,y);
-          startX = x-1; startY = y+1; endX = x+2; endY = y+4;
+          sx = x-1; sy = y+1; ex = x+2; ey = y+4;
           /*eslint-disable */
           [
                       [x  ,y+1],[x+1,y+1],
             [x-1,y+2],[x  ,y+2],[x+1,y+2],[x+2,y+2],
             [x-1,y+3],[x  ,y+3],[x+1,y+3],[x+2,y+3],
                       [x  ,y+4],[x+1,y+4]
-          ].forEach(arr=> drawSpecialty(arr[0],arr[1],startX,startY,endX,endY));
+          ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
           /*eslint-enable */
           if(!rf(2)){
             todo.push({rd: E,x: x+3,y: y+2});
@@ -491,14 +463,14 @@ export function PCG(map,size,proceduralType){
         }else{
           if(!checkSpaceEmpty(x-3,y,x+2,y+5))return false;
           if(drawPathway)sc(x,y);
-          startX = x-2; startY = y+1; endX = x+1; endY = y+4;
+          sx = x-2; sy = y+1; ex = x+1; ey = y+4;
           /*eslint-disable */
           [
                       [x-1,y+1],[x  ,y+1],
             [x-2,y+2],[x-1,y+2],[x  ,y+2],[x+1,y+2],
             [x-2,y+3],[x-1,y+3],[x  ,y+3],[x+1,y+3],
                       [x-1,y+4],[x  ,y+4]
-          ].forEach(arr=> drawSpecialty(arr[0],arr[1],startX,startY,endX,endY));
+          ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
           /*eslint-enable */
           if(!rf(2)){
             todo.push({rd: E,x: x+2,y: y+2});
@@ -516,18 +488,18 @@ export function PCG(map,size,proceduralType){
             todo.push({rd: S,x: x,y: y+5});
           } //end if
         } //end if
-      }else if(rd===W && y-Math.floor(roomSize/2)-2>=0 && y+Math.ceil(roomSize/2)+2<size&&x-roomSize-2>=0){
+      }else if(roomDirection===W && rw){
         if(!rf(2)){
           if(!checkSpaceEmpty(x-5,y-2,x,y+3))return false;
           if(drawPathway)sc(x,y);
-          startX = x-4; startY = y-1; endX = x-1; endY = y+2;
+          sx = x-4; sy = y-1; ex = x-1; ey = y+2;
           /*eslint-disable */
           [
                       [x-3,y-1],[x-2,y-1],
             [x-4,y  ],[x-3,y  ],[x-2,y  ],[x-1,y  ],
             [x-4,y+1],[x-3,y+1],[x-2,y+1],[x-1,y+1],
                       [x-3,y+2],[x-2,y+2]
-          ].forEach(arr=> drawSpecialty(arr[0],arr[1],startX,startY,endX,endY));
+          ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
           /*eslint-enable */
           if(!rf(2)){
             todo.push({rd: N,x: x-2,y: y-2});
@@ -547,14 +519,14 @@ export function PCG(map,size,proceduralType){
         }else{
           if(!checkSpaceEmpty(x-5,y-3,x,y+2))return false;
           if(drawPathway)sc(x,y);
-          startX = x-4; startY = y-2; endX = x-1; endY = y+1;
+          sx = x-4; sy = y-2; ex = x-1; ey = y+1;
           /*eslint-disable */
           [
                       [x-3,y-2],[x-2,y-2],
             [x-4,y-1],[x-3,y-1],[x-2,y-1],[x-1,y-1],
             [x-4,y  ],[x-3,y  ],[x-2,y  ],[x-1,y  ],
                       [x-3,y+1],[x-2,y+1]
-          ].forEach(arr=> drawSpecialty(arr[0],arr[1],startX,startY,endX,endY));
+          ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
           /*eslint-enable */
           if(!rf(2)){
             todo.push({rd: N,x: x-2,y: y-3});
@@ -574,77 +546,80 @@ export function PCG(map,size,proceduralType){
         } //end if
       } //end if
     }else if(roomSize===3){
-      if(rd===N && x-Math.floor(roomSize/2)-1>=0 && x+Math.ceil(roomSize/2)+1<size&&y-roomSize-1>=0){
+      if(roomDirection===N && rn){
         if(!checkSpaceEmpty(x-2,y-4,x+2,y))return false;
         if(drawPathway)sc(x,y);
-        startX = x-1; endX = x+1; startY = y-3; endY = y-1;
+        sx = x-1; ex = x+1; sy = y-3; ey = y-1;
         /*eslint-disable */
         [
                     [x,y-3],
           [x-1,y-2],[x,y-2],[x+1,y-2],
                     [x,y-1]
-        ].forEach(arr=> drawSpecialty(arr[0],arr[1],startX,startY,endX,endY));
+        ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
         /*eslint-enable */
         todo.push({rd: E,x: x+2,y: y-2});
         todo.push({rd: W,x: x-2,y: y-2});
         todo.push({rd: N,x: x,y: y-4});
-      }else if(rd===E && y-Math.floor(roomSize/2)-1>=0 && y+Math.ceil(roomSize/2)+1<size&&x+roomSize+1<size){
+      }else if(roomDirection===E && re){
         if(!checkSpaceEmpty(x,y-2,x+4,y+2))return false;
         if(drawPathway)sc(x,y);
-        startX = x+1; endX = x+3; startY = y-1; endY = y+1;
+        sx = x+1; ex = x+3; sy = y-1; ey = y+1;
         /*eslint-disable */
         [
                     [x+2,y-1],
           [x+1,y  ],[x+2,y  ],[x+3,y  ],
                     [x+2,y+1]
-        ].forEach(arr=> drawSpecialty(arr[0],arr[1],startX,startY,endX,endY));
+        ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
         /*eslint-enable */
         todo.push({rd: E,x: x+4,y: y});
         todo.push({rd: N,x: x+2,y: y-2});
         todo.push({rd: S,x: x+2,y: y+2});
-      }else if(rd===S && x-Math.floor(roomSize/2)-1>=0 && x+Math.ceil(roomSize/2)+1<size&&y+roomSize+1<size){
+      }else if(roomDirection===S && rs){
         if(!checkSpaceEmpty(x-2,y,x+2,y+4))return false;
         if(drawPathway)sc(x,y);
-        startX = x-1; endX = x+1; startY = y+1; endY = y+3;
+        sx = x-1; ex = x+1; sy = y+1; ey = y+3;
         /*eslint-disable */
         [
                     [x  ,y+1],
           [x-1,y+2],[x  ,y+2],[x+1,y+2],
                     [x  ,y+3]
-        ].forEach(arr=> drawSpecialty(arr[0],arr[1],startX,startY,endX,endY));
+        ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
         /*eslint-enable */
         todo.push({rd: E,x: x+2,y: y+2});
         todo.push({rd: W,x: x-2,y: y+2});
         todo.push({rd: S,x: x,y: y+4});
-      }else if(rd===W && y-Math.floor(roomSize/2)-1>=0 && y+Math.ceil(roomSize/2)+1<size&&x-roomSize-1>=0){
+      }else if(roomDirection===W && rw){
         if(!checkSpaceEmpty(x-4,y-2,x,y+2))return false;
         if(drawPathway)sc(x,y);
-        startX = x-3; startY = y-1; endX = x-1; endY = y+1;
+        sx = x-3; sy = y-1; ex = x-1; ey = y+1;
         /*eslint-disable */
         [
                     [x-2,y-1],
           [x-3,y  ],[x-2,y  ],[x-1,y  ],
                     [x-2,y+1]
-        ].forEach(arr=> drawSpecialty(arr[0],arr[1],startX,startY,endX,endY));
+        ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
         /*eslint-enable */
         todo.push({rd: W,x: x-4,y: y});
         todo.push({rd: N,x: x-2,y: y-2});
         todo.push({rd: S,x: x-2,y: y+2});
       } //end if
-    }else if(rd===N && x-Math.floor(roomSize/2)-1>=0 && x+Math.ceil(roomSize/2)+1<size&&y-roomSize-1>=0){
-      centerX=x;centerY=y-Math.floor(radius);
-      startX=x-Math.floor(roomSize/2);endX=x+Math.ceil(roomSize/2);
-      startY=y-roomSize;endY=y;
-      if(!checkSpaceEmpty(startX-1,startY-1,endX+1,endY+1))return false;
+    }else if(roomDirection===N && rn){
+      centerX=x;
+      centerY=y-Math.floor(r);
+      sx=x-Math.floor(r);
+      ex=x+Math.ceil(r);
+      sy=y-roomSize;
+      ey=y;
+      if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
       if(drawPathway)sc(x,y);
-      for(i=startX;i<endX;i++){
-        for(j=startY;j<endY;j++){
-          let cx = startX+(endX-startX)/2, //center x float
-              cy = startY+(endY-startY)/2, //center y float
+      for(i=sx;i<ex;i++){
+        for(j=sy;j<ey;j++){
+          let cx = sx+(ex-sx)/2, //center x float
+              cy = sy+(ey-sy)/2, //center y float
               w = Math.abs(i-cx), //comparison width
               h = Math.abs(j-cy), //comparison height
-              sa1 = 0.5+(endX-startX)/2, // semi-axis 1
-              sa2 = 0.5+(endY-startY)/2, // semi-axis 2
+              sa1 = 0.5+(ex-sx)/2, // semi-axis 1
+              sa2 = 0.5+(ey-sy)/2, // semi-axis 2
               hypotenuse = Math.sqrt(Math.pow(w,2)+Math.pow(h,2)),
               theta = Math.asin(h / hypotenuse),
               p1 = Math.pow(sa1,2)*Math.pow(Math.sin(theta),2),
@@ -652,27 +627,29 @@ export function PCG(map,size,proceduralType){
               foci = (sa1*sa2)/Math.sqrt(p1+p2);
 
           if(hypotenuse<foci){
-            drawSpecialty(i,j,startX,startY,endX,endY);
+            drawSpecialty(i,j,sx,sy,ex,ey,type);
           } //end if
         } //end for
       } //end for
       todo.push({rd: N,x: x,y: y-roomSize-1});
-      todo.push({rd: W,x: x-Math.floor(radius)+1,y: y-Math.floor(radius)-1});
-      todo.push({rd: E,x: x+Math.floor(radius)-1,y: y-Math.floor(radius)-1});
-    }else if(rd===E && y-Math.floor(roomSize/2)-1>=0 && y+Math.ceil(roomSize/2)+1<size&&x+roomSize+1<size){
-      centerX=x+Math.floor(roomSize/2);centerY=y;
-      startX=x+1;endX=x+roomSize;
-      startY=y-Math.floor(roomSize/2);endY=y+Math.ceil(roomSize/2);
-      if(!checkSpaceEmpty(startX-1,startY-1,endX+1,endY+1))return false;
+      todo.push({rd: W,x: x-Math.floor(r)+1,y: y-Math.floor(r)-1});
+      todo.push({rd: E,x: x+Math.floor(r)-1,y: y-Math.floor(r)-1});
+    }else if(roomDirection===E && re){
+      centerX=x+Math.floor(r);
+      centerY=y;
+      sx=x+1;ex=x+roomSize;
+      sy=y-Math.floor(r);
+      ey=y+Math.ceil(r);
+      if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
       if(drawPathway)sc(x,y);
-      for(i=startX;i<=endX;i++){
-        for(j=startY;j<endY;j++){
-          let cx = startX+(endX-startX)/2, //center x float
-              cy = startY+(endY-startY)/2, //center y float
+      for(i=sx;i<=ex;i++){
+        for(j=sy;j<ey;j++){
+          let cx = sx+(ex-sx)/2, //center x float
+              cy = sy+(ey-sy)/2, //center y float
               w = Math.abs(i-cx), //comparison width
               h = Math.abs(j-cy), //comparison height
-              sa1 = 0.5+(endX-startX)/2, // semi-axis 1
-              sa2 = 0.5+(endY-startY)/2, // semi-axis 2
+              sa1 = 0.5+(ex-sx)/2, // semi-axis 1
+              sa2 = 0.5+(ey-sy)/2, // semi-axis 2
               hypotenuse = Math.sqrt(Math.pow(w,2)+Math.pow(h,2)),
               theta = Math.asin(h / hypotenuse),
               p1 = Math.pow(sa1,2)*Math.pow(Math.sin(theta),2),
@@ -680,27 +657,30 @@ export function PCG(map,size,proceduralType){
               foci = (sa1*sa2)/Math.sqrt(p1+p2);
 
           if(hypotenuse<foci){
-            drawSpecialty(i,j,startX,startY,endX,endY);
+            drawSpecialty(i,j,sx,sy,ex,ey,type);
           } //end if
         } //end for
       } //end for
       todo.push({rd: E,x: x+roomSize,y: y});
-      todo.push({rd: N,x: x+Math.ceil(roomSize/2),y: y-Math.floor(roomSize/2)-1});
-      todo.push({rd: S,x: x+Math.ceil(roomSize/2),y: y+Math.ceil(roomSize/2)-1});
-    }else if(rd===S && x-Math.floor(roomSize/2)-1>=0 && x+Math.ceil(roomSize/2)+1<size&&y+roomSize+1<size){
-      centerX=x;centerY=y+Math.floor(roomSize/2);
-      startX=x-Math.floor(roomSize/2);endX=x+Math.ceil(roomSize/2);
-      startY=y+1;endY=y+roomSize;
-      if(!checkSpaceEmpty(startX-1,startY-1,endX+1,endY+1))return false;
+      todo.push({rd: N,x: x+Math.ceil(r),y: y-(r)|0-1});
+      todo.push({rd: S,x: x+Math.ceil(r),y: y+Math.ceil(r)-1});
+    }else if(roomDirection===S && rs){
+      centerX=x;
+      centerY=y+Math.floor(r);
+      sx=x-Math.floor(r);
+      ex=x+Math.ceil(r);
+      sy=y+1;
+      ey=y+roomSize;
+      if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
       if(drawPathway)sc(x,y);
-      for(i=startX;i<endX;i++){
-        for(j=startY;j<=endY;j++){
-          let cx = startX+(endX-startX)/2, //center x float
-              cy = startY+(endY-startY)/2, //center y float
+      for(i=sx;i<ex;i++){
+        for(j=sy;j<=ey;j++){
+          let cx = sx+(ex-sx)/2, //center x float
+              cy = sy+(ey-sy)/2, //center y float
               w = Math.abs(i-cx), //comparison width
               h = Math.abs(j-cy), //comparison height
-              sa1 = 0.5+(endX-startX)/2, // semi-axis 1
-              sa2 = 0.5+(endY-startY)/2, // semi-axis 2
+              sa1 = 0.5+(ex-sx)/2, // semi-axis 1
+              sa2 = 0.5+(ey-sy)/2, // semi-axis 2
               hypotenuse = Math.sqrt(Math.pow(w,2)+Math.pow(h,2)),
               theta = Math.asin(h / hypotenuse),
               p1 = Math.pow(sa1,2)*Math.pow(Math.sin(theta),2),
@@ -708,27 +688,30 @@ export function PCG(map,size,proceduralType){
               foci = (sa1*sa2)/Math.sqrt(p1+p2);
 
           if(hypotenuse<foci){
-            drawSpecialty(i,j,startX,startY,endX,endY);
+            drawSpecialty(i,j,sx,sy,ex,ey,type);
           } //end if
         } //end for
       } //end for
       todo.push({rd: S,x: x,y: y+roomSize+1});
-      todo.push({rd: W,x: x-Math.floor(roomSize/2)-1,y: y+Math.ceil(roomSize/2)});
-      todo.push({rd: E,x: x+Math.ceil(roomSize/2),y: y+Math.ceil(roomSize/2)});
-    }else if(rd===W && y-Math.floor(roomSize/2)-1>=0 && y+Math.ceil(roomSize/2)+1<size&&x-roomSize-1>=0){
-      centerX=x-Math.floor(roomSize/2);centerY=y;
-      startX=x-roomSize;endX=x;
-      startY=y-Math.floor(roomSize/2);endY=y+Math.ceil(roomSize/2);
-      if(!checkSpaceEmpty(startX-1,startY-1,endX+1,endY+1))return false;
+      todo.push({rd: W,x: x-(r)|0-1,y: y+Math.ceil(r)});
+      todo.push({rd: E,x: x+Math.ceil(r),y: y+Math.ceil(r)});
+    }else if(roomDirection===W && rw){
+      centerX=x-Math.floor(r);
+      centerY=y;
+      sx=x-roomSize;
+      ex=x;
+      sy=y-Math.floor(r);
+      ey=y+Math.ceil(r);
+      if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
       if(drawPathway)sc(x,y);
-      for(i=startX;i<endX;i++){
-        for(j=startY;j<endY;j++){
-          let cx = startX+(endX-startX)/2, //center x float
-              cy = startY+(endY-startY)/2, //center y float
+      for(i=sx;i<ex;i++){
+        for(j=sy;j<ey;j++){
+          let cx = sx+(ex-sx)/2, //center x float
+              cy = sy+(ey-sy)/2, //center y float
               w = Math.abs(i-cx), //comparison width
               h = Math.abs(j-cy), //comparison height
-              sa1 = 0.5+(endX-startX)/2, // semi-axis 1
-              sa2 = 0.5+(endY-startY)/2, // semi-axis 2
+              sa1 = 0.5+(ex-sx)/2, // semi-axis 1
+              sa2 = 0.5+(ey-sy)/2, // semi-axis 2
               hypotenuse = Math.sqrt(Math.pow(w,2)+Math.pow(h,2)),
               theta = Math.asin(h / hypotenuse),
               p1 = Math.pow(sa1,2)*Math.pow(Math.sin(theta),2),
@@ -736,13 +719,13 @@ export function PCG(map,size,proceduralType){
               foci = (sa1*sa2)/Math.sqrt(p1+p2);
 
           if(hypotenuse<foci){
-            drawSpecialty(i,j,startX,startY,endX,endY);
+            drawSpecialty(i,j,sx,sy,ex,ey,type);
           } //end if
         } //end for
       } //end for
       todo.push({rd: W,x: x-roomSize-1,y: y});
-      todo.push({rd: N,x: x-Math.floor(roomSize/2)-1,y: y-Math.floor(roomSize/2)-1});
-      todo.push({rd: S,x: x-Math.floor(roomSize/2)-1,y: y+Math.ceil(roomSize/2)});
+      todo.push({rd: N,x: x-(r)|0-1,y: y-(r)|0-1});
+      todo.push({rd: S,x: x-(r)|0-1,y: y+Math.ceil(r)});
     }else{
       return false; //went off side of map
     } //end if
@@ -750,67 +733,76 @@ export function PCG(map,size,proceduralType){
 
   // Given a specified x and y coordinate, roomsize, direction and type
   // we will draw a square room.
-  function buildSquareRoom(){
-    var x = arguments[0],
-        y = arguments[1],
-        roomSize = arguments[2],
-        direction = arguments[3],
-        drawPathway = arguments[4],
-        floorType = arguments[5],
-        i,j,startX,startY,endX,endY;
+  function buildSquareRoom(x,y,roomSize,roomDirection,drawPathway,type){
+    var i,j,sx,sy,ex,ey,
+        r = roomSize / 2,
+        lx = x-(r)|0-1>=0,
+        ly = y-(r)|0-1>=0,
+        rn = lx && x+Math.ceil(r)+1<size&&y-roomSize-1>=0,
+        re = ly && y+Math.ceil(r)+1<size&&x+roomSize+1<size,
+        rs = lx && x+Math.ceil(r)+1<size&&y+roomSize+1<size,
+        rw = ly && y+Math.ceil(r)+1<size&&x-roomSize-1>=0;
 
-    if(rd===N && x-Math.floor(roomSize/2)-1>=0 && x+Math.ceil(roomSize/2)+1<size&&y-roomSize-1>=0){
-      startX=x-Math.floor(roomSize/2);endX=x+Math.ceil(roomSize/2);
-      startY=y-roomSize;endY=y;
-      if(!checkSpaceEmpty(startX-1,startY-1,endX+1,endY+1))return false;
-      for(i=startX;i<endX;i++){
-        for(j=startY;j<endY;j++){
+    if(roomDirection===N && rn){
+      sx=x-Math.floor(r);
+      ex=x+Math.ceil(r);
+      sy=y-roomSize;
+      ey=y;
+      if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
+      for(i=sx;i<ex;i++){
+        for(j=sy;j<ey;j++){
           if(drawPathway)sc(x,y);
-          map[i][j].setFloor();
+          drawSpecialty(i,j,sx,sy,ex,ey,type);
         } //end for
       } //end for
       todo.push({rd: N,x: x,y: y-roomSize-1});
-      todo.push({rd: W,x: x-Math.floor(roomSize/2)-1,y: y-Math.floor(roomSize/2)-1});
-      todo.push({rd: E,x: x+Math.ceil(roomSize/2),y: y-Math.floor(roomSize/2)-1});
-    }else if(rd===E && y-Math.floor(roomSize/2)-1>=0 && y+Math.ceil(roomSize/2)+1<size&&x+roomSize+1<size){
-      startX=x+1;endX=x+roomSize;
-      startY=y-Math.floor(roomSize/2);endY=y+Math.ceil(roomSize/2);
-      if(!checkSpaceEmpty(startX-1,startY-1,endX+1,endY+1))return false;
-      for(i=startX;i<=endX;i++){
-        for(j=startY;j<endY;j++){
+      todo.push({rd: W,x: x-(r)|0-1,y: y-(r)|0-1});
+      todo.push({rd: E,x: x+Math.ceil(r),y: y-(r)|0-1});
+    }else if(roomDirection===E && re){
+      sx=x+1;
+      ex=x+roomSize;
+      sy=y-Math.floor(r);
+      ey=y+Math.ceil(r);
+      if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
+      for(i=sx;i<=ex;i++){
+        for(j=sy;j<ey;j++){
           if(drawPathway)sc(x,y);
-          map[i][j].setFloor();
+          drawSpecialty(i,j,sx,sy,ex,ey,type);
         } //end for
       } //end for
       todo.push({rd: E,x: x+roomSize+1,y: y});
-      todo.push({rd: N,x: x+Math.ceil(roomSize/2),y: y-Math.floor(roomSize/2)-1});
-      todo.push({rd: S,x: x+Math.ceil(roomSize/2),y: y+Math.ceil(roomSize/2)});
-    }else if(rd===S && x-Math.floor(roomSize/2)-1>=0 && x+Math.ceil(roomSize/2)+1<size&&y+roomSize+1<size){
-      startX=x-Math.floor(roomSize/2);endX=x+Math.ceil(roomSize/2);
-      startY=y+1;endY=y+roomSize;
-      if(!checkSpaceEmpty(startX-1,startY-1,endX+1,endY+1))return false;
-      for(i=startX;i<endX;i++){
-        for(j=startY;j<=endY;j++){
+      todo.push({rd: N,x: x+Math.ceil(r),y: y-(r)|0-1});
+      todo.push({rd: S,x: x+Math.ceil(r),y: y+Math.ceil(r)});
+    }else if(roomDirection===S && rs){
+      sx=x-Math.floor(r);
+      ex=x+Math.ceil(r);
+      sy=y+1;
+      ey=y+roomSize;
+      if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
+      for(i=sx;i<ex;i++){
+        for(j=sy;j<=ey;j++){
           if(drawPathway)sc(x,y);
-          map[i][j].setFloor();
+          drawSpecialty(i,j,sx,sy,ex,ey,type);
         } //end for
       } //end for
       todo.push({rd: S,x: x,y: y+roomSize+1});
-      todo.push({rd: W,x: x-Math.floor(roomSize/2)-1,y: y+Math.ceil(roomSize/2)});
-      todo.push({rd: E,x: x+Math.ceil(roomSize/2),y: y+Math.ceil(roomSize/2)});
-    }else if(rd===W && y-Math.floor(roomSize/2)-1>=0 && y+Math.ceil(roomSize/2)+1<size&&x-roomSize-1>=0){
-      startX=x-roomSize;endX=x;
-      startY=y-Math.floor(roomSize/2);endY=y+Math.ceil(roomSize/2);
-      if(!checkSpaceEmpty(startX-1,startY-1,endX+1,endY+1))return false;
-      for(i=startX;i<endX;i++){
-        for(j=startY;j<endY;j++){
+      todo.push({rd: W,x: x-(r)|0-1,y: y+Math.ceil(r)});
+      todo.push({rd: E,x: x+Math.ceil(r),y: y+Math.ceil(r)});
+    }else if(roomDirection===W && rw){
+      sx=x-roomSize;
+      ex=x;
+      sy=y-Math.floor(r);
+      ey=y+Math.ceil(r);
+      if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
+      for(i=sx;i<ex;i++){
+        for(j=sy;j<ey;j++){
           if(drawPathway)sc(x,y);
-          map[i][j].setFloor();
+          drawSpecialty(i,j,sx,sy,ex,ey,type);
         } //end for
       } //end for
       todo.push({rd: W,x: x-roomSize-1,y: y});
-      todo.push({rd: N,x: x-Math.floor(roomSize/2)-1,y: y-Math.floor(roomSize/2)-1});
-      todo.push({rd: S,x: x-Math.floor(roomSize/2)-1,y: y+Math.ceil(roomSize/2)});
+      todo.push({rd: N,x: x-(r)|0-1,y: y-(r)|0-1});
+      todo.push({rd: S,x: x-(r)|0-1,y: y+Math.ceil(r)});
     }else{
       return false; //went off side of map
     } //end if

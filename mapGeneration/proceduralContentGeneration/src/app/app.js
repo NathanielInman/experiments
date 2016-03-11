@@ -84,7 +84,7 @@ import {PCG} from './common/main';
         map[i][j]= new Sector();
       } //end for
     } //end for
-    if(PCG(map,size,4)){
+    if(PCG(map,size)){
       let rw = v.w/size,
           rh = v.h/size;
 
