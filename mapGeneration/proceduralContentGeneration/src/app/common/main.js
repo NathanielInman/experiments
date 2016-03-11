@@ -39,7 +39,6 @@ export function PCG(map,size){
   if(proceduralType===MARSHY_DREDGE) waterChance = 85;
   if(proceduralType===WIDE_PASSAGES) waterChance = 35;
   if(proceduralType===DEEP_PASSAGES) waterChance = 60;
-  if(proceduralType===CRYPT_ANCIENT) alert('yes')
   do{
     step++; //increase the number of times we've iterated by one.
 
@@ -199,6 +198,7 @@ export function PCG(map,size){
     var halfX = (ex-sx)/2,
         halfY = (ey-sy)/2;
 
+type=ROOM_POOL;
     if(type===ROOM_DISPERSION){
       map[x][y].setFloor();
       if(!rf(2)){ //50% chance
@@ -247,13 +247,27 @@ export function PCG(map,size){
       } //end if
     }else if(type===ROOM_ISLAND){
       if(x>=sx+halfX/2&&x<=ex-halfX/2&&y>=sy+halfY/2&&y<=ey-halfY/2){
-        map[x][y].setFloor();
+        let bend = !rf(2);
+
+        if(bend&&x===sx+(halfX/2)|0||bend&&x===ex-(halfX/2)|0||
+           bend&&y===sy+(halfY/2)|0||bend&&y===ey-(halfY/2)|0){
+          map[x][y].setWater();
+        }else{
+          map[x][y].setFloor();
+        } //end if
       }else{
         map[x][y].setWater();
       } //end if
     }else if(type===ROOM_POOL){
       if(x>=sx+halfX/2&&x<=ex-halfX/2&&y>=sy+halfY/2&&y<=ey-halfY/2){
-        map[x][y].setWater();
+        let bend = !rf(2);
+
+        if(bend&&x===sx+(halfX/2)|0||bend&&x===ex-(halfX/2)|0||
+           bend&&y===sy+(halfY/2)|0||bend&&y===ey-(halfY/2)|0){
+          map[x][y].setFloor();
+        }else{
+          map[x][y].setWater();
+        } //end if
       }else{
         map[x][y].setFloor();
       } //end if
