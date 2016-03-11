@@ -149,6 +149,15 @@ export function PCG(map,size){
         if(i<size&&j<size&&map[i+1][j+1].isEmpty()) map[i+1][j+1].setWall();
         if(i>0&&j<size&&map[i-1][j+1].isEmpty()) map[i-1][j+1].setWall();
         if(i<size&&j>0&&map[i+1][j-1].isEmpty()) map[i+1][j-1].setWall();
+        if(i===0||j===0||i===size-1||j===size-1) map[i][j].setWall();
+        if(map[i][j].isCorridor()){
+          if(i>0&&map[i-1][j].isWall()&&i<size-1&&map[i+1][j].isWall()||
+             j>0&&map[i][j-1].isWall()&&j<size-1&&map[i][j+1].isWall()){
+            if(!rf(4)) map[i][j].setDoor();
+          }else{
+            map[i][j].setFloor();
+          } //end if
+        } //end if
       } //end if
     } //end for
   } //end for
@@ -198,7 +207,6 @@ export function PCG(map,size){
     var halfX = (ex-sx)/2,
         halfY = (ey-sy)/2;
 
-type=ROOM_POOL;
     if(type===ROOM_DISPERSION){
       map[x][y].setFloor();
       if(!rf(2)){ //50% chance
