@@ -1,0 +1,10 @@
+E:\Station\Programming\School\NumericalTicTacToe\NumericalTicTacToe\bin\Debug\NumericalTicTacToe.exe.config
+E:\Station\Programming\School\NumericalTicTacToe\NumericalTicTacToe\bin\Debug\NumericalTicTacToe.exe
+E:\Station\Programming\School\NumericalTicTacToe\NumericalTicTacToe\bin\Debug\NumericalTicTacToe.pdb
+E:\Station\Programming\School\NumericalTicTacToe\NumericalTicTacToe\bin\Debug\NumericalTicTacToe.xml
+E:\Station\Programming\School\NumericalTicTacToe\NumericalTicTacToe\obj\Debug\NumericalTicTacToe.Form1.resources
+E:\Station\Programming\School\NumericalTicTacToe\NumericalTicTacToe\obj\Debug\NumericalTicTacToe.Resources.resources
+E:\Station\Programming\School\NumericalTicTacToe\NumericalTicTacToe\obj\Debug\NumericalTicTacToe.vbproj.GenerateResource.Cache
+E:\Station\Programming\School\NumericalTicTacToe\NumericalTicTacToe\obj\Debug\NumericalTicTacToe.exe
+E:\Station\Programming\School\NumericalTicTacToe\NumericalTicTacToe\obj\Debug\NumericalTicTacToe.xml
+E:\Station\Programming\School\NumericalTicTacToe\NumericalTicTacToe\obj\Debug\NumericalTicTacToe.pdb

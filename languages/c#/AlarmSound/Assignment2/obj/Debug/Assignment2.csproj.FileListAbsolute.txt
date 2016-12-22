@@ -1,0 +1,6 @@
+E:\Station\Programming\School\C# Programming\AlarmSound\Assignment2\bin\Debug\Assignment2.exe.config
+E:\Station\Programming\School\C# Programming\AlarmSound\Assignment2\bin\Debug\Assignment2.exe
+E:\Station\Programming\School\C# Programming\AlarmSound\Assignment2\bin\Debug\Assignment2.pdb
+E:\Station\Programming\School\C# Programming\AlarmSound\Assignment2\obj\Debug\Assignment2.csprojResolveAssemblyReference.cache
+E:\Station\Programming\School\C# Programming\AlarmSound\Assignment2\obj\Debug\Assignment2.exe
+E:\Station\Programming\School\C# Programming\AlarmSound\Assignment2\obj\Debug\Assignment2.pdb

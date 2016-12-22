@@ -1,0 +1,10 @@
+E:\Station\Programming\School\RPSLP\RPSLP\bin\Debug\RPSLP.exe.config
+E:\Station\Programming\School\RPSLP\RPSLP\bin\Debug\RPSLP.exe
+E:\Station\Programming\School\RPSLP\RPSLP\bin\Debug\RPSLP.pdb
+E:\Station\Programming\School\RPSLP\RPSLP\bin\Debug\RPSLP.xml
+E:\Station\Programming\School\RPSLP\RPSLP\obj\Debug\RPSLP.Form1.resources
+E:\Station\Programming\School\RPSLP\RPSLP\obj\Debug\RPSLP.Resources.resources
+E:\Station\Programming\School\RPSLP\RPSLP\obj\Debug\RPSLP.vbproj.GenerateResource.Cache
+E:\Station\Programming\School\RPSLP\RPSLP\obj\Debug\RPSLP.exe
+E:\Station\Programming\School\RPSLP\RPSLP\obj\Debug\RPSLP.xml
+E:\Station\Programming\School\RPSLP\RPSLP\obj\Debug\RPSLP.pdb
