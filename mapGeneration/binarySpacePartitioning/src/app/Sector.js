@@ -30,3 +30,4 @@ export class Sector{
     this.active=1;
   }
 }
+

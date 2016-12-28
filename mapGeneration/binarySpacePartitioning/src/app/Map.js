@@ -1,4 +1,4 @@
-import { Sector } from 'object-model/Sector';
+import {Sector} from './Sector';
 
 export class Map{
   constructor(w,h){
@@ -8,18 +8,19 @@ export class Map{
     this.generate();
   }
   generate(){
-    var i,j;
-    for(i=0;i<this.width;i++){
+    for(let i=0;i<this.width;i++){
       this.sector[i]=[];
-      for(j=0;j<this.height;j++){
+      for(let j=0;j<this.height;j++){
         this.sector[i][j]=new Sector(i,j);
       } //end for
     } //end for
   }
   redraw(){
-    var i,j,w=v.w/this.width,h=v.h/this.height;
-    for(i=0;i<this.width;i++){
-      for(j=0;j<this.height;j++){
+    let w=v.w/this.width,h=v.h/this.height;
+
+    console.log('redraw');
+    for(let i=0;i<this.width;i++){
+      for(let j=0;j<this.height;j++){
         if(this.sector[i][j].active){
           ctx.fillStyle='#099';
         }else if(this.sector[i][j].wall){
@@ -33,4 +34,4 @@ export class Map{
       } //end for
     } //end for
   }
-};
+}
