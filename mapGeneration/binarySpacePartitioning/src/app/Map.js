@@ -21,14 +21,14 @@ export class Map{
     console.log('redraw');
     for(let i=0;i<this.width;i++){
       for(let j=0;j<this.height;j++){
-        if(this.sector[i][j].active){
+        if(this.sector[i][j].isOther()){
           ctx.fillStyle='#099';
-        }else if(this.sector[i][j].wall){
+        }else if(this.sector[i][j].isWall()){
           ctx.fillStyle='#888';
-        }else if(this.sector[i][j].floor){
+        }else if(this.sector[i][j].isFloor()){
           ctx.fillStyle='#030';
-        }else if(this.sector[i][j].door){
-          ctx.fillStyle='853';
+        }else if(this.sector[i][j].isDoor()){
+          ctx.fillStyle='#853';
         }else{
           ctx.fillStyle='#300';
         } //end if

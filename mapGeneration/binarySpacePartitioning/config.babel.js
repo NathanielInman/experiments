@@ -16,7 +16,7 @@ export default {
 //  devtool: 'source-map',
   plugins:[
     new commonsChunk('vendor.js'),
-    new uglifyWebpack({minimize: true,mangle: false}),
+    //new uglifyWebpack({minimize: true,mangle: false}),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production')

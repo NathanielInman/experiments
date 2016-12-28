@@ -1,40 +1,34 @@
+const VOID = 0,
+      FLOOR = 1,
+      WALL = 2,
+      DOOR = 3,
+      OTHER = 4;
+
 export class Sector{
   constructor(x,y){
     this.x=x;
     this.y=y;
-    this.floor=0;
-    this.wall=0;
-    this.door=0;
+    this.type=VOID;
   }
-  isFloor(){
-    return !this.wall&&this.floor;
-  }
-  isWall(){
-    return this.wall&&this.floor;
-  }
-  isEmpty(){
-    return !this.wall&&!this.floor;
-  }
-  isDoor(){
-    return this.door;
-  }
+  isFloor(){ return this.type===FLOOR }
+  isWall(){ return this.type===WALL }
+  isEmpty(){ return this.type===VOID }
+  isDoor(){ return this.type===DOOR }
+  isOther(){ return this.type===OTHER }
   setFloor(){
-    this.floor=1;
-    this.wall=0;
+    this.type=FLOOR;
   }
   setWall(){
-    this.wall=1;
-    this.floor=1;
+    this.type=WALL;
   }
   setEmpty(){
-    this.wall=0;
-    this.floor=0;
-  }
-  setActive(){
-    this.active=1;
+    this.type=VOID;
   }
   setDoor(){
-    this.door=1;
+    this.type=DOOR;
+  }
+  setOther(){
+    this.type=OTHER;
   }
 }
 

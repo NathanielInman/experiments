@@ -85,18 +85,18 @@ class Partition{
       y2=r(y2-tinSize,y2+1,1);
     } //end if
 
-    console.log('carved',x1,x2,y1,y2);
+    console.log('carved',x1,x2,y1,y2,x2-x1);
     // Carve the floors and walls surrounding the room
     for(let i=x1-1;i<=x2;i++){
       for(let j=y1-1;j<=y2;j++){
         // Make sure we're not a corner, if we're not then save to pathable
-        if(i===Math.floor((x2-x1)/2)&&j===y1-1){ //north
+        if(i===Math.floor(x1+(x2-x1)/2)&&j===y1-1){ //north
           this.pathable.push({x: i,y: j,direction: 'north'});
-        }else if(i===Math.floor((x2-x1)/2)&&j===y2){ //south
+        }else if(i===Math.floor(x1+(x2-x1)/2)&&j===y2){ //south
           this.pathable.push({x: i,y: j,direction: 'south'});
-        }else if(i===x1-1&&j===Math.floor((y2-y1)/2)){ //west
+        }else if(i===x1-1&&j===Math.floor(y1+(y2-y1)/2)){ //west
           this.pathable.push({x: i,y: j,direction: 'west'});
-        }else if(i===x2&&j===Math.floor((y2-y1)/2)){ //east
+        }else if(i===x2&&j===Math.floor(y1+(y2-y1)/2)){ //east
           this.pathable.push({x: i,y: j,direction: 'east'});
         } //end if
         if(i===x1-1||i===x2||j===y1-1||j==y2){
@@ -124,24 +124,37 @@ class Partition{
       //connect child rooms
       this.left.setClosed();
       this.right.setClosed();
-      console.log(this.left.x1,this.left.x2,'-',this.right.x1,this.right.x2);
-      console.log(this.left.y1,this.left.y2,'-',this.right.y1,this.right.y2);
       if(this.left.y1===this.right.y1&&this.left.y2===this.right.y2){
-        let s1=this.left.pathable.find(s=>s.direction==='east'),
-            s2=this.right.pathable.find(s=>s.direction==='west');
+        let s1i=this.left.pathable.findIndex(s=>s.direction==='east'),
+            s2i=this.right.pathable.findIndex(s=>s.direction==='west'),
+            s1=this.left.pathable.splice(s1i,1),
+            s2=this.right.pathable.splice(s2i,1);
 
-        console.log('vertical split',s1,s2);
-        console.log('this.left.pathable',this.left.pathable);
-        console.log('this.right.pathable',this.right.pathable);
+        console.log('debuggery',s1i,s2i,s1,s2);
+        if(this.parent) this.parent.pathable.push(this.left.pathable);
+        if(this.parent) this.parent.pathable.push(this.right.pathable);
+        if(s1&&s2){
+          this.map.sector[s1.x][s1.y].setDoor();
+          this.map.sector[s2.x][s2.y].setDoor();
+        }else{
+          console.log('failed',this.left.pathable,this.right.pathable);
+        }//end if
       }else if(this.left.x1===this.right.x1&&this.left.x2===this.right.x2){
-        let s1=this.left.pathable.find(s=>s.direction==='south'),
-            s2=this.right.pathable.find(s=>s.direction==='north');
+        let s1i=this.left.pathable.findIndex(s=>s.direction==='south'),
+            s2i=this.right.pathable.findIndex(s=>s.direction==='north'),
+            s1=this.left.pathable.splice(s1i,1),
+            s2=this.right.pathable.splice(s2i,1);
 
-        console.log('horizontal split',s1,s2);
-        console.log('this.left.pathable',this.left.pathable);
-        console.log('this.right.pathable',this.right.pathable);
+        console.log('debuggery',s1i,s2i,s1,s2);
+        if(this.parent) this.parent.pathable.push(this.left.pathable);
+        if(this.parent) this.parent.pathable.push(this.right.pathable);
+        if(s1&&s2){
+          this.map.sector[s1.x][s1.y].setDoor();
+          this.map.sector[s2.x][s2.y].setDoor();
+        }else{
+          console.log('failed',this.left.pathable,this.right.pathable);
+        } //end if
       } //end if
-      console.log('connected: ',this.left,this.right);
     } //end if
   }
 }
