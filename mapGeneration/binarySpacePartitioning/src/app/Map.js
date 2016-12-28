@@ -27,6 +27,8 @@ export class Map{
           ctx.fillStyle='#888';
         }else if(this.sector[i][j].floor){
           ctx.fillStyle='#030';
+        }else if(this.sector[i][j].door){
+          ctx.fillStyle='853';
         }else{
           ctx.fillStyle='#300';
         } //end if

@@ -4,6 +4,7 @@ export class Sector{
     this.y=y;
     this.floor=0;
     this.wall=0;
+    this.door=0;
   }
   isFloor(){
     return !this.wall&&this.floor;
@@ -13,6 +14,9 @@ export class Sector{
   }
   isEmpty(){
     return !this.wall&&!this.floor;
+  }
+  isDoor(){
+    return this.door;
   }
   setFloor(){
     this.floor=1;
@@ -28,6 +32,9 @@ export class Sector{
   }
   setActive(){
     this.active=1;
+  }
+  setDoor(){
+    this.door=1;
   }
 }
 

@@ -14,48 +14,46 @@ class Partition{
   // available size. The rooms are constructed with walls. After initialization
   // the connect function is called to build out hallways.
   constructor(map,x1,x2,y1,y2,parent){
-    console.log('x1,x2,y1,y2',x1,x2,y1,y2);
     this._closed=false;
     this.map = map;
+    this.x1 = x1; this.y1 = y1; this.x2 = x2; this.y2 = y2;
     this.width=x2-x1;
     this.height=y2-y1;
     this.parent=parent||false;
-    this.initialize(x1,x2,y1,y2);
+    this.pathable=[]; //room walls that can be connected to
+    this.initialize();
   }
   get opened(){ return this._closed===false; }
   get closed(){ return this._closed===true; } 
-  setOpen(){ this._closed=false; }
   setClosed(){ this._closed=true; }
 
   // This creates a left and right child (left/right could be up and down) if there
   // is enough valid space to do so; otherwise, it sets the left and right child
   // as closed nodes
-  initialize(x1,x2,y1,y2){
+  initialize(){
+    let x1 = this.x1, y1 = this.y1, x2 = this.x2, y2 = this.y2;
+
     if(this.width>=this.height){
-      if(this.width>minSize*2){
-        console.log('splitting vertically',minSize);
+      if(this.width>minSize*2){ //splitting horizontally
         let split = r(x1+minSize,x2-minSize,1);
 
         this.left = new Partition(this.map,x1,split,y1,y2,this);
         this.right = new Partition(this.map,split+1,x2,y1,y2,this);
-      }else{
-        console.log('Cant split vertically',this.width,minSize*2);
+      }else{ //can't split horizontally, too smalle - close nodes
         this.left =  {closed:true};
         this.right = {closed:true};
-        this.fill(x1,x2,y1,y2);
+        this.fill();
       } //end if
     }else{
-      if(this.height>minSize*2){
-        console.log('splitting horizontally');
+      if(this.height>minSize*2){ // splitting vertically
         let split = r(y1+minSize,y2-minSize,1);
 
         this.left = new Partition(this.map,x1,x2,y1,split,this);
         this.right = new Partition(this.map,x1,x2,split+1,y2,this);
-      }else{
-        console.log('Cant split horizontally',this.height,minSize*2);
+      }else{ //can't split vertically, too small - close nodes
         this.left =  {closed:true};
         this.right = {closed:true};
-        this.fill(x1,x2,y1,y2);
+        this.fill();
       } //end if
     } //end if
   }
@@ -64,15 +62,8 @@ class Partition{
   // smaller partitions. It fills the floor and walls if it meets the size
   // requirement. If the room is way too smal, it's emptied and set to closed
   // so we know not to conenct this location with a hallway
-  fill(x1,x2,y1,y2){
-
-    // If the room is smaller than it's allowed to be then we need to close
-    // it off and prevent it from being connected by a hallway
-    if(this.width<tinSize||this.height<tinSize){
-      for(let i=x1;i<x2;i++)for(let j=y1;j<y2;j++)this.map.sector[i][j].setEmpty();
-      this.setClosed(); //This node can't be connected to
-      return; //make sure to exit early
-    } //end if
+  fill(){
+    let x1 = this.x1, y1 = this.y1, x2 = this.x2, y2 = this.y2;
 
     // Make sure we randomly place the room in the allocated space, not using
     // the whole space allocated or it will look entirely too generic and
@@ -94,9 +85,20 @@ class Partition{
       y2=r(y2-tinSize,y2+1,1);
     } //end if
 
+    console.log('carved',x1,x2,y1,y2);
     // Carve the floors and walls surrounding the room
     for(let i=x1-1;i<=x2;i++){
       for(let j=y1-1;j<=y2;j++){
+        // Make sure we're not a corner, if we're not then save to pathable
+        if(i===Math.floor((x2-x1)/2)&&j===y1-1){ //north
+          this.pathable.push({x: i,y: j,direction: 'north'});
+        }else if(i===Math.floor((x2-x1)/2)&&j===y2){ //south
+          this.pathable.push({x: i,y: j,direction: 'south'});
+        }else if(i===x1-1&&j===Math.floor((y2-y1)/2)){ //west
+          this.pathable.push({x: i,y: j,direction: 'west'});
+        }else if(i===x2&&j===Math.floor((y2-y1)/2)){ //east
+          this.pathable.push({x: i,y: j,direction: 'east'});
+        } //end if
         if(i===x1-1||i===x2||j===y1-1||j==y2){
           this.map.sector[i][j].setWall();
         }else{
@@ -104,38 +106,43 @@ class Partition{
         } //end if
       } //end for
     } //end for
-    this.setOpen(); //this is a pathable partition
   }
 
   //Connect is called after all the partitions are finished. It loops through
   //the partitions and connects all the sisters together that are still living
   //and works it's way up to the root node.
   connect(){
-    console.log(this);
+    console.log('connect',this);
+    // Recursively traverse downwards to terminal leafs
+    if(this.left.opened&&this.left.left.opened) this.left.left.connect();
+    if(this.left.opened&&this.left.right.opened) this.left.right.connect();
+    if(this.right.opened&&this.right.right.opened) this.right.right.connect();
+    if(this.right.opened&&this.right.left.opened) this.right.left.connect();
+
+    // terminal leafs and upward connect and operate
     if(this.left.opened&&this.right.opened){
       //connect child rooms
-      this.setClosed(); //mark node as leaf
       this.left.setClosed();
       this.right.setClosed();
+      console.log(this.left.x1,this.left.x2,'-',this.right.x1,this.right.x2);
+      console.log(this.left.y1,this.left.y2,'-',this.right.y1,this.right.y2);
+      if(this.left.y1===this.right.y1&&this.left.y2===this.right.y2){
+        let s1=this.left.pathable.find(s=>s.direction==='east'),
+            s2=this.right.pathable.find(s=>s.direction==='west');
+
+        console.log('vertical split',s1,s2);
+        console.log('this.left.pathable',this.left.pathable);
+        console.log('this.right.pathable',this.right.pathable);
+      }else if(this.left.x1===this.right.x1&&this.left.x2===this.right.x2){
+        let s1=this.left.pathable.find(s=>s.direction==='south'),
+            s2=this.right.pathable.find(s=>s.direction==='north');
+
+        console.log('horizontal split',s1,s2);
+        console.log('this.left.pathable',this.left.pathable);
+        console.log('this.right.pathable',this.right.pathable);
+      } //end if
       console.log('connected: ',this.left,this.right);
-    }else if(this.left.closed&&this.right.opened){
-      this.right.setClosed();
-      this.setOpen(); //mark node as leaf
-      //connect right with current
-      console.log('connected: ',this.right,this)
-    }else if(this.left.opened&&this.right.closed){
-      this.left.setOpen();
-      this.setOpen(); //mark node as leaf
-      //connect left with current
-      console.log('connected: ',this.left,this);
-    }else if(this.left.closed&&this.right.closed){
-      this.setOpen(); //mark node as leaf
-    }else if(this.left.closed&&this.left.opened){
-      this.left.connect(); //recursively call left
-    }else if(this.right.closed&&this.left.opened){
-      this.right.connect(); //recursively call right
     } //end if
-    if(this.parent)this.parent.connect(); //walk upwards
   }
 }
 
