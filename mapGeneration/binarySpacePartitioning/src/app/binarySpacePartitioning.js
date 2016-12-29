@@ -17,7 +17,8 @@ class Partition{
     this.id=parent?parent.id+type:'@';
     this._closed=false;
     this.map = map;
-    this.x1 = x1; this.y1 = y1; this.x2 = x2; this.y2 = y2;
+    this.x1 = x1; this.y1 = y1; this.x2 = x2; this.y2 = y2; //ordained space
+    this.x1a = x1; this.y1a = y1; this.x2a = x2; this.y2a = y2; //used space
     this.width=x2-x1;
     this.height=y2-y1;
     this.parent=parent||false;
@@ -70,23 +71,22 @@ class Partition{
     // the whole space allocated or it will look entirely too generic and
     // repeated
     if(this.width>minSize){
-      x1=r(x1,x1+tinSize,1);
-      x2=r(x2-tinSize,x2+1,1);
+      this.x1a=x1=r(x1,x1+tinSize,1);
+      this.x2a=x2=r(x2-tinSize,x2+1,1);
     }else if(this.width>minSize/2&&r(0,2,1)===1){
-      x1=r(x1,x1+tinSize,1);
+      this.x1a=x1=r(x1,x1+tinSize,1);
     }else if(this.width>minSize/2){
-      x2=r(x2-tinSize,x2+1,1);
+      this.x2a=x2=r(x2-tinSize,x2+1,1);
     } //end if
     if(this.height>minSize){
-      y1=r(y1,y1+tinSize,1);
-      y2=r(y2-tinSize,y2+1,1);
+      this.y1a=y1=r(y1,y1+tinSize,1);
+      this.y2a=y2=r(y2-tinSize,y2+1,1);
     }else if(this.height>minSize/2&&r(0,2,1)===1){
-      y1=r(y1,y1+tinSize,1);
+      this.y1a=y1=r(y1,y1+tinSize,1);
     }else if(this.height>minSize/2){
-      y2=r(y2-tinSize,y2+1,1);
+      this.y2a=y2=r(y2-tinSize,y2+1,1);
     } //end if
 
-    console.log('carved',x1,x2,y1,y2,x2-x1);
     // Carve the floors and walls surrounding the room
     for(let i=x1-1;i<=x2;i++){
       for(let j=y1-1;j<=y2;j++){
@@ -130,33 +130,25 @@ class Partition{
             s1=this.left.pathable.splice(s1i,1).pop(),
             s2=this.right.pathable.splice(s2i,1).pop();
 
-        console.log('debuggery',s1i,s2i,s1,s2);
+        console.log('debuggery horizontal');
+        console.log('x',s1.x,s2.x,this.right.y1,this.right.y2);
+        console.log('y',s1.y,s2.y,this.right.x1,this.right.x2);
         this.pathable = [].concat.apply([],[this.pathable,this.left.pathable,this.right.pathable]);
-        if(s1&&s2){
-          this.map.sector[s1.x][s1.y].setDoor();
-          this.map.sector[s2.x][s2.y].setDoor();
-        }else{
-          console.log('failed',this.left.pathable,this.right.pathable);
-        }//end if
+        for(let i=s1.x;i<=s2.x;i++) this.map.sector[i][s1.y].setOther();
       }else if(this.left.x1===this.right.x1&&this.left.x2===this.right.x2){
         let s1i=this.left.pathable.findIndex(s=>s.direction==='south'),
             s2i=this.right.pathable.findIndex(s=>s.direction==='north'),
             s1=this.left.pathable.splice(s1i,1).pop(),
             s2=this.right.pathable.splice(s2i,1).pop();
 
-        console.log('debuggery',s1i,s2i,s1,s2);
+        console.log('debuggery vertical');
+        console.log('x',s1.x,s2.x,this.right.y1,this.right.y2);
+        console.log('y',s1.y,s2.y,this.right.x1,this.right.x2);
         this.pathable = [].concat.apply([],[this.pathable,this.left.pathable,this.right.pathable]);
-        if(s1&&s2){
-          this.map.sector[s1.x][s1.y].setDoor();
-          this.map.sector[s2.x][s2.y].setDoor();
-        }else{
-          console.log('failed',this.left.pathable,this.right.pathable);
-        } //end if
+        for(let j=s1.y;j<=s2.y;j++) this.map.sector[s1.x][j].setOther();
       } //end if
-    }else{
-      console.log('this.pathable',this.pathable);
+    }else{ //Reached a terminal partition, apply pathable upwards
       this.pathable = [].concat.apply([],[this.pathable,this.left.pathable,this.right.pathable]);
-      console.log('this.pathable',this.pathable);
     }//end if
   }
 }

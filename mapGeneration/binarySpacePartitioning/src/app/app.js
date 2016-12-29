@@ -30,5 +30,7 @@ if(!easel.activated){
     map.redraw();
   };
   easel.redraw();
+  window.map=map;
+  window.easel=easel;
 } //end if
 
