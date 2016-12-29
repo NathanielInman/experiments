@@ -13,7 +13,8 @@ class Partition{
   // This constructor creates a partitioned map down to the smallest
   // available size. The rooms are constructed with walls. After initialization
   // the connect function is called to build out hallways.
-  constructor(map,x1,x2,y1,y2,parent){
+  constructor(map,x1,x2,y1,y2,parent,type){
+    this.id=parent?parent.id+type:'@';
     this._closed=false;
     this.map = map;
     this.x1 = x1; this.y1 = y1; this.x2 = x2; this.y2 = y2;
@@ -37,22 +38,22 @@ class Partition{
       if(this.width>minSize*2){ //splitting horizontally
         let split = r(x1+minSize,x2-minSize,1);
 
-        this.left = new Partition(this.map,x1,split,y1,y2,this);
-        this.right = new Partition(this.map,split+1,x2,y1,y2,this);
+        this.left = new Partition(this.map,x1,split,y1,y2,this,'L');
+        this.right = new Partition(this.map,split+1,x2,y1,y2,this,'R');
       }else{ //can't split horizontally, too smalle - close nodes
-        this.left =  {closed:true};
-        this.right = {closed:true};
+        this.left =  {closed:true,pathable:[]};
+        this.right = {closed:true,pathable:[]};
         this.fill();
       } //end if
     }else{
       if(this.height>minSize*2){ // splitting vertically
         let split = r(y1+minSize,y2-minSize,1);
 
-        this.left = new Partition(this.map,x1,x2,y1,split,this);
-        this.right = new Partition(this.map,x1,x2,split+1,y2,this);
+        this.left = new Partition(this.map,x1,x2,y1,split,this,'L');
+        this.right = new Partition(this.map,x1,x2,split+1,y2,this,'R');
       }else{ //can't split vertically, too small - close nodes
-        this.left =  {closed:true};
-        this.right = {closed:true};
+        this.left =  {closed:true,pathable:[]};
+        this.right = {closed:true,pathable:[]};
         this.fill();
       } //end if
     } //end if
@@ -112,12 +113,11 @@ class Partition{
   //the partitions and connects all the sisters together that are still living
   //and works it's way up to the root node.
   connect(){
-    console.log('connect',this);
     // Recursively traverse downwards to terminal leafs
-    if(this.left.opened&&this.left.left.opened) this.left.left.connect();
-    if(this.left.opened&&this.left.right.opened) this.left.right.connect();
-    if(this.right.opened&&this.right.right.opened) this.right.right.connect();
-    if(this.right.opened&&this.right.left.opened) this.right.left.connect();
+    if(this.left.opened) this.left.connect();
+    if(this.right.opened) this.right.connect();
+
+    console.log('connecting...',this.id,this);
 
     // terminal leafs and upward connect and operate
     if(this.left.opened&&this.right.opened){
@@ -127,12 +127,11 @@ class Partition{
       if(this.left.y1===this.right.y1&&this.left.y2===this.right.y2){
         let s1i=this.left.pathable.findIndex(s=>s.direction==='east'),
             s2i=this.right.pathable.findIndex(s=>s.direction==='west'),
-            s1=this.left.pathable.splice(s1i,1),
-            s2=this.right.pathable.splice(s2i,1);
+            s1=this.left.pathable.splice(s1i,1).pop(),
+            s2=this.right.pathable.splice(s2i,1).pop();
 
         console.log('debuggery',s1i,s2i,s1,s2);
-        if(this.parent) this.parent.pathable.push(this.left.pathable);
-        if(this.parent) this.parent.pathable.push(this.right.pathable);
+        this.pathable = [].concat.apply([],[this.pathable,this.left.pathable,this.right.pathable]);
         if(s1&&s2){
           this.map.sector[s1.x][s1.y].setDoor();
           this.map.sector[s2.x][s2.y].setDoor();
@@ -142,12 +141,11 @@ class Partition{
       }else if(this.left.x1===this.right.x1&&this.left.x2===this.right.x2){
         let s1i=this.left.pathable.findIndex(s=>s.direction==='south'),
             s2i=this.right.pathable.findIndex(s=>s.direction==='north'),
-            s1=this.left.pathable.splice(s1i,1),
-            s2=this.right.pathable.splice(s2i,1);
+            s1=this.left.pathable.splice(s1i,1).pop(),
+            s2=this.right.pathable.splice(s2i,1).pop();
 
         console.log('debuggery',s1i,s2i,s1,s2);
-        if(this.parent) this.parent.pathable.push(this.left.pathable);
-        if(this.parent) this.parent.pathable.push(this.right.pathable);
+        this.pathable = [].concat.apply([],[this.pathable,this.left.pathable,this.right.pathable]);
         if(s1&&s2){
           this.map.sector[s1.x][s1.y].setDoor();
           this.map.sector[s2.x][s2.y].setDoor();
@@ -155,7 +153,11 @@ class Partition{
           console.log('failed',this.left.pathable,this.right.pathable);
         } //end if
       } //end if
-    } //end if
+    }else{
+      console.log('this.pathable',this.pathable);
+      this.pathable = [].concat.apply([],[this.pathable,this.left.pathable,this.right.pathable]);
+      console.log('this.pathable',this.pathable);
+    }//end if
   }
 }
 
