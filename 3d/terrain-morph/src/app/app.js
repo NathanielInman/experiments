@@ -34,12 +34,13 @@ if(!easel.activated){
 function main(){
   if(!initialized) initialize();
   renderer.render(scene,camera);
+  camera.lookAt(scene.position);
   requestAnimationFrame(main);
 } //end main()
 
 function initialize(){
-  let data = generateHeight(1024,1024),
-      texture = new THREE.CanvasTexture(generateTexture(data,1024,1024)),
+  let data = generateHeight(2048,2048),
+      texture = new THREE.CanvasTexture(generateTexture(data,2048,2048)),
       material = new THREE.MeshBasicMaterial({map: texture,overdraw: 0.5}),
       quality = 16,
       step = 1024 / quality,
@@ -47,7 +48,7 @@ function initialize(){
 
   initialized = true;
   camera = new THREE.PerspectiveCamera(60,v.w/v.h,1,10000);
-  camera.position.y = 2000;
+  camera.position.y = 1000;
   controls = new THREE.OrbitControls( camera, renderer.domElement );
   controls.enableDamping = true;
   controls.dampingFactor = 0.25;
