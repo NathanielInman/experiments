@@ -11,7 +11,10 @@ export default {
     app: [
       './src/app/app.js'
     ],
-    vendor: ['ion-cloud']
+    vendor: [
+      'three/build/three',
+      'three/examples/js/controls/OrbitControls'
+    ]
   },
 //  devtool: 'source-map',
   plugins:[
