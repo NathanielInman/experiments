@@ -3,13 +3,15 @@ import './app.styl';
 import {Map} from './Map';
 import * as THREE from 'three/build/three';
 window.THREE = THREE;
-import {loadOrbitControls} from './OrbitControls';
+import {loadPointerLockControls} from './PointerLockControls';
 import {Easel3d} from 'ion-cloud';
 import {generateNoise} from './generateNoise';
 
 let easel = new Easel3d(),
+    controlsEnabled=false, // Assume controls disabled until user allows
     camera,scene,mesh,controls,mouseX=0,mouseY=0,
     initialized = false,
+    instructions = document.getElementById('instructions'), //turns off
     renderer = new THREE.WebGLRenderer({
       canvas: window.C
     }),
@@ -25,6 +27,9 @@ let canvas = document.createElement('canvas'),
     },
     v=render(); //will hold viewport width and height
 
+console.log('instructions',instructions);
+acquirePointerLock(); //ask the user to user pointer lock
+/*
 document.body.appendChild(canvas);
 canvas.addEventListener('mousemove',onDocumentMouseMove,false);
 ctx.fillStyle='#fff';
@@ -33,6 +38,7 @@ for(let i=0,width=v.w/mapSize,height=v.h/mapSize;i<100;i++){
     if(map.getSector(i,j).isFloor()) ctx.fillRect(i*width,j*height,width,height);
   } //end for
 } //end for
+*/
 
 // Launch application if easel was able to create a canvas,
 // if it wasn't then we know canvas isn't supported
@@ -48,7 +54,7 @@ if(!easel.activated){
   </p>`;
 }else{
   noscript.style.visibility='hidden';
-  loadOrbitControls();
+  loadPointerLockControls();
   main();
 } //end if
 
@@ -68,7 +74,7 @@ function initialize(){
   initialized = true;
   camera = new THREE.PerspectiveCamera(60,v.w/v.h,1,10000);
   camera.position.y = 1000;
-  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls = new THREE.PointerLockControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.dampingFactor = 0.25;
   controls.enableZoom = false;
@@ -76,14 +82,14 @@ function initialize(){
   geometry.rotateX(-Math.PI/2);
   console.log('geometry',geometry);
   for(let i=0,x,y,mx,my;i<geometry.faces.length;i++){
-    x = i%(mapSize*4);
-    y = Math.floor(i/(mapSize*4));
+    y = i%(mapSize*4);
+    x = Math.floor(i/(mapSize*4));
     mx = Math.floor(x/4);
     my = Math.floor(y/4);
     if(map.getSector(mx,my).isFloor()){
-      geometry.vertices[geometry.faces[i].a].y=0;
+      geometry.vertices[geometry.faces[i].b].y=0;
     }else{
-      geometry.vertices[geometry.faces[i].a].y=50;
+      geometry.vertices[geometry.faces[i].b].y=50;
     } //end if
   } //end for
   console.log('geometry',geometry);
@@ -152,3 +158,47 @@ function onDocumentMouseMove(event){
   mouseX = event.clientX - window.innerWidth/2;
   mouseY = event.clientY - window.innerHeight/2;
 } //end onDocumentMouseMove()
+
+function acquirePointerLock(){
+  let havePointerLock = 'pointerLockElement' in document ||
+                        'mozPointerLockElement' in document ||
+                        'webkitPointerLockElement' in document;
+
+  if(havePointerLock){
+    let element = document.body,
+        pointerlockchange = (event)=>{
+          if(document.pointerLockElement === element ||
+             document.mozPointerLockElement === element ||
+             document.webkitPointerLockElement === element){
+            controlsEnabled = true;
+            controls.enabled = true;
+            blocker.style.display = 'none';
+          } else {
+            controls.enabled = false;
+            blocker.style.display = '-webkit-box';
+            blocker.style.display = '-moz-box';
+            blocker.style.display = 'box';
+            instructions.style.display = '';
+          } //end if
+        },
+        pointerlockerror = (event) => instructions.style.display = '';
+
+    // Hook pointer lock state change events
+    document.addEventListener('pointerlockchange',pointerlockchange,false);
+    document.addEventListener('mozpointerlockchange',pointerlockchange,false);
+    document.addEventListener('webkitpointerlockchange',pointerlockchange,false);
+    document.addEventListener('pointerlockerror',pointerlockerror,false);
+    document.addEventListener('mozpointerlockerror',pointerlockerror,false);
+    document.addEventListener('webkitpointerlockerror',pointerlockerror,false);
+
+    instructions.addEventListener('click',function(event){
+      instructions.style.display = 'none';
+
+      // Ask the browser to lock the pointer
+      element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+      element.requestPointerLock();
+    },false);
+  }else{
+    instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+  } //end if
+}
