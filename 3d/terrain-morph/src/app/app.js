@@ -12,12 +12,43 @@ let easel = new Easel3d(),
     camera,scene,mesh,controls,mouseX=0,mouseY=0,
     initialized = false,
     instructions = document.getElementById('instructions'), //turns off
+    moveForward = false,
+    moveBackward = false,
+    moveLeftward = false,
+    moveRightward = false,
     renderer = new THREE.WebGLRenderer({
       canvas: window.C
     }),
     mapSize=100,
-    map = new Map(0,mapSize,mapSize);
+    prevTime = performance.now(), //used to determine moving velocity
+    velocity = new THREE.Vector3(), //helps with player movement
+    map = new Map(0,mapSize,mapSize),
+    onKeyDown = e=>{
+      if(e.keyCode===38||e.keyCode===87){ //up / w
+        moveForward = true;
+      }else if(e.keyCode===37||e.keyCode===65){ //left / a
+        moveLeftward = true;
+      }else if(e.keyCode===40||e.keyCode===83){ //down  s
+        moveBackward = true;
+      }else if(e.keyCode===39||e.keyCode===68){ //right / d
+        moveRightward = true;
+      }else if(e.keyCode===32){ //space
+      } //end if
+    },
+    onKeyUp = e=>{
+      if(e.keyCode===38||e.keyCode===87){ //up / w
+        moveForward = false;
+      }else if(e.keyCode===37||e.keyCode===65){ //left / a
+        moveLeftward = false;
+      }else if(e.keyCode===40||e.keyCode===83){ //down  s
+        moveBackward = false;
+      }else if(e.keyCode===39||e.keyCode===68){ //right / d
+        moveRightward = false;
+      }else if(e.keyCode===32){ //space
+      } //end if
+    };
 
+/*
 let canvas = document.createElement('canvas'),
     ctx = canvas.getContext('2d'),
     render = function render(){
@@ -27,9 +58,6 @@ let canvas = document.createElement('canvas'),
     },
     v=render(); //will hold viewport width and height
 
-console.log('instructions',instructions);
-acquirePointerLock(); //ask the user to user pointer lock
-/*
 document.body.appendChild(canvas);
 canvas.addEventListener('mousemove',onDocumentMouseMove,false);
 ctx.fillStyle='#fff';
@@ -39,6 +67,9 @@ for(let i=0,width=v.w/mapSize,height=v.h/mapSize;i<100;i++){
   } //end for
 } //end for
 */
+acquirePointerLock(); //ask the user to user pointer lock
+document.addEventListener('keydown',onKeyDown,false);
+document.addEventListener('keyup',onKeyUp,false);
 
 // Launch application if easel was able to create a canvas,
 // if it wasn't then we know canvas isn't supported
@@ -59,9 +90,24 @@ if(!easel.activated){
 } //end if
 
 function main(){
+  let time = performance.now(),
+      timeDelta = (time-prevTime)/1000;
+
   if(!initialized) initialize();
+  velocity.x -= velocity.x * 10.0 * timeDelta;
+  velocity.z -= velocity.z * 10.0 * timeDelta;
+  velocity.y -= 9.8 * 100.0 * timeDelta; // 100.0 = mass
+
+  if(moveForward) velocity.z -= 400.0 * timeDelta;
+  if(moveBackward) velocity.z += 400.0 * timeDelta;
+  if(moveLeftward) velocity.x -= 400.0 * timeDelta;
+  if(moveRightward) velocity.x += 400.0 * timeDelta;
+  controls.getObject().translateX(velocity.x*timeDelta);
+  controls.getObject().translateY(velocity.y*timeDelta);
+  controls.getObject().translateZ(velocity.z*timeDelta);
+  prevTime = time;
+  console.log(camera.position);
   renderer.render(scene,camera);
-  camera.lookAt(scene.position);
   requestAnimationFrame(main);
 } //end main()
 
@@ -74,13 +120,10 @@ function initialize(){
   initialized = true;
   camera = new THREE.PerspectiveCamera(60,v.w/v.h,1,10000);
   camera.position.y = 1000;
-  controls = new THREE.PointerLockControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.25;
-  controls.enableZoom = false;
+  controls = new THREE.PointerLockControls(camera);
   scene = new THREE.Scene();
+  scene.add(controls.getObject());
   geometry.rotateX(-Math.PI/2);
-  console.log('geometry',geometry);
   for(let i=0,x,y,mx,my;i<geometry.faces.length;i++){
     y = i%(mapSize*4);
     x = Math.floor(i/(mapSize*4));
@@ -92,7 +135,6 @@ function initialize(){
       geometry.vertices[geometry.faces[i].b].y=50;
     } //end if
   } //end for
-  console.log('geometry',geometry);
   mesh = new THREE.Mesh(geometry,material);
   scene.add(mesh);
   renderer.setClearColor(0xbfd1e5);
@@ -175,9 +217,6 @@ function acquirePointerLock(){
             blocker.style.display = 'none';
           } else {
             controls.enabled = false;
-            blocker.style.display = '-webkit-box';
-            blocker.style.display = '-moz-box';
-            blocker.style.display = 'box';
             instructions.style.display = '';
           } //end if
         },
