@@ -99,6 +99,8 @@ function main(){
     if(moveBackward) velocity.z += 500.0 * timeDelta;
     if(moveLeftward) velocity.x -= 500.0 * timeDelta;
     if(moveRightward) velocity.x += 500.0 * timeDelta;
+    if(moveForward) velocity.x -=180*timeDelta; //forward isn't centered?
+    if(moveBackward) velocity.x +=180*timeDelta; //backward isn't centered?
     controls.getObject().translateX(velocity.x*timeDelta);
     controls.getObject().translateY(velocity.y*timeDelta);
     controls.getObject().translateZ(velocity.z*timeDelta);
@@ -144,6 +146,7 @@ function initialize(){
   window.camera = camera;
   window.scene = scene;
   window.mesh = mesh;
+  window.controls = controls;
 } //end initialize()
 
 function generateHeightTexture(width,height){
