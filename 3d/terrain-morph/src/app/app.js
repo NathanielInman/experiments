@@ -21,6 +21,8 @@ let easel = new Easel3d(),
     prevTime = performance.now(), //used to determine moving velocity
     velocity = new THREE.Vector3(), //helps with player movement
     map = new Map(0,mapSize,mapSize),
+    playerPlaced = false, //keep track of whether player was placed on map
+    raycaster, //make sure we can't walk into walls
     onKeyDown = e=>{
       if(e.keyCode===38||e.keyCode===87){ //up / w
         moveForward = true;
@@ -88,22 +90,28 @@ if(!easel.activated){
 
 function main(){
   let time = performance.now(),
-      timeDelta = (time-prevTime)/1000;
+      timeDelta = (time-prevTime)/1000,
+      intersections; //see if ray hits walls
 
   if(!initialized) initialize();
   if(controlsEnabled){
     velocity.x -= velocity.x * 10.0 * timeDelta;
     velocity.z -= velocity.z * 10.0 * timeDelta;
     velocity.y -= 9.8 * 100.0 * timeDelta; // 100.0 = mass
-    if(moveForward) velocity.z -= 500.0 * timeDelta;
-    if(moveBackward) velocity.z += 500.0 * timeDelta;
+    raycaster.ray.origin.copy(controls.getObject().position);
+    raycaster.ray.origin.y +=1;
+    raycaster.ray.origin.z -=4;
+    intersections = raycaster.intersectObjects([mesh],true);
+    console.log(intersections);
     if(moveLeftward) velocity.x -= 500.0 * timeDelta;
+    if(moveForward&&!intersections.length) velocity.z -= 500.0 * timeDelta;
+    if(moveBackward) velocity.z += 500.0 * timeDelta;
     if(moveRightward) velocity.x += 500.0 * timeDelta;
-    if(moveForward) velocity.x -=180*timeDelta; //forward isn't centered?
+    if(moveForward&&!intersections.length) velocity.x -=180*timeDelta; //forward isn't centered?
     if(moveBackward) velocity.x +=180*timeDelta; //backward isn't centered?
     controls.getObject().translateX(velocity.x*timeDelta);
     controls.getObject().translateY(velocity.y*timeDelta);
-    controls.getObject().translateZ(velocity.z*timeDelta);
+    if(!intersections.length) controls.getObject().translateZ(velocity.z*timeDelta);
     if(controls.getObject().position.y<10){
       velocity.y = 0;
       controls.getObject().position.y = 10;
@@ -127,6 +135,7 @@ function initialize(){
   controls = new THREE.PointerLockControls(camera);
   scene.add(controls.getObject());
   geometry.rotateX(-Math.PI/2);
+  raycaster = new THREE.Raycaster(new THREE.Vector3(),new THREE.Vector3(0,-1,0),0,10);
   for(let i=0,x,y,mx,my;i<geometry.faces.length;i++){
     y = i%(mapSize*4);
     x = Math.floor(i/(mapSize*4));
@@ -134,6 +143,13 @@ function initialize(){
     my = Math.floor(y/4);
     if(map.getSector(mx,my).isFloor()){
       geometry.vertices[geometry.faces[i].b].y=0;
+      if(!playerPlaced){ //place user if we haven't already 
+        let face = geometry.faces[i].b;
+
+        playerPlaced = true;
+        controls.getObject().position.x = geometry.vertices[face].x;
+        controls.getObject().position.z = geometry.vertices[face].z;
+      } //end if
     }else{
       geometry.vertices[geometry.faces[i].b].y=50;
     } //end if
