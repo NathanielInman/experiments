@@ -16,9 +16,7 @@ let easel = new Easel3d(),
     moveBackward = false,
     moveLeftward = false,
     moveRightward = false,
-    renderer = new THREE.WebGLRenderer({
-      canvas: window.C
-    }),
+    renderer = new THREE.WebGLRenderer({canvas: window.C}),
     mapSize=100,
     prevTime = performance.now(), //used to determine moving velocity
     velocity = new THREE.Vector3(), //helps with player movement
@@ -59,7 +57,6 @@ let canvas = document.createElement('canvas'),
     v=render(); //will hold viewport width and height
 
 document.body.appendChild(canvas);
-canvas.addEventListener('mousemove',onDocumentMouseMove,false);
 ctx.fillStyle='#fff';
 for(let i=0,width=v.w/mapSize,height=v.h/mapSize;i<100;i++){
   for(let j=0;j<100;j++){
@@ -94,19 +91,23 @@ function main(){
       timeDelta = (time-prevTime)/1000;
 
   if(!initialized) initialize();
-  velocity.x -= velocity.x * 10.0 * timeDelta;
-  velocity.z -= velocity.z * 10.0 * timeDelta;
-  velocity.y -= 9.8 * 100.0 * timeDelta; // 100.0 = mass
-
-  if(moveForward) velocity.z -= 400.0 * timeDelta;
-  if(moveBackward) velocity.z += 400.0 * timeDelta;
-  if(moveLeftward) velocity.x -= 400.0 * timeDelta;
-  if(moveRightward) velocity.x += 400.0 * timeDelta;
-  controls.getObject().translateX(velocity.x*timeDelta);
-  controls.getObject().translateY(velocity.y*timeDelta);
-  controls.getObject().translateZ(velocity.z*timeDelta);
-  prevTime = time;
-  console.log(camera.position);
+  if(controlsEnabled){
+    velocity.x -= velocity.x * 10.0 * timeDelta;
+    velocity.z -= velocity.z * 10.0 * timeDelta;
+    velocity.y -= 9.8 * 100.0 * timeDelta; // 100.0 = mass
+    if(moveForward) velocity.z -= 500.0 * timeDelta;
+    if(moveBackward) velocity.z += 500.0 * timeDelta;
+    if(moveLeftward) velocity.x -= 500.0 * timeDelta;
+    if(moveRightward) velocity.x += 500.0 * timeDelta;
+    controls.getObject().translateX(velocity.x*timeDelta);
+    controls.getObject().translateY(velocity.y*timeDelta);
+    controls.getObject().translateZ(velocity.z*timeDelta);
+    if(controls.getObject().position.y<10){
+      velocity.y = 0;
+      controls.getObject().position.y = 10;
+    } //end if
+    prevTime = time;
+  } //end if
   renderer.render(scene,camera);
   requestAnimationFrame(main);
 } //end main()
@@ -118,10 +119,10 @@ function initialize(){
       geometry = new THREE.PlaneGeometry(2000,2000,mapSize*2,mapSize*2);
 
   initialized = true;
-  camera = new THREE.PerspectiveCamera(60,v.w/v.h,1,10000);
-  camera.position.y = 1000;
-  controls = new THREE.PointerLockControls(camera);
   scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0xffffff,0,750);
+  camera = new THREE.PerspectiveCamera(75,v.w/v.h,1,1000);
+  controls = new THREE.PointerLockControls(camera);
   scene.add(controls.getObject());
   geometry.rotateX(-Math.PI/2);
   for(let i=0,x,y,mx,my;i<geometry.faces.length;i++){
@@ -139,13 +140,14 @@ function initialize(){
   scene.add(mesh);
   renderer.setClearColor(0xbfd1e5);
   renderer.setPixelRatio(window.devicePixelRatio);
-  document.addEventListener('mousemove',onDocumentMouseMove,false);
   window.addEventListener('resize',onWindowResize,false);
   window.camera = camera;
+  window.scene = scene;
+  window.mesh = mesh;
 } //end initialize()
 
 function generateHeightTexture(width,height){
-  let data = new Uint8Array( width * height ),
+  let data = new Uint8Array(width*height),
       perlin = generateNoise(),
       size = width * height, quality = 2, z = Math.random() * 100;
 
@@ -195,11 +197,6 @@ function onWindowResize(){
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth,window.innerHeight);
 } //end onWindowResize()
-
-function onDocumentMouseMove(event){
-  mouseX = event.clientX - window.innerWidth/2;
-  mouseY = event.clientY - window.innerHeight/2;
-} //end onDocumentMouseMove()
 
 function acquirePointerLock(){
   let havePointerLock = 'pointerLockElement' in document ||
