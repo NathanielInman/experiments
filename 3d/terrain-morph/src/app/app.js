@@ -91,7 +91,10 @@ if(!easel.activated){
 function main(){
   let time = performance.now(),
       timeDelta = (time-prevTime)/1000,
-      intersections; //see if ray hits walls
+      forwardIntersections,
+      backwardIntersections,
+      leftwardIntersections,
+      rightwardIntersections; //see if ray hits walls
 
   if(!initialized) initialize();
   if(controlsEnabled){
@@ -99,19 +102,31 @@ function main(){
     velocity.z -= velocity.z * 10.0 * timeDelta;
     velocity.y -= 9.8 * 100.0 * timeDelta; // 100.0 = mass
     raycaster.ray.origin.copy(controls.getObject().position);
-    raycaster.ray.origin.y +=1;
-    raycaster.ray.origin.z -=4;
-    intersections = raycaster.intersectObjects([mesh],true);
-    console.log(intersections);
-    if(moveLeftward) velocity.x -= 500.0 * timeDelta;
-    if(moveForward&&!intersections.length) velocity.z -= 500.0 * timeDelta;
-    if(moveBackward) velocity.z += 500.0 * timeDelta;
-    if(moveRightward) velocity.x += 500.0 * timeDelta;
-    if(moveForward&&!intersections.length) velocity.x -=180*timeDelta; //forward isn't centered?
+    raycaster.ray.origin.y +=5;
+    raycaster.ray.origin.z -=10;
+    forwardIntersections = raycaster.intersectObjects([mesh],true);
+    raycaster.ray.origin.z +=20;
+    backwardIntersections = raycaster.intersectObjects([mesh],true);
+    raycaster.ray.origin.z -=10;
+    raycaster.ray.origin.x -=10;
+    leftwardIntersections = raycaster.intersectObjects([mesh],true);
+    raycaster.ray.origin.x +=20;
+    rightwardIntersections = raycaster.intersectObjects([mesh],true);
+    if(moveLeftward&&!leftwardIntersections.length) velocity.x -= 500.0 * timeDelta;
+    if(moveForward&&!forwardIntersections.length) velocity.z -= 500.0 * timeDelta;
+    if(moveBackward&&!backwardIntersections.length) velocity.z += 500.0 * timeDelta;
+    if(moveRightward&&!rightwardIntersections.length) velocity.x += 500.0 * timeDelta;
+    if(moveForward&&!forwardIntersections.length) velocity.x -=180*timeDelta; //forward isn't centered?
     if(moveBackward) velocity.x +=180*timeDelta; //backward isn't centered?
-    controls.getObject().translateX(velocity.x*timeDelta);
+    if(!leftwardIntersections.length&&velocity.x<0||
+       !rightwardIntersections.length&&velocity.x>0){
+      controls.getObject().translateX(velocity.x*timeDelta);
+    } //end if
+    if(!forwardIntersections.length&&velocity.z<0||
+       !backwardIntersections.length&&velocity.z>0){
+      controls.getObject().translateZ(velocity.z*timeDelta);
+    } //end if
     controls.getObject().translateY(velocity.y*timeDelta);
-    if(!intersections.length) controls.getObject().translateZ(velocity.z*timeDelta);
     if(controls.getObject().position.y<10){
       velocity.y = 0;
       controls.getObject().position.y = 10;
