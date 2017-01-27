@@ -157,23 +157,22 @@ function initialize(){
   scene.add(controls.getObject());
   geometry.rotateX(-Math.PI/2);
   raycaster = new THREE.Raycaster(new THREE.Vector3(),new THREE.Vector3(0,-1,0),0,10);
-  for(let i=0,x,y,mx,my;i<geometry.faces.length;i++){
-    x = i%(mapSize*4);
-    y = Math.floor(i/(mapSize*4));
-    mx = Math.floor(x/4);
-    my = Math.floor(y/4);
+  for(let i=0,x,y,mx,my,face;i<geometry.faces.length;i++){
+    face = geometry.faces[i].b;
+    x = geometry.vertices[face].x+geometry.parameters.width/2;
+    y = geometry.vertices[face].z+geometry.parameters.width/2;
+    mx = Math.floor(x/20);
+    my = Math.floor(y/20);
     if(map.getSector(mx,my).isFloor()){
-      geometry.vertices[geometry.faces[i].b].y=0;
-      if(!playerPlaced){ //place user if we haven't already 
-        let face = geometry.faces[i].b;
-
-        console.log('debug',mx,my);
-        playerPlaced = true;
+      geometry.vertices[face].y=0;
+      if(!playerPlaced){
+        playerPlaced=true;
+        console.log(mx,my);
         controls.getObject().position.x = geometry.vertices[face].x;
         controls.getObject().position.z = geometry.vertices[face].z;
       } //end if
     }else{
-      geometry.vertices[geometry.faces[i].b].y=50;
+      geometry.vertices[face].y=50;
     } //end if
   } //end for
   mesh = new THREE.Mesh(geometry,material);
