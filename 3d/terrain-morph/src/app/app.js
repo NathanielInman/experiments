@@ -98,6 +98,12 @@ function main(){
 
   if(!initialized) initialize();
   if(controlsEnabled){
+    let geoSize = mesh.geometry.parameters.width,
+        position = controls.getObject().position,
+        px = (position.x+geoSize/2)/20,
+        py = (position.z+geoSize/2)/20;
+
+    console.log('px,py',px,py,Math.floor(px),Math.floor(py));
     velocity.x -= velocity.x * 10.0 * timeDelta;
     velocity.z -= velocity.z * 10.0 * timeDelta;
     velocity.y -= 9.8 * 100.0 * timeDelta; // 100.0 = mass
@@ -152,8 +158,8 @@ function initialize(){
   geometry.rotateX(-Math.PI/2);
   raycaster = new THREE.Raycaster(new THREE.Vector3(),new THREE.Vector3(0,-1,0),0,10);
   for(let i=0,x,y,mx,my;i<geometry.faces.length;i++){
-    y = i%(mapSize*4);
-    x = Math.floor(i/(mapSize*4));
+    x = i%(mapSize*4);
+    y = Math.floor(i/(mapSize*4));
     mx = Math.floor(x/4);
     my = Math.floor(y/4);
     if(map.getSector(mx,my).isFloor()){
@@ -161,6 +167,7 @@ function initialize(){
       if(!playerPlaced){ //place user if we haven't already 
         let face = geometry.faces[i].b;
 
+        console.log('debug',mx,my);
         playerPlaced = true;
         controls.getObject().position.x = geometry.vertices[face].x;
         controls.getObject().position.z = geometry.vertices[face].z;
@@ -178,6 +185,7 @@ function initialize(){
   window.scene = scene;
   window.mesh = mesh;
   window.controls = controls;
+  window.map = map;
 } //end initialize()
 
 function generateHeightTexture(width,height){
