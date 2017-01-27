@@ -91,48 +91,37 @@ if(!easel.activated){
 function main(){
   let time = performance.now(),
       timeDelta = (time-prevTime)/1000,
-      forwardIntersections,
-      backwardIntersections,
-      leftwardIntersections,
-      rightwardIntersections; //see if ray hits walls
+      forwardWalkable = true,
+      backwardWalkable = true,
+      leftwardWalkable = true,
+      rightwardWalkable = true;
 
   if(!initialized) initialize();
   if(controlsEnabled){
     let geoSize = mesh.geometry.parameters.width,
-        position = controls.getObject().position,
-        px = (position.x+geoSize/2)/20,
-        py = (position.z+geoSize/2)/20;
+        controlClone = controls.getObject().clone(),
+        px,py,position; //testing potential player x and y
 
-    console.log('px,py',px,py,Math.floor(px),Math.floor(py));
     velocity.x -= velocity.x * 10.0 * timeDelta;
     velocity.z -= velocity.z * 10.0 * timeDelta;
     velocity.y -= 9.8 * 100.0 * timeDelta; // 100.0 = mass
-    raycaster.ray.origin.copy(controls.getObject().position);
-    raycaster.ray.origin.y +=5;
-    raycaster.ray.origin.z -=10;
-    forwardIntersections = raycaster.intersectObjects([mesh],true);
-    raycaster.ray.origin.z +=20;
-    backwardIntersections = raycaster.intersectObjects([mesh],true);
-    raycaster.ray.origin.z -=10;
-    raycaster.ray.origin.x -=10;
-    leftwardIntersections = raycaster.intersectObjects([mesh],true);
-    raycaster.ray.origin.x +=20;
-    rightwardIntersections = raycaster.intersectObjects([mesh],true);
-    if(moveLeftward&&!leftwardIntersections.length) velocity.x -= 500.0 * timeDelta;
-    if(moveForward&&!forwardIntersections.length) velocity.z -= 500.0 * timeDelta;
-    if(moveBackward&&!backwardIntersections.length) velocity.z += 500.0 * timeDelta;
-    if(moveRightward&&!rightwardIntersections.length) velocity.x += 500.0 * timeDelta;
-    if(moveForward&&!forwardIntersections.length) velocity.x -=180*timeDelta; //forward isn't centered?
+    if(moveLeftward) velocity.x -= 500.0 * timeDelta;
+    if(moveForward) velocity.z -= 500.0 * timeDelta;
+    if(moveBackward) velocity.z += 500.0 * timeDelta;
+    if(moveRightward) velocity.x += 500.0 * timeDelta;
+    if(moveForward) velocity.x -=180*timeDelta; //forward isn't centered?
     if(moveBackward) velocity.x +=180*timeDelta; //backward isn't centered?
-    if(!leftwardIntersections.length&&velocity.x<0||
-       !rightwardIntersections.length&&velocity.x>0){
+    controlClone.translateX(velocity.x*timeDelta);
+    controlClone.translateZ(velocity.z*timeDelta);
+    controlClone.translateY(velocity.y*timeDelta);
+    position = controlClone.position;
+    px = Math.floor((position.x+geoSize/2)/20);
+    py = Math.floor((position.z+geoSize/2)/20);
+    if(map.getSector(px,py).isWalkable()){
       controls.getObject().translateX(velocity.x*timeDelta);
-    } //end if
-    if(!forwardIntersections.length&&velocity.z<0||
-       !backwardIntersections.length&&velocity.z>0){
       controls.getObject().translateZ(velocity.z*timeDelta);
+      controls.getObject().translateY(velocity.y*timeDelta);
     } //end if
-    controls.getObject().translateY(velocity.y*timeDelta);
     if(controls.getObject().position.y<10){
       velocity.y = 0;
       controls.getObject().position.y = 10;
