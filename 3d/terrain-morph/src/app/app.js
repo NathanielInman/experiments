@@ -117,7 +117,7 @@ function main(){
     position = controlClone.position;
     px = (position.x+geoSize/2)/20+0.25;
     py = (position.z+geoSize/2)/20+0.25;
-    console.log(Math.floor(px),Math.floor(py),px,py,map.getSector(Math.floor(px),Math.floor(py));
+    console.log(Math.floor(px),Math.floor(py),px,py,map.getSector(Math.floor(px),Math.floor(py)));
     px = Math.floor(px);
     py = Math.floor(py);
     if(map.getSector(px,py).isWalkable()){
