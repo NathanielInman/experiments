@@ -141,7 +141,7 @@ function initialize(){
   initialized = true;
   scene = new THREE.Scene();
   scene.fog = new THREE.Fog(0xffffff,0,750);
-  camera = new THREE.PerspectiveCamera(75,v.w/v.h,1,1000);
+  camera = new THREE.PerspectiveCamera(60,v.w/v.h,1,1000);
   controls = new THREE.PointerLockControls(camera);
   scene.add(controls.getObject());
   geometry.rotateX(-Math.PI/2);
