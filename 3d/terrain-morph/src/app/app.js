@@ -115,8 +115,11 @@ function main(){
     controlClone.translateZ(velocity.z*timeDelta);
     controlClone.translateY(velocity.y*timeDelta);
     position = controlClone.position;
-    px = Math.floor((position.x+geoSize/2)/20);
-    py = Math.floor((position.z+geoSize/2)/20);
+    px = (position.x+geoSize/2)/20+0.25;
+    py = (position.z+geoSize/2)/20+0.25;
+    console.log(Math.floor(px),Math.floor(py),px,py,map.getSector(Math.floor(px),Math.floor(py));
+    px = Math.floor(px);
+    py = Math.floor(py);
     if(map.getSector(px,py).isWalkable()){
       controls.getObject().translateX(velocity.x*timeDelta);
       controls.getObject().translateZ(velocity.z*timeDelta);
