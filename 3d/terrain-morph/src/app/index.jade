@@ -2,10 +2,9 @@ doctype html
 html(lang='en')
   include ./partials/_head.jade
   body
-    #blocker
-      #instructions
-        span Click to play
-        br
-        | (W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
-    include ./partials/_footer.jade
+    #noscript
+      span You must enable javascript to play this game
+    #instructions
+      span Click to play
+      span (W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
     include ./partials/_scripts.jade

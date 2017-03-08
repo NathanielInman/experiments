@@ -1,22 +1,28 @@
 import 'file-loader?name=[name].html!./index.jade';
 import './app.styl';
+window.M = Math;
+window.r = function randomInteger(f,g,e){
+  f = !g ? 0 * (g = f) : f > g ? g + (d = f) - g : f;
+  e = e || 0;
+  g = M.random() * (g - f) + f;
+  return e ? g | 0 : g;
+};
 import {Map} from './Map';
 import * as THREE from 'three/build/three';
 window.THREE = THREE;
 import {loadPointerLockControls} from './PointerLockControls';
-import {Easel3d} from 'ion-cloud';
 import {generateNoise} from './generateNoise';
 
-let easel = new Easel3d(),
-    controlsEnabled=false, // Assume controls disabled until user allows
+let controlsEnabled=false, // Assume controls disabled until user allows
     camera,scene,mesh,controls,mouseX=0,mouseY=0,
     initialized = false,
-    instructions = document.getElementById('instructions'), //turns off
     moveForward = false,
     moveBackward = false,
     moveLeftward = false,
     moveRightward = false,
-    renderer = new THREE.WebGLRenderer({canvas: window.C}),
+    renderer = new THREE.WebGLRenderer({antialias: true}),
+    noscript = document.querySelector('#noscript'),
+    instructions = document.querySelector('#instructions'),
     mapSize=100,
     prevTime = performance.now(), //used to determine moving velocity
     velocity = new THREE.Vector3(), //helps with player movement
@@ -48,45 +54,13 @@ let easel = new Easel3d(),
       } //end if
     };
 
-/*
-let canvas = document.createElement('canvas'),
-    ctx = canvas.getContext('2d'),
-    render = function render(){
-      v = {w: window.innerWidth, h: window.innerHeight};
-      canvas.width = v.w; canvas.height = v.h;
-      return v;
-    },
-    v=render(); //will hold viewport width and height
-
-document.body.appendChild(canvas);
-ctx.fillStyle='#fff';
-for(let i=0,width=v.w/mapSize,height=v.h/mapSize;i<100;i++){
-  for(let j=0;j<100;j++){
-    if(map.getSector(i,j).isFloor()) ctx.fillRect(i*width,j*height,width,height);
-  } //end for
-} //end for
-*/
+instructions.style.display = 'flex';
+noscript.style.display = 'none';
 acquirePointerLock(); //ask the user to user pointer lock
 document.addEventListener('keydown',onKeyDown,false);
 document.addEventListener('keyup',onKeyUp,false);
-
-// Launch application if easel was able to create a canvas,
-// if it wasn't then we know canvas isn't supported
-if(!easel.activated){
-  let noscript = document.getElementById('noscript');
-
-  noscript.innerHTML = `
-  <p class="browsehappy">
-    You are using an outdated browser. Please
-    <a href="http://browsehappy.com/"> upgrade your browser</a>
-    to improve your experience.
-    <span style="color:red;"><br/>Canvas isn't supported in your browser.</span>
-  </p>`;
-}else{
-  noscript.style.visibility='hidden';
-  loadPointerLockControls();
-  main();
-} //end if
+loadPointerLockControls();
+main();
 
 function main(){
   let time = performance.now(),
@@ -115,11 +89,8 @@ function main(){
     controlClone.translateZ(velocity.z*timeDelta);
     controlClone.translateY(velocity.y*timeDelta);
     position = controlClone.position;
-    px = (position.x+geoSize/2)/20+0.25;
-    py = (position.z+geoSize/2)/20+0.25;
-    console.log(px,py);
-    px = Math.floor(px);
-    py = Math.floor(py);
+    px = Math.floor((position.x+geoSize/2)/20+0.5);
+    py = Math.floor((position.z+geoSize/2)/20+0.5);
     if(map.getSector(px,py).isWalkable()){
       controls.getObject().translateX(velocity.x*timeDelta);
       controls.getObject().translateZ(velocity.z*timeDelta);
@@ -144,7 +115,7 @@ function initialize(){
   initialized = true;
   scene = new THREE.Scene();
   scene.fog = new THREE.Fog(0xffffff,0,750);
-  camera = new THREE.PerspectiveCamera(60,v.w/v.h,1,1000);
+  camera = new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1,1000);
   controls = new THREE.PointerLockControls(camera);
   scene.add(controls.getObject());
   geometry.rotateX(-Math.PI/2);
@@ -162,15 +133,19 @@ function initialize(){
       // which will face the camera towards the scene as the center scene is origin
       controls.getObject().position.x = geometry.vertices[face].x;
       controls.getObject().position.z = geometry.vertices[face].z;
+    }else if(map.getSector(Math.ceil(x/20),Math.ceil(y/20)).isFloor()){
+      geometry.vertices[face].y=0;
     }else{
       geometry.vertices[face].y=50;
     } //end if
   } //end for
   mesh = new THREE.Mesh(geometry,material);
   scene.add(mesh);
+  renderer.setSize(window.innerWidth,window.innerHeight);
   renderer.setClearColor(0xbfd1e5);
   renderer.setPixelRatio(window.devicePixelRatio);
-  window.addEventListener('resize',onWindowResize,false);
+  document.body.appendChild(renderer.domElement);
+  //camera.updateProjectionMatrix();
   window.camera = camera;
   window.scene = scene;
   window.mesh = mesh;
@@ -243,7 +218,7 @@ function acquirePointerLock(){
              document.webkitPointerLockElement === element){
             controlsEnabled = true;
             controls.enabled = true;
-            blocker.style.display = 'none';
+            instructions.style.display = 'none';
           } else {
             controls.enabled = false;
             instructions.style.display = '';
