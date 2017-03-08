@@ -60,6 +60,7 @@ acquirePointerLock(); //ask the user to user pointer lock
 document.addEventListener('keydown',onKeyDown,false);
 document.addEventListener('keyup',onKeyUp,false);
 loadPointerLockControls();
+window.addEventListener('resize',onWindowResize,true);
 main();
 
 function main(){
@@ -108,7 +109,11 @@ function initialize(){
   let data = generateHeightTexture(2048,2048),
       texture = new THREE.CanvasTexture(generateTexture(data,2048,2048)),
       material = new THREE.MeshBasicMaterial({map: texture,overdraw: 0.5}),
-      geometry = new THREE.PlaneGeometry(2000,2000,mapSize*2,mapSize*2);
+      geometry = new THREE.PlaneGeometry(2000,2000,mapSize*2,mapSize*2),
+      floorShape = new THREE.Shape(),
+      floorShapeWidth = geometry.parameters.width/2/mapSize,
+      floorGeometry,
+      floors = new THREE.Group();
 
   initialized = true;
   scene = new THREE.Scene();
@@ -118,14 +123,28 @@ function initialize(){
   scene.add(controls.getObject());
   geometry.rotateX(-Math.PI/2);
   raycaster = new THREE.Raycaster(new THREE.Vector3(),new THREE.Vector3(0,-1,0),0,10);
-  for(let i=0,x,y,mx,my,face;i<geometry.faces.length;i++){
+  floorShape.moveTo(0,0);
+  floorShape.lineTo(0,floorShapeWidth);
+  floorShape.lineTo(floorShapeWidth,floorShapeWidth);
+  floorShape.lineTo(floorShapeWidth,0);
+  floorShape.lineTo(0,0);
+  floorGeometry = new THREE.ShapeBufferGeometry(floorShape);
+  for(let i=0,x,y,mx,my,face,floor,mesh,gx,gz,gw;i<geometry.faces.length;i++){
     face = geometry.faces[i].b;
-    x = geometry.vertices[face].x+geometry.parameters.width/2;
-    y = geometry.vertices[face].z+geometry.parameters.width/2;
+    gx = geometry.vertices[face].x;
+    gz = geometry.vertices[face].z;
+    gw = geometry.parameters.width/2;
+    x = gx+gw;
+    y = gz+gw;
     mx = Math.floor(x/20);
     my = Math.floor(y/20);
     if(map.getSector(mx,my).isFloor()){
       geometry.vertices[face].y=0;
+      mesh = new THREE.Mesh(floorGeometry,new THREE.MeshBasicMaterial({color:0x00ffff,wireframe:true}));
+      mesh.position.set(gx,1,gz);
+      mesh.rotation.set(-Math.PI/2,0,0);
+      mesh.scale.set(0.9,0.9,1);
+      floors.add(mesh);
 
       // always update camera with latest floor so the last floor is the camera,
       // which will face the camera towards the scene as the center scene is origin
@@ -133,12 +152,18 @@ function initialize(){
       controls.getObject().position.z = geometry.vertices[face].z;
     }else if(map.getSector(Math.ceil(x/20),Math.ceil(y/20)).isFloor()){
       geometry.vertices[face].y=0;
+      mesh = new THREE.Mesh(floorGeometry,new THREE.MeshBasicMaterial({color:0x00ffff,wireframe:true}));
+      mesh.position.set(gx,1,gz);
+      mesh.rotation.set(-Math.PI/2,0,0);
+      mesh.scale.set(0.9,0.9,1);
+      floors.add(mesh);
     }else{
       geometry.vertices[face].y=50;
     } //end if
   } //end for
   mesh = new THREE.Mesh(geometry,material);
   scene.add(mesh);
+  scene.add(floors);
   renderer.setSize(window.innerWidth,window.innerHeight);
   renderer.setClearColor(0xbfd1e5);
   renderer.setPixelRatio(window.devicePixelRatio);
