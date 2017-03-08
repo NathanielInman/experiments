@@ -83,8 +83,6 @@ function main(){
     if(moveForward) velocity.z -= 500.0 * timeDelta;
     if(moveBackward) velocity.z += 500.0 * timeDelta;
     if(moveRightward) velocity.x += 500.0 * timeDelta;
-    if(moveForward) velocity.x -=180*timeDelta; //forward isn't centered?
-    if(moveBackward) velocity.x +=180*timeDelta; //backward isn't centered?
     controlClone.translateX(velocity.x*timeDelta);
     controlClone.translateZ(velocity.z*timeDelta);
     controlClone.translateY(velocity.y*timeDelta);
@@ -115,7 +113,7 @@ function initialize(){
   initialized = true;
   scene = new THREE.Scene();
   scene.fog = new THREE.Fog(0xffffff,0,750);
-  camera = new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1,1000);
+  camera = new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,0.1,1000);
   controls = new THREE.PointerLockControls(camera);
   scene.add(controls.getObject());
   geometry.rotateX(-Math.PI/2);
@@ -145,7 +143,6 @@ function initialize(){
   renderer.setClearColor(0xbfd1e5);
   renderer.setPixelRatio(window.devicePixelRatio);
   document.body.appendChild(renderer.domElement);
-  //camera.updateProjectionMatrix();
   window.camera = camera;
   window.scene = scene;
   window.mesh = mesh;
@@ -200,9 +197,12 @@ function generateTexture(data,width,height){
 } //end generateTexture()
 
 function onWindowResize(){
-  camera.aspect = window.innerWidth / window.innerHeight;
+  let w = window.innerWidth,
+      h = window.innerHeight;
+
+  renderer.setSize(w,h);
+  camera.aspect = w/h;
   camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth,window.innerHeight);
 } //end onWindowResize()
 
 function acquirePointerLock(){
