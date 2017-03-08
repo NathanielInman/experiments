@@ -117,7 +117,7 @@ function main(){
     position = controlClone.position;
     px = (position.x+geoSize/2)/20+0.25;
     py = (position.z+geoSize/2)/20+0.25;
-    console.log(Math.floor(px),Math.floor(py),px,py,map.getSector(Math.floor(px),Math.floor(py)));
+    console.log(px,py);
     px = Math.floor(px);
     py = Math.floor(py);
     if(map.getSector(px,py).isWalkable()){
@@ -157,12 +157,11 @@ function initialize(){
     my = Math.floor(y/20);
     if(map.getSector(mx,my).isFloor()){
       geometry.vertices[face].y=0;
-      if(!playerPlaced){
-        playerPlaced=true;
-        console.log(mx,my);
-        controls.getObject().position.x = geometry.vertices[face].x;
-        controls.getObject().position.z = geometry.vertices[face].z;
-      } //end if
+
+      // always update camera with latest floor so the last floor is the camera,
+      // which will face the camera towards the scene as the center scene is origin
+      controls.getObject().position.x = geometry.vertices[face].x;
+      controls.getObject().position.z = geometry.vertices[face].z;
     }else{
       geometry.vertices[face].y=50;
     } //end if
