@@ -238,6 +238,7 @@ function acquirePointerLock(){
   if(havePointerLock){
     let element = document.body,
         pointerlockchange = (event)=>{
+          console.log('pointerlockchange',event);
           if(document.pointerLockElement === element ||
              document.mozPointerLockElement === element ||
              document.webkitPointerLockElement === element){
@@ -246,7 +247,7 @@ function acquirePointerLock(){
             instructions.style.display = 'none';
           } else {
             controls.enabled = false;
-            instructions.style.display = '';
+            instructions.style.display = 'flex';
           } //end if
         },
         pointerlockerror = (event) => instructions.style.display = '';
