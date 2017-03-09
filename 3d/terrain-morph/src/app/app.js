@@ -108,8 +108,8 @@ function initialize(){
   let texture = new THREE.CanvasTexture(generateTexture(2048,2048)),
       material = new THREE.MeshLambertMaterial({
         color: '#009696',
-        shading: THREE.FlatShading //,
-        //map: texture
+        shading: THREE.FlatShading,
+        map: texture
       }),
       geometry = new THREE.PlaneGeometry(2000,2000,mapSize*2,mapSize*2),
       lantern = new THREE.PointLight(0xFFFFFF,1,400),
@@ -171,43 +171,31 @@ function initialize(){
   renderer.setSize(window.innerWidth,window.innerHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
   document.body.appendChild(renderer.domElement);
-  window.camera = camera;
-  window.scene = scene;
-  window.mesh = mesh;
-  window.controls = controls;
-  window.map = map;
 } //end initialize()
 
 // TODO: Repurpose this function for creating a texture height map so that
 // colors flow from dark at the top to light at the bottom where the user
 // stands
 function generateTexture(width,height){
-  let canvas, ctx, image, imageData,
-      level, diff,
-      vector3 = new THREE.Vector3(0,0,0),
-      sun = new THREE.Vector3(1,1,1),
-      shade,data=[];
+  let canvas, ctx, nx, ny;
 
-  sun.normalize();
   canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
   ctx = canvas.getContext('2d');
   ctx.fillStyle = '#000';
   ctx.fillRect(0,0,width,height);
-  image = ctx.getImageData(0,0,width,height);
-  imageData = image.data;
-  for(let i=0,j=0;i<imageData.length;i+=4,j++) {
-    vector3.x = data[j-1]-data[j+1];
-    vector3.y = 2;
-    vector3.z = data[j-width]-data[j+width];
-    vector3.normalize();
-    shade = vector3.dot(sun);
-    imageData[i] = (96+shade*128)*(data[j]*0.007);
-    imageData[i+1] = (32+ shade*96)*(data[j]*0.007);
-    imageData[i+2] = (shade*96)*(data[j]*0.007);
+  ctx.fillStyle = '#fff';
+  for(let y=0;y<height;y++){
+    for(let x=0;x<width;x++){
+      nx = Math.floor(x/2/mapSize);
+      ny = Math.floor(y/2/mapSize);
+      if(map.getSector(nx,ny).isFloor()){
+        ctx.fillRect(x,y,1,1);
+      } //end if
+    } //end for
   } //end for
-  ctx.putImageData( image, 0, 0 );
+  document.body.appendChild(canvas);
   return canvas;
 } //end generateTexture()
 
