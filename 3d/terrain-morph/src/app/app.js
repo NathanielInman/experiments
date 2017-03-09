@@ -107,13 +107,14 @@ function main(){
 
 function initialize(){
   let texture = new THREE.CanvasTexture(generateTexture(2048,2048)),
-      material = new THREE.MeshBasicMaterial({
+      material = new THREE.MeshLambertMaterial({
         color: '#009696',
-        //shading: THREE.FlatShading,
+        shading: THREE.FlatShading,
+        fog: true,
         map: texture
       }),
       geometry = new THREE.PlaneGeometry(2000,2000,mapSize*2,mapSize*2),
-      lantern = new THREE.PointLight(0xFFFFFF,1,400),
+      lantern = new THREE.PointLight(0xFFFFFF,2,800),
       floorShape = new THREE.Shape(),
       floorShapeWidth = geometry.parameters.width/2/mapSize,
       floorGeometry,
@@ -121,7 +122,6 @@ function initialize(){
 
   initialized = true;
   scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(0x003311,0,750);
   camera = new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,0.1,1000);
   camera.add(lantern);
   controls = new THREE.PointerLockControls(camera);
@@ -189,14 +189,14 @@ function generateTexture(width,height){
   ctx.fillStyle = '#fff';
   for(let y=0;y<height;y++){
     for(let x=0;x<width;x++){
-      nx = Math.floor(x/width*mapSize);
-      ny = Math.floor(y/height*mapSize);
+      nx = Math.floor(x/width*mapSize+0.5);
+      ny = Math.floor(y/height*mapSize+0.5);
       if(map.getSector(nx,ny).isFloor()){
         ctx.fillRect(x,y,1,1);
       } //end if
     } //end for
   } //end for
-  StackBlur.canvasRGB(canvas,1,1,width,height,5);
+  StackBlur.canvasRGB(canvas,1,1,width,height,15);
   return canvas;
 } //end generateTexture()
 
