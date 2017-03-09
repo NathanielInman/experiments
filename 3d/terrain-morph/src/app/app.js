@@ -8,6 +8,7 @@ window.r = function randomInteger(f,g,e){
   return e ? g | 0 : g;
 };
 import {Map} from './Map';
+import * as StackBlur from 'stackblur-canvas';
 import * as THREE from 'three/build/three';
 window.THREE = THREE;
 import {loadPointerLockControls} from './PointerLockControls';
@@ -106,9 +107,9 @@ function main(){
 
 function initialize(){
   let texture = new THREE.CanvasTexture(generateTexture(2048,2048)),
-      material = new THREE.MeshLambertMaterial({
+      material = new THREE.MeshBasicMaterial({
         color: '#009696',
-        shading: THREE.FlatShading,
+        //shading: THREE.FlatShading,
         map: texture
       }),
       geometry = new THREE.PlaneGeometry(2000,2000,mapSize*2,mapSize*2),
@@ -188,14 +189,14 @@ function generateTexture(width,height){
   ctx.fillStyle = '#fff';
   for(let y=0;y<height;y++){
     for(let x=0;x<width;x++){
-      nx = Math.floor(x/2/mapSize);
-      ny = Math.floor(y/2/mapSize);
+      nx = Math.floor(x/width*mapSize);
+      ny = Math.floor(y/height*mapSize);
       if(map.getSector(nx,ny).isFloor()){
         ctx.fillRect(x,y,1,1);
       } //end if
     } //end for
   } //end for
-  document.body.appendChild(canvas);
+  StackBlur.canvasRGB(canvas,1,1,width,height,5);
   return canvas;
 } //end generateTexture()
 
