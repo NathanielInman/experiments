@@ -51,7 +51,7 @@
     "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
-    "ion-cloud": "^1.0.0",
+    "stackblur-canvas": "^1.4.0",
     "three": "^0.83.0"
   },
   "readmeFilename": "README.md",
