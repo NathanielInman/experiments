@@ -11,7 +11,6 @@ import {Map} from './Map';
 import * as THREE from 'three/build/three';
 window.THREE = THREE;
 import {loadPointerLockControls} from './PointerLockControls';
-import {generateNoise} from './generateNoise';
 
 let controlsEnabled=false, // Assume controls disabled until user allows
     camera,scene,mesh,controls,mouseX=0,mouseY=0,
@@ -106,10 +105,14 @@ function main(){
 } //end main()
 
 function initialize(){
-  let data = generateHeightTexture(2048,2048),
-      texture = new THREE.CanvasTexture(generateTexture(data,2048,2048)),
-      material = new THREE.MeshBasicMaterial({map: texture,overdraw: 0.5}),
+  let texture = new THREE.CanvasTexture(generateTexture(2048,2048)),
+      material = new THREE.MeshLambertMaterial({
+        color: '#009696',
+        shading: THREE.FlatShading //,
+        //map: texture
+      }),
       geometry = new THREE.PlaneGeometry(2000,2000,mapSize*2,mapSize*2),
+      lantern = new THREE.PointLight(0xFFFFFF,1,400),
       floorShape = new THREE.Shape(),
       floorShapeWidth = geometry.parameters.width/2/mapSize,
       floorGeometry,
@@ -117,8 +120,9 @@ function initialize(){
 
   initialized = true;
   scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(0xffffff,0,750);
+  scene.fog = new THREE.Fog(0x003311,0,750);
   camera = new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,0.1,1000);
+  camera.add(lantern);
   controls = new THREE.PointerLockControls(camera);
   scene.add(controls.getObject());
   geometry.rotateX(-Math.PI/2);
@@ -140,7 +144,7 @@ function initialize(){
     my = Math.floor(y/20);
     if(map.getSector(mx,my).isFloor()){
       geometry.vertices[face].y=0;
-      mesh = new THREE.Mesh(floorGeometry,new THREE.MeshBasicMaterial({color:0x00ffff,wireframe:true}));
+      mesh = new THREE.Mesh(floorGeometry,new THREE.MeshBasicMaterial({color:0x005555,wireframe:true}));
       mesh.position.set(gx,1,gz);
       mesh.rotation.set(-Math.PI/2,0,0);
       mesh.scale.set(0.9,0.9,1);
@@ -152,7 +156,7 @@ function initialize(){
       controls.getObject().position.z = geometry.vertices[face].z;
     }else if(map.getSector(Math.ceil(x/20),Math.ceil(y/20)).isFloor()){
       geometry.vertices[face].y=0;
-      mesh = new THREE.Mesh(floorGeometry,new THREE.MeshBasicMaterial({color:0x00ffff,wireframe:true}));
+      mesh = new THREE.Mesh(floorGeometry,new THREE.MeshBasicMaterial({color:0x005555,wireframe:true}));
       mesh.position.set(gx,1,gz);
       mesh.rotation.set(-Math.PI/2,0,0);
       mesh.scale.set(0.9,0.9,1);
@@ -165,7 +169,6 @@ function initialize(){
   scene.add(mesh);
   scene.add(floors);
   renderer.setSize(window.innerWidth,window.innerHeight);
-  renderer.setClearColor(0xbfd1e5);
   renderer.setPixelRatio(window.devicePixelRatio);
   document.body.appendChild(renderer.domElement);
   window.camera = camera;
@@ -175,31 +178,18 @@ function initialize(){
   window.map = map;
 } //end initialize()
 
-function generateHeightTexture(width,height){
-  let data = new Uint8Array(width*height),
-      perlin = generateNoise(),
-      size = width * height, quality = 2, z = Math.random() * 100;
-
-  for(let j=0;j<4;j++){
-    quality *= 4;
-    for(let i=0,x,y;i<size;i++){
-      x = i % width;
-      y = Math.floor(i/width);
-      data[i] += Math.abs(perlin.noise(x/quality,y/quality,z)*0.5)*quality+10;
-    } //end for
-  } //end for
-  return data;
-} //end generateHeight()
-
-function generateTexture(data,width,height){
+// TODO: Repurpose this function for creating a texture height map so that
+// colors flow from dark at the top to light at the bottom where the user
+// stands
+function generateTexture(width,height){
   let canvas, ctx, image, imageData,
-      level, diff, 
+      level, diff,
       vector3 = new THREE.Vector3(0,0,0),
       sun = new THREE.Vector3(1,1,1),
-      shade;
+      shade,data=[];
 
   sun.normalize();
-  canvas = document.createElement( 'canvas' );
+  canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
   ctx = canvas.getContext('2d');
@@ -216,7 +206,7 @@ function generateTexture(data,width,height){
     imageData[i] = (96+shade*128)*(data[j]*0.007);
     imageData[i+1] = (32+ shade*96)*(data[j]*0.007);
     imageData[i+2] = (shade*96)*(data[j]*0.007);
-  }
+  } //end for
   ctx.putImageData( image, 0, 0 );
   return canvas;
 } //end generateTexture()
@@ -238,7 +228,6 @@ function acquirePointerLock(){
   if(havePointerLock){
     let element = document.body,
         pointerlockchange = (event)=>{
-          console.log('pointerlockchange',event);
           if(document.pointerLockElement === element ||
              document.mozPointerLockElement === element ||
              document.webkitPointerLockElement === element){
