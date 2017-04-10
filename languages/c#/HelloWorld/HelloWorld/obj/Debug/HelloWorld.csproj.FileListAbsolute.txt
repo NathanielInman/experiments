@@ -1,9 +1,0 @@
-C:\Users\Nathaniel\AppData\Local\Temporary Projects\HelloWorld\bin\Debug\HelloWorld.exe.config
-C:\Users\Nathaniel\AppData\Local\Temporary Projects\HelloWorld\bin\Debug\HelloWorld.exe
-C:\Users\Nathaniel\AppData\Local\Temporary Projects\HelloWorld\bin\Debug\HelloWorld.pdb
-C:\Users\Nathaniel\AppData\Local\Temporary Projects\HelloWorld\obj\Debug\HelloWorld.csprojResolveAssemblyReference.cache
-C:\Users\Nathaniel\AppData\Local\Temporary Projects\HelloWorld\obj\Debug\HelloWorld.exe
-C:\Users\Nathaniel\AppData\Local\Temporary Projects\HelloWorld\obj\Debug\HelloWorld.pdb
-D:\Station\Programming\School\C# Programming\HelloWorld\HelloWorld\bin\Debug\HelloWorld.exe.config
-D:\Station\Programming\School\C# Programming\HelloWorld\HelloWorld\obj\Debug\HelloWorld.exe
-D:\Station\Programming\School\C# Programming\HelloWorld\HelloWorld\obj\Debug\HelloWorld.pdb
