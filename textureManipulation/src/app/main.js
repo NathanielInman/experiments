@@ -13,29 +13,39 @@ export function main() {
   setTimeout(loop,3000);
 
   function loop(){
-    let img1,img2;
+    let img1,img2,w = Math.floor(v.w/5), h = Math.floor(v.h/5);
 
-    ctx.drawImage(t1,v.w/5,v.h/5,v.w/5,v.h/5);
-    ctx.drawImage(t1,v.w/5*2,v.h/5,v.w/5,v.h/5);
-    ctx.drawImage(t1,v.w/5*3,v.h/5,v.w/5,v.h/5);
-    ctx.drawImage(t1,v.w/5,v.h/5*2,v.w/5,v.h/5);
-    ctx.drawImage(t2,v.w/5*2,v.h/5*2,v.w/5,v.h/5);
-    img1 = ctx.getImageData(v.w/5*2,v.h/5*2,v.w/5,v.h/5);
-    ctx.drawImage(t1,v.w/5*3,v.h/5*2,v.w/5,v.h/5);
-    ctx.drawImage(t1,v.w/5,v.h/5*3,v.w/5,v.h/5);
-    ctx.drawImage(t1,v.w/5*2,v.h/5*3,v.w/5,v.h/5);
-    img2 = ctx.getImageData(v.w/5*2,v.h/5*3,v.w/5,v.h/5);
-    ctx.drawImage(t1,v.w/5*3,v.h/5*3,v.w/5,v.h/5);
+    ctx.drawImage(t1,w,h,w,h);
+    ctx.drawImage(t1,w*2,h,w,h);
+    ctx.drawImage(t1,w*3,h,w,h);
+    ctx.drawImage(t1,w,h*2,w,h);
+    ctx.drawImage(t2,w*2,h*2,w,h);
+    img1 = ctx.getImageData(w*2,h*2,w,h);
+    ctx.drawImage(t1,w*3,h*2,w,h);
+    ctx.drawImage(t1,w,h*3,w,h);
+    ctx.drawImage(t1,w*2,h*3,w,h);
+    img2 = ctx.getImageData(w*2,h*3,w,h);
+    ctx.drawImage(t1,w*3,h*3,w,h);
 
     // now draw blends
-    let size = img1.data.length;
+    let blend1 = ctx.getImageData(w*2,h*2,w,h),
+        blend2 = ctx.getImageData(w*2,h*2,w,h),
+        blend3 = ctx.getImageData(w*2,h*2,w,h),
+        blend4 = ctx.getImageData(w*2,h*2,w,h);
 
-    console.log('size',size);
-    for(let i=0,perc;i<img1.data.length;i++){
-      perc = i/img1.data.length;
-      img1.data[i] = img1.data[i]*(1-perc)+img2.data[i]*perc;
+    console.log(img1.data.length);
+    for(let i=0,vperc,hperc;i<img1.data.length;i++){
+      vperc = i/img1.data.length;
+      hperc = ((i/4)%w)/w;
+      blend1.data[i] = img1.data[i]*(1-vperc)+img2.data[i]*vperc;
+      blend2.data[i] = img1.data[i]*vperc+img2.data[i]*(1-vperc);
+      blend3.data[i] = img1.data[i]*(1-hperc)+img2.data[i]*hperc;
+      blend4.data[i] = img1.data[i]*hperc+img2.data[i]*(1-hperc);
     } //end for
-    ctx.putImageData(img1,v.w/5*2,v.h/5*3);
+    ctx.putImageData(blend2,w*2,h);
+    ctx.putImageData(blend1,w*2,h*3);
+    ctx.putImageData(blend4,w,h*2);
+    ctx.putImageData(blend3,w*3,h*2);
     //requestAnimationFrame(loop);
   } //end draw();
 } //end app()
