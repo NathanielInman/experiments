@@ -31,9 +31,10 @@ export function main() {
     let size = img1.data.length;
 
     console.log('size',size);
-    while(size--){
-      img1.data[size] = img1.data[size]*.5+img2.data[size]*.5;
-    } //end while
+    for(let i=0,perc;i<img1.data.length;i++){
+      perc = i/img1.data.length;
+      img1.data[i] = img1.data[i]*(1-perc)+img2.data[i]*perc;
+    } //end for
     ctx.putImageData(img1,v.w/5*2,v.h/5*3);
     //requestAnimationFrame(loop);
   } //end draw();
