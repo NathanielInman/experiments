@@ -57,7 +57,7 @@ export function main() {
       vperc = y/h;
       hperc = x/w;
       lrperc = (x+y)/((w+h)*.5);
-      tlperc = (x+y)/(w+h);
+      tlperc = (x+y)/((w+h)*.5)-1;
       blend1.data[i] = img1.data[i]*(1-vperc)+img2.data[i]*vperc;
       blend2.data[i] = img1.data[i]*vperc+img2.data[i]*(1-vperc);
       blend3.data[i] = img1.data[i]*(1-hperc)+img2.data[i]*hperc;
