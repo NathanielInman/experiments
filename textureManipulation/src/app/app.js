@@ -1,7 +1,7 @@
 import 'file-loader?name=[name].html!./index.jade';
 import './app.styl';
 import {Easel} from 'ion-cloud';
-import {makeItRain} from './main';
+import {main} from './main';
 export let easel = new Easel();
 
 // Launch application if easel was able to create a canvas,
@@ -18,6 +18,6 @@ if(!easel.activated){
   </p>`;
 }else{
   noscript.style.visibility='hidden';
-  makeItRain();
+  main();
 } //end if
 
