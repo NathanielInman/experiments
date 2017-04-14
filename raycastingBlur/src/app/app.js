@@ -17,7 +17,12 @@ if(!easel.activated){
     <span style="color:red;"><br/>Canvas isn't supported in your browser.</span>
   </p>`;
 }else{
+  let t1, t2;
+
   noscript.style.visibility='hidden';
+  t1 = performance.now();
   main();
+  t2 = performance.now();
+  console.info(`Execution took: ${t2-t1} ms`);
 } //end if
 
