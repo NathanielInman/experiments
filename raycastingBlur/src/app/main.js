@@ -7,6 +7,7 @@ export function main() {
       sy = Math.floor(v.h/5),
       w = Math.floor(v.w/5*3),
       h = Math.floor(v.h/5*3),
+      s = w/4; //spread radius
       r = w/2; //blur radius
 
   ctx.fillStyle = '#f00';
@@ -21,7 +22,7 @@ export function main() {
     if(i%4===0){ //limit needless calculations to per pixel distance
       x = Math.floor(i/4)%w; //image data contains 4 entries per pixel: r,g,b,a
       y = Math.floor(Math.floor(i/4)/w);
-      bk = Math.sqrt(Math.pow(ox-x-sx,2)+Math.pow(oy-y-sy,2))/r;
+      bk = (Math.sqrt(Math.pow(ox-x-sx,2)+Math.pow(oy-y-sy,2))-s)/(r-s);
     } //end if
     blend.data[i] = img1.data[i]*(1-bk)+img2.data[i]*bk;
   } //end for
