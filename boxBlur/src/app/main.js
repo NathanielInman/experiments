@@ -54,7 +54,7 @@ export function main() {
 
     console.log(img1.data.length);
     for(let i=0,x,y,vperc,hperc,lrperc,tlperc,trperc,llperc;i<img1.data.length;i++){
-      if(i%4===0){
+      if(i%4===0){ //limit calculations to 1/4th
         x = Math.floor(i/4)%w; //image data contains 4 entries per pixel: r,g,b,a
         y = Math.floor(Math.floor(i/4)/w);
         vperc = y/h;
