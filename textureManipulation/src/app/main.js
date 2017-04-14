@@ -54,14 +54,16 @@ export function main() {
 
     console.log(img1.data.length);
     for(let i=0,x,y,vperc,hperc,lrperc,tlperc,trperc,llperc;i<img1.data.length;i++){
-      x = (i/4)%w; //image data contains 4 entries per pixel: r,g,b,a
-      y = Math.floor((i/4)/w);
-      vperc = y/h;
-      hperc = x/w;
-      lrperc = (x+y)/((w+h)*.5);
-      tlperc = (x+y)/((w+h)*.5)-1;
-      trperc = (x-y)/h+1;
-      llperc = (y-x)/w+1;
+      if(i%4===0){
+        x = Math.floor(i/4)%w; //image data contains 4 entries per pixel: r,g,b,a
+        y = Math.floor(Math.floor(i/4)/w);
+        vperc = y/h;
+        hperc = x/w;
+        lrperc = (x+y)/((w+h)*.5);
+        tlperc = (x+y)/((w+h)*.5)-1;
+        trperc = (x-y)/h+1;
+        llperc = (y-x)/w+1;
+      } //end if
       blend1.data[i] = img1.data[i]*(1-vperc)+img2.data[i]*vperc;
       blend2.data[i] = img1.data[i]*vperc+img2.data[i]*(1-vperc);
       blend3.data[i] = img1.data[i]*(1-hperc)+img2.data[i]*hperc;
