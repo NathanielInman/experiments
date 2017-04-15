@@ -23,6 +23,6 @@ if(!easel.activated){
   t1 = performance.now();
   main();
   t2 = performance.now();
-  console.info(`Execution took: ${t2-t1} ms`);
+  console.info(`Total execution took: ${t2-t1} ms`);
 } //end if
 
