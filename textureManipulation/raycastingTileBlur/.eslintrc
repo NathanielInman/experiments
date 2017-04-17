@@ -58,7 +58,6 @@
     // Possible Errors
     "comma-dangle": 2,               // disallow or enforce trailing commas
     "no-cond-assign": 2,             // disallow assignment in conditional expressions
-    "no-console": 1,                 // disallow use of console in the node environment
     "no-constant-condition": 2,      // disallow use of constant expressions in conditions
     "no-control-regex": 2,           // disallow control characters in regular expressions
     "no-debugger": 2,                // disallow use of debugger
@@ -102,7 +101,6 @@
     "no-case-declarations": 1,       // disallow lexical declarations in case clauses
     "no-div-regex": 1,               // disallow division operators explicitly at beginning of regular expression
     "no-else-return": 1,             // disallow else after a return in an if
-    "no-empty-label": 1,             // disallow use of labels for anything other than loops and switches
     "no-empty-pattern": 1,           // disallow use of empty destructuring patterns
     "no-eq-null": 1,                 // disallow comparisons to null without a type-checking operator
     "no-eval": 1,                    // disallow use of eval()
