@@ -29,4 +29,8 @@ export function main() {
   t2 = performance.now();
   ctx.putImageData(blend,sx*2,sy*2);
   console.info(`Image processed in ${t2-t1} ms`);
+  ctx.strokeStyle = '#fff';
+  ctx.rect(sx,sy,w*3,h*3);
+  ctx.rect(sx*2,sy*2,w,h);
+  ctx.stroke();
 } //end main()

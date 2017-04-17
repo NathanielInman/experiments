@@ -17,6 +17,13 @@ if(!easel.activated){
     <span style="color:red;"><br/>Canvas isn't supported in your browser.</span>
   </p>`;
 }else{
+  draw();
+
+  // Add event listener for resizing the window
+  window.addEventListener('resize', draw, false);
+} //end if
+
+function draw(){
   let t1, t2;
 
   noscript.style.visibility='hidden';
@@ -24,5 +31,4 @@ if(!easel.activated){
   main();
   t2 = performance.now();
   console.info(`Total execution took: ${t2-t1} ms`);
-} //end if
-
+} //end draw();
