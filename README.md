@@ -1,7 +1,7 @@
 # Experiments
 
 The purpose of this repository project was to acquire knowledge that was not taught in my Computer Science degree.
-All code can be used without my consent. 
+All code can be used without my consent.
 
 Experiments are viewable [here](http://nathanielinman.github.io/experiments/).
 
