@@ -94,7 +94,7 @@ export function AGC(map,size,type){
     var result=0,
         i = iterations%2===0;
 
-    if(x>0&&y>0&&type!==2){
+    if(x>0&&y>0&&type!==tileDirtWall){
       if(i&&map[x-1][y-1].isFloor()||!i&&map2[x-1][y-1].isFloor()){
         result++;
       } //end if
@@ -104,7 +104,7 @@ export function AGC(map,size,type){
         result++;
       } //end if
     } //end if
-    if(x>0&&y<size&&type!==2){
+    if(x>0&&y<size&&type!==tileDirtWall){
       if(i&&map[x-1][y+1].isFloor()||!i&&map2[x-1][y+1].isFloor()){
         result++;
       } //end if
@@ -119,7 +119,7 @@ export function AGC(map,size,type){
         result++;
       } //end if
     } //end if
-    if(x<size&&y>0&&type!==2){
+    if(x<size&&y>0&&type!==tileDirtWall){
       if(i&&map[x+1][y-1].isFloor()||!i&&map2[x+1][y-1].isFloor()){
         result++;
       } //end if
@@ -129,7 +129,7 @@ export function AGC(map,size,type){
         result++;
       } //end if
     } //end if
-    if(x<size&&y<size&&type!==2){
+    if(x<size&&y<size&&type!==tileDirtWall){
       if(i&&map[x+1][y+1].isFloor()||!i&&map2[x+1][y+1].isFloor()){
         result++;
       } //end if
@@ -211,7 +211,7 @@ export function AGC(map,size,type){
       for(let i=0;i<size;i++){
         for(let j=0;j<size;j++){
           mooresNeighborhood=testSides(i,j,size,type);
-          if(type===0){
+          if(type===tileUnused){
             if(t&&map[i][j].isFloor()||!t&&map2[i][j].isFloor()){
               if(mooresNeighborhood>=4){
                 if(t){
@@ -235,7 +235,7 @@ export function AGC(map,size,type){
             }else{
               map[i][j].type=tileUnused;
             } //end if
-          }else if(type===1){
+          }else if(type===tileDirtFloor){
             if(t&&map[i][j].isFloor()||!t&&map2[i][j].isFloor()){
               if(mooresNeighborhood>=4){
                 if(t){
@@ -259,7 +259,7 @@ export function AGC(map,size,type){
             }else{
               map[i][j].type=tileUnused;
             } //end if
-          }else if(type===2){
+          }else if(type===tileDirtWall){
             if(t&&map[i][j].isEmpty()||!t&&map2[i][j].isEmpty()){
               if(mooresNeighborhood===4){
                 if(t){

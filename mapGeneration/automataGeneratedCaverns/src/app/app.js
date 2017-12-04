@@ -18,6 +18,8 @@ import {AGC} from './common/main';
     let size = 41,
         map = [];
 
+    const tileRemoved = 3;
+    const tileDirtWall = 2;
     const tileDirtFloor = 1;
     const tileUnused = 0;
 
@@ -45,11 +47,11 @@ import {AGC} from './common/main';
 
       for(let i=0;i<size;i++){
         for(let j=0;j<=size;j++){
-          if(map[i][j].type===0){
+          if(map[i][j].type===tileUnused){
             ctx.fillStyle='#000';
-          }else if(map[i][j].type===2){
+          }else if(map[i][j].type===tileDirtWall){
             ctx.fillStyle='#333';
-          }else if(map[i][j].type===3){
+          }else if(map[i][j].type===tileRemoved){
             ctx.fillStyle='#F00';
           }else{
             ctx.fillStyle='#383';
