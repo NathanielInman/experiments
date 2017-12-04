@@ -1,5 +1,5 @@
 import {Easel} from './vendor/easel';
-import {AGC} from './common/main';
+import {AGC} from './main';
 
 // Launch application if easel was able to create a canvas,
 // if it wasn't then we know canvas isn't supported
