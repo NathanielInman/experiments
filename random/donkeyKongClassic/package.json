@@ -1,0 +1,35 @@
+{
+  "name": "donkey_kong_classic",
+  "version": "1.0.0",
+  "description": "CSS Magic with Donkey Kong Classic",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/n/a"
+  },
+  "keywords": [
+    "donkey",
+    "kong",
+    "gulp",
+    "jade",
+    "stylus",
+    "css",
+    "magic",
+    "classic"
+  ],
+  "author": "Nathaniel Inman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/n/a/issues"
+  },
+  "homepage": "https://github.com/n/a",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-jade": "^1.1.0",
+    "gulp-stylus": "^2.0.6",
+    "nib": "^1.1.0"
+  }
+}

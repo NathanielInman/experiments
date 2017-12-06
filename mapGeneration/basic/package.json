@@ -1,0 +1,38 @@
+{
+  "name": "v1",
+  "version": "0.1.0",
+  "description": "Map generation experiment.",
+  "main": "Gulpfile.js",
+  "author": {
+    "name": "Nathaniel Inman",
+    "email": "nate041010@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Nathaniel Inman/v1.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Nathaniel Inman/v1/issues"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.11"
+  },
+  "readmeFilename": "README.md",
+  "homepage": "https://github.com/Nathaniel Inman/v1",
+  "dependencies": {
+    "browser-sync": "^2.2.1",
+    "gulp-babel": "^4.0.0",
+    "gulp-add-src": "^0.2.0",
+    "gulp-concat": "^2.5.2",
+    "gulp-order": "^1.1.1",
+    "gulp-jade": "^1.0.0",
+    "gulp-jshint": "^1.9.2",
+    "gulp-minify-css": "^0.5.1",
+    "gulp-notify": "^2.2.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-stylus": "^2.0.1",
+    "gulp-uglify": "^1.1.0",
+    "jshint-stylish": "^1.0.1",
+    "kouto-swiss": "^0.11.8"
+  }
+}

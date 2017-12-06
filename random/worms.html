@@ -1,0 +1,62 @@
+<!doctype html>
+<head><title>Worms</title>
+<style>
+                html*{font-size:2em;color:#BBB;}
+                body{background-color:black;}
+                div{position:absolute;left:0;top:0;overflow:hidden;}
+</style>
+</head>
+<body>
+<div id='tails' style='right:0;bottom:0;font-size:1em;'></div>
+<div id='frame' style='right:0;bottom:0;'></div>
+<script>
+var wormType=function(x,y,dx,dy){
+                this.x =x; this.y =y;
+                this.dx=dx;this.dy=dy;
+};
+var worm=[],tail=[],MAX_WORMS=10,MAX_TAIL=7;
+r=function(x){return Math.floor(Math.random()*x);};
+$=function(id){return document.getElementById(id);};
+for(var i=0;i<MAX_TAIL;i++){
+                tail[i]=[];
+                $('tails').innerHTML+="<div id='s"+i+"' style='right:0;bottom:0;'></div>";
+} //end for
+setInterval(function(){
+                var data="",s=[];
+                if(worm.length<MAX_WORMS){
+                                var x=r(99)+1,y=r(99)+1; //won't need dx or dy for tails
+                                worm.push(new wormType(x,y,r(2),r(2)));
+                                for(var j=0;j<MAX_TAIL;j++){s[j]="";tail[j].push(new wormType(x,y,0,0));};
+                }else{
+                                for(var j=0;j<MAX_TAIL;j++){s[j]="";}; //initialize the tail data strings
+                } //end if
+                for(var i=0;i<worm.length;i++){
+                                for(var j=MAX_TAIL-1;j>=0;j--){
+                                                if(j==0){tail[j][i].x=worm[i].x;tail[j][i].y=worm[i].y;}else{
+                                                                tail[j][i].x=tail[j-1][i].x;tail[j][i].y=tail[j-1][i].y;
+                                                } //end if
+                                                s[j]+="<div style='left:"+(tail[j][i].x)+"%;top:"+(tail[j][i].y-7)+"%;color:#555;'>&bull;</div>";
+                                } //end for
+                                if(worm[i].x<98&&worm[i].dx==1){
+                                                worm[i].x+=(Math.random()*2-0.7)*.5;
+                                                if(worm[i].x>=98)worm[i].dx=0;
+                                }else{
+                                                worm[i].x+=(Math.random()*2-1.7)*.5;
+                                                if(worm[i].x<=0)worm[i].dx=1;
+                                } //end if
+                                if(worm[i].y<98&&worm[i].dy==1){
+                                                worm[i].y+=(Math.random()*2-0.7)*.5;
+                                                if(worm[i].y>=98)worm[i].dy=0;
+                                }else{
+                                                worm[i].y+=(Math.random()*2-1.7)*.5;
+                                                if(worm[i].y<=0)worm[i].dy=1;
+                                } //end if
+                                data+="<div style='left:"+(worm[i].x)+"%;top:"+(worm[i].y-7)+"%;'>&bull;</div>";
+                } //end for
+                $('frame').innerHTML=data;
+                for(var j=0;j<MAX_TAIL;j++){
+                                $('s'+j).innerHTML=s[j];
+                } //end for
+},10);
+</script>
+</body></html>

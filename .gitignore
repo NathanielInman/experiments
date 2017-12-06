@@ -1,4 +1,17 @@
-/+old/
-.idea/
-node_modules/
+# General javascript
+node_modules
+jspm_packages
+dist
+
+# OSX
+.DS_Store
+
+# Vim
+*.swp
+*.swo
+
+# Jetbrains IDE
+.idea
+
+# Cloud9 Web IDE
 .c9/
