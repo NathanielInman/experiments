@@ -13,7 +13,7 @@ if(!Easel.activated){
     <span style="color:red;"><br/>Canvas isn't supported in your browser.</span>
   </p>`;
 }else{
-  let map = new Map(51,51);
+  let map = new Map(50,50);
 
   AGC(map); //perform automata generated caverns
   Easel.onDraw = function(){

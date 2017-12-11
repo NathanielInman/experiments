@@ -102,7 +102,7 @@ export function AGC(map,inputDensity){
   // wikipedia.org/wiki/Conway%27s_Game_of_Life
   function conwayGameOfLife(){
     let mooresNeighborhood;
-    
+
     for(let y=0;y<map.height;y++){
       for(let x=0;x<map.width;x++){
         mooresNeighborhood=getMooresNeighborhood(x,y);
