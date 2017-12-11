@@ -297,24 +297,24 @@ export function PHS(map,osize,deviation){
     } //end for
   } //end drawTileDoors()
   function cleanMap(){
-    var isUseful; //details whether wall is useful
+    let isUseful;
 
-    for(let i=0;i<size;i++){
-      for(let j=0;j<size;j++){
-        if(map[i][j].isWall()){
+    map.sectors.forEach((row,y)=>{
+      row.forEach((sector,x)=>{
+        if(sector.isWall()){
           isUseful = false;
-          if(i>0&&map[i-1][j].isWalkable()) isUseful = true;
-          if(j>0&&map[i][j-1].isWalkable()) isUseful = true;
-          if(i<size-1&&map[i+1][j].isWalkable()) isUseful = true;
-          if(j<size-1&&map[i][j+1].isWalkable()) isUseful = true;
-          if(i>0&&j>0&&map[i-1][j-1].isWalkable()) isUseful = true;
-          if(i>0&&j<size-1&&map[i-1][j+1].isWalkable()) isUseful = true;
-          if(i<size-1&&j>0&&map[i+1][j-1].isWalkable()) isUseful = true;
-          if(i<size-1&&j<size-1&&map[i+1][j+1].isWalkable()) isUseful = true;
-          if(!isUseful) map[i][j].setEmpty();
+          if(y>0&&map.isWalkable(x,y-1)) isUseful = true;
+          if(x>0&&map.isWalkable(x-1,y)) isUseful = true;
+          if(y<map.height-1&&map.isWalkable(x,y+1)) isUseful = true;
+          if(x<map.width-1&&map.isWalkable(x+1,y)) isUseful = true;
+          if(x>0&&y>0&&map.isWalkable(x-1,y-1)) isUseful = true;
+          if(x>0&&y<map.height-1&&map.isWalkable(x-1,y+1)) isUseful = true;
+          if(x<map.width-1&&y>0&&map.isWalkable(x+1,y-1)) isUseful = true;
+          if(x<map.width-1&&y<map.height-1&&map.isWalkable(x+1,y+1)) isUseful = true;
+          if(!isUseful) sector.setEmpty();
         } //end if
-      } //end for
-    } //end for
+      });
+    });
   } //end cleanMap()
 
   // We are able to prune the map by iterating one-by-one through the
@@ -411,27 +411,25 @@ export function PHS(map,osize,deviation){
         fail++;
       } //end if
     } //end while
-    carveDeadEnds();
 
-    function carveDeadEnds(){
-      for(let i=1;i<size-1;i++){
-        for(let j=1;j<size-1;j++){
-          if(isEmpty(i,j)&&isCorridor(i-1,j)&&isCorridor(i+1,j)||
-             isEmpty(i,j)&&isCorridor(i,j-1)&&isCorridor(i,j+1)||
-             isEmpty(i,j)&&isCorridor(i-1,j)&&isCorridor(i,j+1)&&
-               isCorridor(i-2,j)&&isCorridor(i,j+2)||
-             isEmpty(i,j)&&isCorridor(i,j+1)&&isCorridor(i+1,j)&&
-               isCorridor(i,j+2)&&isCorridor(i+2,j)||
-             isEmpty(i,j)&&isCorridor(i+1,j)&&isCorridor(i,j-1)&&
-               isCorridor(i+2,j)&&isCorridor(i,j-2)||
-             isEmpty(i,j)&&isCorridor(i,j-1)&&isCorridor(i-1,j)&&
-               isCorridor(i,j-2)&&isCorridor(i-2,j)){
-            setEmpty(i-1,j);setEmpty(i-1,j-1);setEmpty(i-1,j+1);
-            setEmpty(i,j+1);setEmpty(i+1,j+1);setEmpty(i+1,j);
-            setEmpty(i+1,j-1);setEmpty(i,j-1);
-          } //end if
-        } //end for
-      } //end for
-    } //end carveDeadEnds function
+    // now we carve the dead ends
+    map.sectors.forEach((row,y)=>{
+      row.forEach((sector,x)=>{
+        if(sector.isEmpty()&&map.isCorridor(x-1,y)&&map.isCorridor(x+1,y)||
+          sector.isEmpty()&&map.isCorridor(x,y-1)&&map.isCorridor(x,y+1)||
+          sector.isEmpty()&&map.isCorridor(x-1,y)&&map.isCorridor(x,y+1)&&
+            map.isCorridor(x-2,y)&&map.isCorridor(x,y+2)||
+          sector.isEmpty()&&map.isCorridor(x,y+1)&&map.isCorridor(x+1,y)&&
+            map.isCorridor(x,y+2)&&map.isCorridor(x+2,y)||
+          sector.isEmpty()&&map.isCorridor(x+1,y)&&map.isCorridor(x,y-1)&&
+            map.isCorridor(x+2,y)&&map.isCorridor(x,y-2)||
+          sector.isEmpty()&&map.isCorridor(x,y-1)&&map.isCorridor(x-1,y)&&
+            map.isCorridor(x,y-2)&&map.isCorridor(x-2,y)){
+          map.setEmpty(x-1,y-1);map.setEmpty(x,y-1);map.setEmpty(x+1,y-1);
+          map.setEmpty(x-1,y);map.setEmpty(x+1,y);
+          map.setEmpty(x-1,y+1);map.setEmpty(x,y+1);map.setEmpty(x+1,y+1);
+        } //end if
+      });
+    });
   } //end createCorridors()
 } //end function
