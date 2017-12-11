@@ -18,7 +18,7 @@ export class Map{
   getSector(x,y){ return this.sectors[y][x]; }
   type(x,y){ return this.getSector(x,y).type; }
   loc(x,y){ return this.getSector(x,y).loc; }
-  setLoc(x,y,loc){ return this.getSector(x,y).loc = loc; }
+  setLoc(x,y,loc){ this.getSector(x,y).loc = loc; }
   isEmpty(x,y){ return this.getSector(x,y).isEmpty(); }
   setEmpty(x,y){ return this.getSector(x,y).setEmpty(); }
   isFloor(x,y){ return this.getSector(x,y).isFloor(); }

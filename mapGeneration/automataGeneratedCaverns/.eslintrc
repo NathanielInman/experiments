@@ -165,7 +165,7 @@
     // Stylistic Issues
     "array-bracket-spacing": 1,      // enforce spacing inside array brackets (fixable)
     "block-spacing": [2,"always"],   // disallow or enforce spaces inside of single line blocks (fixable)
-    "brace-style": 1,                // enforce one true brace style
+    "brace-style": 0,                // enforce one true brace style
     "camelcase": 1,                  // require camel case names
     "capitalized-comments": 0,       // enforce or disallow capitalization of the first letter of a comment
     "comma-dangle": 1,               // require or disallow trailing commas
