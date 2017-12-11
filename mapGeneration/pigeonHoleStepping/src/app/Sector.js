@@ -9,7 +9,7 @@ export class Sector{
   setFloor(){ this.type = 1; }
   isWall(){ return this.type === 2; }
   setWall(){ this.type = 2; }
-  isCorridor(){ return this.type ===3; }
+  isCorridor(){ return this.type === 3; }
   setCorridor(){ this.type = 3; }
   isDoor(){ return this.type === 4; }
   setDoor(){ this.type = 4; }

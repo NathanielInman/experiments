@@ -5,8 +5,8 @@ const SOUTH = 3;
 
 export function PHS(map,osize,deviation){
   let size=osize-Math.floor(Math.random()*deviation),
-      cx=Math.floor(size/2),cy=Math.floor(size/2),
-      fail=0,win=0,val=0,
+      cx=Math.floor(map.width/2), //current x position
+      cy=Math.floor(map.height/2), //current y position
       roomNum={
         num:          1,
         done:         [true], //add index 0 because num starts at 1
@@ -18,14 +18,15 @@ export function PHS(map,osize,deviation){
       direction=0;
 
 
+  console.log('map',map);
   if(size%2===0)size++;
   createCorridors();
-  drawTileDirtWalls();
+  drawWalls();
   allocateRooms();
-  partitionRooms();
-  drawTileDoors();
-  pruneMap();
-  cleanMap();
+  //partitionRooms();
+  //drawTileDoors();
+  //pruneMap();
+  //cleanMap();
   return true;
 
   // This function checks to see if the tileCorridors will create
@@ -78,70 +79,74 @@ export function PHS(map,osize,deviation){
   function move(direction){
     let result=false;
 
+    console.log('move',cx,cy);
     if(direction===NORTH && !blocked(NORTH)){
       if(map.isCorridor(cx,cy-6)){
         cy-=6;
       }else{
-        for(;cy>=cy-5;cy--) map.setCorridor(cx,cy);
+        for(let cyc=cy;cy>=cyc-5;cy--) map.setCorridor(cx,cy);
         result = true;
       } //end if
     }else if(direction===EAST && !blocked(EAST)){
       if(map.isCorridor(cx+6,cy)){
         cx+=6;
       }else{
-        for(;cx<=cx+5;cx++) setCorridor(cx,cy);
+        for(let cxc=cx;cx<=cxc+5;cx++) map.setCorridor(cx,cy);
         result = true;
       } //end if
     }else if(direction===SOUTH && !blocked(SOUTH)){
       if(map.isCorridor(cx,cy+6)){
         cy+=6;
       }else{
-        for(;cy<=cy+5;cy++) setCorridor(cx,cy);
+        for(let cyc=cy;cy<=cyc+5;cy++) map.setCorridor(cx,cy);
         result = true;
       } //end if
     }else if(direction===WEST && !blocked(WEST)){
       if(map.isCorridor(cx-6,cy)){
         cx-=6;
       }else{
-        for(;cx>=cx-5;cx--) setCorridor(cx,cy);
+        for(let cxc=cx;cx>=cxc-5;cx--) map.setCorridor(cx,cy);
         result = true;
       } //end if
     } //end function
     return result;
   } //end move function
-  function nextTotileCorridor(x,y){
-    var result = false;
 
-    if(x>0&&isCorridor(x-1,y))result = true;
-    if(y>0&&isCorridor(x,y-1))result = true;
-    if(x<size-1&&isCorridor(x+1,y))result = true;
-    if(y<size-1&&isCorridor(x,y+1))result = true;
-    if(y>0&&y>0&&isCorridor(x-1,y-1))result = true;
-    if(x>0&&y<size-1&&isCorridor(x-1,y+1))result = true;
-    if(x<size-1&&y>0&&isCorridor(x+1,y-1))result = true;
-    if(x<size-1&&y<size-1&&isCorridor(x+1,y+1))result = true;
+  function nextToCorridor(x,y){
+    let result = false;
+
+    if(x>0&&map.isCorridor(x-1,y)) result = true;
+    if(y>0&&map.isCorridor(x,y-1)) result = true;
+    if(x<map.width-1&&map.isCorridor(x+1,y)) result = true;
+    if(y<map.height-1&&map.isCorridor(x,y+1)) result = true;
+    if(x>0&&y>0&&map.isCorridor(x-1,y-1)) result = true;
+    if(x>0&&y<map.height-1&&map.isCorridor(x-1,y+1)) result = true;
+    if(x<map.width-1&&y>0&&map.isCorridor(x+1,y-1)) result = true;
+    if(x<map.width-1&&y<map.height-1&&map.isCorridor(x+1,y+1)) result = true;
     return result;
-  } //end nextToTileCorridor()
-  function drawTileDirtWalls(){
-    for(let i=0;i<size;i++){
-      for(let j=0;j<size;j++){
-        if(i===0&&!isCorridor(i,j)){setWall(i,j);
-        }else if(j===0&&!isCorridor(i,j)){setWall(i,j);
-        }else if(i===size-1&&!isCorridor(i,j)){setWall(i,j);
-        }else if(j===size-1&&!isCorridor(i,j)){setWall(i,j);
-        }else if(isEmpty(i,j)&&nextTotileCorridor(i,j)){setWall(i,j);}
-      } //end for
-    } //end for
-  } //end drawTileDirtWalls()
+  } //end nextToCorridor()
+
+  function drawWalls(){
+    map.sectors.forEach((row,y)=>{
+      row.forEach((sector,x)=>{
+        if(y===0&&!sector.isCorridor(x,y)||
+          x===0&&!sector.isCorridor(x,y)||
+          y===map.height-1&&!sector.isCorridor(x,y)||
+          x===map.width-1&&!sector.isCorridor(x,y)||
+          sector.isEmpty()&&nextToCorridor(x,y)) sector.setWall();
+      });
+    });
+  } //end drawWalls()
+
   function fillRoom(x,y,x2,y2){
     var fail=false,
         drawn=false;
 
     for(let j=y;j<=y2;j++){
       for(let i=x;i<=x2;i++){
-        if(isEmpty(i,j)){
+        if(map.isEmpty(i,j)){
           drawn=true;
-          setRoom(i,j,roomNum.num);
+          map.setRoom(i,j,roomNum.num);
         }else{
           fail=true;
           break;
@@ -156,19 +161,27 @@ export function PHS(map,osize,deviation){
       roomNum.num++;
     } //end if
   } //end fillRoom()
+
   function allocateRooms(){
     var minWidth=0,minHeight=0,
         maxWidth=5,maxHeight=5;
 
-    /*eslint-disable */
+    map.sectors.forEach((row,y)=>{
+      row.forEach((sector,x)=>{
+        if(sector.isEmpty()){
+          (()=>{
+          })();
+        } //end if
+      });
+    });
     for(let i=0;i<size;i++){
       for(let j=0;j<size;j++){
-        if(isEmpty(i,j)){
+        if(map.isEmpty(i,j)){
           minWidth=0;minHeight=0;
           (()=>{
             for(let y=i;y<size;y++){
               for(let x=j;x<size;x++){
-                if(!isEmpty(y,x)){
+                if(!map.isEmpty(y,x)){
                   if(y===i){
                     if(x-j<3){
                       return;
@@ -199,28 +212,30 @@ export function PHS(map,osize,deviation){
     } //end for
     /*eslint-enable */
   } //end allocateRooms()
+
   function partitionRooms(){
     for(let i=1;i<size-1;i++){
       for(let j=1;j<size-1;j++){
-        if(isRoom(i,j)&&isRoom(i,j-1)&&!isSameRoom(i,j,i,j-1)){
-          setWall(i,j-1);
+        if(map.isRoom(i,j)&&map.isRoom(i,j-1)&&!map.isSameRoom(i,j,i,j-1)){
+          map.setWall(i,j-1);
         } //end if
-        if(isRoom(i,j)&&isRoom(i-1,j)&&!isSameRoom(i,j,i-1,j)){
-          setWall(i-1,j);
+        if(map.isRoom(i,j)&&map.isRoom(i-1,j)&&!map.isSameRoom(i,j,i-1,j)){
+          map.setWall(i-1,j);
         } //end if
-        if(isRoom(i,j)&&isRoom(i+1,j+1)&&!isSameRoom(i,j,i+1,j+1)){
-          setWall(i,j);
+        if(map.isRoom(i,j)&&map.isRoom(i+1,j+1)&&!map.isSameRoom(i,j,i+1,j+1)){
+          map.setWall(i,j);
         } //end if
-        if(isRoom(i,j-1)&&isRoom(i-1,j)&&!isRoom(i,j)&&
-           !isSameRoom(i,j-1,i-1,j)){
-          setWall(i-1,j);
+        if(map.isRoom(i,j-1)&&map.isRoom(i-1,j)&&!map.isRoom(i,j)&&
+           !map.isSameRoom(i,j-1,i-1,j)){
+          map.setWall(i-1,j);
         } //end if
-        if(isEmpty(i,j)){
-          setWall(i,j); //set the to a wall
+        if(map.isEmpty(i,j)){
+          map.setWall(i,j); //set the to a wall
         } //end if
       } //end for
     } //end for
   } //end partitionRooms()
+
   function drawTileDoors(){
     var chance;
 
@@ -296,6 +311,7 @@ export function PHS(map,osize,deviation){
       } //end for
     } //end for
   } //end drawTileDoors()
+
   function cleanMap(){
     let isUseful;
 
@@ -397,13 +413,14 @@ export function PHS(map,osize,deviation){
   function createCorridors(){
     let fail=0, win=0;
 
-    while(fail<75&&win<size*3){
+    while(fail<750&&win<map.width+map.height){
+      console.log('while',fail,win);
       direction=Math.floor(Math.random()*4);
       if(direction===NORTH&&cy-7>=0&&move(NORTH)){
         win++
-      }else if(direction===EAST&&cx+7<size&&move(EAST)){
+      }else if(direction===EAST&&cx+7<map.width&&move(EAST)){
         win++;
-      }else if(direction===SOUTH&&cy+7<size&&move(SOUTH)){
+      }else if(direction===SOUTH&&cy+7<map.height&&move(SOUTH)){
         win++
       }else if(direction===WEST&&cx-7>=0&&move(WEST)){
         win++
@@ -411,19 +428,20 @@ export function PHS(map,osize,deviation){
         fail++;
       } //end if
     } //end while
+    console.log('fail',fail,win);
 
     // now we carve the dead ends
     map.sectors.forEach((row,y)=>{
       row.forEach((sector,x)=>{
-        if(sector.isEmpty()&&map.isCorridor(x-1,y)&&map.isCorridor(x+1,y)||
-          sector.isEmpty()&&map.isCorridor(x,y-1)&&map.isCorridor(x,y+1)||
-          sector.isEmpty()&&map.isCorridor(x-1,y)&&map.isCorridor(x,y+1)&&
+        if(x>0&&x<map.width-1&&sector.isEmpty()&&map.isCorridor(x-1,y)&&map.isCorridor(x+1,y)||
+          y>0&&y<map.height-1&&sector.isEmpty()&&map.isCorridor(x,y-1)&&map.isCorridor(x,y+1)||
+          x>1&&y<map.height-2&&sector.isEmpty()&&map.isCorridor(x-1,y)&&map.isCorridor(x,y+1)&&
             map.isCorridor(x-2,y)&&map.isCorridor(x,y+2)||
-          sector.isEmpty()&&map.isCorridor(x,y+1)&&map.isCorridor(x+1,y)&&
+          x>1&&y<map.height-2&&sector.isEmpty()&&map.isCorridor(x,y+1)&&map.isCorridor(x+1,y)&&
             map.isCorridor(x,y+2)&&map.isCorridor(x+2,y)||
-          sector.isEmpty()&&map.isCorridor(x+1,y)&&map.isCorridor(x,y-1)&&
+          x<map.width-2&&y>1&&sector.isEmpty()&&map.isCorridor(x+1,y)&&map.isCorridor(x,y-1)&&
             map.isCorridor(x+2,y)&&map.isCorridor(x,y-2)||
-          sector.isEmpty()&&map.isCorridor(x,y-1)&&map.isCorridor(x-1,y)&&
+          x>1&&y>1&&sector.isEmpty()&&map.isCorridor(x,y-1)&&map.isCorridor(x-1,y)&&
             map.isCorridor(x,y-2)&&map.isCorridor(x-2,y)){
           map.setEmpty(x-1,y-1);map.setEmpty(x,y-1);map.setEmpty(x+1,y-1);
           map.setEmpty(x-1,y);map.setEmpty(x+1,y);
