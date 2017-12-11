@@ -1,9 +1,3 @@
-const tileUnused = 0;
-const tileDirtFloor = 1;
-const tileDirtWall = 2;
-const tileError = 3;
-const tileCorridor = 4;
-const tileDoor = 5;
 const WEST = 0;
 const EAST = 1;
 const NORTH = 2;
@@ -41,38 +35,38 @@ export function PHS(map,osize,deviation){
     let result = false;
 
     if(direction===NORTH&&cy-6>=0){
-      if(cx-6>=0&&
+      if(cx-6>=0&& //northwest
         map.isCorridor(cx-1,cy)&&
         map.isCorridor(cx-6,cy-1)&&
         map.isCorridor(cx-1,cy-6)) result = true;
-      if(cx+6<map.width&&
+      if(cx+6<map.width&& //northeast
         map.isCorridor(cx+1,cy)&&
         map.isCorridor(cx+6,cy-1)&&
         map.isCorridor(cx+1,cy-6)) result = true
     }else if(direction===SOUTH&&cy+6<map.height){
-      if(cx-6>=0&&
+      if(cx-6>=0&& //southwest
         map.isCorridor(cx-1,cy)&&
         map.isCorridor(cx-6,cy+1)&&
         map.isCorridor(cx-1,cy+6)) result = true;
-      if(cx+6<map.width&&
+      if(cx+6<map.width&& //southeast
         map.isCorridor(cx+1,cy)&&
         map.isCorridor(cx+6,cy+1)&&
         map.isCorridor(cx+1,cy+6)) result = true;
     }else if(direction===EAST&&cx+6<map.width){
-      if(cy-6>=0&&
+      if(cy-6>=0&& //eastnorth
         map.isCorridor(cx,cy-1)&&
         map.isCorridor(cx+1,cy-6)&&
         map.isCorridor(cx+6,cy-1)) result = true
-      if(cy+6<map.height&&
+      if(cy+6<map.height&& //eastsouth
         map.isCorridor(cx,cy+1)&&
         map.isCorridor(cx+1,cy+6)&&
         map.isCorridor(cx+6,cy+1)) result = true
     }else if(direction===WEST&&cx-6>=0){
-      if(cy-6>=0&&
+      if(cy-6>=0&& //westnorth
         map.isCorridor(cx,cy-1)&&
         map.isCorridor(cx-1,cy-6)&&
         map.isCorridor(cx-6,cy-1)) result = true;
-      if(cy<map.height&&
+      if(cy<map.height&& //westsouth
         map.isCorridor(cx,cy+1)&&
         map.isCorridor(cx-1,cy+6)&&
         map.isCorridor(cx-6,cy+1)) result = true;
@@ -82,46 +76,36 @@ export function PHS(map,osize,deviation){
 
   // Carve out a path for the player in the direction specified
   function move(direction){
-    var result,i;
+    let result=false;
 
     if(direction===NORTH && !blocked(NORTH)){
-      if(isCorridor(cx,cy-6)){
+      if(map.isCorridor(cx,cy-6)){
         cy-=6;
-        result = 2;
       }else{
-        for(i=cy;i>=cy-5;i--) setCorridor(cx,i);
-        cy=i;
-        result = 1;
+        for(;cy>=cy-5;cy--) map.setCorridor(cx,cy);
+        result = true;
       } //end if
     }else if(direction===EAST && !blocked(EAST)){
-      if(isCorridor(cx+6,cy)){
+      if(map.isCorridor(cx+6,cy)){
         cx+=6;
-        result = 2;
       }else{
-        for(i=cx;i<=cx+5;i++) setCorridor(i,cy);
-        cx=i;
-        result = 1;
+        for(;cx<=cx+5;cx++) setCorridor(cx,cy);
+        result = true;
       } //end if
     }else if(direction===SOUTH && !blocked(SOUTH)){
-      if(isCorridor(cx,cy+6)){
+      if(map.isCorridor(cx,cy+6)){
         cy+=6;
-        result = 2;
       }else{
-        for(i=cy;i<=cy+5;i++) setCorridor(cx,i);
-        cy=i;
-        result = 1;
+        for(;cy<=cy+5;cy++) setCorridor(cx,cy);
+        result = true;
       } //end if
     }else if(direction===WEST && !blocked(WEST)){
-      if(isCorridor(cx-6,cy)){
+      if(map.isCorridor(cx-6,cy)){
         cx-=6;
-        result = 2;
       }else{
-        for(i=cx;i>=cx-5;i--) setCorridor(i,cy);
-        cx=i;
-        result = 1;
+        for(;cx>=cx-5;cx--) setCorridor(cx,cy);
+        result = true;
       } //end if
-    }else{
-      result = 0;
     } //end function
     return result;
   } //end move function
@@ -411,52 +395,20 @@ export function PHS(map,osize,deviation){
   // Drunk walker makes corridors according to the
   // restriction that we need to leave enough space for rooms
   function createCorridors(){
+    let fail=0, win=0;
+
     while(fail<75&&win<size*3){
       direction=Math.floor(Math.random()*4);
-      if(direction===0){//north
-        if(cy-7>=0){
-          val=move(NORTH);
-          if(val===0){
-            fail++
-          }else if(val===1){
-            win++;
-          } //end if
-        }else{
-          fail++;
-        } //end if
-      }else if(direction===1){//east
-        if(cx+7<size){
-          val=move(EAST);
-          if(val===0){
-            fail++
-          }else if(val===1){
-            win++;
-          } //end if
-        }else{
-          fail++;
-        } //end if
-      }else if(direction===2){//south
-        if(cy+7<size){
-          val=move(SOUTH);
-          if(val===0){
-            fail++
-          }else if(val===1){
-            win++;
-          } //end if
-        }else{
-          fail++;
-        } //end if
-      }else if(direction===3){//west
-        if(cx-7>=0){
-          val=move(WEST);
-          if(val===0){
-            fail++
-          }else if(val===1){
-            win++;
-          } //end if
-        }else{
-          fail++;
-        } //end if
+      if(direction===NORTH&&cy-7>=0&&move(NORTH)){
+        win++
+      }else if(direction===EAST&&cx+7<size&&move(EAST)){
+        win++;
+      }else if(direction===SOUTH&&cy+7<size&&move(SOUTH)){
+        win++
+      }else if(direction===WEST&&cx-7>=0&&move(WEST)){
+        win++
+      }else{
+        fail++;
       } //end if
     } //end while
     carveDeadEnds();
