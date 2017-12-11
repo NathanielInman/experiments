@@ -38,30 +38,46 @@ export function PHS(map,osize,deviation){
   // a square. We can't allow this, so we return true if they will and
   // prevent it in the move function
   function blocked(direction){
-    if(direction===NORTH||direction===SOUTH){
-      if(cx-6>=0){ //westward block
-        if(isCorridor(cx-1,cy)&&
-           isCorridor(cx-6,cy+(direction===NORTH?-1:1))&&
-           isCorridor(cx-1,cy+(direction===NORTH?-6:6)))return true;
-      } //end if
-      if(cx+6<size){ //eastward block
-        if(isCorridor(cx+1,cy)&&
-           isCorridor(cx+6,cy+(direction===NORTH?-1:1))&&
-           isCorridor(cx+1,cy+(direction===NORTH?-6:6)))return true;
-      } //end if
-    }else if(direction===EAST||direction===WEST){
-      if(cy-6>=0){ //northward block
-        if(isCorridor(cx,cy-1)&&
-           isCorridor(cx+(direction===WEST?-1:1),cy-6)&&
-           isCorridor(cx+(direction===WEST?-6:6),cy-1))return true;
-      } //end if
-      if(cy+6<size){ //southward block
-        if(isCorridor(cx,cy+1)&&
-           isCorridor(cx+(direction===WEST?-1:1),cy+6)&&
-           isCorridor(cx+(direction===WEST?-6:6),cy+1))return true;
-      } //end if
+    let result = false;
+
+    if(direction===NORTH&&cy-6>=0){
+      if(cx-6>=0&&
+        map.isCorridor(cx-1,cy)&&
+        map.isCorridor(cx-6,cy-1)&&
+        map.isCorridor(cx-1,cy-6)) result = true;
+      if(cx+6<map.width&&
+        map.isCorridor(cx+1,cy)&&
+        map.isCorridor(cx+6,cy-1)&&
+        map.isCorridor(cx+1,cy-6)) result = true
+    }else if(direction===SOUTH&&cy+6<map.height){
+      if(cx-6>=0&&
+        map.isCorridor(cx-1,cy)&&
+        map.isCorridor(cx-6,cy+1)&&
+        map.isCorridor(cx-1,cy+6)) result = true;
+      if(cx+6<map.width&&
+        map.isCorridor(cx+1,cy)&&
+        map.isCorridor(cx+6,cy+1)&&
+        map.isCorridor(cx+1,cy+6)) result = true;
+    }else if(direction===EAST&&cx+6<map.width){
+      if(cy-6>=0&&
+        map.isCorridor(cx,cy-1)&&
+        map.isCorridor(cx+1,cy-6)&&
+        map.isCorridor(cx+6,cy-1)) result = true
+      if(cy+6<map.height&&
+        map.isCorridor(cx,cy+1)&&
+        map.isCorridor(cx+1,cy+6)&&
+        map.isCorridor(cx+6,cy+1)) result = true
+    }else if(direction===WEST&&cx-6>=0){
+      if(cy-6>=0&&
+        map.isCorridor(cx,cy-1)&&
+        map.isCorridor(cx-1,cy-6)&&
+        map.isCorridor(cx-6,cy-1)) result = true;
+      if(cy<map.height&&
+        map.isCorridor(cx,cy+1)&&
+        map.isCorridor(cx-1,cy+6)&&
+        map.isCorridor(cx-6,cy+1)) result = true;
     } //end if
-    return false;
+    return result;
   } //end function
 
   // Carve out a path for the player in the direction specified
