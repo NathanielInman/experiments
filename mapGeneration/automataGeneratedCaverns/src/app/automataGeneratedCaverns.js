@@ -1,12 +1,12 @@
 import {Map} from './Map';
 
 // wikipedia.org/wiki/Conway%27s_Game_of_Life
-function conwayGameOfLife(){
+function conwayGameOfLife(map,map2){
   let mooresNeighborhood;
 
   for(let y=0;y<map.height;y++){
     for(let x=0;x<map.width;x++){
-      mooresNeighborhood=getMooresNeighborhood(x,y);
+      mooresNeighborhood=getMooresNeighborhood(map,map2,x,y);
       if(map2.isFloor(x,y)){
         if(mooresNeighborhood>=4){
           map.setFloor(x,y);
@@ -24,8 +24,8 @@ function conwayGameOfLife(){
 
 // it gets the number of living cells nearby.
 // living cells to us mean sectors that are floors
-function getMooresNeighborhood(x,y){
-  var result=0;
+function getMooresNeighborhood(map,map2,x,y){
+  let result=0;
 
   if(x>0&&y>0&&map2.isFloor(x-1,y-1)) result++;
   if(x>0&&map2.isFloor(x-1,y)) result++;
@@ -40,7 +40,7 @@ function getMooresNeighborhood(x,y){
 
 // Surround all floors traversable with walls and convert floors near
 // map edges to walls
-function buildWalls(){
+function buildWalls(map){
   map.sectors.forEach((row,y)=>{
     row.forEach((sector,x)=>{
       if(sector.isFloor){
@@ -67,42 +67,36 @@ function buildWalls(){
 } //end buildWalls()
 
 //look around at location and push unmapped nodes to stack
-function traverseLook(x,y){
+function traverseLook(map,unmapped,x,y){
   if(x>0&&map.isFloor(x-1,y)&&!map.loc(x-1,y)){
-    node={x: x-1,y};
-    unmapped.push(node);
+    unmapped.push({x: x-1, y});
     map.setLoc(x-1,y,-1);
   } //end if
   if(y>0&&map.isFloor(x,y-1)&&!map.loc(x,y-1)){
-    node={x,y: y-1};
-    unmapped.push(node);
+    unmapped.push({x,y: y-1});
     map.setLoc(x,y-1,-1);
   } //end if
   if(x<map.width&&map.isFloor(x+1,y)&&!map.loc(x+1,y)){
-    node={x: x+1,y};
-    unmapped.push(node);
+    unmapped.push({x: x+1, y});
     map.setLoc(x+1,y,-1);
   } //end if
   if(y<map.height&&map.isFloor(x,y+1)&&!map.loc(x,y+1)){
-    node={x,y: y+1};
-    unmapped.push(node);
+    unmapped.push({x,y: y+1});
     map.setLoc(x,y+1,-1);
   } //end if
 } //end traverseLook()
 
 // Traverse a location completely
-function traverse(curLoc,xInput,yInput){
-  var newLoc = node, x = xInput, y = yInput;
+function traverse(map,locStats,unmapped,x,y){
+  let newLoc = null; //we pull from unmapped
 
   locStats.val=1; //set the current mas size to 1
-  map.setLoc(x,y,curLoc);
-  traverseLook(x,y);
+  map.setLoc(x,y,locStats.cur);
+  traverseLook(map,unmapped,x,y);
   while(unmapped.length>0){
     newLoc=unmapped.pop();
-    x=newLoc.x;
-    y=newLoc.y;
-    traverseLook(x,y);
-    map.setLoc(x,y,curLoc);
+    traverseLook(map,unmapped,newLoc.x,newLoc.y);
+    map.setLoc(newLoc.x,newLoc.y,locStats.cur);
     locStats.val++;
     if(locStats.val>locStats.max){
       locStats.max=locStats.val;
@@ -114,12 +108,16 @@ function traverse(curLoc,xInput,yInput){
 // Remove orphaned floors by iterating through all sectors
 // and each time we find a floor we traverse from that section.
 // the largest section traversed is what we keep
-function clipOrphaned(){
-  let locStats = {val: 0,cur: 0,num: 0,max: 0};
+function clipOrphaned(map){
+  let locStats = {val: 0,cur: 0,num: 0,max: 0},
+      unmapped = [];
 
   map.sectors.forEach((row,y)=>{
     row.forEach((sector,x)=>{
-      if(sector.isFloor()&&!sector.loc) traverse(++locStats.cur,x,y);
+      if(sector.isFloor()&&!sector.loc){
+        locStats.cur++;
+        traverse(map,locStats,unmapped,x,y);
+      } //end if
     });
   });
   map.sectors.forEach(row=>{
@@ -142,8 +140,8 @@ export function AGC(map,inputDensity){
       if(r(0,100)<density) map2.setFloor(x,y);
     } //end for
   } //end for
-  conwayGameOfLife();
-  clipOrphaned();
-  buildWalls();
+  conwayGameOfLife(map,map2);
+  clipOrphaned(map);
+  buildWalls(map);
   return true;
 } //end AGC()
