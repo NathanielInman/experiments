@@ -27,7 +27,7 @@ if(!Easel.activated){
           ctx.fillStyle='#333';
         }else if(sector.isRemoved()){
           ctx.fillStyle='#f00';
-        }else{
+        }else{ //floor
           ctx.fillStyle='#383';
         } //end if
 

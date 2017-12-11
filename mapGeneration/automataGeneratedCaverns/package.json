@@ -9,10 +9,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/Nathaniel Inman/automataGeneratedCaverns.git"
+    "url": "git://github.com/NathanielInman/Experiments.git"
   },
   "bugs": {
-    "url": "https://github.com/Nathaniel Inman/automataGeneratedCaverns/issues"
+    "url": "https://github.com/NathanielInman/Experiments/issues"
   },
   "scripts": {
     "build:clean": "rm -rf ./dist && mkdir ./dist",
@@ -51,5 +51,5 @@
     "ion-cloud": "^1.1.1"
   },
   "readmeFilename": "README.md",
-  "homepage": "https://github.com/Nathaniel Inman/automataGeneratedCaverns"
+  "homepage": "https://github.com/NathanielInman/Experiments"
 }
