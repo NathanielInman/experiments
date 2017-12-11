@@ -1,3 +1,5 @@
+import Set from 'collections/set';
+
 const WEST = 0;
 const EAST = 1;
 const NORTH = 2;
@@ -139,6 +141,7 @@ export function PHS(map,osize,deviation){
   } //end drawWalls()
 
   function fillRoom(x,y,x2,y2){
+    console.log('!!!fill room!!!',x,y,x2,y2);
     var fail=false,
         drawn=false;
 
@@ -147,6 +150,7 @@ export function PHS(map,osize,deviation){
         if(map.isEmpty(i,j)){
           drawn=true;
           map.setRoom(i,j,roomNum.num);
+          map.setFloor(i,j);
         }else{
           fail=true;
           break;
@@ -163,54 +167,32 @@ export function PHS(map,osize,deviation){
   } //end fillRoom()
 
   function allocateRooms(){
-    var minWidth=0,minHeight=0,
-        maxWidth=5,maxHeight=5;
+    let minWidth=3,minHeight=3,
+        maxWidth=5,maxHeight=5,
+        freeX = [],freeY = [],intersectY = [];
 
     map.sectors.forEach((row,y)=>{
       row.forEach((sector,x)=>{
         if(sector.isEmpty()){
-          (()=>{
-          })();
+          freeX.length=0;
+          for(let i=x,sx=x;i<map.width&&i-x<=maxWidth;i++){
+            if(map.isEmpty(i,y)) freeX.push(i);
+          } //end for
+          if(freeX.length>minWidth){
+            freeY=new Set();
+            intersectY=new Set();
+            freeX.forEach((fx,fxIndex)=>{
+              for(let i=y,sy=y;i<map.height&&i-y<=maxHeight;i++){
+                if(map.isEmpty(fx,i)&&fxIndex===0) freeY.add(i);
+                if(map.isEmpty(fx,i)&&fxIndex!==0) intersectY.add(i);
+              } //end for
+              if(fxIndex>0) freeY = freeY.intersection(intersectY);
+            });
+            if(freeY.length>minHeight) fillRoom(freeX[0],freeY.min(),freeX[freeX.length-1],freeY.max());
+          } //end if
         } //end if
       });
     });
-    for(let i=0;i<size;i++){
-      for(let j=0;j<size;j++){
-        if(map.isEmpty(i,j)){
-          minWidth=0;minHeight=0;
-          (()=>{
-            for(let y=i;y<size;y++){
-              for(let x=j;x<size;x++){
-                if(!map.isEmpty(y,x)){
-                  if(y===i){
-                    if(x-j<3){
-                      return;
-                    }else{
-                      minWidth=x-j;
-                    } //end if
-                  }else if(x-j<minWidth&&y-i>=3){
-                    fillRoom(i,j,y-1,j+minWidth-1);
-                    return;
-                  }else{
-                    return;
-                  } //end if
-                  break;
-                }else if(y-i>maxHeight){
-                  fillRoom(i,j,y-1,j+minWidth-1);
-                  return;
-                }else if(x>minWidth&&minWidth!==0){ //out of bounds
-                  break;
-                }else if(x-j>maxWidth && y===i){
-                  minWidth=maxWidth-1;
-                  break;
-                }//end if
-              } //end for
-            } //end for
-          })();
-        } //end if
-      } //end for
-    } //end for
-    /*eslint-enable */
   } //end allocateRooms()
 
   function partitionRooms(){
