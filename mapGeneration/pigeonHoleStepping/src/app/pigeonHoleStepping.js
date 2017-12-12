@@ -5,26 +5,13 @@ const EAST = 1;
 const NORTH = 2;
 const SOUTH = 3;
 
-export function PHS(map,osize,deviation){
-  let size=osize-Math.floor(Math.random()*deviation),
-      cx=Math.floor(map.width/2), //current x position
+export function PHS(map){
+  let cx=Math.floor(map.width/2), //current x position
       cy=Math.floor(map.height/2), //current y position
-      roomNum={
-        num:          1,
-        done:         [true], //add index 0 because num starts at 1
-        topLeftX:     [0], //add index 0 because num starts at 1
-        topLeftY:     [0], //add index 0 because num starts at 1
-        bottomRightX: [0], //add index 0 because num starts at 1
-        bottomRightY: [0] //add index 0 because num starts at 1
-      },
-      direction=0;
+      currentRoomNumber=1;
 
-
-  console.log('map',map);
-  if(size%2===0)size++;
   createCorridors();
   allocateRooms();
-  //cleanMap();
   return true;
 
   // This function checks to see if the tileCorridors will create
@@ -132,7 +119,7 @@ export function PHS(map,osize,deviation){
         if(j===y||j===y2||i===x||i===x2){
           map.setWall(i,j);
         }else{
-          map.setRoom(i,j,roomNum.num);
+          map.setRoom(i,j,currentRoomNumber);
           map.setFloor(i,j);
         } //end if
       } //end for
@@ -178,10 +165,7 @@ export function PHS(map,osize,deviation){
         } //end for
       } //end for
     }else{
-      roomNum.topLeftX.push(x);roomNum.bottomRightX.push(x2);
-      roomNum.topLeftY.push(y);roomNum.bottomRightY.push(y2);
-      roomNum.done.push(false);
-      roomNum.num++;
+      currentRoomNumber++;
     } //end if
   } //end fillRoom()
 
@@ -226,57 +210,12 @@ export function PHS(map,osize,deviation){
     });
   } //end allocateRooms()
 
-  function partitionRooms(){
-    for(let i=1;i<size-1;i++){
-      for(let j=1;j<size-1;j++){
-        if(map.isRoom(i,j)&&map.isRoom(i,j-1)&&!map.isSameRoom(i,j,i,j-1)){
-          map.setWall(i,j-1);
-        } //end if
-        if(map.isRoom(i,j)&&map.isRoom(i-1,j)&&!map.isSameRoom(i,j,i-1,j)){
-          map.setWall(i-1,j);
-        } //end if
-        if(map.isRoom(i,j)&&map.isRoom(i+1,j+1)&&!map.isSameRoom(i,j,i+1,j+1)){
-          map.setWall(i,j);
-        } //end if
-        if(map.isRoom(i,j-1)&&map.isRoom(i-1,j)&&!map.isRoom(i,j)&&
-           !map.isSameRoom(i,j-1,i-1,j)){
-          map.setWall(i-1,j);
-        } //end if
-        if(map.isEmpty(i,j)){
-          map.setWall(i,j); //set the to a wall
-        } //end if
-      } //end for
-    } //end for
-  } //end partitionRooms()
-
-  function cleanMap(){
-    let isUseful;
-
-    map.sectors.forEach((row,y)=>{
-      row.forEach((sector,x)=>{
-        if(sector.isWall()){
-          isUseful = false;
-          if(y>0&&map.isWalkable(x,y-1)) isUseful = true;
-          if(x>0&&map.isWalkable(x-1,y)) isUseful = true;
-          if(y<map.height-1&&map.isWalkable(x,y+1)) isUseful = true;
-          if(x<map.width-1&&map.isWalkable(x+1,y)) isUseful = true;
-          if(x>0&&y>0&&map.isWalkable(x-1,y-1)) isUseful = true;
-          if(x>0&&y<map.height-1&&map.isWalkable(x-1,y+1)) isUseful = true;
-          if(x<map.width-1&&y>0&&map.isWalkable(x+1,y-1)) isUseful = true;
-          if(x<map.width-1&&y<map.height-1&&map.isWalkable(x+1,y+1)) isUseful = true;
-          if(!isUseful) sector.setEmpty();
-        } //end if
-      });
-    });
-  } //end cleanMap()
-
   // Drunk walker makes corridors according to the
   // restriction that we need to leave enough space for rooms
   function createCorridors(){
-    let fail=0, win=0;
+    let fail=0, win=0, direction;
 
     while(fail<750&&win<map.width+map.height){
-      console.log('while',fail,win);
       direction=Math.floor(Math.random()*4);
       if(direction===NORTH&&cy-7>=0&&move(NORTH)){
         win++
