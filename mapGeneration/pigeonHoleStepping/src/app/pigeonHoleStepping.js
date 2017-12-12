@@ -131,64 +131,52 @@ export function PHS(map,osize,deviation){
   function drawWalls(){
     map.sectors.forEach((row,y)=>{
       row.forEach((sector,x)=>{
-        if(y===0&&!sector.isCorridor(x,y)||
-          x===0&&!sector.isCorridor(x,y)||
-          y===map.height-1&&!sector.isCorridor(x,y)||
-          x===map.width-1&&!sector.isCorridor(x,y)||
-          sector.isEmpty()&&nextToCorridor(x,y)) sector.setWall();
+        if(sector.isEmpty()&&nextToCorridor(x,y)) sector.setWall();
       });
     });
   } //end drawWalls()
 
   function fillRoom(x,y,x2,y2){
     console.log('!!!fill room!!!',x,y,x2,y2);
-    var fail=false,
-        drawn=false;
-
-    for(let j=y;j<=y2;j++){
-      for(let i=x;i<=x2;i++){
-        if(map.isEmpty(i,j)){
-          drawn=true;
+    for(let j=y-1;j<=y2+1;j++){
+      for(let i=x-1;i<=x2+1;i++){
+        if(j===y-1||j===y2+1||i===x-1||i===x2+1){
+          map.setWall(i,j);
+        }else{
           map.setRoom(i,j,roomNum.num);
           map.setFloor(i,j);
-        }else{
-          fail=true;
-          break;
         } //end if
       } //end for
-      if(fail)break;
     } //end for
-    if(drawn){
-      roomNum.topLeftX.push(x);roomNum.bottomRightX.push(x2);
-      roomNum.topLeftY.push(y);roomNum.bottomRightY.push(y2);
-      roomNum.done.push(false);
-      roomNum.num++;
-    } //end if
+    roomNum.topLeftX.push(x);roomNum.bottomRightX.push(x2);
+    roomNum.topLeftY.push(y);roomNum.bottomRightY.push(y2);
+    roomNum.done.push(false);
+    roomNum.num++;
   } //end fillRoom()
 
   function allocateRooms(){
     let minWidth=3,minHeight=3,
         maxWidth=5,maxHeight=5,
-        freeX = [],freeY = [],intersectY = [];
+        freeX,freeY,intersectY;
 
     map.sectors.forEach((row,y)=>{
       row.forEach((sector,x)=>{
         if(sector.isEmpty()){
-          freeX.length=0;
-          for(let i=x,sx=x;i<map.width&&i-x<=maxWidth;i++){
-            if(map.isEmpty(i,y)) freeX.push(i);
+          freeX=new Set();
+          for(let i=x,sx=x;i>0&&i<map.width-2&&i-x<=maxWidth;i++){
+            if(map.isEmpty(i,y)) freeX.add(i);
           } //end for
-          if(freeX.length>minWidth){
+          if(freeX.length>=minWidth){
             freeY=new Set();
             intersectY=new Set();
-            freeX.forEach((fx,fxIndex)=>{
-              for(let i=y,sy=y;i<map.height&&i-y<=maxHeight;i++){
+            freeX.toArray().forEach((fx,fxIndex)=>{
+              for(let i=y,sy=y;i>0&&i<map.height-2&&i-y<=maxHeight;i++){
                 if(map.isEmpty(fx,i)&&fxIndex===0) freeY.add(i);
                 if(map.isEmpty(fx,i)&&fxIndex!==0) intersectY.add(i);
               } //end for
               if(fxIndex>0) freeY = freeY.intersection(intersectY);
             });
-            if(freeY.length>minHeight) fillRoom(freeX[0],freeY.min(),freeX[freeX.length-1],freeY.max());
+            if(freeY.length>=minHeight) fillRoom(freeX.min(),freeY.min(),freeX.max(),freeY.max());
           } //end if
         } //end if
       });
