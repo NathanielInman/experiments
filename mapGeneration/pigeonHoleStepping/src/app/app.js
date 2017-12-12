@@ -36,8 +36,7 @@ if(!easel.activated){
 
         // the -0.4 & +0.8 is to remove sub-pixel issues
         // that might cause lines to appear between cells
-        //easel.ctx.fillRect(x*rw-0.4,y*rh-0.4,rw+0.8,rh+0.8);
-        easel.ctx.fillRect(x*rw,y*rh,rw,rh);
+        easel.ctx.fillRect(x*rw-0.4,y*rh-0.4,rw+0.8,rh+0.8);
       });
     });
   };

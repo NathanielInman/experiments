@@ -12,6 +12,7 @@ export function PHS(map){
 
   createCorridors();
   allocateRooms();
+  wallifyCorridors();
   return true;
 
   // This function checks to see if the tileCorridors will create
@@ -64,7 +65,6 @@ export function PHS(map){
   function move(direction){
     let result=false;
 
-    console.log('move',cx,cy);
     if(direction===NORTH && !blocked(NORTH)){
       if(map.isCorridor(cx,cy-6)){
         cy-=6;
@@ -230,7 +230,9 @@ export function PHS(map){
       } //end if
     } //end while
 
-    // now we carve the dead ends
+    // now we carve the dead ends before we start applying rooms to the
+    // corridors; otherwise we might create orphaned rooms if we prune
+    // it later
     map.sectors.forEach((row,y)=>{
       row.forEach((sector,x)=>{
         if(x>0&&x<map.width-1&&sector.isEmpty()&&map.isCorridor(x-1,y)&&map.isCorridor(x+1,y)||
@@ -250,4 +252,22 @@ export function PHS(map){
       });
     });
   } //end createCorridors()
+
+  // surround the corridors that arent surrounded with walls yet with walls now.
+  function wallifyCorridors(){
+    map.sectors.forEach((row,y)=>{
+      row.forEach((sector,x)=>{
+        if(sector.isCorridor()){
+          if(x>0&&map.isEmpty(x-1,y)) map.setWall(x-1,y);
+          if(x>0&&y>0&&map.isEmpty(x-1,y-1)) map.setWall(x-1,y-1);
+          if(y>0&&map.isEmpty(x,y-1)) map.setWall(x,y-1);
+          if(y>0&&x<map.width-1&&map.isEmpty(x+1,y-1)) map.setWall(x+1,y-1);
+          if(x<map.width-1&&map.isEmpty(x+1,y)) map.setWall(x+1,y);
+          if(x<map.width-1&&y<map.height-1&&map.isEmpty(x+1,y+1)) map.setWall(x+1,y+1);
+          if(y<map.height-1&&map.isEmpty(x,y+1)) map.setWall(x,y+1);
+          if(y<map.height-1&&x>0&&map.isEmpty(x-1,y+1)) map.setWall(x-1,y+1);
+        } //end if
+      });
+    });
+  } //end wallifyCorridors()
 } //end function
