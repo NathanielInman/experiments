@@ -24,7 +24,6 @@ export function PHS(map,osize,deviation){
   if(size%2===0)size++;
   createCorridors();
   allocateRooms();
-  //pruneMap();
   //cleanMap();
   return true;
 
@@ -126,7 +125,7 @@ export function PHS(map,osize,deviation){
   } //end nextToCorridor()
 
   function fillRoom(x,y,x2,y2){
-    let setDoor = false, randomDirection;
+    let setDoor = false, randomDirection, failureCount=0;
 
     for(let j=y;j<=y2;j++){
       for(let i=x;i<=x2;i++){
@@ -138,7 +137,7 @@ export function PHS(map,osize,deviation){
         } //end if
       } //end for
     } //end for
-    while(!setDoor){
+    while(!setDoor&&failureCount<100){
       randomDirection=Math.floor(Math.random()*5);
 
       if(randomDirection===NORTH){
@@ -166,12 +165,24 @@ export function PHS(map,osize,deviation){
           map.setDoor(rx,y2);setDoor = true;
         } //end if
       } //end if
+      failureCount++;
     } //end while()
-    console.log('room',roomNum);
-    roomNum.topLeftX.push(x);roomNum.bottomRightX.push(x2);
-    roomNum.topLeftY.push(y);roomNum.bottomRightY.push(y2);
-    roomNum.done.push(false);
-    roomNum.num++;
+
+    // In the unlikely event that the map has a void and we couldn't
+    // connect the room to a hallway, lets clear the room we made; otherwise
+    // lets attribute the room 
+    if(!setDoor){
+      for(let j=y;j<=y2;j++){
+        for(let i=x;i<=x2;i++){
+          map.setEmpty(i,j);
+        } //end for
+      } //end for
+    }else{
+      roomNum.topLeftX.push(x);roomNum.bottomRightX.push(x2);
+      roomNum.topLeftY.push(y);roomNum.bottomRightY.push(y2);
+      roomNum.done.push(false);
+      roomNum.num++;
+    } //end if
   } //end fillRoom()
 
   function allocateRooms(){
@@ -257,81 +268,6 @@ export function PHS(map,osize,deviation){
         } //end if
       });
     });
-  } //end cleanMap()
-
-  // We are able to prune the map by iterating one-by-one through the
-  // map and if the cell we're currently is one is walkable, then we
-  // iterate through all nearby walkable floors, marking that floor as
-  // seen and giving it the same identifier room number, keeping track
-  // of the number or rooms per room identifier. Then we loop
-  // through the entire map and remove cells that are of a room number
-  // that isn't the largest size (thus keeping the largest room only)
-  function pruneMap(){
-    var node = {x: 0,y: 0},
-        loc_max = {val: 0,cur: 0,num: 0,max: 0},
-        unmapped=[];
-
-    // iterate through all cells once, marking their location number
-    // which is the number all nearby walkable cells will share
-    for(let i=0;i<size;i++){
-      for(let j=0;j<size;j++){
-        if(map[i][j].isWalkable()&&!map[i][j].loc){
-          traverse(++loc_max.cur,i,j);
-        } //end if
-      } //end for
-    } //end for
-
-    // loop through all the cells, clearing them if they don't share the
-    // location id of the most-touching or largest area we found
-    for(let i=0;i<size;i++){
-      for(let j=0;j<size;j++){
-        if(map[i][j].isWalkable()&&map[i][j].loc!==loc_max.num){
-          map[i][j].type=tileError;
-        } //end if
-      } //end for
-    } //end for
-
-    //look around at location and push unmapped nodes to stack
-    function traverse_look(i,j){
-      if(i>0&&map[i-1][j].isWalkable()&&!map[i-1][j].loc){
-        node={x: i-1,y: j};
-        unmapped.push(node);map[i-1][j].loc=-1;
-      } //end if
-      if(j>0&&map[i][j-1].isWalkable()&&!map[i][j-1].loc){
-        node={x: i,y: j-1};
-        unmapped.push(node);map[i][j-1].loc=-1;
-      } //end if
-      if(i<size&&map[i+1][j].isWalkable()&&!map[i+1][j].loc){
-        node={x: i+1,y: j};
-        unmapped.push(node);map[i+1][j].loc=-1;
-      } //end if
-      if(j<size&&map[i][j+1].isWalkable()&&!map[i][j+1].loc){
-        node={x: i,y: j+1};
-        unmapped.push(node);map[i][j+1].loc=-1;
-      } //end if
-    } //end traverse_look()
-
-    // Traverse a location completely
-    function traverse(curLoc,i,j){
-      var newLoc = node,
-          x = i, y = j;
-
-      loc_max.val=1; //set the current mas size to 1
-      map[x][y].loc=curLoc;
-      traverse_look(x,y);
-      while(unmapped.length>0){
-        newLoc=unmapped.pop();
-        x=newLoc.x;
-        y=newLoc.y;
-        traverse_look(x,y);
-        map[x][y].loc=curLoc;
-        loc_max.val++;
-        if(loc_max.val>loc_max.max){
-          loc_max.max=loc_max.val;
-          loc_max.num=loc_max.cur;
-        } //end manage maximum mass
-      } //end while
-    } //end traverse()
   } //end cleanMap()
 
   // Drunk walker makes corridors according to the
