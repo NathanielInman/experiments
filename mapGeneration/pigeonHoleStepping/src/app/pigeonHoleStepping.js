@@ -13,7 +13,6 @@ export function PHS(map){
   createCorridors();
   allocateRooms();
   wallifyCorridors();
-  return true;
 
   // This function checks to see if the tileCorridors will create
   // a square. We can't allow this, so we return true if they will and
@@ -97,20 +96,6 @@ export function PHS(map){
     return result;
   } //end move function
 
-  function nextToCorridor(x,y){
-    let result = false;
-
-    if(x>0&&map.isCorridor(x-1,y)) result = true;
-    if(y>0&&map.isCorridor(x,y-1)) result = true;
-    if(x<map.width-1&&map.isCorridor(x+1,y)) result = true;
-    if(y<map.height-1&&map.isCorridor(x,y+1)) result = true;
-    if(x>0&&y>0&&map.isCorridor(x-1,y-1)) result = true;
-    if(x>0&&y<map.height-1&&map.isCorridor(x-1,y+1)) result = true;
-    if(x<map.width-1&&y>0&&map.isCorridor(x+1,y-1)) result = true;
-    if(x<map.width-1&&y<map.height-1&&map.isCorridor(x+1,y+1)) result = true;
-    return result;
-  } //end nextToCorridor()
-
   function fillRoom(x,y,x2,y2){
     let setDoor = false, randomDirection, failureCount=0;
 
@@ -157,7 +142,7 @@ export function PHS(map){
 
     // In the unlikely event that the map has a void and we couldn't
     // connect the room to a hallway, lets clear the room we made; otherwise
-    // lets attribute the room 
+    // lets attribute the room
     if(!setDoor){
       for(let j=y;j<=y2;j++){
         for(let i=x;i<=x2;i++){
@@ -202,6 +187,7 @@ export function PHS(map){
                 freeY = freeY.intersection(intersectY);
                 if(freeY.length===0) return true;
               } //end if
+              return false;
             });
             if(freeY.length>=minHeight) fillRoom(freeX.min(),freeY.min(),freeX.max(),freeY.max());
           } //end if
