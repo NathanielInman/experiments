@@ -23,10 +23,8 @@ export function PHS(map,osize,deviation){
   console.log('map',map);
   if(size%2===0)size++;
   createCorridors();
-  drawWalls();
   allocateRooms();
-  //partitionRooms();
-  //drawTileDoors();
+  drawDoors();
   //pruneMap();
   //cleanMap();
   return true;
@@ -128,19 +126,10 @@ export function PHS(map,osize,deviation){
     return result;
   } //end nextToCorridor()
 
-  function drawWalls(){
-    map.sectors.forEach((row,y)=>{
-      row.forEach((sector,x)=>{
-        if(sector.isEmpty()&&nextToCorridor(x,y)) sector.setWall();
-      });
-    });
-  } //end drawWalls()
-
   function fillRoom(x,y,x2,y2){
-    console.log('!!!fill room!!!',x,y,x2,y2);
-    for(let j=y-1;j<=y2+1;j++){
-      for(let i=x-1;i<=x2+1;i++){
-        if(j===y-1||j===y2+1||i===x-1||i===x2+1){
+    for(let j=y;j<=y2;j++){
+      for(let i=x;i<=x2;i++){
+        if(j===y||j===y2||i===x||i===x2){
           map.setWall(i,j);
         }else{
           map.setRoom(i,j,roomNum.num);
@@ -155,7 +144,7 @@ export function PHS(map,osize,deviation){
   } //end fillRoom()
 
   function allocateRooms(){
-    let minWidth=3,minHeight=3,
+    let minWidth=4,minHeight=4,
         maxWidth=5,maxHeight=5,
         freeX,freeY,intersectY;
 
@@ -163,18 +152,30 @@ export function PHS(map,osize,deviation){
       row.forEach((sector,x)=>{
         if(sector.isEmpty()){
           freeX=new Set();
-          for(let i=x,sx=x;i>0&&i<map.width-2&&i-x<=maxWidth;i++){
-            if(map.isEmpty(i,y)) freeX.add(i);
+          for(let i=x,sx=x;i>0&&i<map.width-2&&i-sx<=maxWidth;i++){
+            if(map.isEmpty(i,y)){
+              freeX.add(i);
+            }else{
+              break;
+            } //end if
           } //end for
           if(freeX.length>=minWidth){
             freeY=new Set();
             intersectY=new Set();
-            freeX.toArray().forEach((fx,fxIndex)=>{
-              for(let i=y,sy=y;i>0&&i<map.height-2&&i-y<=maxHeight;i++){
-                if(map.isEmpty(fx,i)&&fxIndex===0) freeY.add(i);
-                if(map.isEmpty(fx,i)&&fxIndex!==0) intersectY.add(i);
+            freeX.toArray().some((fx,fxIndex)=>{
+              intersectY.clear();
+              for(let i=y,sy=y;i>0&&i<map.height-2&&i-sy<=maxHeight;i++){
+                if(map.isEmpty(fx,i)){
+                  if(fxIndex===0) freeY.add(i);
+                  if(fxIndex!==0) intersectY.add(i);
+                }else{
+                  break;
+                } //end if
               } //end for
-              if(fxIndex>0) freeY = freeY.intersection(intersectY);
+              if(fxIndex>0){
+                freeY = freeY.intersection(intersectY);
+                if(freeY.length===0) return true;
+              } //end if
             });
             if(freeY.length>=minHeight) fillRoom(freeX.min(),freeY.min(),freeX.max(),freeY.max());
           } //end if
@@ -206,20 +207,20 @@ export function PHS(map,osize,deviation){
     } //end for
   } //end partitionRooms()
 
-  function drawTileDoors(){
+  function drawDoors(){
     var chance;
 
     for(let i=1;i<size-1;i++){
       for(let j=1;j<size-1;j++){
-        if(isCorridor(i,j)){
+        if(map.isCorridor(i,j)){
 
           // South tileDirtWall room
-          if(i<size-2&&isWall(i+1,j)&&isRoom(i+2,j)){
+          if(i<size-2&&map.isWall(i+1,j)&&map.isRoom(i+2,j)){
 
             // check to see if there's another place for the tileDoor, and give
             // it a chance to be spawned instead of at the current location
-            if(isCorridor(i,j+1)&&isWall(i+1,j+1)&&
-               isSameRoom(i+2,j+1,i+2,j)){
+            if(map.isCorridor(i,j+1)&&map.isWall(i+1,j+1)&&
+               map.isSameRoom(i+2,j+1,i+2,j)){
               chance=Math.floor(Math.random()*100);
             }else{
               chance=0;
@@ -230,20 +231,20 @@ export function PHS(map,osize,deviation){
             // location for the tileDoor, then it will be spawned here with
             // a 100% chance
             if(chance>80){
-              if(roomNum.done[getRoom(i+2,j)]===false){
-                roomNum.done[getRoom(i+2,j)]=true;
-                setDoor(i+1,j);
+              if(roomNum.done[map.getRoom(i+2,j)]===false){
+                roomNum.done[map.getRoom(i+2,j)]=true;
+                map.setDoor(i+1,j);
               } //end if
             } //end if
           } //end if
 
           // East tileDirtWall room
-          if(j<size-2&&isWall(i,j+1)&&isRoom(i,j+2)){
+          if(j<size-2&&map.isWall(i,j+1)&&map.isRoom(i,j+2)){
 
             // check to see if there's another place for the tileDoor, and give
             // it a chance to be spawned instead of at the current location
-            if(isCorridor(i+1,j)&&isWall(i+1,j+1)&&
-               isSameRoom(i+1,j+2,i,j+2)){
+            if(map.isCorridor(i+1,j)&&map.isWall(i+1,j+1)&&
+               map.isSameRoom(i+1,j+2,i,j+2)){
               chance=Math.floor(Math.random()*100);
             }else{
               chance=100;
@@ -254,33 +255,33 @@ export function PHS(map,osize,deviation){
             // location for the tileDoor, then it will be spawned here with
             // a 100% chance
             if(chance>60){
-              if(roomNum.done[getRoom(i,j+2)]===false){
-                roomNum.done[getRoom(i,j+2)]=true;
-                setDoor(i,j+1);
+              if(roomNum.done[map.getRoom(i,j+2)]===false){
+                roomNum.done[map.getRoom(i,j+2)]=true;
+                map.setDoor(i,j+1);
               } //end if
             }//end if
           } //end if
 
           // west tileDirtWall room
-          if(i>2&&isWall(i-1,j)&&isRoom(i-2,j)){
+          if(i>2&&map.isWall(i-1,j)&&map.isRoom(i-2,j)){
 
             // check to see if there's another place for the tileDoor, and give
             // it a chance to be spawned instead of at the current location
-            if(roomNum.done[getRoom(i-2,j)]===false){
-              roomNum.done[getRoom(i-2,j)]=true;
-              setDoor(i-1,j);
+            if(roomNum.done[map.getRoom(i-2,j)]===false){
+              roomNum.done[map.getRoom(i-2,j)]=true;
+              map.setDoor(i-1,j);
             } //end if
           } //end if
-          if(j>2&&isWall(i,j-1)&&isRoom(i,j-2)){
-            if(roomNum.done[getRoom(i,j-2)]===false){
-              roomNum.done[getRoom(i,j-2)]=true;
-              setDoor(i,j-1);
+          if(j>2&&map.isWall(i,j-1)&&map.isRoom(i,j-2)){
+            if(roomNum.done[map.getRoom(i,j-2)]===false){
+              roomNum.done[map.getRoom(i,j-2)]=true;
+              map.setDoor(i,j-1);
             } //end if
           } //end if
         } //end if
       } //end for
     } //end for
-  } //end drawTileDoors()
+  } //end drawDoors()
 
   function cleanMap(){
     let isUseful;
@@ -398,7 +399,6 @@ export function PHS(map,osize,deviation){
         fail++;
       } //end if
     } //end while
-    console.log('fail',fail,win);
 
     // now we carve the dead ends
     map.sectors.forEach((row,y)=>{
