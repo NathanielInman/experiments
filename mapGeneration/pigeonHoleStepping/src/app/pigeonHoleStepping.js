@@ -24,7 +24,6 @@ export function PHS(map,osize,deviation){
   if(size%2===0)size++;
   createCorridors();
   allocateRooms();
-  drawDoors();
   //pruneMap();
   //cleanMap();
   return true;
@@ -127,6 +126,8 @@ export function PHS(map,osize,deviation){
   } //end nextToCorridor()
 
   function fillRoom(x,y,x2,y2){
+    let setDoor = false, randomDirection;
+
     for(let j=y;j<=y2;j++){
       for(let i=x;i<=x2;i++){
         if(j===y||j===y2||i===x||i===x2){
@@ -137,6 +138,36 @@ export function PHS(map,osize,deviation){
         } //end if
       } //end for
     } //end for
+    while(!setDoor){
+      randomDirection=Math.floor(Math.random()*5);
+
+      if(randomDirection===NORTH){
+        let rx=Math.floor(Math.random()*(x2-x))+x;
+
+        if(map.isFloor(rx,y+1)&&map.isCorridor(rx,y-1)){
+          map.setDoor(rx,y);setDoor = true;
+        } //end if
+      }else if(randomDirection===EAST){
+        let ry=Math.floor(Math.random()*(y2-y))+y;
+
+        if(map.isFloor(x2-1,ry)&&map.isCorridor(x2+1,ry)){
+          map.setDoor(x2,ry);setDoor = true;
+        } //end if
+      }else if(randomDirection===WEST){
+        let ry=Math.floor(Math.random()*(y2-y))+y;
+
+        if(map.isFloor(x+1,ry)&&map.isCorridor(x-1,ry)){
+          map.setDoor(x,ry);setDoor = true;
+        } //end if
+      }else if(randomDirection===SOUTH){
+        let rx=Math.floor(Math.random()*(x2-x))+x;
+
+        if(map.isFloor(rx,y2-1)&&map.isCorridor(rx,y2+1)){
+          map.setDoor(rx,y2);setDoor = true;
+        } //end if
+      } //end if
+    } //end while()
+    console.log('room',roomNum);
     roomNum.topLeftX.push(x);roomNum.bottomRightX.push(x2);
     roomNum.topLeftY.push(y);roomNum.bottomRightY.push(y2);
     roomNum.done.push(false);
@@ -206,82 +237,6 @@ export function PHS(map,osize,deviation){
       } //end for
     } //end for
   } //end partitionRooms()
-
-  function drawDoors(){
-    var chance;
-
-    for(let i=1;i<size-1;i++){
-      for(let j=1;j<size-1;j++){
-        if(map.isCorridor(i,j)){
-
-          // South tileDirtWall room
-          if(i<size-2&&map.isWall(i+1,j)&&map.isRoom(i+2,j)){
-
-            // check to see if there's another place for the tileDoor, and give
-            // it a chance to be spawned instead of at the current location
-            if(map.isCorridor(i,j+1)&&map.isWall(i+1,j+1)&&
-               map.isSameRoom(i+2,j+1,i+2,j)){
-              chance=Math.floor(Math.random()*100);
-            }else{
-              chance=0;
-            }//end if
-
-            // The tileDoor wil be spawned here at a 50% chance if there's
-            // another location for the tileDoor, elseif there is no other
-            // location for the tileDoor, then it will be spawned here with
-            // a 100% chance
-            if(chance>80){
-              if(roomNum.done[map.getRoom(i+2,j)]===false){
-                roomNum.done[map.getRoom(i+2,j)]=true;
-                map.setDoor(i+1,j);
-              } //end if
-            } //end if
-          } //end if
-
-          // East tileDirtWall room
-          if(j<size-2&&map.isWall(i,j+1)&&map.isRoom(i,j+2)){
-
-            // check to see if there's another place for the tileDoor, and give
-            // it a chance to be spawned instead of at the current location
-            if(map.isCorridor(i+1,j)&&map.isWall(i+1,j+1)&&
-               map.isSameRoom(i+1,j+2,i,j+2)){
-              chance=Math.floor(Math.random()*100);
-            }else{
-              chance=100;
-            }//end if
-
-            // The tileDoor wil be spawned here at a 50% chance if there's
-            // another location for the tileDoor, elseif there is no other
-            // location for the tileDoor, then it will be spawned here with
-            // a 100% chance
-            if(chance>60){
-              if(roomNum.done[map.getRoom(i,j+2)]===false){
-                roomNum.done[map.getRoom(i,j+2)]=true;
-                map.setDoor(i,j+1);
-              } //end if
-            }//end if
-          } //end if
-
-          // west tileDirtWall room
-          if(i>2&&map.isWall(i-1,j)&&map.isRoom(i-2,j)){
-
-            // check to see if there's another place for the tileDoor, and give
-            // it a chance to be spawned instead of at the current location
-            if(roomNum.done[map.getRoom(i-2,j)]===false){
-              roomNum.done[map.getRoom(i-2,j)]=true;
-              map.setDoor(i-1,j);
-            } //end if
-          } //end if
-          if(j>2&&map.isWall(i,j-1)&&map.isRoom(i,j-2)){
-            if(roomNum.done[map.getRoom(i,j-2)]===false){
-              roomNum.done[map.getRoom(i,j-2)]=true;
-              map.setDoor(i,j-1);
-            } //end if
-          } //end if
-        } //end if
-      } //end for
-    } //end for
-  } //end drawDoors()
 
   function cleanMap(){
     let isUseful;

@@ -30,9 +30,9 @@ export class Map{
   setRemoved(x,y){ this.getSector(x,y).setRemoved(); }
   isWalkable(x,y){ return this.getSector(x,y).isWalkable(); }
   isRoom(x,y){ return this.getSector(x,y).roomNumber>0; }
-  setRoom(x,y,num){ this.getSector(x,y).roomNum = num; }
+  setRoom(x,y,num){ this.getSector(x,y).roomNumber = num; }
   getRoom(x,y){ return this.getSector(x,y).roomNumber; }
   isSameRoom(x1,y1,x2,y2){
-    return this.getSector(x1,y1).roomNum===this.getSector(x2,y2).roomNum;
+    return this.getSector(x1,y1).roomNumber===this.getSector(x2,y2).roomNumber;
   }
 }
