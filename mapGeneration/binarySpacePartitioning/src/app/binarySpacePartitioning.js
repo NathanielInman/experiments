@@ -2,6 +2,7 @@
 const tinSize = 3;
 const minSize = 2*tinSize;
 const maxSize = 3*tinSize;
+const r = (lint,uint)=> Math.floor(Math.random()*(uint-lint))+lint;
 
 // The partition class is essentially a binary tree with tiny controller
 // logic to handle partition sizes and closing of partitions that don't
@@ -88,8 +89,8 @@ class Partition{
     } //end if
 
     // Carve the floors and walls surrounding the room
-    for(let i=x1-1;i<=x2;i++){
-      for(let j=y1-1;j<=y2;j++){
+    for(let j=y1-1;j<=y2;j++){
+      for(let i=x1-1;i<=x2;i++){
         // Make sure we're not a corner, if we're not then save to pathable
         if(i===Math.floor(x1+(x2-x1)/2)&&j===y1-1){ //north
           this.pathable.push({x: i,y: j,direction: 'north'});
@@ -101,9 +102,9 @@ class Partition{
           this.pathable.push({x: i,y: j,direction: 'east'});
         } //end if
         if(i===x1-1||i===x2||j===y1-1||j==y2){
-          this.map.sector[i][j].setWall();
+          this.map.setWall(i,j);
         }else{
-          this.map.sector[i][j].setFloor();
+          this.map.setFloor(i,j);
         } //end if
       } //end for
     } //end for
@@ -118,6 +119,7 @@ class Partition{
     if(this.right.opened) this.right.connect();
 
     console.log('connecting...',this.id,this);
+    console.log('leafs...',[[this.left.x1,this.left.y1],[this.left.x2,this.left.y2]],[[this.right.x1,this.right.y1],[this.right.x2,this.right.y2]]);
 
     // terminal leafs and upward connect and operate
     if(this.left.opened&&this.right.opened){
@@ -130,22 +132,24 @@ class Partition{
             s1=this.left.pathable.splice(s1i,1).pop(),
             s2=this.right.pathable.splice(s2i,1).pop();
 
-        console.log('debuggery horizontal');
-        console.log('x',s1.x,s2.x,this.right.y1,this.right.y2);
-        console.log('y',s1.y,s2.y,this.right.x1,this.right.x2);
+        console.log('debuggery horizontal',this.left.pathable,this.right.pathable);
+        console.log('debuggery chosen',s1,s2);
         this.pathable = [].concat.apply([],[this.pathable,this.left.pathable,this.right.pathable]);
-        for(let i=s1.x;i<=s2.x;i++) this.map.sector[i][s1.y].setOther();
+        for(let j=s1.y;j<=s2.y;j++)
+          for(let i=s1.x;i<=s2.x;i++)
+            this.map.setCorridor(i,j);
       }else if(this.left.x1===this.right.x1&&this.left.x2===this.right.x2){
         let s1i=this.left.pathable.findIndex(s=>s.direction==='south'),
             s2i=this.right.pathable.findIndex(s=>s.direction==='north'),
             s1=this.left.pathable.splice(s1i,1).pop(),
             s2=this.right.pathable.splice(s2i,1).pop();
 
-        console.log('debuggery vertical');
-        console.log('x',s1.x,s2.x,this.right.y1,this.right.y2);
-        console.log('y',s1.y,s2.y,this.right.x1,this.right.x2);
+        console.log('debuggery vertical',this.left.pathable,this.right.pathable);
+        console.log('debuggery chosen',s1,s2);
         this.pathable = [].concat.apply([],[this.pathable,this.left.pathable,this.right.pathable]);
-        for(let j=s1.y;j<=s2.y;j++) this.map.sector[s1.x][j].setOther();
+        for(let j=s1.y;j<=s2.y;j++)
+          for(let i=s1.x;i<=s2.x;i++)
+            this.map.setCorridor(i,j);
       } //end if
     }else{ //Reached a terminal partition, apply pathable upwards
       this.pathable = [].concat.apply([],[this.pathable,this.left.pathable,this.right.pathable]);

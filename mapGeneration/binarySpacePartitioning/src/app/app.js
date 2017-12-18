@@ -1,12 +1,11 @@
-import 'file-loader?name=[name].html!./index.jade';
-import './app.styl';
-import {easel} from 'ion-cloud';
+import {Easel} from 'ion-cloud';
 import {Map} from './Map';
 import {bsp} from './binarySpacePartitioning';
 
 // Launch application if easel was able to create a canvas,
 // if it wasn't then we know canvas isn't supported
-let noscript = document.getElementById('noscript');
+let noscript = document.getElementById('noscript'),
+    easel = new Easel();
 
 if(!easel.activated){
   noscript.innerHTML = `
@@ -17,20 +16,31 @@ if(!easel.activated){
     <span style="color:red;"><br/>Canvas isn't supported in your browser.</span>
   </p>`;
 }else{
-  noscript.style.visibility='hidden';
   let map = new Map(50,50);
-  
+
   bsp(map);
   easel.onDraw = ()=>{
-    // Clear Screen
-    ctx.fillStyle='#000';
-    ctx.fillRect(0,0,v.w,v.h);
+    let rh = easel.viewport.h/map.height, rw = easel.viewport.w/map.width;
 
-    // Refresh drawing the map when window requires it
-    map.redraw();
+    map.sectors.forEach((row,y)=>{
+      row.forEach((sector,x)=>{
+        if(sector.isEmpty()){
+          easel.ctx.fillStyle='#000';
+        }else if(sector.isWall()){
+          easel.ctx.fillStyle='#333';
+        }else if(sector.isDoor()){
+          easel.ctx.fillStyle='#883';
+        }else if(sector.isCorridor()){
+          easel.ctx.fillStyle='#388';
+        }else{ //floor
+          easel.ctx.fillStyle='#383';
+        } //end if
+
+        // the -0.4 & +0.8 is to remove sub-pixel issues
+        // that might cause lines to appear between cells
+        easel.ctx.fillRect(x*rw-0.4,y*rh-0.4,rw+0.8,rh+0.8);
+      });
+    });
   };
   easel.redraw();
-  window.map=map;
-  window.easel=easel;
 } //end if
-
