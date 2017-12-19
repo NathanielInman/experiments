@@ -1,7 +1,6 @@
 // These three constants control the size of the rooms
-const tinSize = 3;
-const minSize = 2*tinSize;
-const maxSize = 3*tinSize;
+const minSize = 1;
+const maxSize = 6;
 const r = (lint,uint)=> Math.floor(Math.random()*(uint-lint))+lint;
 
 // The partition class is essentially a binary tree with tiny controller
@@ -37,7 +36,7 @@ class Partition{
     let x1 = this.x1, y1 = this.y1, x2 = this.x2, y2 = this.y2;
 
     if(this.width>=this.height){
-      if(this.width>minSize*2){ //splitting horizontally
+      if(this.width>maxSize){ //splitting horizontally
         let split = r(x1+minSize,x2-minSize,1);
 
         this.left = new Partition(this.map,x1,split,y1,y2,this,'L');
@@ -48,7 +47,7 @@ class Partition{
         this.fill();
       } //end if
     }else{
-      if(this.height>minSize*2){ // splitting vertically
+      if(this.height>maxSize){ // splitting vertically
         let split = r(y1+minSize,y2-minSize,1);
 
         this.left = new Partition(this.map,x1,x2,y1,split,this,'L');
@@ -67,26 +66,6 @@ class Partition{
   // so we know not to conenct this location with a hallway
   fill(){
     let x1 = this.x1, y1 = this.y1, x2 = this.x2, y2 = this.y2;
-
-    // Make sure we randomly place the room in the allocated space, not using
-    // the whole space allocated or it will look entirely too generic and
-    // repeated
-    if(this.width>minSize){
-      this.x1a=x1=r(x1,x1+tinSize,1);
-      this.x2a=x2=r(x2-tinSize,x2+1,1);
-    }else if(this.width>minSize/2&&r(0,2,1)===1){
-      this.x1a=x1=r(x1,x1+tinSize,1);
-    }else if(this.width>minSize/2){
-      this.x2a=x2=r(x2-tinSize,x2+1,1);
-    } //end if
-    if(this.height>minSize){
-      this.y1a=y1=r(y1,y1+tinSize,1);
-      this.y2a=y2=r(y2-tinSize,y2+1,1);
-    }else if(this.height>minSize/2&&r(0,2,1)===1){
-      this.y1a=y1=r(y1,y1+tinSize,1);
-    }else if(this.height>minSize/2){
-      this.y2a=y2=r(y2-tinSize,y2+1,1);
-    } //end if
 
     // Carve the floors and walls surrounding the room
     for(let j=y1-1;j<=y2;j++){
