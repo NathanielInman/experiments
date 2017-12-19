@@ -20,8 +20,9 @@ const S = 1;
 const E = 2;
 const W = 3;
 
-export function PCG(map,size){
+export function pcg(map){
   var i,j, //used as temporary iterators.
+      size = map.width,
       cx = Math.floor(size/6),cy = Math.floor(size/6), //center x and y
       roomDirection, //room direction to build
       roomSize, //room size of which to try to build.

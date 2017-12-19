@@ -1,114 +1,50 @@
-import {Easel} from './vendor/easel';
-import {PCG} from './common/main';
+import {Easel} from 'ion-cloud';
+import {Map} from './Map';
+import {pcg} from './proceduralContentGeneration';
 
 // Launch application if easel was able to create a canvas,
 // if it wasn't then we know canvas isn't supported
-{
-  let noscript = document.getElementById('noscript');
+let noscript = document.querySelector('noscript'),
+    easel = new Easel();
 
-  if(!Easel.activated){
-    noscript.innerHTML = `
-    <p class="browsehappy">
-      You are using an outdated browser. Please
-      <a href="http://browsehappy.com/"> upgrade your browser</a>
-      to improve your experience.
-      <span style="color:red;"><br/>Canvas isn't supported in your browser.</span>
-    </p>`;
-  }else{
-    let size = 41,
-        map = [];
+if(!easel.activated){
+  noscript.innerHTML = `
+  <p class="browsehappy">
+    You are using an outdated browser. Please
+    <a href="http://browsehappy.com/"> upgrade your browser</a>
+    to improve your experience.
+    <span style="color:red;"><br/>Canvas isn't supported in your browser.</span>
+  </p>`;
+}else{
+  let map = new Map(41,41);
 
-    const tileUnused = 0;
-    const tileDirtFloor = 1;
-    const tileDirtWall = 2;
-    const tileCorridor = 4;
-    const tileDoor = 5;
-    const tileWater = 6;
-    const tileBossFloor = 6;
-    const tileLootFloor = 7;
+  pcg(map);
+  easel.onDraw = ()=>{
+    let rh = easel.viewport.h/map.height, rw = easel.viewport.w/map.width;
 
-    class Sector{
-      constructor(){
-        this.type = 0;
-        this.loc = 0;
-      }
-      isEmpty(){
-        return this.type === tileUnused;
-      }
-      isFloor(){
-        return this.type === tileDirtFloor;
-      }
-      isWall(){
-        return this.type === tileDirtWall;
-      }
-      isDoor(){
-        return this.type === tileDoor;
-      }
-      isCorridor(){
-        return this.type === tileCorridor;
-      }
-      isWater(){
-        return this.type === tileWater;
-      }
-      setEmpty(){
-        this.type = tileUnused;
-      }
-      setFloor(){
-        this.type = tileDirtFloor;
-      }
-      setWall(){
-        this.type = tileDirtWall;
-      }
-      setDoor(){
-        this.type = tileDoor;
-      }
-      setCorridor(){
-        this.type = tileCorridor;
-      }
-      setWater(){
-        this.type = tileWater;
-      }
-      isWalkable(){
-        var walkable = false;
+    map.sectors.forEach((row,y)=>{
+      row.forEach((sector,x)=>{
+        if(sector.isEmpty()){
+          easel.ctx.fillStyle='#000';
+        }else if(sector.isWall()){
+          easel.ctx.fillStyle='#333';
+        }else if(sector.isDoor()){
+          easel.ctx.fillStyle='#f84';
+        }else if(sector.isCorridor()){
+          easel.ctx.fillStyle='#883';
+        }else if(sector.isWater()){
+          easel.ctx.fillStyle='#36f';
+        }else if(sector.isError()){
+          easel.ctx.fillStyle='#f00';
+        }else{ //floor
+          easel.ctx.fillStyle='#383';
+        } //end if
 
-        if(this.isFloor())walkable = true;
-        if(this.isWater())walkable = true;
-        if(this.isDoor())walkable = true;
-        if(this.isCorridor())walkable = true;
-        return walkable;
-      }
-    }
-    for (let i=0;i<=size;i++){
-      map[i] = [];
-      for(let j=0;j<=size;j++){
-        map[i][j]= new Sector();
-      } //end for
-    } //end for
-    if(PCG(map,size)){
-      let rw = v.w/size,
-          rh = v.h/size;
-
-      for(let i=0;i<size;i++){
-        for(let j=0;j<size;j++){
-          if(map[i][j].isFloor()){
-            ctx.fillStyle='#383';
-          }else if(map[i][j].isWall()){
-            ctx.fillStyle='#333';
-          }else if(map[i][j].isDoor()){
-            ctx.fillStyle='#F84';
-          }else if(map[i][j].isCorridor()){
-            ctx.fillStyle='#883';
-          }else if(map[i][j].isWater()){
-            ctx.fillStyle='#36F';
-          }else if(map[i][j].type===3){
-            ctx.fillStyle='#F00';
-          }else{
-            ctx.fillStyle='#000';
-          } //end if
-          ctx.fillRect(i*rw,j*rh,rw,rh);
-        } //end for
-      } //end for
-    } //end if
-    noscript.style.visibility='hidden';
-  } //end if
-}
+        // the -0.4 & +0.8 is to remove sub-pixel issues
+        // that might cause lines to appear between cells
+        easel.ctx.fillRect(x*rw-0.4,y*rh-0.4,rw+0.8,rh+0.8);
+      });
+    });
+  };
+  easel.redraw();
+} //end if
