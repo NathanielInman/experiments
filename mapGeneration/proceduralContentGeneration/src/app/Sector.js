@@ -16,5 +16,13 @@ export class Sector{
   setWater(){ this.type=5; }
   isError(){ return this.type===6; }
   setError(){ this.type=6; }
+  isWalkable(){
+    let result = false;
+
+    if(this.isFloor()||this.isDoor()||this.isCorridor()||this.isWater()){
+      result = true;
+    } //end if
+    return result;
+  }
 }
 

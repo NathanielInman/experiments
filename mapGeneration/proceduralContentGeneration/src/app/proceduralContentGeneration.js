@@ -20,9 +20,23 @@ const S = 1;
 const E = 2;
 const W = 3;
 
+// rf stands for random number floored
+// it takes an optional second param which means we need a random
+// number between the range of num1 and num2
+function rf(num1,num2){
+  var result;
+
+  if(num2){
+    result = num1+Math.floor(Math.random()*num2);
+  }else{
+    result = Math.floor(Math.random()*num1);
+  } //end if
+  return result;
+} //end rf()
+
+// eslint-disable-next-line complexity
 export function pcg(map){
-  var i,j, //used as temporary iterators.
-      size = map.width,
+  let size = map.width,
       cx = Math.floor(size/6),cy = Math.floor(size/6), //center x and y
       roomDirection, //room direction to build
       roomSize, //room size of which to try to build.
@@ -65,6 +79,7 @@ export function pcg(map){
       roomType=ROOMTYPE_SPHERICAL;
     }else{
       let d100 = rf(100);
+
       if(proceduralType===CRYPT_STANDARD) waterChance = 5;
       if(proceduralType===CRYPT_ANCIENT) waterChance = 85;
       if(proceduralType===CRYPT_CATACOMBS) waterChance = 15;
@@ -133,58 +148,50 @@ export function pcg(map){
       } //end if
     } //end if
     if(todo.length===0 && successfulRooms<15){
-      for(let i=0;i<size;i++)for(let j=0;j<size;j++){cs(i,j);successfulRooms=1;}
+      for(let i=0;i<size;i++){
+        for(let j=0;j<size;j++){
+          cs(i,j);
+          successfulRooms=1;
+        } //end for
+      } //end for
       step=0;cx = Math.floor(size/6);cy = Math.floor(size/6);
     } //end if
   }while(todo.length>0||step===0);
 
   // Surround the map with walls
-  for(i=0;i<size;i++){
-    for(j=0;j<size;j++){
-      if(map[i][j].isWalkable()){
-        if(i>0&&map[i-1][j].isEmpty()) map[i-1][j].setWall();
-        if(i<size&&map[i+1][j].isEmpty()) map[i+1][j].setWall();
-        if(j>0&&map[i][j-1].isEmpty()) map[i][j-1].setWall();
-        if(j<size&&map[i][j+1].isEmpty()) map[i][j+1].setWall();
-        if(i>0&&j>0&&map[i-1][j-1].isEmpty()) map[i-1][j-1].setWall();
-        if(i<size&&j<size&&map[i+1][j+1].isEmpty()) map[i+1][j+1].setWall();
-        if(i>0&&j<size&&map[i-1][j+1].isEmpty()) map[i-1][j+1].setWall();
-        if(i<size&&j>0&&map[i+1][j-1].isEmpty()) map[i+1][j-1].setWall();
-        if(i===0||j===0||i===size-1||j===size-1) map[i][j].setWall();
-        if(map[i][j].isCorridor()){
-          if(i>0&&map[i-1][j].isWall()&&i<size-1&&map[i+1][j].isWall()||
-             j>0&&map[i][j-1].isWall()&&j<size-1&&map[i][j+1].isWall()){
-            if(!rf(4)) map[i][j].setDoor();
-          }else{
-            map[i][j].setFloor();
-          } //end if
-        } //end if
+  map.sectors.forEach((row,y)=>{
+    row.forEach((sector,x)=>{
+      if(sector.isWalkable()){
+        if(x>0&&map.isEmpty(x-1,y)) map.setWall(x-1,y);
+        if(x>0&&y>0&&map.isEmpty(x-1,y-1)) map.setWall(x-1,y-1);
+        if(y>0&&map.isEmpty(x,y-1)) map.setWall(x,y-1);
+        if(y>0&&x<map.width-1&&map.isEmpty(x+1,y-1)) map.setWall(x+1,y-1);
+        if(x<map.width-1&&map.isEmpty(x+1,y)) map.setWall(x+1,y);
+        if(x<map.width-1&&y<map.height-1&&map.isEmpty(x+1,y+1)) map.setWall(x+1,y+1);
+        if(y<map.height-1&&map.isEmpty(x,y+1)) map.setWall(x,y+1);
+        if(y<map.height-1&&x>0&&map.isEmpty(x-1,y+1)) map.setWall(x-1,y+1);
       } //end if
-    } //end for
-  } //end for
+      if(sector.isDoor()){
+        let valid = false;
+
+        if(x>0&&x<map.width-1&&map.isWall(x-1,y)&&map.isWall(x+1,y)){
+          valid = true;
+        }else if(y>0&&y<map.height-1&&map.isWall(x,y-1)&&map.isWall(x,y+1)){
+          valid = true;
+        } //end if
+        if(!valid) sector.setFloor();
+      }
+    });
+  });
   return true;
-
-  // rf stands for random number floored
-  // it takes an optional second param which means we need a random
-  // number between the range of num1 and num2
-  function rf(num1,num2){
-    var result;
-
-    if(num2){
-      result = num1+Math.floor(Math.random()*num2);
-    }else{
-      result = Math.floor(Math.random()*num1);
-    } //end if
-    return result;
-  } //end rf()
 
   // Check to see if a selection of area is empty
   function checkSpaceEmpty(x,y,x2,y2){
-    for(let i=x;i<=x2;i++){
-      for(let j=y;j<=y2;j++){
-        if(i<0||j<0||i>=size||j>=size||!map[i][j].isEmpty()){
+    for(let yi=y;yi<=y2;yi++){
+      for(let xi=x;xi<=x2;xi++){
+        if(xi<0||yi<0||xi>=map.width||yi>=map.height||!map.isEmpty(xi,yi)){
           return false;
-        } //end if
+        } //end for
       } //end for
     } //end for
     return true;
@@ -192,51 +199,52 @@ export function pcg(map){
 
   // set cooridor of x,y location
   function sc(x,y){
-    map[x][y].setCorridor();
-    map[x][y].loc=roomDirection;
-    map[x][y].roomNum=successfulRooms;
+    map.setDoor(x,y);
+    map.setLoc(x,y,roomDirection);
+    map.setRoom(x,y,successfulRooms);
   } //end sc()
 
   // clear sector of all information we may have set
   function cs(x,y){
-    map[x][y].setEmpty();
-    map[x][y].loc=0;
-    map[x][y].roomNum=0;
+    map.setEmpty(x,y);
+    map.setLoc(x,y,0);
+    map.setRoom(x,y,0);
   } //end cs()
 
+  //eslint-disable-next-line complexity
   function drawSpecialty(x,y,sx,sy,ex,ey,type){
     var halfX = (ex-sx)/2,
         halfY = (ey-sy)/2;
 
     if(type===ROOM_DISPERSION){
-      map[x][y].setFloor();
+      map.setFloor(x,y);
       if(!rf(2)){ //50% chance
         if(!rf(2)){
-          map[x-1][y].setFloor();
-          if(!rf(2)) map[x-1][y-1].setFloor();
-          if(!rf(2)) map[x-1][y+1].setFloor();
+          map.setFloor(x-1,y);
+          if(!rf(2)) map.setFloor(x-1,y-1);
+          if(!rf(2)) map.setFloor(x-1,y+1);
         } //end if
         if(!rf(2)){
-          map[x+1][y].setFloor();
-          if(!rf(2)) map[x+1][y-1].setFloor();
-          if(!rf(2)) map[x+1][y+1].setFloor();
+          map.setFloor(x+1,y);
+          if(!rf(2)) map.setFloor(x+1,y-1);
+          if(!rf(2)) map.setFloor(x+1,y+1);
         } //end if
         if(!rf(2)){
-          map[x][y-1].setFloor();
-          if(!rf(2)) map[x+1][y-1].setFloor();
-          if(!rf(2)) map[x-1][y-1].setFloor();
+          map.setFloor(x,y-1);
+          if(!rf(2)) map.setFloor(x+1,y-1);
+          if(!rf(2)) map.setFloor(x-1,y-1);
         } //end if
         if(!rf(2)){
-          map[x][y+1].setFloor();
-          if(!rf(2)) map[x+1][y+1].setFloor();
-          if(!rf(2)) map[x-1][y+1].setFloor();
+          map.setFloor(x,y+1);
+          if(!rf(2)) map.setFloor(x+1,y+1);
+          if(!rf(2)) map.setFloor(x-1,y+1);
         } //end if
       } //end if
     }else if(type===ROOM_ISLANDS){
       if(!rf(2)){ //50% chance
-        map[x][y].setFloor();
+        map.setFloor(x,y);
       }else{
-        map[x][y].setWater();
+        map.setWater(x,y);
       } //end if
     }else if(type===ROOM_ISLAND_WALKWAYS){
       let n=!rf(2),s=!rf(2),e=!rf(2),w=!rf(2),
@@ -246,13 +254,13 @@ export function pcg(map){
           ea = x>=sx+halfX-1&&y>=sy+halfY-1&&y<=ey-halfY;
 
       if(n&&na||s&&sa||w&&wa||e&&ea){
-        map[x][y].setFloor();
-        if(!rf(3))if(map[x-1][y-1].isWater())map[x-1][y-1].setFloor();
-        if(!rf(3))if(map[x+1][y-1].isWater())map[x+1][y-1].setFloor();
-        if(!rf(3))if(map[x-1][y+1].isWater())map[x-1][y+1].setFloor();
-        if(!rf(3))if(map[x+1][y+1].isWater())map[x+1][y+1].setFloor();
+        map.setFloor(x,y);
+        if(!rf(3))if(map.isWater(x-1,y-1))map.setFloor(x-1,y-1);
+        if(!rf(3))if(map.isWater(x+1,y-1))map.setFloor(x+1,y-1);
+        if(!rf(3))if(map.isWater(x-1,y+1))map.setFloor(x-1,y+1);
+        if(!rf(3))if(map.isWater(x+1,y+1))map.setFloor(x+1,y+1);
       }else{
-        map[x][y].setWater();
+        map.setWater(x,y);
       } //end if
     }else if(type===ROOM_ISLAND){
       if(x>=sx+halfX/2&&x<=ex-halfX/2&&y>=sy+halfY/2&&y<=ey-halfY/2){
@@ -260,12 +268,12 @@ export function pcg(map){
 
         if(bend&&x===sx+(halfX/2)|0||bend&&x===ex-(halfX/2)|0||
            bend&&y===sy+(halfY/2)|0||bend&&y===ey-(halfY/2)|0){
-          map[x][y].setWater();
+          map.setWater(x,y);
         }else{
-          map[x][y].setFloor();
+          map.setFloor(x,y);
         } //end if
       }else{
-        map[x][y].setWater();
+        map.setWater(x,y);
       } //end if
     }else if(type===ROOM_POOL){
       if(x>=sx+halfX/2&&x<=ex-halfX/2&&y>=sy+halfY/2&&y<=ey-halfY/2){
@@ -273,24 +281,25 @@ export function pcg(map){
 
         if(bend&&x===sx+(halfX/2)|0||bend&&x===ex-(halfX/2)|0||
            bend&&y===sy+(halfY/2)|0||bend&&y===ey-(halfY/2)|0){
-          map[x][y].setFloor();
+          map.setFloor(x,y);
         }else{
-          map[x][y].setWater();
+          map.setWater(x,y);
         } //end if
       }else{
-        map[x][y].setFloor();
+        map.setFloor(x,y);
       } //end if
-    }else{
-      map[x][y].setFloor();
+    }else if(type===ROOM_NORMAL){
+      map.setFloor(x,y);
     } //end if
     return true;
   } //end drawSpecialty()
 
   // given a specified x and y coordinate, roomsize, direction and type
   // we will draw a spherical room
+  // eslint-disable-next-line complexity
   function buildSphereRoom(x,y,roomSize,roomDirection,drawPathway,type){
     var i,j,sx,sy,ex,ey,
-        centerX,centerY,r = roomSize/2,
+        r = roomSize/2,
         offset = roomSize%2===0?2:1,
         lx = x-(r)|0-offset>=0,
         ly = y-(r)|0-offset>=0,
@@ -650,8 +659,6 @@ export function pcg(map){
         todo.push({rd: S,x: x-2,y: y+2});
       } //end if
     }else if(roomDirection===N && rn){
-      centerX=x;
-      centerY=y-Math.floor(r);
       sx=x-Math.floor(r);
       ex=x+Math.ceil(r);
       sy=y-roomSize;
@@ -681,8 +688,6 @@ export function pcg(map){
       todo.push({rd: W,x: x-Math.floor(r)+1,y: y-Math.floor(r)-1});
       todo.push({rd: E,x: x+Math.floor(r)-1,y: y-Math.floor(r)-1});
     }else if(roomDirection===E && re){
-      centerX=x+Math.floor(r);
-      centerY=y;
       sx=x+1;ex=x+roomSize;
       sy=y-Math.floor(r);
       ey=y+Math.ceil(r);
@@ -711,8 +716,6 @@ export function pcg(map){
       todo.push({rd: N,x: x+Math.ceil(r),y: y-(r)|0-1});
       todo.push({rd: S,x: x+Math.ceil(r),y: y+Math.ceil(r)-1});
     }else if(roomDirection===S && rs){
-      centerX=x;
-      centerY=y+Math.floor(r);
       sx=x-Math.floor(r);
       ex=x+Math.ceil(r);
       sy=y+1;
@@ -742,8 +745,6 @@ export function pcg(map){
       todo.push({rd: W,x: x-(r)|0-1,y: y+Math.ceil(r)});
       todo.push({rd: E,x: x+Math.ceil(r),y: y+Math.ceil(r)});
     }else if(roomDirection===W && rw){
-      centerX=x-Math.floor(r);
-      centerY=y;
       sx=x-roomSize;
       ex=x;
       sy=y-Math.floor(r);
@@ -775,10 +776,12 @@ export function pcg(map){
     }else{
       return false; //went off side of map
     } //end if
+    return true;
   } //end buildSphereRoom()
 
   // Given a specified x and y coordinate, roomsize, direction and type
   // we will draw a square room.
+  //eslint-disable-next-line complexity
   function buildSquareRoom(x,y,roomSize,roomDirection,drawPathway,type){
     var i,j,sx,sy,ex,ey,
         r = roomSize / 2,

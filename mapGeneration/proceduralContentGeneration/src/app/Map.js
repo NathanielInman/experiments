@@ -15,7 +15,10 @@ export class Map{
       } //end for
     } //end for
   }
+  setLoc(x,y,locNumber){ this.getSector(x,y).loc = locNumber; }
+  setRoom(x,y,roomNumber){ this.getSector(x,y).roomNumber = roomNumber; }
   getSector(x,y){ return this.sectors[y][x]; }
+  isWalkable(x,y){ return this.getSector(x,y).isWalkable(); }
   isEmpty(x,y){ return this.getSector(x,y).isEmpty(); }
   setEmpty(x,y){ this.getSector(x,y).setEmpty(); }
   isFloor(x,y){ return this.getSector(x,y).isFloor(); }
