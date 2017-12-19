@@ -91,21 +91,27 @@ class Partition{
 
       // horizontal connection
       if(this.left.y1===this.right.y1&&this.left.y2===this.right.y2){
-        for(let x=this.left.x2-1,y=this.left.y1;y<=this.left.y2;y++){
+        let created = false, x=this.left.x2-1, y;
+
+        while(!created){
+          y=r(this.left.y1,this.left.y2+1);
           if(this.map.isFloor(x,y)&&this.map.isFloor(x+2,y)){
             this.map.setCorridor(x+1,y);
-            break;
+            created=true;
           } //end if
-        } //end for
+        } //end while
 
       // vertical connection
       }else if(this.left.x1===this.right.x1&&this.left.x2===this.right.x2){
-        for(let x=this.left.x1,y=this.left.y2-1;x<=this.left.x2;x++){
+        let created = false, x, y=this.left.y2-1;
+
+        while(!created){
+          x=r(this.left.x1,this.left.x2+1);
           if(this.map.isFloor(x,y)&&this.map.isFloor(x,y+2)){
             this.map.setCorridor(x,y+1);
-            break;
+            created = true;
           } //end if
-        } //end for
+        } //end while
       } //end if
     }//end if
   }
