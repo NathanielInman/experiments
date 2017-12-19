@@ -17,15 +17,17 @@ class Partition{
     this.id=parent?parent.id+type:'@';
     this._closed=false;
     this.map = map;
-    this.x1 = x1; this.y1 = y1; this.x2 = x2; this.y2 = y2; //ordained space
-    this.x1a = x1; this.y1a = y1; this.x2a = x2; this.y2a = y2; //used space
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2; //ordained space
     this.width=x2-x1;
     this.height=y2-y1;
     this.parent=parent||false;
     this.initialize();
   }
   get opened(){ return this._closed===false; }
-  get closed(){ return this._closed===true; } 
+  get closed(){ return this._closed===true; }
   setClosed(){ this._closed=true; }
 
   // This creates a left and right child (left/right could be up and down) if there
@@ -34,45 +36,41 @@ class Partition{
   initialize(){
     let x1 = this.x1, y1 = this.y1, x2 = this.x2, y2 = this.y2;
 
+    // splitting horizontally
     if(this.width>=this.height){
-      if(this.width>maxSize){ //splitting horizontally
+      if(this.width>maxSize){
         let split = r(x1+minSize,x2-minSize,1);
 
         this.left = new Partition(this.map,x1,split,y1,y2,this,'L');
         this.right = new Partition(this.map,split+1,x2,y1,y2,this,'R');
-      }else{ //can't split horizontally, too smalle - close nodes
-        this.left =  {closed:true};
-        this.right = {closed:true};
+      }else{ //can't split horizontally, too small - close nodes
+        this.left = {closed: true};
+        this.right = {closed: true};
         this.fill();
       } //end if
-    }else{
-      if(this.height>maxSize){ // splitting vertically
-        let split = r(y1+minSize,y2-minSize,1);
 
-        this.left = new Partition(this.map,x1,x2,y1,split,this,'L');
-        this.right = new Partition(this.map,x1,x2,split+1,y2,this,'R');
-      }else{ //can't split vertically, too small - close nodes
-        this.left =  {closed:true};
-        this.right = {closed:true};
-        this.fill();
-      } //end if
+    // splitting vertically
+    }else if(this.height>maxSize){
+      let split = r(y1+minSize,y2-minSize,1);
+
+      this.left = new Partition(this.map,x1,x2,y1,split,this,'L');
+      this.right = new Partition(this.map,x1,x2,split+1,y2,this,'R');
+    }else{ //can't split vertically, too small - close nodes
+      this.left = {closed: true};
+      this.right = {closed: true};
+      this.fill();
     } //end if
   }
 
   // Fill is called when the partition can no longer be broken down into
-  // smaller partitions. It fills the floor and walls if it meets the size
-  // requirement. If the room is way too smal, it's emptied and set to closed
-  // so we know not to conenct this location with a hallway
+  // smaller partitions.
   fill(){
-    let x1 = this.x1, y1 = this.y1, x2 = this.x2, y2 = this.y2;
-
-    // Carve the floors and walls surrounding the room
-    for(let j=y1-1;j<=y2;j++){
-      for(let i=x1-1;i<=x2;i++){
-        if(i===x1-1||i===x2||j===y1-1||j==y2){
-          this.map.setWall(i,j);
+    for(let y=this.y1-1;y<=this.y2;y++){
+      for(let x=this.x1-1;x<=this.x2;x++){
+        if(x===this.x1-1||x===this.x2||y===this.y1-1||y===this.y2){
+          this.map.setWall(x,y);
         }else{
-          this.map.setFloor(i,j);
+          this.map.setFloor(x,y);
         } //end if
       } //end for
     } //end for
@@ -86,25 +84,23 @@ class Partition{
     if(this.left.opened) this.left.connect();
     if(this.right.opened) this.right.connect();
 
-    console.log('connecting...',this.id,this);
-    console.log('leafs...',[[this.left.x1,this.left.y1],[this.left.x2,this.left.y2]],[[this.right.x1,this.right.y1],[this.right.x2,this.right.y2]]);
-
     // terminal leafs and upward connect and operate
     if(this.left.opened&&this.right.opened){
-      //connect child rooms
       this.left.setClosed();
       this.right.setClosed();
+
+      // horizontal connection
       if(this.left.y1===this.right.y1&&this.left.y2===this.right.y2){
-        console.log('debuggery horizontal');
-        for(let x=this.left.x2,y=this.left.y1;y<=this.left.y2;y++){
+        for(let x=this.left.x2-1,y=this.left.y1;y<=this.left.y2;y++){
           if(this.map.isFloor(x,y)&&this.map.isFloor(x+2,y)){
             this.map.setCorridor(x+1,y);
             break;
           } //end if
         } //end for
+
+      // vertical connection
       }else if(this.left.x1===this.right.x1&&this.left.x2===this.right.x2){
-        console.log('debuggery vertical');
-        for(let x=this.left.x1,y=this.left.y1;x<=this.left.x2;x++){
+        for(let x=this.left.x1,y=this.left.y2-1;x<=this.left.x2;x++){
           if(this.map.isFloor(x,y)&&this.map.isFloor(x,y+2)){
             this.map.setCorridor(x,y+1);
             break;
@@ -119,6 +115,4 @@ export function bsp(map){
   let tree = new Partition(map,1,map.width-1,1,map.height-1);
 
   tree.connect();
-  console.info('Ran binary space partitioning');
 }
-
