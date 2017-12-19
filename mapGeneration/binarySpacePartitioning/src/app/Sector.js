@@ -10,7 +10,5 @@ export class Sector{
   setWall(){ this.type = 2; }
   isDoor(){ return this.type===3; }
   setDoor(){ this.type = 3; }
-  isCorridor(){ return this.type===4; }
-  setCorridor(){ this.type = 4; }
 }
 

@@ -25,6 +25,6 @@ export class Map{
   setFloor(x,y){ return this.getSector(x,y).setFloor(); }
   isWall(x,y){ return this.getSector(x,y).isWall(); }
   setWall(x,y){ return this.getSector(x,y).setWall(); }
-  isCorridor(x,y){ return this.getSector(x,y).isCorridor(); }
-  setCorridor(x,y){ return this.getSector(x,y).setCorridor(); }
+  isDoor(x,y){ return this.getSector(x,y).isDoor(); }
+  setDoor(x,y){ return this.getSector(x,y).setDoor(); }
 }

@@ -1,6 +1,6 @@
 // These three constants control the size of the rooms
 const minSize = 1;
-const maxSize = 6;
+const maxSize = 5;
 const r = (lint,uint)=> Math.floor(Math.random()*(uint-lint))+lint;
 
 // The partition class is essentially a binary tree with tiny controller
@@ -96,7 +96,7 @@ class Partition{
         while(!created){
           y=r(this.left.y1,this.left.y2+1);
           if(this.map.isFloor(x,y)&&this.map.isFloor(x+2,y)){
-            this.map.setCorridor(x+1,y);
+            this.map.setDoor(x+1,y);
             created=true;
           } //end if
         } //end while
@@ -108,7 +108,7 @@ class Partition{
         while(!created){
           x=r(this.left.x1,this.left.x2+1);
           if(this.map.isFloor(x,y)&&this.map.isFloor(x,y+2)){
-            this.map.setCorridor(x,y+1);
+            this.map.setDoor(x,y+1);
             created = true;
           } //end if
         } //end while

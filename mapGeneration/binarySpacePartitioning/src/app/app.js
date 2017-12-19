@@ -29,11 +29,9 @@ if(!easel.activated){
         }else if(sector.isWall()){
           easel.ctx.fillStyle='#333';
         }else if(sector.isDoor()){
-          easel.ctx.fillStyle='#883';
-        }else if(sector.isCorridor()){
-          easel.ctx.fillStyle='#388';
+          easel.ctx.fillStyle='#893';
         }else{ //floor
-          easel.ctx.fillStyle='#383';
+          easel.ctx.fillStyle='#464';
         } //end if
 
         // the -0.4 & +0.8 is to remove sub-pixel issues
