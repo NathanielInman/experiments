@@ -108,6 +108,7 @@ export function pcg(map){
       let d100 = rf(100), //roll a 100 sided die
           sizeChart = [[10,5],[35,4],[70,3],[100,2]]; //(percent,size) pairs
 
+      //eslint-disable-next-line no-loop-func, no-return-assign
       sizeChart.some(pair=> roomSize = d100<pair[0]?pair[1]:false);
     }else if(roomType===ROOMTYPE_SPHERICAL){
       let d100 = rf(100), //roll a 100 sided die
@@ -116,6 +117,7 @@ export function pcg(map){
             [16,8],[18,7],[20,6],[45,5],[70,4],[100,3]
           ];
 
+      //eslint-disable-next-line no-loop-func, no-return-assign
       sizeChart.some(pair=> roomSize = d100<pair[0]?pair[1]:false);
       if(proceduralType===CRYPT_STANDARD||
          proceduralType===CRYPT_ANCIENT||
