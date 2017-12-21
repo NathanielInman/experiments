@@ -1,5 +1,5 @@
 {
-  "name": "voronoi",
+  "name": "Voronoi",
   "version": "0.1.0",
   "description": "n/a",
   "main": "Gulpfile.js",
@@ -9,16 +9,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/Nathaniel Inman/voronoi.git"
+    "url": "git://github.com/NathanielInman/Experiments.git"
   },
   "bugs": {
-    "url": "https://github.com/Nathaniel Inman/voronoi/issues"
+    "url": "https://github.com/NathanielInman/Experiments/issues"
   },
   "devDependencies": {
     "gulp": "^3.8.11"
   },
   "readmeFilename": "README.md",
-  "homepage": "https://github.com/Nathaniel Inman/voronoi",
+  "homepage": "https://github.com/NathanielInman/Experiments",
   "dependencies": {
     "amd-optimize": "^0.4.3",
     "browser-sync": "^2.6.5",
