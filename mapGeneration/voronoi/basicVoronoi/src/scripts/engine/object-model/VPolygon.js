@@ -12,7 +12,8 @@ export class VPolygon{
     if(this.size==1) this.first = p;
   }
   addLeft(p){
-    var vs = this.vertices;
+    let vs = this.vertices;
+
     this.vertices = [p];
     for(let i=0;i<vs.length;i++)this.vertices.push(vs[i]);
     this.size++;

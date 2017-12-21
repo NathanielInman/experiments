@@ -74,7 +74,8 @@ if(!Easel.activated){
   // Apply a listener to the canvas to have a point move around
   // with the mouse for added effect
   Easel.C.onmousemove = function(e){
-    var last = map.points[map.points.length-1];
+    let last = map.points[map.points.length-1];
+
     last.x = e.clientX - e.target.offsetLeft;
     last.y = e.clientY - e.target.offsetTop;
     Easel.redraw();
@@ -84,8 +85,9 @@ if(!Easel.activated){
   // while drawing the voronoi diagram
   (function mainLoop(){
     if(Easel.color.cur!==Easel.color.tar){
-      let c = ink(Easel.color.cur,{o:1});
-      let t = ink(Easel.color.tar,{o:1});
+      let c = ink(Easel.color.cur,{o:1}),
+          t = ink(Easel.color.tar,{o:1});
+
       c.r=c.r<t.r?++c.r:c.r>t.r?--c.r:c.r;
       c.g=c.g<t.g?++c.g:c.g>t.g?--c.g:c.g;
       c.b=c.b<t.b?++c.b:c.b>t.b?--c.b:c.b;

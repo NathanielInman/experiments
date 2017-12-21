@@ -14,7 +14,8 @@ export class VQueue{
     return this.q.pop();
   }
   remove(e){
-    var index = -1;
+    let index = -1;
+
     for(this.i=0;this.i<this.q.length;this.i++){
       if(this.q[this.i]==e){
         index = this.i; break;

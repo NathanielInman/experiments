@@ -10,9 +10,9 @@ export class Voronoi{
     this.places = null;
     this.edges = null;
     this.cells = null;
-    this.queue = new VQueue; //TODO FIX?
+    this.queue = new VQueue(); //TODO FIX?
     this.width = 0;
-    this.heght = 0; //TODO FIX?
+    this.height = 0; //TODO FIX?
     this.root = null;
     this.ly = 0;
     this.lasty = 0;
@@ -71,10 +71,10 @@ export class Voronoi{
       this.root.right = new VParabola(p);
       let s = new Point((p.x+this.fp.x)/2, this.height);
       if(p.x>this.fp.x){
-        console.log("!!!",s,this.fp,p)
+        console.log("!!!",s,this.fp,p);
         this.root.edge = new VEdge(s, this.fp, p);
       }else{
-        console.log("!!!",s,this.fp,p)
+        console.log("!!!",s,this.fp,p);
         this.root.edge = new VEdge(s, p, this.fp);
       } //end if
       this.edges.push(this.root.edge);
@@ -104,7 +104,7 @@ export class Voronoi{
     this.checkCircle(p2);
   }
   removeParabola(e){
-    var p1 = e.arch,
+    let p1 = e.arch,
         xl = this.getLeftParent(p1);
         xr = this.getRightParent(p1);
         p0 = this.getLeftChild(xl);
@@ -155,7 +155,8 @@ export class Voronoi{
     this.checkCircle(p2);
   }
   finishEdge(n){
-    var mx;
+    let mx;
+
     if(n.edge.direction.x > 0.0){
       mx = Math.max(this.width, n.edge.start.x + 10);
     }else{
@@ -166,7 +167,7 @@ export class Voronoi{
     if(!n.right.isLeaf) this.finishEdge(n.right); //TOOD FIX?
   }
   getXOfEdge(par, y){
-    var left = this.getLeftChild(par),
+    let left = this.getLeftChild(par),
         right = this.getRightChild(par),
         p = left.site,
         r = right.site,
@@ -177,7 +178,7 @@ export class Voronoi{
 
     dp = 2*(r.y-y);
 
-    var a2 = 1/dp,
+    let a2 = 1/dp,
         b2 = -2*r.x/dp,
         c2 = y+dp*0.25+r.x*r.x/dp,
         a = a1-a2,
@@ -195,7 +196,8 @@ export class Voronoi{
     } //end if
   }
   getParabolaByX(xx){
-    var par = this.root, x = 0;
+    let par = this.root, x = 0;
+
     while(!par.isLeaf){
       x = this.getXOfEdge(par, this.ly);
       if(x>xx){
@@ -207,14 +209,14 @@ export class Voronoi{
     return par;
   }
   getY(p, x){
-    var dp = 2*(p.y - this.ly),
+    let dp = 2*(p.y - this.ly),
         b1 = -2*p.x/dp,
         c1 = this.ly+dp/4 + p.x*p.x/dp;
 
     return (x*x/dp + b1*x + c1);
   }
   checkCircle(b){
-    var lp = this.getLeftParent(b),
+    let lp = this.getLeftParent(b),
         rp = this.getRightParent(b),
         a = this.getLeftChild(lp),
         c = this.getRightChild(rp);
@@ -233,7 +235,7 @@ export class Voronoi{
     return(Math.sqrt( (b.x-a.x)*(b.x-a.x) + (b.y-a.y)*(b.y-a.y) ));
   }
   getEdgeIntersection(a, b){
-    var I = this.getLineIntersection(a.start, a.bisect, b.start, b.bisect),
+    let I = this.getLineIntersection(a.start, a.bisect, b.start, b.bisect),
         wd = (I.x - a.start.x)*a.direction.x<0 ||
              (I.y - a.start.y)*a.direction.y<0 ||
              (I.x - b.start.x)*b.direction.x<0 ||
@@ -246,7 +248,7 @@ export class Voronoi{
     } //end if
   }
   getLineIntersection(a1, a2, b1, b2){
-    var dax = (a1.x-a2.x), dbx = (b1.x-b2.x),
+    let dax = (a1.x-a2.x), dbx = (b1.x-b2.x),
         day = (a1.y-a2.y), dby = (b1.y-b2.y),
         den = dax*dby - day*dbx,
         A,B,I;
@@ -266,7 +268,8 @@ export class Voronoi{
     return this.getRightChild(this.getRightParent(n));
   }
   getLeftParent(n){
-    var par = n.parent, pLast = n;
+    let par = n.parent, pLast = n;
+
     while(par.left == pLast){
       if(!par.parent) return null;
       pLast = par; par = par.parent;
@@ -274,7 +277,8 @@ export class Voronoi{
     return par;
   }
   getRightParent(n){
-    var par = n.parent, pLast = n;
+    let par = n.parent, pLast = n;
+
     while(par.right == pLast){
       if(!par.parent) return null;
       pLast = par; par = par.parent;
