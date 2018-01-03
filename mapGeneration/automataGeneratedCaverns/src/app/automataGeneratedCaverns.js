@@ -1,5 +1,7 @@
 import {Map} from './Map';
 
+const ri = (lint,uint)=> Math.floor(Math.random()*(uint-lint))+lint;
+
 // wikipedia.org/wiki/Conway%27s_Game_of_Life
 function conwayGameOfLife(map,map2){
   let mooresNeighborhood;
@@ -137,7 +139,7 @@ export function AGC(map,inputDensity){
     for(let x=0;x<map.width;x++){
       map.setEmpty(x,y);
       map2.setEmpty(x,y);
-      if(r(0,100)<density) map2.setFloor(x,y);
+      if(ri(0,100)<density) map2.setFloor(x,y);
     } //end for
   } //end for
   conwayGameOfLife(map,map2);
