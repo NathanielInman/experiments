@@ -67,12 +67,11 @@ export class EntityMapper{
   // as the checking entity (and that we're not checking it with
   // itself) This function is slightly more accurate than the spatial
   // mapper but magnitudes slower.
-  checkBounce(entity){
-    var i=0,c=entity,t;
+  checkBounce(c){
 
     // Iterate through the collection and check for collisions
-    for(;i<this.collection.length;i++){
-      t=this.collection[i];
+    this.collection.some(t=>{
+      let result = false;
 
       // Make sure target entity isn't current entity also
       if(c.id!==t.id){
@@ -92,9 +91,10 @@ export class EntityMapper{
           }else if(t.dx!==c.dx&&t.dy===c.dy){
             c.dx^=1;t.dx^=1; //horizontal collision
           } //end if
-          break; //prevents bouncing on two objects by leaving early
+          result=true; //prevents bouncing on two objects by leaving early
         } //end if
       } //end if
-    } //end for
+      return result;
+    });
   }
 }
