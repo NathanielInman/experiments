@@ -21,7 +21,7 @@ class Entity{
     if(this.y>v.h*0.99&&this.dy||this.y<v.h*0.01&&!this.dy)this.dy^=1;
   }
 }
-class EntityMapper{
+export class EntityMapper{
   constructor(){
     this.total = 500; //total number of entities we'll draw
     this.collection = []; //holds all of the entities
@@ -82,12 +82,3 @@ class EntityMapper{
     } //end for
   }
 }
-
-/**
- * Main entry point to application
- */
-function app() {
-  "use strict";
-
-  var scene = new EntityMapper();
-} //end app()
