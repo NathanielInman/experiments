@@ -1,9 +1,8 @@
 import {Easel} from 'ion-cloud';
-import {EntityMapper} from './main';
+import {EntityMapper} from './EntityMapper';
 
-let noscript = document.getElementByTagName('noscript'),
-    easel = new Easel(),
-    scene;
+let noscript = document.querySelector('noscript'),
+    easel = new Easel();
 
 if(!easel.activated){
   noscript.innerHTML = `
@@ -15,5 +14,5 @@ if(!easel.activated){
   </p>`;
 }else{
   noscript.style.visibility='hidden';
-  scene = new EntityMapper();
+  window.scene = new EntityMapper(easel.viewport,easel.ctx);
 } //end if

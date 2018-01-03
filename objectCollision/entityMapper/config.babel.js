@@ -36,7 +36,7 @@ export default {
       template: indexTemplate,
       mobile: true,
       injectExtras: index,
-      title: 'automataGeneratedCaverns'
+      title: 'Entity Mapper'
     }),
     new BrowserSync({
       host: 'localhost',
