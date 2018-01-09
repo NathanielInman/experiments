@@ -13,6 +13,7 @@ export function PHS(map){
   createCorridors();
   allocateRooms();
   wallifyCorridors();
+  return map;
 
   // This function checks to see if the tileCorridors will create
   // a square. We can't allow this, so we return true if they will and
