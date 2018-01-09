@@ -54,6 +54,9 @@ export function pcg(map){
   if(proceduralType===MARSHY_DREDGE) waterChance = 85;
   if(proceduralType===WIDE_PASSAGES) waterChance = 35;
   if(proceduralType===DEEP_PASSAGES) waterChance = 60;
+  //TODO REMOVE
+  proceduralType=CRYPT_CATACOMBS;
+
   do{
     step++; //increase the number of times we've iterated by one.
 
@@ -104,6 +107,8 @@ export function pcg(map){
 
     // Square and spherical rooms have different size metrics. Depending on
     // which type the room is, acquire the room size
+    // TODO REMOVE next lint
+    roomType=ROOMTYPE_SQUARE
     if(roomType===ROOMTYPE_SQUARE){
       let d100 = rf(100), //roll a 100 sided die
           sizeChart = [[10,5],[35,4],[70,3],[100,2]]; //(percent,size) pairs
@@ -129,6 +134,7 @@ export function pcg(map){
       } //end if
     } //end if
     if(step>=500){
+      console.log('step failed',step);
       todo.length=0;
     }else{
       let useWater = rf(100)<waterChance,
@@ -192,6 +198,7 @@ export function pcg(map){
     for(let yi=y;yi<=y2;yi++){
       for(let xi=x;xi<=x2;xi++){
         if(xi<0||yi<0||xi>=map.width||yi>=map.height||!map.isEmpty(xi,yi)){
+          console.log('failure');
           return false;
         } //end for
       } //end for
@@ -807,8 +814,11 @@ export function pcg(map){
         } //end for
       } //end for
       todo.push({rd: N,x: x,y: y-roomSize-1});
-      todo.push({rd: W,x: x-(r)|0-1,y: y-(r)|0-1});
+      todo.push({rd: W,x: sx-1,y: ey-(r)|0-1});
       todo.push({rd: E,x: x+Math.ceil(r),y: y-(r)|0-1});
+      console.log('NORTH: nwe - ',[sx,ex],[sy,ey]);
+    }else if(roomDirection===N&&!rn){
+      console.log('failed north');
     }else if(roomDirection===E && re){
       sx=x+1;
       ex=x+roomSize;
@@ -822,8 +832,11 @@ export function pcg(map){
         } //end for
       } //end for
       todo.push({rd: E,x: x+roomSize+1,y: y});
-      todo.push({rd: N,x: x+Math.ceil(r),y: y-(r)|0-1});
+      todo.push({rd: N,x: ex+1,y: y});
       todo.push({rd: S,x: x+Math.ceil(r),y: y+Math.ceil(r)});
+      console.log('EAST: nes - ',[sx,ex],[sy,ey]);
+    }else if(roomDirection===E&&!re){
+      console.log('failed east');
     }else if(roomDirection===S && rs){
       sx=x-Math.floor(r);
       ex=x+Math.ceil(r);
@@ -837,8 +850,11 @@ export function pcg(map){
         } //end for
       } //end for
       todo.push({rd: S,x: x,y: y+roomSize+1});
-      todo.push({rd: W,x: x-(r)|0-1,y: y+Math.ceil(r)});
+      todo.push({rd: W,x: sx-1,y: sy+(r)|0-1});
       todo.push({rd: E,x: x+Math.ceil(r),y: y+Math.ceil(r)});
+      console.log('SOUTH: swe - ',[sx,ex],[sy,ey]);
+    }else if(roomDirection===S&&!rs){
+      console.log('failed south');
     }else if(roomDirection===W && rw){
       sx=x-roomSize;
       ex=x;
@@ -852,9 +868,11 @@ export function pcg(map){
         } //end for
       } //end for
       todo.push({rd: W,x: x-roomSize-1,y: y});
-      todo.push({rd: N,x: x-(r)|0-1,y: y-(r)|0-1});
+      todo.push({rd: N,x: sx+(r)|0+1,y: sy-1});
       todo.push({rd: S,x: x-(r)|0-1,y: y+Math.ceil(r)});
+      console.log('WEST: wns - ',[sx,ex],[sy,ey]);
     }else{
+      console.log('failed west');
       return false; //went off side of map
     } //end if
     return true;

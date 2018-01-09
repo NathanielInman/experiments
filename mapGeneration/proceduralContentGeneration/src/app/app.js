@@ -16,7 +16,7 @@ if(!easel.activated){
     <span style="color:red;"><br/>Canvas isn't supported in your browser.</span>
   </p>`;
 }else{
-  let map = new Map(41,41);
+  let map = new Map(141,141);
 
   pcg(map);
   easel.onDraw = ()=>{
