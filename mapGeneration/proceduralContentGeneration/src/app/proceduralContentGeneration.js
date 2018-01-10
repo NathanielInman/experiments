@@ -7,13 +7,11 @@ const DEEP_PASSAGES = 5;
 
 const ROOMTYPE_SQUARE = 0;
 const ROOMTYPE_SPHERICAL = 1;
-
-const ROOM_NORMAL = 0;
-const ROOM_DISPERSION = 1;
-const ROOM_ISLANDS = 2;
-const ROOM_ISLAND_WALKWAYS = 3;
-const ROOM_ISLAND = 4;
-const ROOM_POOL = 5;
+const ROOMTYPES = [
+  'normal','dispersion','water islands','water island walkways',
+  'water island','water pool'
+];
+const ROOMTYPES_NONWATER = ROOMTYPES.filter(r=>!r.includes('water'));
 
 const N = 0;
 const S = 1;
@@ -37,10 +35,11 @@ function rf(num1,num2){
 // eslint-disable-next-line complexity
 export function pcg(map){
   let size = map.width,
-      cx = Math.floor(size/6),cy = Math.floor(size/6), //center x and y
+      cx = Math.floor(map.width/2),
+      cy = Math.floor(map.height/2),
       roomDirection, //room direction to build
       roomSize, //room size of which to try to build.
-      roomType, //room type of which to build
+      roomShape, //room type of which to build
       step=0, //number of times of which we've iterated.
       next, //this holds the next set of information pulled from the todo array
       successfulRooms=1, //this is used for the roomNum as well as debugging
@@ -76,10 +75,10 @@ export function pcg(map){
       roomDirection=next.rd;
     } //end if
 
-    // Certain procedural types have roomType restrictions or preferances,
+    // Certain procedural types have roomShape restrictions or preferances,
     // we pply those here
     if(proceduralType===DEEP_PASSAGES){
-      roomType=ROOMTYPE_SPHERICAL;
+      roomShape=ROOMTYPE_SPHERICAL;
     }else{
       let d100 = rf(100);
 
@@ -92,12 +91,12 @@ export function pcg(map){
       if(d100<20){
         if(proceduralType===CRYPT_STANDARD||
            proceduralType===CRYPT_ANCIENT){
-          roomType = ROOMTYPE_SPHERICAL;
+          roomShape = ROOMTYPE_SPHERICAL;
         }else{
-          roomType = ROOMTYPE_SQUARE;
+          roomShape = ROOMTYPE_SQUARE;
         } //end if
       }else{
-        roomType = ROOMTYPE_SQUARE;
+        roomShape = ROOMTYPE_SQUARE;
       } //end if
     } //end if
 
@@ -108,14 +107,14 @@ export function pcg(map){
     // Square and spherical rooms have different size metrics. Depending on
     // which type the room is, acquire the room size
     // TODO REMOVE next lint
-    roomType=ROOMTYPE_SQUARE
-    if(roomType===ROOMTYPE_SQUARE){
+    roomShape=ROOMTYPE_SQUARE
+    if(roomShape===ROOMTYPE_SQUARE){
       let d100 = rf(100), //roll a 100 sided die
           sizeChart = [[10,5],[35,4],[70,3],[100,2]]; //(percent,size) pairs
 
       //eslint-disable-next-line no-loop-func, no-return-assign
       sizeChart.some(pair=> roomSize = d100<pair[0]?pair[1]:false);
-    }else if(roomType===ROOMTYPE_SPHERICAL){
+    }else if(roomShape===ROOMTYPE_SPHERICAL){
       let d100 = rf(100), //roll a 100 sided die
           sizeChart = [
             [2,15],[4,14],[6,13],[8,12],[10,11],[12,10],[14,9],
@@ -138,19 +137,24 @@ export function pcg(map){
       todo.length=0;
     }else{
       let useWater = rf(100)<waterChance,
-          generateType = useWater?rf(3)+2:rf(2),
-          drawPathway = step===1?false:true;
+          drawPathway = step===1?false:true,
+          roomType;
 
-      if(roomType===ROOMTYPE_SPHERICAL){
-        if(buildSphereRoom(cx,cy,roomSize,roomDirection,drawPathway,generateType)){
+      if(successfulRooms>=15&&useWater){
+        roomType=ROOMTYPES[rf(ROOMTYPES.length)];
+      }else if(successfulRooms>=15&&!useWater){
+        roomType=ROOMTYPES_NONWATER[rf(ROOMTYPES_NONWATER.length)];
+      } //end if
+      if(roomShape===ROOMTYPE_SPHERICAL){
+        if(buildSphereRoom(cx,cy,roomSize,roomDirection,drawPathway,roomType)){
           successfulRooms++;
         }else if(!rf(2)){
           roomSize=2;
-          roomType=ROOMTYPE_SQUARE; //try a square room before moving on
+          roomShape=ROOMTYPE_SQUARE; //try a square room before moving on
         } //end if
       } //end if
-      if(roomType===ROOMTYPE_SQUARE){
-        if(buildSquareRoom(cx,cy,roomSize,roomDirection,drawPathway,generateType)){
+      if(roomShape===ROOMTYPE_SQUARE){
+        if(buildSquareRoom(cx,cy,roomSize,roomDirection,drawPathway,roomType)){
           successfulRooms++;
         } //end if
       } //end if
@@ -162,7 +166,9 @@ export function pcg(map){
           successfulRooms=1;
         } //end for
       } //end for
-      step=0;cx = Math.floor(size/6);cy = Math.floor(size/6);
+      step=0;
+      cx = Math.floor(map.width/2);
+      cy = Math.floor(map.height/2);
     } //end if
   }while(todo.length>0||step===0);
 
@@ -198,7 +204,6 @@ export function pcg(map){
     for(let yi=y;yi<=y2;yi++){
       for(let xi=x;xi<=x2;xi++){
         if(xi<0||yi<0||xi>=map.width||yi>=map.height||!map.isEmpty(xi,yi)){
-          console.log('failure',x,y,x2,y2);
           return false;
         } //end for
       } //end for
@@ -225,7 +230,7 @@ export function pcg(map){
     var halfX = (ex-sx)/2,
         halfY = (ey-sy)/2;
 
-    if(type===ROOM_DISPERSION){
+    if(type==='dispersion'){
       map.setFloor(x,y);
       if(!rf(2)){ //50% chance
         if(!rf(2)){
@@ -249,13 +254,13 @@ export function pcg(map){
           if(!rf(2)) map.setFloor(x-1,y+1);
         } //end if
       } //end if
-    }else if(type===ROOM_ISLANDS){
+    }else if(type==='water islands'){
       if(!rf(2)){ //50% chance
         map.setFloor(x,y);
       }else{
         map.setWater(x,y);
       } //end if
-    }else if(type===ROOM_ISLAND_WALKWAYS){
+    }else if(type==='water island walkways'){
       let n=!rf(2),s=!rf(2),e=!rf(2),w=!rf(2),
           na = x>=sx+halfX-1&&x<=ex-halfX&&y<=ey-halfY,
           sa = x>=sx+halfX-1&&x<=ex-halfX&&y>=sy+halfY-1,
@@ -271,7 +276,7 @@ export function pcg(map){
       }else{
         map.setWater(x,y);
       } //end if
-    }else if(type===ROOM_ISLAND){
+    }else if(type==='water island'){
       if(x>=sx+halfX/2&&x<=ex-halfX/2&&y>=sy+halfY/2&&y<=ey-halfY/2){
         let bend = !rf(2);
 
@@ -284,7 +289,7 @@ export function pcg(map){
       }else{
         map.setWater(x,y);
       } //end if
-    }else if(type===ROOM_POOL){
+    }else if(type==='water pool'){
       if(x>=sx+halfX/2&&x<=ex-halfX/2&&y>=sy+halfY/2&&y<=ey-halfY/2){
         let bend = !rf(2);
 
@@ -297,7 +302,7 @@ export function pcg(map){
       }else{
         map.setFloor(x,y);
       } //end if
-    }else if(type===ROOM_NORMAL){
+    }else{ // type==='normal'
       map.setFloor(x,y);
     } //end if
     return true;
@@ -792,10 +797,10 @@ export function pcg(map){
   // we will draw a square room.
   //eslint-disable-next-line complexity
   function buildSquareRoom(x,y,roomSize,roomDirection,drawPathway,type){
-    var i,j,sx,sy,ex,ey,
+    let i,j,sx,sy,ex,ey,
         r = roomSize / 2,
-        lx = x-(r)|0-1>=0,
-        ly = y-(r)|0-1>=0,
+        lx = x-(r|0)-1>=0,
+        ly = y-(r|0)-1>=0,
         rn = lx && x+Math.ceil(r)+1<size&&y-roomSize-1>=0,
         re = ly && y+Math.ceil(r)+1<size&&x+roomSize+1<size,
         rs = lx && x+Math.ceil(r)+1<size&&y+roomSize+1<size,
@@ -805,7 +810,7 @@ export function pcg(map){
       sx=x-Math.floor(r);
       ex=x+Math.ceil(r);
       sy=y-roomSize;
-      ey=y;
+      ey=y-1;
       if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
       for(i=sx;i<=ex;i++){
         for(j=sy;j<=ey;j++){
@@ -816,9 +821,6 @@ export function pcg(map){
       todo.push({rd: N,x: x,y: sy-1});
       todo.push({rd: W,x: sx-1,y: sy+(r|0)});
       todo.push({rd: E,x: ex+1,y: sy-(r|0)});
-      console.log('NORTH: nwe - ',[sx,ex],[sy,ey]);
-    }else if(roomDirection===N&&!rn){
-      console.log('failed north');
     }else if(roomDirection===E && re){
       sx=x+1;
       ex=x+roomSize;
@@ -834,9 +836,6 @@ export function pcg(map){
       todo.push({rd: E,x: ex+1,y: y});
       todo.push({rd: N,x: sx+(r|0),y: sy-1});
       todo.push({rd: S,x: sx+(r|0),y: ey+1});
-      console.log('EAST: nes - ',[sx,ex],[sy,ey]);
-    }else if(roomDirection===E&&!re){
-      console.log('failed east');
     }else if(roomDirection===S && rs){
       sx=x-Math.floor(r);
       ex=x+Math.ceil(r);
@@ -852,12 +851,9 @@ export function pcg(map){
       todo.push({rd: S,x: x,y: ey+1});
       todo.push({rd: W,x: sx-1,y: sy+(r|0)});
       todo.push({rd: E,x: ex+1,y: sy+(r|0)});
-      console.log('SOUTH: swe - ',[sx,ex],[sy,ey]);
-    }else if(roomDirection===S&&!rs){
-      console.log('failed south');
     }else if(roomDirection===W && rw){
       sx=x-roomSize;
-      ex=x;
+      ex=x-1;
       sy=y-Math.floor(r);
       ey=y+Math.ceil(r);
       if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
@@ -870,10 +866,6 @@ export function pcg(map){
       todo.push({rd: W,x: sx-1,y: y});
       todo.push({rd: N,x: sx+(r|0),y: sy-1});
       todo.push({rd: S,x: sx-(r|0),y: ey+1});
-      console.log('WEST: wns - ',[sx,ex],[sy,ey]);
-    }else{
-      console.log('failed west');
-      return false; //went off side of map
     } //end if
     return true;
   } //end buildSquareRoom()
