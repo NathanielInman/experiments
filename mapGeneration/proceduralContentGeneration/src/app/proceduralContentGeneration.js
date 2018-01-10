@@ -194,9 +194,6 @@ export function pcg(map){
       todo=[], //holds the list of directions that need to be searched and tried
       proceduralType=MAPTYPES[rf(MAPTYPES.length)];
 
-  //TODO REMOVE
-  proceduralType=MAPTYPES.find(m=>m.name==='crypt catacombs');
-
   do{
     step++; //increase the number of times we've iterated by one.
 
@@ -225,10 +222,7 @@ export function pcg(map){
 
     // Square and spherical rooms have different size metrics. Depending on
     // which type the room is, acquire the room size
-    // TODO REMOVE next lint
-    roomShape='square'
-    if(step>=500){
-      console.log('step failed',step);
+    if(step>=1000){
       todo.length=0;
     }else{
       let useWater = rf(100)<proceduralType.waterChance,
@@ -330,9 +324,7 @@ export function pcg(map){
   //eslint-disable-next-line complexity
   function drawSpecialty(x,y,sx,sy,ex,ey,type){
     let halfX = (ex-sx)/2,
-        halfY = (ey-sy)/2,
-        mx = Math.floor(halfX+sx),
-        my = Math.floor(halfY+sy);
+        halfY = (ey-sy)/2;
 
     if(type==='dispersion'){
       map.setFloor(x,y);
@@ -421,6 +413,8 @@ export function pcg(map){
                               [x,y-1]
         ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
         /*eslint-enable */
+        map.setFloor(x,y-1); //we enforce floors on either side of doors
+        map.setFloor(x,y+1); //we enforce floors on either side of doors
         todo.push({rd: N,x: x,y: y-6});
         todo.push({rd: W,x: x-3,y: y-3});
         todo.push({rd: E,x: x+3,y: y-3});
@@ -437,6 +431,8 @@ export function pcg(map){
                               [x+3,y+2]
         ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
         /*eslint-enable */
+        map.setFloor(x-1,y); //we enforce floors on either side of doors
+        map.setFloor(x+1,y); //we enforce floors on either side of doors
         todo.push({rd: N,x: x+3,y: y-3});
         todo.push({rd: E,x: x+6,y: y});
         todo.push({rd: S,x: x+3,y: y+3});
@@ -469,6 +465,8 @@ export function pcg(map){
                               [x-3,y+2]
         ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
         /*eslint-enable */
+        map.setFloor(x-1,y); //we enforce floors on either side of doors
+        map.setFloor(x+1,y); //we enforce floors on either side of doors
         todo.push({rd: N,x: x-3,y: y-3});
         todo.push({rd: W,x: x-6,y: y});
         todo.push({rd: S,x: x-3,y: y+3});
@@ -487,6 +485,8 @@ export function pcg(map){
                       [x,y-1],[x+1,y-1]
           ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
           /*eslint-enable */
+          map.setFloor(x,y-1); //we enforce floors on either side of doors
+          map.setFloor(x,y+1); //we enforce floors on either side of doors
           if(!rf(2)){ //50% chance
             todo.push({rd: E,x: x+3,y: y-2});
           }else{
@@ -514,6 +514,8 @@ export function pcg(map){
                       [x-1,y-1],[x,y-1]
           ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
           /*eslint-enable */
+          map.setFloor(x,y-1); //we enforce floors on either side of doors
+          map.setFloor(x,y+1); //we enforce floors on either side of doors
           if(!rf(2)){
             todo.push({rd: E,x: x+2,y: y-2});
           }else{
@@ -543,6 +545,8 @@ export function pcg(map){
                       [x+2,y+2],[x+3,y+2]
           ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
           /*eslint-enable */
+          map.setFloor(x+1,y); //we enforce floors on either side of doors
+          map.setFloor(x-1,y); //we enforce floors on either side of doors
           if(!rf(2)){
             todo.push({rd: N,x: x+2,y: y-2});
           }else{
@@ -570,6 +574,8 @@ export function pcg(map){
                       [x+2,y+1],[x+3,y+1]
           ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
           /*eslint-enable */
+          map.setFloor(x+1,y); //we enforce floors on either side of doors
+          map.setFloor(x-1,y); //we enforce floors on either side of doors
           if(!rf(2)){
             todo.push({rd: N,x: x+2,y: y-3});
           }else{
@@ -599,6 +605,8 @@ export function pcg(map){
                       [x  ,y+4],[x+1,y+4]
           ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
           /*eslint-enable */
+          map.setFloor(x,y-1); //we enforce floors on either side of doors
+          map.setFloor(x,y+1); //we enforce floors on either side of doors
           if(!rf(2)){
             todo.push({rd: E,x: x+3,y: y+2});
           }else{
@@ -626,6 +634,8 @@ export function pcg(map){
                       [x-1,y+4],[x  ,y+4]
           ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
           /*eslint-enable */
+          map.setFloor(x,y-1); //we enforce floors on either side of doors
+          map.setFloor(x,y+1); //we enforce floors on either side of doors
           if(!rf(2)){
             todo.push({rd: E,x: x+2,y: y+2});
           }else{
@@ -655,6 +665,8 @@ export function pcg(map){
                       [x-3,y+2],[x-2,y+2]
           ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
           /*eslint-enable */
+          map.setFloor(x-1,y); //we enforce floors on either side of doors
+          map.setFloor(x+1,y); //we enforce floors on either side of doors
           if(!rf(2)){
             todo.push({rd: N,x: x-2,y: y-2});
           }else{
@@ -682,6 +694,8 @@ export function pcg(map){
                       [x-3,y+1],[x-2,y+1]
           ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
           /*eslint-enable */
+          map.setFloor(x-1,y); //we enforce floors on either side of doors
+          map.setFloor(x+1,y); //we enforce floors on either side of doors
           if(!rf(2)){
             todo.push({rd: N,x: x-2,y: y-3});
           }else{
@@ -711,6 +725,8 @@ export function pcg(map){
                     [x,y-1]
         ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
         /*eslint-enable */
+        map.setFloor(x,y-1); //we enforce floors on either side of doors
+        map.setFloor(x,y+1); //we enforce floors on either side of doors
         todo.push({rd: E,x: x+2,y: y-2});
         todo.push({rd: W,x: x-2,y: y-2});
         todo.push({rd: N,x: x,y: y-4});
@@ -725,6 +741,8 @@ export function pcg(map){
                     [x+2,y+1]
         ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
         /*eslint-enable */
+        map.setFloor(x-1,y); //we enforce floors on either side of doors
+        map.setFloor(x+1,y); //we enforce floors on either side of doors
         todo.push({rd: E,x: x+4,y: y});
         todo.push({rd: N,x: x+2,y: y-2});
         todo.push({rd: S,x: x+2,y: y+2});
@@ -739,6 +757,8 @@ export function pcg(map){
                     [x  ,y+3]
         ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
         /*eslint-enable */
+        map.setFloor(x,y-1); //we enforce floors on either side of doors
+        map.setFloor(x,y+1); //we enforce floors on either side of doors
         todo.push({rd: E,x: x+2,y: y+2});
         todo.push({rd: W,x: x-2,y: y+2});
         todo.push({rd: S,x: x,y: y+4});
@@ -753,6 +773,8 @@ export function pcg(map){
                     [x-2,y+1]
         ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
         /*eslint-enable */
+        map.setFloor(x-1,y); //we enforce floors on either side of doors
+        map.setFloor(x+1,y); //we enforce floors on either side of doors
         todo.push({rd: W,x: x-4,y: y});
         todo.push({rd: N,x: x-2,y: y-2});
         todo.push({rd: S,x: x-2,y: y+2});
@@ -783,6 +805,8 @@ export function pcg(map){
           } //end if
         } //end for
       } //end for
+      map.setFloor(x,y-1); //we enforce floors on either side of doors
+      map.setFloor(x,y+1); //we enforce floors on either side of doors
       todo.push({rd: N,x: x,y: y-roomSize-1});
       todo.push({rd: W,x: x-Math.floor(r)+1,y: y-Math.floor(r)-1});
       todo.push({rd: E,x: x+Math.floor(r)-1,y: y-Math.floor(r)-1});
@@ -811,6 +835,8 @@ export function pcg(map){
           } //end if
         } //end for
       } //end for
+      map.setFloor(x+1,y); //we enforce floors on either side of doors
+      map.setFloor(x-1,y); //we enforce floors on either side of doors
       todo.push({rd: E,x: x+roomSize,y: y});
       todo.push({rd: N,x: x+Math.ceil(r),y: y-(r)|0-1});
       todo.push({rd: S,x: x+Math.ceil(r),y: y+Math.ceil(r)-1});
@@ -840,6 +866,8 @@ export function pcg(map){
           } //end if
         } //end for
       } //end for
+      map.setFloor(x,y-1); //we enforce floors on either side of doors
+      map.setFloor(x,y+1); //we enforce floors on either side of doors
       todo.push({rd: S,x: x,y: y+roomSize+1});
       todo.push({rd: W,x: x-(r)|0-1,y: y+Math.ceil(r)});
       todo.push({rd: E,x: x+Math.ceil(r),y: y+Math.ceil(r)});
@@ -869,6 +897,8 @@ export function pcg(map){
           } //end if
         } //end for
       } //end for
+      map.setFloor(x-1,y); //we enforce floors on etiher side of doors
+      map.setFloor(x+1,y); //we enforce floors on either side of doors
       todo.push({rd: W,x: x-roomSize-1,y: y});
       todo.push({rd: N,x: x-(r)|0-1,y: y-(r)|0-1});
       todo.push({rd: S,x: x-(r)|0-1,y: y+Math.ceil(r)});
@@ -902,11 +932,9 @@ export function pcg(map){
           drawSpecialty(i,j,sx,sy,ex,ey,type);
         } //end for
       } //end for
-      if(drawPathway){
-        sc(x,y);
-        map.setFloor(x,y-1);
-        map.setFloor(x,y+1);
-      } //end if
+      if(drawPathway) sc(x,y);
+      map.setFloor(x,y-1); //we enforce floors on either side of doors
+      map.setFloor(x,y+1); //we enforce floors on either side of doors
       todo.push({rd: N,x: x,y: sy-1});
       todo.push({rd: W,x: sx-1,y: sy+(r|0)});
       todo.push({rd: E,x: ex+1,y: sy+(r|0)});
@@ -921,11 +949,9 @@ export function pcg(map){
           drawSpecialty(i,j,sx,sy,ex,ey,type);
         } //end for
       } //end for
-      if(drawPathway){
-        sc(x,y);
-        map.setFloor(x-1,y);
-        map.setFloor(x+1,y);
-      } //end if
+      if(drawPathway) sc(x,y);
+      map.setFloor(x-1,y); //we enforce floors on either side of doors
+      map.setFloor(x+1,y); //we enforce floors on either side of doors
       todo.push({rd: E,x: ex+1,y: y});
       todo.push({rd: N,x: sx+(r|0),y: sy-1});
       todo.push({rd: S,x: sx+(r|0),y: ey+1});
@@ -940,11 +966,9 @@ export function pcg(map){
           drawSpecialty(i,j,sx,sy,ex,ey,type);
         } //end for
       } //end for
-      if(drawPathway){
-        sc(x,y);
-        map.setFloor(x,y-1);
-        map.setFloor(x,y+1);
-      } //end if
+      if(drawPathway) sc(x,y);
+      map.setFloor(x,y-1); //we enforce floors on either side of doors
+      map.setFloor(x,y+1); //we enforce floors on either side of doors
       todo.push({rd: S,x: x,y: ey+1});
       todo.push({rd: W,x: sx-1,y: sy+(r|0)});
       todo.push({rd: E,x: ex+1,y: sy+(r|0)});
@@ -959,11 +983,9 @@ export function pcg(map){
           drawSpecialty(i,j,sx,sy,ex,ey,type);
         } //end for
       } //end for
-      if(drawPathway){
-        sc(x,y);
-        map.setFloor(x-1,y);
-        map.setFloor(x+1,y);
-      } //end if
+      if(drawPathway) sc(x,y);
+      map.setFloor(x-1,y); //we enforce floors on either side of doors
+      map.setFloor(x+1,y); //we enforce floors on either side of doors
       todo.push({rd: W,x: sx-1,y: y});
       todo.push({rd: N,x: sx+(r|0),y: sy-1});
       todo.push({rd: S,x: sx+(r|0),y: ey+1});
