@@ -1,12 +1,140 @@
-const CRYPT_STANDARD = 0;
-const CRYPT_ANCIENT = 1;
-const CRYPT_CATACOMBS = 2;
-const MARSHY_DREDGE = 3;
-const WIDE_PASSAGES = 4;
-const DEEP_PASSAGES = 5;
 
-const ROOMTYPE_SQUARE = 0;
-const ROOMTYPE_SPHERICAL = 1;
+const MAPTYPES = [
+  {
+    name: 'standard crypt',
+    waterChance: 5,
+    roomShape: [
+      {
+        name: 'square',
+        chance: 95,
+        sizes: [
+          {size: 5, chance: 10},{size: 4, chance: 35},
+          {size: 3, chance: 70},{size: 2, chance: 100}
+        ]
+      },
+      {
+        name: 'spherical',
+        chance: 100,
+        sizes: [
+          {size: 9, chance: 4},{size: 8, chance: 8},
+          {size: 7, chance: 12},{size: 6, chance: 20},
+          {size: 5, chance: 45},{size: 4, chance: 70},
+          {size: 3, chance: 100}
+        ]
+      }
+    ]
+  },
+  {
+    name: 'ancient crypt',
+    waterChance: 85,
+    roomShape: [
+      {
+        name: 'square',
+        chance: 80,
+        sizes: [
+          {size: 5, chance: 10},{size: 4, chance: 35},
+          {size: 3, chance: 70},{size: 2, chance: 100}
+        ]
+      },
+      {
+        name: 'spherical',
+        chance: 100,
+        sizes: [
+          {size: 9, chance: 4},{size: 8, chance: 8},
+          {size: 7, chance: 12},{size: 6, chance: 20},
+          {size: 5, chance: 45},{size: 4, chance: 70},
+          {size: 3, chance: 100}
+        ]
+      }
+    ]
+  },
+  {
+    name: 'crypt catacombs',
+    waterChance: 15,
+    roomShape: [
+      {
+        name: 'square',
+        chance: 100,
+        sizes: [
+          {size: 5, chance: 10},{size: 4, chance: 35},
+          {size: 3, chance: 70},{size: 2, chance: 100}
+        ]
+      }
+    ]
+  },
+  {
+    name: 'marshy dredge',
+    waterChance: 85,
+    roomShape: [
+      {
+        name: 'spherical',
+        chance: 50,
+        sizes: [
+          {size: 15, chance: 2},{size: 14, chance: 4},
+          {size: 13, chance: 6},{size: 12, chance: 8},
+          {size: 11, chance: 10},{size: 10, chance: 12},
+          {size: 9, chance: 14},{size: 8, chance: 16},
+          {size: 7, chance: 18},{size: 6, chance: 20},
+          {size: 5, chance: 45},{size: 4, chance: 70},
+          {size: 3, chance: 100}
+        ]
+      },
+      {
+        name: 'square',
+        chance: 100,
+        sizes: [
+          {size: 5, chance: 10},{size: 4, chance: 35},
+          {size: 3, chance: 70},{size: 2, chance: 100}
+        ]
+      }
+    ]
+  },
+  {
+    name: 'wide passages',
+    waterChance: 35,
+    roomShape: [
+      {
+        name: 'spherical',
+        chance: 100,
+        sizes: [
+          {size: 15, chance: 4},{size: 14, chance: 8},
+          {size: 13, chance: 12},{size: 12, chance: 16},
+          {size: 11, chance: 20},{size: 10, chance: 24},
+          {size: 9, chance: 28},{size: 8, chance: 32},
+          {size: 7, chance: 36},{size: 6, chance: 40},
+          {size: 5, chance: 70},{size: 4, chance: 90},
+          {size: 3, chance: 100}
+        ]
+      }
+    ]
+  },
+  {
+    name: 'deep passages',
+    waterChance: 60,
+    roomShape: [
+      {
+        name: 'spherical',
+        chance: 90,
+        sizes: [
+          {size: 11, chance: 4},{size: 10, chance: 8},
+          {size: 9, chance: 12},{size: 8, chance: 16},
+          {size: 7, chance: 20},{size: 6, chance: 30},
+          {size: 5, chance: 50},{size: 4, chance: 70},
+          {size: 3, chance: 100}
+        ]
+      },
+      {
+        name: 'square',
+        chance: 100,
+        sizes: [
+          {size: 5, chance: 10},{size: 4, chance: 35},
+          {size: 3, chance: 70},{size: 2, chance: 100}
+        ]
+      }
+    ]
+  }
+];
+
 const ROOMTYPES = [
   'normal','dispersion','water islands','water island walkways',
   'water island','water pool'
@@ -32,6 +160,26 @@ function rf(num1,num2){
   return result;
 } //end rf()
 
+// given a certain procedural type randomly select the room shape
+function getRoomShape(proceduralType){
+  let d100 = rf(100), roomShape;
+
+  //eslint-disable-next-line no-return-assign
+  proceduralType.roomShape.some(s=>roomShape=d100<s.chance?s.name:false);
+  return roomShape;
+} //end getRoomShape()
+
+// given a certain procedural type and shape randomly select a room size
+function getRoomSize(proceduralType,shapeName){
+  let d100 = rf(100),
+      roomShape =  proceduralType.roomShape.find(s=>s.name===shapeName),
+      roomSize;
+
+  //eslint-disable-next-line no-return-assign
+  roomShape.sizes.some(s=> roomSize = d100<s.chance?s.size:false);
+  return roomSize;
+} //end getRoomSize()
+
 // eslint-disable-next-line complexity
 export function pcg(map){
   let size = map.width,
@@ -44,17 +192,10 @@ export function pcg(map){
       next, //this holds the next set of information pulled from the todo array
       successfulRooms=1, //this is used for the roomNum as well as debugging
       todo=[], //holds the list of directions that need to be searched and tried
-      waterChance, //hold the chance of water appearing
-      proceduralType=rf(6);
+      proceduralType=MAPTYPES[rf(MAPTYPES.length)];
 
-  if(proceduralType===CRYPT_STANDARD) waterChance = 5;
-  if(proceduralType===CRYPT_ANCIENT) waterChance = 85;
-  if(proceduralType===CRYPT_CATACOMBS) waterChance = 15;
-  if(proceduralType===MARSHY_DREDGE) waterChance = 85;
-  if(proceduralType===WIDE_PASSAGES) waterChance = 35;
-  if(proceduralType===DEEP_PASSAGES) waterChance = 60;
   //TODO REMOVE
-  proceduralType=CRYPT_CATACOMBS;
+  proceduralType=MAPTYPES.find(m=>m.name==='crypt catacombs');
 
   do{
     step++; //increase the number of times we've iterated by one.
@@ -75,30 +216,8 @@ export function pcg(map){
       roomDirection=next.rd;
     } //end if
 
-    // Certain procedural types have roomShape restrictions or preferances,
-    // we pply those here
-    if(proceduralType===DEEP_PASSAGES){
-      roomShape=ROOMTYPE_SPHERICAL;
-    }else{
-      let d100 = rf(100);
-
-      if(proceduralType===CRYPT_STANDARD) waterChance = 5;
-      if(proceduralType===CRYPT_ANCIENT) waterChance = 85;
-      if(proceduralType===CRYPT_CATACOMBS) waterChance = 15;
-      if(proceduralType===MARSHY_DREDGE) waterChance = 85;
-      if(proceduralType===WIDE_PASSAGES) waterChance = 35;
-      if(proceduralType===DEEP_PASSAGES) waterChance = 60;
-      if(d100<20){
-        if(proceduralType===CRYPT_STANDARD||
-           proceduralType===CRYPT_ANCIENT){
-          roomShape = ROOMTYPE_SPHERICAL;
-        }else{
-          roomShape = ROOMTYPE_SQUARE;
-        } //end if
-      }else{
-        roomShape = ROOMTYPE_SQUARE;
-      } //end if
-    } //end if
+    roomShape = getRoomShape(proceduralType);
+    roomSize = getRoomSize(proceduralType,roomShape);
 
     // If we are first starting out the generation, then we need to have a
     // starting direction to begin building. Randomly choose that direction
@@ -107,36 +226,12 @@ export function pcg(map){
     // Square and spherical rooms have different size metrics. Depending on
     // which type the room is, acquire the room size
     // TODO REMOVE next lint
-    roomShape=ROOMTYPE_SQUARE
-    if(roomShape===ROOMTYPE_SQUARE){
-      let d100 = rf(100), //roll a 100 sided die
-          sizeChart = [[10,5],[35,4],[70,3],[100,2]]; //(percent,size) pairs
-
-      //eslint-disable-next-line no-loop-func, no-return-assign
-      sizeChart.some(pair=> roomSize = d100<pair[0]?pair[1]:false);
-    }else if(roomShape===ROOMTYPE_SPHERICAL){
-      let d100 = rf(100), //roll a 100 sided die
-          sizeChart = [
-            [2,15],[4,14],[6,13],[8,12],[10,11],[12,10],[14,9],
-            [16,8],[18,7],[20,6],[45,5],[70,4],[100,3]
-          ];
-
-      //eslint-disable-next-line no-loop-func, no-return-assign
-      sizeChart.some(pair=> roomSize = d100<pair[0]?pair[1]:false);
-      if(proceduralType===CRYPT_STANDARD||
-         proceduralType===CRYPT_ANCIENT||
-         proceduralType===CRYPT_CATACOMBS){
-        roomSize = 3;
-      }else if(proceduralType===MARSHY_DREDGE||
-               proceduralType===WIDE_PASSAGES){
-        roomSize = 4;
-      } //end if
-    } //end if
+    roomShape='square'
     if(step>=500){
       console.log('step failed',step);
       todo.length=0;
     }else{
-      let useWater = rf(100)<waterChance,
+      let useWater = rf(100)<proceduralType.waterChance,
           drawPathway = step===1?false:true,
           roomType;
 
@@ -145,15 +240,15 @@ export function pcg(map){
       }else if(successfulRooms>=15&&!useWater){
         roomType=ROOMTYPES_NONWATER[rf(ROOMTYPES_NONWATER.length)];
       } //end if
-      if(roomShape===ROOMTYPE_SPHERICAL){
+      if(roomShape==='spherical'){
         if(buildSphereRoom(cx,cy,roomSize,roomDirection,drawPathway,roomType)){
           successfulRooms++;
         }else if(!rf(2)){
           roomSize=2;
-          roomShape=ROOMTYPE_SQUARE; //try a square room before moving on
+          roomShape='square'; //try a square room before moving on
         } //end if
       } //end if
-      if(roomShape===ROOMTYPE_SQUARE){
+      if(roomShape==='square'){
         if(buildSquareRoom(cx,cy,roomSize,roomDirection,drawPathway,roomType)){
           successfulRooms++;
         } //end if
