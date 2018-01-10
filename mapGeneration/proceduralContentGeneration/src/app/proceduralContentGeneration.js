@@ -198,7 +198,7 @@ export function pcg(map){
     for(let yi=y;yi<=y2;yi++){
       for(let xi=x;xi<=x2;xi++){
         if(xi<0||yi<0||xi>=map.width||yi>=map.height||!map.isEmpty(xi,yi)){
-          console.log('failure');
+          console.log('failure',x,y,x2,y2);
           return false;
         } //end for
       } //end for
@@ -807,15 +807,15 @@ export function pcg(map){
       sy=y-roomSize;
       ey=y;
       if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
-      for(i=sx;i<ex;i++){
-        for(j=sy;j<ey;j++){
+      for(i=sx;i<=ex;i++){
+        for(j=sy;j<=ey;j++){
           if(drawPathway)sc(x,y);
           drawSpecialty(i,j,sx,sy,ex,ey,type);
         } //end for
       } //end for
-      todo.push({rd: N,x: x,y: y-roomSize-1});
-      todo.push({rd: W,x: sx-1,y: ey-(r)|0-1});
-      todo.push({rd: E,x: x+Math.ceil(r),y: y-(r)|0-1});
+      todo.push({rd: N,x: x,y: sy-1});
+      todo.push({rd: W,x: sx-1,y: sy+(r|0)});
+      todo.push({rd: E,x: ex+1,y: sy-(r|0)});
       console.log('NORTH: nwe - ',[sx,ex],[sy,ey]);
     }else if(roomDirection===N&&!rn){
       console.log('failed north');
@@ -826,14 +826,14 @@ export function pcg(map){
       ey=y+Math.ceil(r);
       if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
       for(i=sx;i<=ex;i++){
-        for(j=sy;j<ey;j++){
+        for(j=sy;j<=ey;j++){
           if(drawPathway)sc(x,y);
           drawSpecialty(i,j,sx,sy,ex,ey,type);
         } //end for
       } //end for
-      todo.push({rd: E,x: x+roomSize+1,y: y});
-      todo.push({rd: N,x: ex+1,y: y});
-      todo.push({rd: S,x: x+Math.ceil(r),y: y+Math.ceil(r)});
+      todo.push({rd: E,x: ex+1,y: y});
+      todo.push({rd: N,x: sx+(r|0),y: sy-1});
+      todo.push({rd: S,x: sx+(r|0),y: ey+1});
       console.log('EAST: nes - ',[sx,ex],[sy,ey]);
     }else if(roomDirection===E&&!re){
       console.log('failed east');
@@ -843,15 +843,15 @@ export function pcg(map){
       sy=y+1;
       ey=y+roomSize;
       if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
-      for(i=sx;i<ex;i++){
+      for(i=sx;i<=ex;i++){
         for(j=sy;j<=ey;j++){
           if(drawPathway)sc(x,y);
           drawSpecialty(i,j,sx,sy,ex,ey,type);
         } //end for
       } //end for
-      todo.push({rd: S,x: x,y: y+roomSize+1});
-      todo.push({rd: W,x: sx-1,y: sy+(r)|0-1});
-      todo.push({rd: E,x: x+Math.ceil(r),y: y+Math.ceil(r)});
+      todo.push({rd: S,x: x,y: ey+1});
+      todo.push({rd: W,x: sx-1,y: sy+(r|0)});
+      todo.push({rd: E,x: ex+1,y: sy+(r|0)});
       console.log('SOUTH: swe - ',[sx,ex],[sy,ey]);
     }else if(roomDirection===S&&!rs){
       console.log('failed south');
@@ -861,15 +861,15 @@ export function pcg(map){
       sy=y-Math.floor(r);
       ey=y+Math.ceil(r);
       if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
-      for(i=sx;i<ex;i++){
-        for(j=sy;j<ey;j++){
+      for(i=sx;i<=ex;i++){
+        for(j=sy;j<=ey;j++){
           if(drawPathway)sc(x,y);
           drawSpecialty(i,j,sx,sy,ex,ey,type);
         } //end for
       } //end for
-      todo.push({rd: W,x: x-roomSize-1,y: y});
-      todo.push({rd: N,x: sx+(r)|0+1,y: sy-1});
-      todo.push({rd: S,x: x-(r)|0-1,y: y+Math.ceil(r)});
+      todo.push({rd: W,x: sx-1,y: y});
+      todo.push({rd: N,x: sx+(r|0),y: sy-1});
+      todo.push({rd: S,x: sx-(r|0),y: ey+1});
       console.log('WEST: wns - ',[sx,ex],[sy,ey]);
     }else{
       console.log('failed west');
