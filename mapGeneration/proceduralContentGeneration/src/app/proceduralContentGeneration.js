@@ -268,7 +268,6 @@ export function pcg(map){
   }while(todo.length>0||step===0);
 
   // Surround the map with walls
-  return true;
   map.sectors.forEach((row,y)=>{
     row.forEach((sector,x)=>{
       if(sector.isWalkable()){
@@ -280,6 +279,13 @@ export function pcg(map){
         if(x<map.width-1&&y<map.height-1&&map.isEmpty(x+1,y+1)) map.setWall(x+1,y+1);
         if(y<map.height-1&&map.isEmpty(x,y+1)) map.setWall(x,y+1);
         if(y<map.height-1&&x>0&&map.isEmpty(x-1,y+1)) map.setWall(x-1,y+1);
+
+        // remove stranded floors caused by dispersion rooms
+        if(y<map.height-1&&x<map.width-1&&x>0&&y>0&&
+          !map.isWalkable(x-1,y)&&!map.isWalkable(x+1,y)&&
+          !map.isWalkable(x,y-1)&&!map.isWalkable(x,y+1)){
+          map.setWall(x,y);
+        } //end if
       } //end if
       if(sector.isDoor()){
         let valid = false;
@@ -323,33 +329,15 @@ export function pcg(map){
 
   //eslint-disable-next-line complexity
   function drawSpecialty(x,y,sx,sy,ex,ey,type){
-    var halfX = (ex-sx)/2,
-        halfY = (ey-sy)/2;
+    let halfX = (ex-sx)/2,
+        halfY = (ey-sy)/2,
+        mx = Math.floor(halfX+sx),
+        my = Math.floor(halfY+sy);
 
-    if(type==='dispersion') type='normal';
     if(type==='dispersion'){
       map.setFloor(x,y);
-      if(!rf(2)){ //50% chance
-        if(!rf(2)){
-          map.setFloor(x-1,y);
-          if(!rf(2)) map.setFloor(x-1,y-1);
-          if(!rf(2)) map.setFloor(x-1,y+1);
-        } //end if
-        if(!rf(2)){
-          map.setFloor(x+1,y);
-          if(!rf(2)) map.setFloor(x+1,y-1);
-          if(!rf(2)) map.setFloor(x+1,y+1);
-        } //end if
-        if(!rf(2)){
-          map.setFloor(x,y-1);
-          if(!rf(2)) map.setFloor(x+1,y-1);
-          if(!rf(2)) map.setFloor(x-1,y-1);
-        } //end if
-        if(!rf(2)){
-          map.setFloor(x,y+1);
-          if(!rf(2)) map.setFloor(x+1,y+1);
-          if(!rf(2)) map.setFloor(x-1,y+1);
-        } //end if
+      if(ey-sy>2&&ex-sx>2&&(x===sx||x===ex||y===sy||y===ey)&&!rf(2)){
+        map.setEmpty(x,y);
       } //end if
     }else if(type==='water islands'){
       if(!rf(2)){ //50% chance
@@ -911,10 +899,14 @@ export function pcg(map){
       if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
       for(i=sx;i<=ex;i++){
         for(j=sy;j<=ey;j++){
-          if(drawPathway)sc(x,y);
           drawSpecialty(i,j,sx,sy,ex,ey,type);
         } //end for
       } //end for
+      if(drawPathway){
+        sc(x,y);
+        map.setFloor(x,y-1);
+        map.setFloor(x,y+1);
+      } //end if
       todo.push({rd: N,x: x,y: sy-1});
       todo.push({rd: W,x: sx-1,y: sy+(r|0)});
       todo.push({rd: E,x: ex+1,y: sy+(r|0)});
@@ -926,10 +918,14 @@ export function pcg(map){
       if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
       for(i=sx;i<=ex;i++){
         for(j=sy;j<=ey;j++){
-          if(drawPathway)sc(x,y);
           drawSpecialty(i,j,sx,sy,ex,ey,type);
         } //end for
       } //end for
+      if(drawPathway){
+        sc(x,y);
+        map.setFloor(x-1,y);
+        map.setFloor(x+1,y);
+      } //end if
       todo.push({rd: E,x: ex+1,y: y});
       todo.push({rd: N,x: sx+(r|0),y: sy-1});
       todo.push({rd: S,x: sx+(r|0),y: ey+1});
@@ -941,10 +937,14 @@ export function pcg(map){
       if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
       for(i=sx;i<=ex;i++){
         for(j=sy;j<=ey;j++){
-          if(drawPathway)sc(x,y);
           drawSpecialty(i,j,sx,sy,ex,ey,type);
         } //end for
       } //end for
+      if(drawPathway){
+        sc(x,y);
+        map.setFloor(x,y-1);
+        map.setFloor(x,y+1);
+      } //end if
       todo.push({rd: S,x: x,y: ey+1});
       todo.push({rd: W,x: sx-1,y: sy+(r|0)});
       todo.push({rd: E,x: ex+1,y: sy+(r|0)});
@@ -956,10 +956,14 @@ export function pcg(map){
       if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
       for(i=sx;i<=ex;i++){
         for(j=sy;j<=ey;j++){
-          if(drawPathway)sc(x,y);
           drawSpecialty(i,j,sx,sy,ex,ey,type);
         } //end for
       } //end for
+      if(drawPathway){
+        sc(x,y);
+        map.setFloor(x-1,y);
+        map.setFloor(x+1,y);
+      } //end if
       todo.push({rd: W,x: sx-1,y: y});
       todo.push({rd: N,x: sx+(r|0),y: sy-1});
       todo.push({rd: S,x: sx+(r|0),y: ey+1});
