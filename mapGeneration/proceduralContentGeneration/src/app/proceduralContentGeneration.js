@@ -917,7 +917,7 @@ export function pcg(map){
       } //end for
       todo.push({rd: N,x: x,y: sy-1});
       todo.push({rd: W,x: sx-1,y: sy+(r|0)});
-      todo.push({rd: E,x: ex+1,y: sy-(r|0)});
+      todo.push({rd: E,x: ex+1,y: sy+(r|0)});
     }else if(roomDirection===E && re){
       sx=x+1;
       ex=x+roomSize;
@@ -962,7 +962,7 @@ export function pcg(map){
       } //end for
       todo.push({rd: W,x: sx-1,y: y});
       todo.push({rd: N,x: sx+(r|0),y: sy-1});
-      todo.push({rd: S,x: sx-(r|0),y: ey+1});
+      todo.push({rd: S,x: sx+(r|0),y: ey+1});
     } //end if
     return true;
   } //end buildSquareRoom()
