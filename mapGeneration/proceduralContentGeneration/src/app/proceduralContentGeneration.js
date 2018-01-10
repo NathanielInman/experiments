@@ -268,6 +268,7 @@ export function pcg(map){
   }while(todo.length>0||step===0);
 
   // Surround the map with walls
+  return true;
   map.sectors.forEach((row,y)=>{
     row.forEach((sector,x)=>{
       if(sector.isWalkable()){
@@ -325,6 +326,7 @@ export function pcg(map){
     var halfX = (ex-sx)/2,
         halfY = (ey-sy)/2;
 
+    if(type==='dispersion') type='normal';
     if(type==='dispersion'){
       map.setFloor(x,y);
       if(!rf(2)){ //50% chance
