@@ -1,4 +1,3 @@
-
 const MAPTYPES = [
   {
     name: 'standard crypt',
@@ -150,7 +149,7 @@ const W = 3;
 // it takes an optional second param which means we need a random
 // number between the range of num1 and num2
 function rf(num1,num2){
-  var result;
+  let result;
 
   if(num2){
     result = num1+Math.floor(Math.random()*num2);
@@ -251,7 +250,7 @@ export function pcg(map){
     if(todo.length===0 && successfulRooms<15){
       for(let i=0;i<size;i++){
         for(let j=0;j<size;j++){
-          cs(i,j);
+          map.setEmpty(i,j);
           successfulRooms=1;
         } //end for
       } //end for
@@ -306,20 +305,6 @@ export function pcg(map){
     } //end for
     return true;
   } //end checkSpaceEmpty()
-
-  // set cooridor of x,y location
-  function sc(x,y){
-    map.setDoor(x,y);
-    map.setLoc(x,y,roomDirection);
-    map.setRoom(x,y,successfulRooms);
-  } //end sc()
-
-  // clear sector of all information we may have set
-  function cs(x,y){
-    map.setEmpty(x,y);
-    map.setLoc(x,y,0);
-    map.setRoom(x,y,0);
-  } //end cs()
 
   //eslint-disable-next-line complexity
   function drawSpecialty(x,y,sx,sy,ex,ey,type){
@@ -389,7 +374,7 @@ export function pcg(map){
   // we will draw a spherical room
   // eslint-disable-next-line complexity
   function buildSphereRoom(x,y,roomSize,roomDirection,drawPathway,type){
-    var i,j,sx,sy,ex,ey,
+    let i,j,sx,sy,ex,ey,
         r = roomSize/2,
         offset = roomSize%2===0?2:1,
         lx = x-(r)|0-offset>=0,
@@ -402,7 +387,7 @@ export function pcg(map){
     if(roomSize===5){
       if(roomDirection===N && rn){
         if(!checkSpaceEmpty(x-3,y-6,x+3,y))return false;
-        if(drawPathway)sc(x,y);
+        if(drawPathway) map.setDoor(x,y);
         sx = x-2; sy=y-5; ex = x+2; ey=y-1;
         /*eslint-disable */
         [
@@ -420,7 +405,7 @@ export function pcg(map){
         todo.push({rd: E,x: x+3,y: y-3});
       }else if(roomDirection===E && re){
         if(!checkSpaceEmpty(x,y-3,x+6,y+3))return false;
-        if(drawPathway)sc(x,y);
+        if(drawPathway) map.setDoor(x,y);
         sx = x+1; ex = x+5; sy = y-2; ey = y+2;
         /*eslint-disable */
         [
@@ -438,7 +423,7 @@ export function pcg(map){
         todo.push({rd: S,x: x+3,y: y+3});
       }else if(roomDirection===S && rs){
         if(!checkSpaceEmpty(x-3,y,x+3,y+6))return false;
-        if(drawPathway)sc(x,y);
+        if(drawPathway) map.setDoor(x,y);
         sx = x-2; sy = y+1; ex = x+2; ey = y+5;
         /*eslint-disable */
         [
@@ -449,12 +434,14 @@ export function pcg(map){
                               [x  ,y+5]
         ].forEach(arr=> drawSpecialty(arr[0],arr[1],sx,sy,ex,ey,type));
         /*eslint-enable */
+        map.setFloor(x,y-1); //we enforce floors on either side of doors
+        map.setFloor(x,y+1); //we enforce floors on either side of doors
         todo.push({rd: S,x: x,y: y+6});
         todo.push({rd: W,x: x-3,y: y+3});
         todo.push({rd: E,x: x+3,y: y+3});
       }else if(roomDirection===W && rw){
         if(!checkSpaceEmpty(x-6,y-3,x,y+3))return false;
-        if(drawPathway)sc(x,y);
+        if(drawPathway) map.setDoor(x,y);
         sx = x-5; ex = x-1; sy = y-2; ey = y+2;
         /*eslint-disable */
         [
@@ -475,7 +462,7 @@ export function pcg(map){
       if(roomDirection===N && rn){
         if(Math.floor(Math.random()*2)===0){
           if(!checkSpaceEmpty(x-2,y-5,x+3,y))return false;
-          if(drawPathway)sc(x,y);
+          if(drawPathway) map.setDoor(x,y);
           sx = x-1; ex = x+2; sy = y-4; ey = y-1;
           /*eslint-disable */
           [
@@ -504,7 +491,7 @@ export function pcg(map){
           } //end if
         }else{
           if(!checkSpaceEmpty(x-3,y-5,x+2,y))return false;
-          if(drawPathway)sc(x,y);
+          if(drawPathway) map.setDoor(x,y);
           sx = x-2; sy = y-4; ex = x+1; ey= y-1;
           /*eslint-disable */
           [
@@ -535,7 +522,7 @@ export function pcg(map){
       }else if(roomDirection===E && re){
         if(!rf(2)){
           if(!checkSpaceEmpty(x,y-2,x+5,y+3))return false;
-          if(drawPathway)sc(x,y);
+          if(drawPathway) map.setDoor(x,y);
           sx = x+1; ex = x+4; sy = y-1; ey = y+2;
           /*eslint-disable */
           [
@@ -564,7 +551,7 @@ export function pcg(map){
           } //end if
         }else{
           if(!checkSpaceEmpty(x,y-3,x+5,y+2))return false;
-          if(drawPathway)sc(x,y);
+          if(drawPathway) map.setDoor(x,y);
           sx = x+1; ex = x+4; sy = y-2; ey = y+1;
           /*eslint-disable */
           [
@@ -595,7 +582,7 @@ export function pcg(map){
       }else if(roomDirection===S && rs){
         if(Math.floor(Math.random()*2)===0){
           if(!checkSpaceEmpty(x-2,y,x+3,y+5))return false;
-          if(drawPathway)sc(x,y);
+          if(drawPathway) map.setDoor(x,y);
           sx = x-1; sy = y+1; ex = x+2; ey = y+4;
           /*eslint-disable */
           [
@@ -624,7 +611,7 @@ export function pcg(map){
           } //end if
         }else{
           if(!checkSpaceEmpty(x-3,y,x+2,y+5))return false;
-          if(drawPathway)sc(x,y);
+          if(drawPathway) map.setDoor(x,y);
           sx = x-2; sy = y+1; ex = x+1; ey = y+4;
           /*eslint-disable */
           [
@@ -655,7 +642,7 @@ export function pcg(map){
       }else if(roomDirection===W && rw){
         if(!rf(2)){
           if(!checkSpaceEmpty(x-5,y-2,x,y+3))return false;
-          if(drawPathway)sc(x,y);
+          if(drawPathway) map.setDoor(x,y);
           sx = x-4; sy = y-1; ex = x-1; ey = y+2;
           /*eslint-disable */
           [
@@ -684,7 +671,7 @@ export function pcg(map){
           } //end if
         }else{
           if(!checkSpaceEmpty(x-5,y-3,x,y+2))return false;
-          if(drawPathway)sc(x,y);
+          if(drawPathway) map.setDoor(x,y);
           sx = x-4; sy = y-2; ex = x-1; ey = y+1;
           /*eslint-disable */
           [
@@ -716,7 +703,7 @@ export function pcg(map){
     }else if(roomSize===3){
       if(roomDirection===N && rn){
         if(!checkSpaceEmpty(x-2,y-4,x+2,y))return false;
-        if(drawPathway)sc(x,y);
+        if(drawPathway) map.setDoor(x,y);
         sx = x-1; ex = x+1; sy = y-3; ey = y-1;
         /*eslint-disable */
         [
@@ -732,7 +719,7 @@ export function pcg(map){
         todo.push({rd: N,x: x,y: y-4});
       }else if(roomDirection===E && re){
         if(!checkSpaceEmpty(x,y-2,x+4,y+2))return false;
-        if(drawPathway)sc(x,y);
+        if(drawPathway) map.setDoor(x,y);
         sx = x+1; ex = x+3; sy = y-1; ey = y+1;
         /*eslint-disable */
         [
@@ -748,7 +735,7 @@ export function pcg(map){
         todo.push({rd: S,x: x+2,y: y+2});
       }else if(roomDirection===S && rs){
         if(!checkSpaceEmpty(x-2,y,x+2,y+4))return false;
-        if(drawPathway)sc(x,y);
+        if(drawPathway) map.setDoor(x,y);
         sx = x-1; ex = x+1; sy = y+1; ey = y+3;
         /*eslint-disable */
         [
@@ -764,7 +751,7 @@ export function pcg(map){
         todo.push({rd: S,x: x,y: y+4});
       }else if(roomDirection===W && rw){
         if(!checkSpaceEmpty(x-4,y-2,x,y+2))return false;
-        if(drawPathway)sc(x,y);
+        if(drawPathway) map.setDoor(x,y);
         sx = x-3; sy = y-1; ex = x-1; ey = y+1;
         /*eslint-disable */
         [
@@ -785,7 +772,7 @@ export function pcg(map){
       sy=y-roomSize;
       ey=y;
       if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
-      if(drawPathway)sc(x,y);
+      if(drawPathway) map.setDoor(x,y);
       for(i=sx;i<ex;i++){
         for(j=sy;j<ey;j++){
           let cx = sx+(ex-sx)/2, //center x float
@@ -815,7 +802,7 @@ export function pcg(map){
       sy=y-Math.floor(r);
       ey=y+Math.ceil(r);
       if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
-      if(drawPathway)sc(x,y);
+      if(drawPathway) map.setDoor(x,y);
       for(i=sx;i<=ex;i++){
         for(j=sy;j<ey;j++){
           let cx = sx+(ex-sx)/2, //center x float
@@ -846,7 +833,7 @@ export function pcg(map){
       sy=y+1;
       ey=y+roomSize;
       if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
-      if(drawPathway)sc(x,y);
+      if(drawPathway) map.setDoor(x,y);
       for(i=sx;i<ex;i++){
         for(j=sy;j<=ey;j++){
           let cx = sx+(ex-sx)/2, //center x float
@@ -877,7 +864,7 @@ export function pcg(map){
       sy=y-Math.floor(r);
       ey=y+Math.ceil(r);
       if(!checkSpaceEmpty(sx-1,sy-1,ex+1,ey+1))return false;
-      if(drawPathway)sc(x,y);
+      if(drawPathway) map.setDoor(x,y);
       for(i=sx;i<ex;i++){
         for(j=sy;j<ey;j++){
           let cx = sx+(ex-sx)/2, //center x float
@@ -932,7 +919,7 @@ export function pcg(map){
           drawSpecialty(i,j,sx,sy,ex,ey,type);
         } //end for
       } //end for
-      if(drawPathway) sc(x,y);
+      if(drawPathway) map.setDoor(x,y);
       map.setFloor(x,y-1); //we enforce floors on either side of doors
       map.setFloor(x,y+1); //we enforce floors on either side of doors
       todo.push({rd: N,x: x,y: sy-1});
@@ -949,7 +936,7 @@ export function pcg(map){
           drawSpecialty(i,j,sx,sy,ex,ey,type);
         } //end for
       } //end for
-      if(drawPathway) sc(x,y);
+      if(drawPathway) map.setDoor(x,y);
       map.setFloor(x-1,y); //we enforce floors on either side of doors
       map.setFloor(x+1,y); //we enforce floors on either side of doors
       todo.push({rd: E,x: ex+1,y: y});
@@ -966,7 +953,7 @@ export function pcg(map){
           drawSpecialty(i,j,sx,sy,ex,ey,type);
         } //end for
       } //end for
-      if(drawPathway) sc(x,y);
+      if(drawPathway) map.setDoor(x,y);
       map.setFloor(x,y-1); //we enforce floors on either side of doors
       map.setFloor(x,y+1); //we enforce floors on either side of doors
       todo.push({rd: S,x: x,y: ey+1});
@@ -983,7 +970,7 @@ export function pcg(map){
           drawSpecialty(i,j,sx,sy,ex,ey,type);
         } //end for
       } //end for
-      if(drawPathway) sc(x,y);
+      if(drawPathway) map.setDoor(x,y);
       map.setFloor(x-1,y); //we enforce floors on either side of doors
       map.setFloor(x+1,y); //we enforce floors on either side of doors
       todo.push({rd: W,x: sx-1,y: y});

@@ -15,6 +15,7 @@ export class Map{
       } //end for
     } //end for
   }
+  loc(x,y){ return this.getSector(x,y).loc; }
   setLoc(x,y,locNumber){ this.getSector(x,y).loc = locNumber; }
   setRoom(x,y,roomNumber){ this.getSector(x,y).roomNumber = roomNumber; }
   getSector(x,y){ return this.sectors[y][x]; }

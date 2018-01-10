@@ -31,7 +31,7 @@ if(!easel.activated){
         }else if(sector.isDoor()){
           easel.ctx.fillStyle='#f84';
         }else if(sector.isCorridor()){
-          easel.ctx.fillStyle='#883';
+          easel.ctx.fillStyle='#F00';
         }else if(sector.isWater()){
           easel.ctx.fillStyle='#36f';
         }else if(sector.isError()){
