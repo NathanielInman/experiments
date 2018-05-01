@@ -3,7 +3,7 @@ export function applyErosion(map){
       mapHeight = map.length,
       mapWidth = map[0].length,types={};
 
-  for(let raindrop=0,x,y,v;raindrop<5000;raindrop++){
+  for(let raindrop=0,x,y,v;raindrop<40000;raindrop++){
     x = 5+Math.floor(Math.random()*(mapWidth-10));
     y = 5+Math.floor(Math.random()*(mapHeight-10));
     n = getLowestNeighbor(map,x,y);

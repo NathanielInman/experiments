@@ -1,5 +1,4 @@
 export function normalize(map){
-  console.log(arguments);
   let lowest = Infinity, highest = -Infinity;
 
   for(let y=0;y<map.length;y++){
