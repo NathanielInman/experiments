@@ -4,10 +4,14 @@ const mapMaxDepth = 30;
 const mapMidDepth = 15;
 const mapMinDepth = 9;
 
-export function prepareMap(mapWidth,mapHeight){
+let mapWidth = 0, mapHeight = 0;
+
+export function prepareMap(width,height){
   let map = [];
 
   noise.seed(Math.random());
+  mapWidth = width;
+  mapHeight = height;
   for(let y=0;y<mapHeight;y++){
     map[y]=[];
     for(let x=0;x<mapWidth;x++){
@@ -18,9 +22,7 @@ export function prepareMap(mapWidth,mapHeight){
 } //end prepareMap()
 
 function prepareHeight(map,sector){
-  let {x,y} = sector,
-      mapHeight = map.length,
-      mapWidth = map[0].length;
+  let {x,y} = sector;
 
   // layer 1: Perlin Wide Noise
   // Weight: 2
@@ -28,7 +30,7 @@ function prepareHeight(map,sector){
 
   // layer 2: Central Weight
   // Weight: 3
-  sector.height += 3*(
+  sector.height += 4*(
     1-Math.sqrt(Math.pow(mapWidth/2-x,2)+Math.pow(mapHeight/2-y,2))
     /
     Math.sqrt(Math.pow(mapWidth/2,2)+Math.pow(mapHeight/2,2))
@@ -43,6 +45,6 @@ function prepareHeight(map,sector){
   sector.height += 1+noise.perlin2(x/mapMinDepth,y/mapMinDepth);
 
   // Normalize layers (average the weights so we're between 0 and 1)
-  sector.height = sector.height/9;
+  sector.height = sector.height/10;
   return sector;
 } //end prepareHeight()

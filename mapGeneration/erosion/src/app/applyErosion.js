@@ -15,11 +15,7 @@ export function applyErosion(map){
       y = n.y;
       map[y][x].height+=0.005;
       v -= 0.0005; //reduce velocity and size displacement
-      if(v>0.002){
-        n = getLowestNeighbor(map,x,y);
-      }else{
-        n = null;
-      } //end if
+      n = v>0.002?getLowestNeighbor(map,x,y):null;
     }
   }
   console.log(types);
