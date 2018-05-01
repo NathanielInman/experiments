@@ -18,7 +18,6 @@ export function applyErosion(map){
       n = v>0.002?getLowestNeighbor(map,x,y):null;
     }
   }
-  console.log(types);
 } //end applyErosion()
 
 //eslint-disable-next-line complexity
@@ -41,16 +40,16 @@ function getLowestNeighbor(map,x,y){
     result.push({x,y: y+1,v: map[y+1][x].height,type: 'south'});
   } //end if
   if(x>0&&y>0&&map[y-1][x-1].height<h){
-    result.push({x: x-1,y: y-1,v: map[y-1][x-1].height,type:'northwest'});
+    result.push({x: x-1,y: y-1,v: map[y-1][x-1].height,type: 'northwest'});
   } //end if
   if(x<mapWidth-1&&y>0&&map[y-1][x+1].height<h){
-    result.push({x: x+1,y: y-1,v: map[y-1][x+1].height,type:'northeast'});
+    result.push({x: x+1,y: y-1,v: map[y-1][x+1].height,type: 'northeast'});
   } //end if
   if(x<mapWidth-1&&y<mapHeight-1&&map[y+1][x+1].height<h){
-    result.push({x: x+1,y: y+1,v: map[y+1][x+1].height,type:'southeast'});
+    result.push({x: x+1,y: y+1,v: map[y+1][x+1].height,type: 'southeast'});
   } //end if
   if(x>0&&y<mapHeight-1&&map[y+1][x-1].height<h){
-    result.push({x: x-1,y: y+1,v: map[y+1][x-1].height,type:'southwest'});
+    result.push({x: x-1,y: y+1,v: map[y+1][x-1].height,type: 'southwest'});
   } //end if
   return result.length?result.reduce((p,v)=> v.v<p.v?v:p):null;
 } //end getLowestNeighbor()

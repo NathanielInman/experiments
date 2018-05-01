@@ -13,6 +13,7 @@ export function normalize(map){
 
   // now normalize the height
   let range = highest - lowest;
+
   for(let y=0;y<map.length;y++){
     for(let x=0;x<map[0].length;x++){
       map[y][x].height = (map[y][x].height-lowest)/range;
