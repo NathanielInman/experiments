@@ -5,28 +5,13 @@ const mapMidDepth = 15;
 const mapMinDepth = 9;
 
 export function prepareMap(mapWidth,mapHeight){
-  let lowest = Infinity, highest = -Infinity,
-      map = [];
+  let map = [];
 
   noise.seed(Math.random());
   for(let y=0;y<mapHeight;y++){
     map[y]=[];
     for(let x=0;x<mapWidth;x++){
       map[y][x] = prepareHeight(map,{x,y,height: 0});
-      if(map[y][x].height<lowest){
-        lowest = map[y][x].height;
-      }else if(map[y][x].height>highest){
-        highest = map[y][x].height;
-      } //end if
-    } //end for
-  } //end for
-
-  // now normalize the weights
-  let range = highest-lowest;
-
-  for(let y=0;y<mapHeight;y++){
-    for(let x=0;x<mapWidth;x++){
-      map[y][x].height = (map[y][x].height-lowest)/range*highest;
     } //end for
   } //end for
   return map;
