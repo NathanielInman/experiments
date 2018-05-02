@@ -1,7 +1,7 @@
 {
-  "name": "erosion",
+  "name": "biomes",
   "version": "0.1.0",
-  "description": "random continent generation with erosion",
+  "description": "random continent generation with biomes",
   "main": "config.babel.js",
   "author": {
     "name": "Nathaniel Inman",
