@@ -189,9 +189,7 @@
       }
     }],
     "jsx-quotes": 0,                 // specify whether double or single quotes should be used in JSX attributes
-    "key-spacing": [1,{              // enforce spacing between keys and values in object literal properties
-      align: "value"
-    }],
+    "key-spacing": 1,                // enforce spacing between keys and values in object literal properties
     "keyword-spacing": 0,            // enforce consistent spacing before and after keywords
     "line-comment-position": 0,      // enforce position of line comments
     "linebreak-style": 0,            // disallow mixed 'LF' and 'CRLF' as linebreaks

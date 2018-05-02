@@ -2,6 +2,7 @@ import './app.styl';
 import {Easel} from 'ion-cloud';
 import {prepareMap} from './prepareMap';
 import {applyErosion} from './applyErosion';
+import {applyBiomes} from './applyBiomes';
 import {normalize} from './normalize';
 import {settings} from './settings';
 export let easel = new Easel();
@@ -20,10 +21,11 @@ if(!easel.activated){
   </p>`;
 }else{
   noscript.style.visibility='hidden';
-  let map = prepareMap();
+  let map = prepareMap(); //creates map and applies height
 
   normalize(map);
   applyErosion(map);
+  applyBiomes(map);
   normalize(map);
   easel.onDraw = ()=>{
     let v = easel.viewport,
