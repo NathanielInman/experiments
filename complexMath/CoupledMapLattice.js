@@ -1,5 +1,5 @@
 /* Constants */
-const systemSize=v.w,
+const systemSize=250,
       kTimeStep=3, //Number, affects dispersion
       alpha=1.5,
       epsilon=0.9, //0 - 1, affects wavelength
@@ -57,12 +57,12 @@ easel.onDraw = function process(i){
     } //end for
   } //end for
   let map = map1.map(o=> Math.floor(255*(1+o)/2)),
-      pw = v.w/map.length, ph = 1;
+      pw = v.w/map.length;
 
   map.forEach((hue,x)=>{
     ctx.fillStyle=getColorFromHue(hue);
-    ctx.fillRect(x*pw,i,pw,ph);
+    ctx.fillRect(x*pw,i,pw,pw);
   }) //end for
-  if(i<v.h) easel.redraw(++i);
+  if(i<v.h) easel.redraw(pw+i);
 };
 easel.redraw(0);
