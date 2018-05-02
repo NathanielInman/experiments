@@ -19,8 +19,9 @@ export function applyHeight(map,sector){
       Math.pow(settings.map.height/2,2))
   );
 
-  if(distanceWeight>settings.levels.water)
+  if(distanceWeight>settings.levels.water){
     distanceWeight=settings.levels.water; //limit to sea level
+  } //end if
   sector.height += 4*distanceWeight;
 
   // layer 3: Perlin Medium Noise
