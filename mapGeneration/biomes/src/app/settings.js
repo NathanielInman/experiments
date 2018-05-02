@@ -14,5 +14,12 @@ export const settings = {
     mountain: 0.75, //depth-based
     grass: 0.45, //biome-based
     trees: 0.52 //biome-based
+  },
+  colors: {
+    water: '#004',
+    sand: '#440',
+    dirt: '#442',
+    grass: '#141',
+    trees: '#243'
   }
 };

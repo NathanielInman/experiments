@@ -36,17 +36,20 @@ if(!easel.activated){
       for(let x=0,lightness;x<settings.map.width;x++){
         lightness = map[y][x].height>1?1:map[y][x].height;
         if(map[y][x].height<=settings.levels.water){
-          ctx.fillStyle=ink('#004',{lightness});
+          ctx.fillStyle=ink(settings.colors.water,{lightness});
         }else if(map[y][x].height<=settings.levels.sand){
-          ctx.fillStyle=ink('#440',{lightness: lightness/4});
+          ctx.fillStyle=ink(settings.colors.sand,{lightness: lightness/4});
         }else if(map[y][x].height>settings.levels.mountain){
-          ctx.fillStyle=ink('#444',{lightness: lightness/4*3});
+          lightness = 0.4+(1-0.4)*
+            (lightness-settings.levels.mountain)/
+            (1-settings.levels.mountain);
+          ctx.fillStyle=ink('#444',{lightness});
         }else if(map[y][x].biome<=settings.levels.grass){
-          ctx.fillStyle=ink('#442',{lightness: lightness/2});
+          ctx.fillStyle=ink(settings.colors.dirt,{lightness: lightness/2});
         }else if(map[y][x].biome<=settings.levels.trees){
-          ctx.fillStyle=ink('#141',{lightness: lightness/2});
+          ctx.fillStyle=ink(settings.colors.grass,{lightness: lightness/2});
         }else if(map[y][x].biome>settings.levels.trees){
-          ctx.fillStyle=ink('#243',{lightness: lightness/2});
+          ctx.fillStyle=ink(settings.colors.trees,{lightness: lightness/2});
         } //end if
         ctx.fillRect(x*pw-0.3,y*ph-0.3,pw+0.6,ph+0.6);
       } //end for
