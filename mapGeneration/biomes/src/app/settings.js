@@ -10,14 +10,14 @@ export const settings = {
   },
   levels: {
     water: 0.45, //depth-based
-    sand: 0.47, //depth-based
+    beach: 0.47, //depth-based
     mountain: 0.75, //depth-based
     grass: 0.45, //biome-based
     trees: 0.52 //biome-based
   },
   colors: {
     water: '#004',
-    sand: '#440',
+    beach: '#440',
     dirt: '#442',
     grass: '#141',
     trees: '#243',
