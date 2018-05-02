@@ -20,6 +20,7 @@ export const settings = {
     sand: '#440',
     dirt: '#442',
     grass: '#141',
-    trees: '#243'
+    trees: '#243',
+    mountain: '#444'
   }
 };

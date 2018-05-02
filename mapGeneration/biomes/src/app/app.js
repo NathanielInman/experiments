@@ -43,7 +43,7 @@ if(!easel.activated){
           lightness = 0.4+(1-0.4)*
             (lightness-settings.levels.mountain)/
             (1-settings.levels.mountain);
-          ctx.fillStyle=ink('#444',{lightness});
+          ctx.fillStyle=ink(settings.colors.mountain,{lightness});
         }else if(map[y][x].biome<=settings.levels.grass){
           ctx.fillStyle=ink(settings.colors.dirt,{lightness: lightness/2});
         }else if(map[y][x].biome<=settings.levels.trees){
