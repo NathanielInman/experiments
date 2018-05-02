@@ -28,7 +28,7 @@
     "babel-eslint": "^8.2.3",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
-    "browser-sync": "^2.24.1",
+    "browser-sync": "^2.24.2",
     "browser-sync-webpack-plugin": "^2.2.2",
     "css-loader": "^0.28.11",
     "eslint": "^4.19.1",
@@ -48,7 +48,7 @@
     "webpack": "^4.6.0"
   },
   "dependencies": {
-    "ion-cloud": "^1.6.1",
+    "ion-cloud": "^1.6.2",
     "webpack-cli": "^2.1.2"
   },
   "readmeFilename": "README.md",

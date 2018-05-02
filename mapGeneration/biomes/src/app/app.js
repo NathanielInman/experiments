@@ -37,7 +37,7 @@ if(!easel.activated){
         lightness = map[y][x].height>1?1:map[y][x].height;
         if(map[y][x].height<=settings.levels.water){
           ctx.fillStyle=ink('#004',{lightness});
-        }else if(map[y][x].height<=settings.levels.water+0.015){
+        }else if(map[y][x].height<=settings.levels.sand){
           ctx.fillStyle=ink('#440',{lightness: lightness/4});
         }else if(map[y][x].height>settings.levels.mountain){
           ctx.fillStyle=ink('#444',{lightness: lightness/4*3});
