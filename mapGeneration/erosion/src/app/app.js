@@ -3,9 +3,8 @@ import {Easel} from 'ion-cloud';
 import {prepareMap} from './prepareMap';
 import {applyErosion} from './applyErosion';
 import {normalize} from './normalize';
+import {settings} from './settings';
 export let easel = new Easel();
-
-const mapWidth = 150, mapHeight = 150;
 
 // Launch application if easel was able to create a canvas,
 // if it wasn't then we know canvas isn't supported
@@ -21,7 +20,7 @@ if(!easel.activated){
   </p>`;
 }else{
   noscript.style.visibility='hidden';
-  let map = prepareMap(mapWidth,mapHeight);
+  let map = prepareMap();
 
   normalize(map);
   applyErosion(map);
@@ -29,13 +28,31 @@ if(!easel.activated){
   easel.onDraw = ()=>{
     let v = easel.viewport,
         ctx = easel.ctx,
-        pw = v.w/mapWidth, //pixel width
-        ph = v.h/mapHeight; //pixel height
+        pw = v.w/settings.map.width, //pixel width
+        ph = v.h/settings.map.height; //pixel height
 
-    for(let y=0;y<mapHeight;y++){
-      for(let x=0,c;x<mapWidth;x++){
-        c = Math.floor(255*map[y][x].height).toString(16).padStart(2,0);
-        ctx.fillStyle=`#${c}${c}${c}`;
+    for(let y=0;y<settings.map.height;y++){
+      for(let x=0,c,c2;x<settings.map.width;x++){
+        c = Math.floor(Math.abs(256*map[y][x].height)).toString(16);
+        c = c.padStart(2,'0');
+        if(map[y][x].height<=settings.levels.water){
+          c2 = 255/settings.levels.water*map[y][x].height;
+          c2 = Math.floor(c2<0?0:c2).toString(16);
+          c2 = c2.padStart(2,'0');
+          ctx.fillStyle=`#00${c}${c2}`;
+        }else if(map[y][x].height<=settings.levels.mountain){
+          c2 = 255/(settings.levels.mountain-settings.levels.water)*
+            (map[y][x].height-settings.levels.water);
+          c2 = Math.floor(c2<0?0:c2).toString(16);
+          c2 = c2.padStart(2,'0');
+          ctx.fillStyle=`#${c2}${c}${c2}`;
+        }else{
+          c2 = 255/(1-settings.levels.mountain)*
+            (map[y][x].height-settings.levels.water);
+          c2 = Math.floor(c2+200>255?255:c2+200).toString(16);
+          c2 = c2.padStart(2,'0');
+          ctx.fillStyle=`#${c2}${c2}${c2}`
+        } //end if
         ctx.fillRect(x*pw-0.3,y*ph-0.3,pw+0.6,ph+0.6);
       } //end for
     } //end for
