@@ -9,7 +9,9 @@ export const settings = {
     }
   },
   levels: {
-    water: 0.5,
-    mountain: 0.8
+    water: 0.45, //depth-based
+    mountain: 0.63, //depth-based
+    grass: 0.45, //biome-based
+    trees: 0.55 //biome-based
   }
 };
