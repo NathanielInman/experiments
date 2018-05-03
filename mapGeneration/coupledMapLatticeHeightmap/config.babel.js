@@ -30,7 +30,7 @@ export default {
       template: indexTemplate,
       mobile: true,
       injectExtras: index,
-      title: 'mapErosion'
+      title: 'coupledMapLatticeHeightmap'
     }),
     new BrowserSync({
       host: 'localhost',

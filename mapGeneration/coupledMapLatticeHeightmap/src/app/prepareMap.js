@@ -1,6 +1,5 @@
 import {noise} from './noise';
 import {settings} from './settings';
-import {applyHeight} from './applyHeight';
 
 export function prepareMap(){
   let map = [];
@@ -9,9 +8,8 @@ export function prepareMap(){
   for(let y=0;y<settings.map.height;y++){
     map[y]=[];
     for(let x=0;x<settings.map.width;x++){
-      map[y][x] = applyHeight(map,{x,y,height: 0});
+      map[y][x] = {x,y,height: Math.random()};
     } //end for
   } //end for
   return map;
 } //end prepareMap()
-

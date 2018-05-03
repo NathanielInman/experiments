@@ -1,7 +1,10 @@
 import './app.styl';
 import {Easel} from 'ion-cloud';
 import {prepareMap} from './prepareMap';
+import {applyGaussianBlur} from './applyGaussianBlur';
 import {applyErosion} from './applyErosion';
+import {applyHeight} from './applyHeight';
+import {applyHeightRestrictions} from './applyHeightRestrictions';
 import {normalize} from './normalize';
 import {settings} from './settings';
 export let easel = new Easel();
@@ -22,7 +25,10 @@ if(!easel.activated){
   noscript.style.visibility='hidden';
   let map = prepareMap();
 
+  applyHeight(map);
+  applyGaussianBlur(map);
   normalize(map);
+  applyHeightRestrictions(map);
   applyErosion(map);
   normalize(map);
   easel.onDraw = ()=>{

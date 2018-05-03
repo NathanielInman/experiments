@@ -23,7 +23,7 @@ function prepareHeight(map,sector){
     y/settings.map.depth.max);
 
   // layer 2: Central Weight up to sea level
-  // Weight: 3
+  // Weight: 4
   let distanceWeight = (
     1-Math.sqrt(Math.pow(settings.map.width/2-x,2)+
       Math.pow(settings.map.height/2-y,2))

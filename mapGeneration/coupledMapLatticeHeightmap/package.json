@@ -1,5 +1,5 @@
 {
-  "name": "erosion",
+  "name": "coupledMapLatticeHeightmap",
   "version": "0.1.0",
   "description": "random continent generation with erosion",
   "main": "config.babel.js",

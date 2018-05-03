@@ -9,11 +9,11 @@ export function applyErosion(map){
     n = getLowestNeighbor(map,x,y);
     v = 0.005;
     while(n){
-      map[y][x].height-=0.005;
+      map[y][x].height-=v;
       types[n.type]=types[n.type]?types[n.type]+1:1;
       x = n.x;
       y = n.y;
-      map[y][x].height+=0.005;
+      map[y][x].height+=v;
       v -= 0.0005; //reduce velocity and size displacement
       n = v>0.002?getLowestNeighbor(map,x,y):null;
     }

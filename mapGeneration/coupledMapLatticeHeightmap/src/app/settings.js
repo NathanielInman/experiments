@@ -1,5 +1,5 @@
 export const settings = {
-  map:{
+  map: {
     width: 150,
     height: 150,
     depth: {
@@ -8,7 +8,7 @@ export const settings = {
       max: 30
     }
   },
-  levels:{
+  levels: {
     water: 0.5,
     mountain: 0.8
   }
