@@ -38,7 +38,7 @@ export function applyHeight(map){
         for(let m=0;m<settings.map.width;m++) map[y][m].height=map2[m];
       } //end for
     } //end for
-  } //end for 
+  } //end for
 
   // the formula results in values with -1 to 1, lets normalize to 0 to 1
   for(let y=0;y<settings.map.height;y++){
