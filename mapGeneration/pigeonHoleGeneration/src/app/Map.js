@@ -36,42 +36,63 @@ export class Map{
     return this.getSector(x1,y1).roomNumber===this.getSector(x2,y2).roomNumber;
   }
 
-  // uses bresenhams line algorithm to check if all points A(x1,y1) and B(x2,y2)
-  // are empty and on the map
-  isPathFree(x1,y1,x2,y2){
-    let result = true,
-        dx = Math.abs(x2-x1), dy = Math.abs(y2-y1),
-        sx = x1<x2?1:-1, sy = y1<y2?1:-1,
-        err = dx-dy, err2; //difference and difference*2
-
-    while(!(x1===x2&&y1===y2)){
-      err2 = 2*err;
-      if(err2>-dy){ err-=dy; x1+=sx; } //eslint-disable-line no-param-reassign
-      if(err2<dx){ err+=dx; y1+=sy; } //eslint-disable-line no-param-reassign
-      if(x1<=1||x1>=this.width-1||y1<=1||y1>=this.height-2||!this.isEmpty(x1,y1)){
-        result = false;
-        break; //no need to continue, it fails
-      }
-    }
-    return result;
-  }
-
-  // uses bresenhams line algorithm to set all points between A(x1,y1) and
-  // B(2,y2) to a floor
-  setPathFloor(x1,y1,x2,y2){
+  // uses bresenhams line algorithm to acquire an array of points
+  // inclusively between A(x1,y1) and B(x2,y2)
+  getPath(x1,y1,x2,y2){
     let dx = Math.abs(x2-x1), dy = Math.abs(y2-y1),
         sx = x1<x2?1:-1, sy = y1<y2?1:-1,
-        err = dx-dy, err2; //difference and difference*2
+        err = dx-dy, err2, //difference and difference*2
+        path = [];
 
     while(!(x1===x2&&y1===y2)){
       err2 = 2*err;
       if(err2>-dy){ err-=dy; x1+=sx; } //eslint-disable-line no-param-reassign
       if(err2<dx){ err+=dx; y1+=sy; } //eslint-disable-line no-param-reassign
-      if(x1<=1||x1>=thiswidth-1||y1<=1||y1>=this.height-2||!this.isEmpty(x1,y1)){
-        result = false;
+      if(x1<=1||x1>=this.width-1||y1<=1||y1>=this.height-2){
+        path.length=0
         break; //no need to continue, it fails
-      }
-    }
+      }else{
+        path.push({x: x1,y: y1});
+      } //end if
+    } //end while()
+    return path;
+  }
+  isPathEmpty(path){
+    let result = true;
+
+    if(!path.length){
+      result = false;
+    }else if(!path.every(p=> this.isEmpty(p.x,p.y))){
+      result = false;
+    } //end if
+    return result;
+  }
+  isSquareEmpty(x1,y1,x2,y2){
+    let dx = x1<x2?1:-1, dy = y1<y2?1:-1;
+
+    for(let y = y1;y!==y2;y+=dy){
+      for(let x = x1;x!==x2;x+=dx){
+        if(x<=1||x>=this.width-1||y<=1||y>=this.height-2||!this.isEmpty(x,y)){
+          return false; //exit early
+        } //end if
+      } //end for
+    } //end for
+    return true;
+  }
+  fillRoom(x1,y1,x2,y2){
+    let dx = x1<x2?1:-1, dy = y1<y2?1:-1;
+
+    for(let y = y1;y!==y2+dy;y+=dy){
+      for(let x = x1;x!==x2+dx;x+=dx){
+        if(x<=1||x>=this.width-1||y<=1||y>=this.height-2||!this.isEmpty(x,y)){
+          return; //exit early
+        }else if(y===y1||y===y2||x===x1||x===x2){
+          this.setWall(x,y);
+        }else{
+          this.setFloor(x,y);
+        } //end if
+      } //end for
+    } //end for
   }
 }
 
