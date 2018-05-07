@@ -4,8 +4,9 @@ const WEST = 0;
 const EAST = 1;
 const NORTH = 2;
 const SOUTH = 3;
+const ROOMSIZE = 5; //can't be lower than 3, includes wall
 
-export function PHS(map){
+export function PHG(map){
   let cx=Math.floor(map.width/2), //current x position
       cy=Math.floor(map.height/2), //current y position
       currentRoomNumber=1;
@@ -21,42 +22,42 @@ export function PHS(map){
   function blocked(direction){
     let result = false;
 
-    if(direction===NORTH&&cy-6>=0){
-      if(cx-6>=0&& //northwest
+    if(direction===NORTH&&cy-1-ROOMSIZE>=0){
+      if(cx-1-ROOMSIZE>=0&& //northwest
         map.isCorridor(cx-1,cy)&&
-        map.isCorridor(cx-6,cy-1)&&
-        map.isCorridor(cx-1,cy-6)) result = true;
+        map.isCorridor(cx-1-ROOMSIZE,cy-1)&&
+        map.isCorridor(cx-1,cy-1-ROOMSIZE)) result = true;
       if(cx+6<map.width&& //northeast
         map.isCorridor(cx+1,cy)&&
-        map.isCorridor(cx+6,cy-1)&&
-        map.isCorridor(cx+1,cy-6)) result = true
-    }else if(direction===SOUTH&&cy+6<map.height){
-      if(cx-6>=0&& //southwest
+        map.isCorridor(cx+1+ROOMSIZE,cy-1)&&
+        map.isCorridor(cx+1,cy-1-ROOMSIZE)) result = true
+    }else if(direction===SOUTH&&cy+1+ROOMSIZE<map.height){
+      if(cx-1-ROOMSIZE>=0&& //southwest
         map.isCorridor(cx-1,cy)&&
-        map.isCorridor(cx-6,cy+1)&&
-        map.isCorridor(cx-1,cy+6)) result = true;
-      if(cx+6<map.width&& //southeast
+        map.isCorridor(cx-1-ROOMSIZE,cy+1)&&
+        map.isCorridor(cx-1,cy+1+ROOMSIZE)) result = true;
+      if(cx+1+ROOMSIZE<map.width&& //southeast
         map.isCorridor(cx+1,cy)&&
-        map.isCorridor(cx+6,cy+1)&&
-        map.isCorridor(cx+1,cy+6)) result = true;
+        map.isCorridor(cx+1+ROOMSIZE,cy+1)&&
+        map.isCorridor(cx+1,cy+1+ROOMSIZE)) result = true;
     }else if(direction===EAST&&cx+6<map.width){
-      if(cy-6>=0&& //eastnorth
+      if(cy-1-ROOMSIZE>=0&& //eastnorth
         map.isCorridor(cx,cy-1)&&
-        map.isCorridor(cx+1,cy-6)&&
-        map.isCorridor(cx+6,cy-1)) result = true
+        map.isCorridor(cx+1,cy-1-ROOMSIZE)&&
+        map.isCorridor(cx+1+ROOMSIZE,cy-1)) result = true
       if(cy+6<map.height&& //eastsouth
         map.isCorridor(cx,cy+1)&&
-        map.isCorridor(cx+1,cy+6)&&
-        map.isCorridor(cx+6,cy+1)) result = true
+        map.isCorridor(cx+1,cy+1+ROOMSIZE)&&
+        map.isCorridor(cx+1+ROOMSIZE,cy+1)) result = true
     }else if(direction===WEST&&cx-6>=0){
       if(cy-6>=0&& //westnorth
         map.isCorridor(cx,cy-1)&&
-        map.isCorridor(cx-1,cy-6)&&
-        map.isCorridor(cx-6,cy-1)) result = true;
+        map.isCorridor(cx-1,cy-1-ROOMSIZE)&&
+        map.isCorridor(cx-1-ROOMSIZE,cy-1)) result = true;
       if(cy<map.height&& //westsouth
         map.isCorridor(cx,cy+1)&&
-        map.isCorridor(cx-1,cy+6)&&
-        map.isCorridor(cx-6,cy+1)) result = true;
+        map.isCorridor(cx-1,cy+1+ROOMSIZE)&&
+        map.isCorridor(cx-1-ROOMSIZE,cy+1)) result = true;
     } //end if
     return result;
   } //end function
@@ -66,31 +67,31 @@ export function PHS(map){
     let result=false;
 
     if(direction===NORTH && !blocked(NORTH)){
-      if(map.isCorridor(cx,cy-6)){
-        cy-=6;
+      if(map.isCorridor(cx,cy-1-ROOMSIZE)){
+        cy-=1+ROOMSIZE;
       }else{
-        for(let cyc=cy;cy>=cyc-5;cy--) map.setCorridor(cx,cy);
+        for(let cyc=cy;cy>=cyc-ROOMSIZE;cy--) map.setCorridor(cx,cy);
         result = true;
       } //end if
     }else if(direction===EAST && !blocked(EAST)){
-      if(map.isCorridor(cx+6,cy)){
-        cx+=6;
+      if(map.isCorridor(cx+1+ROOMSIZE,cy)){
+        cx+=1+ROOMSIZE;
       }else{
-        for(let cxc=cx;cx<=cxc+5;cx++) map.setCorridor(cx,cy);
+        for(let cxc=cx;cx<=cxc+ROOMSIZE;cx++) map.setCorridor(cx,cy);
         result = true;
       } //end if
     }else if(direction===SOUTH && !blocked(SOUTH)){
-      if(map.isCorridor(cx,cy+6)){
-        cy+=6;
+      if(map.isCorridor(cx,cy+1+ROOMSIZE)){
+        cy+=1+ROOMSIZE;
       }else{
-        for(let cyc=cy;cy<=cyc+5;cy++) map.setCorridor(cx,cy);
+        for(let cyc=cy;cy<=cyc+ROOMSIZE;cy++) map.setCorridor(cx,cy);
         result = true;
       } //end if
     }else if(direction===WEST && !blocked(WEST)){
-      if(map.isCorridor(cx-6,cy)){
-        cx-=6;
+      if(map.isCorridor(cx-1-ROOMSIZE,cy)){
+        cx-=1+ROOMSIZE;
       }else{
-        for(let cxc=cx;cx>=cxc-5;cx--) map.setCorridor(cx,cy);
+        for(let cxc=cx;cx>=cxc-ROOMSIZE;cx--) map.setCorridor(cx,cy);
         result = true;
       } //end if
     } //end function
@@ -156,15 +157,14 @@ export function PHS(map){
   } //end fillRoom()
 
   function allocateRooms(){
-    let minWidth=4,minHeight=4,
-        maxWidth=5,maxHeight=5,
+    let minWidth=3,minHeight=3,
         freeX,freeY,intersectY;
 
     map.sectors.forEach((row,y)=>{
       row.forEach((sector,x)=>{
         if(sector.isEmpty()){
           freeX=new Set();
-          for(let i=x,sx=x;i>0&&i<map.width-2&&i-sx<=maxWidth;i++){
+          for(let i=x,sx=x;i>0&&i<map.width-2&&i-sx<=ROOMSIZE;i++){
             if(map.isEmpty(i,y)){
               freeX.add(i);
             }else{
@@ -176,7 +176,7 @@ export function PHS(map){
             intersectY=new Set();
             freeX.toArray().some((fx,fxIndex)=>{
               intersectY.clear();
-              for(let i=y,sy=y;i>0&&i<map.height-2&&i-sy<=maxHeight;i++){
+              for(let i=y,sy=y;i>0&&i<map.height-2&&i-sy<=ROOMSIZE;i++){
                 if(map.isEmpty(fx,i)){
                   if(fxIndex===0) freeY.add(i);
                   if(fxIndex!==0) intersectY.add(i);
@@ -204,13 +204,13 @@ export function PHS(map){
 
     while(fail<750&&win<map.width+map.height){
       direction=Math.floor(Math.random()*4);
-      if(direction===NORTH&&cy-7>=0&&move(NORTH)){
+      if(direction===NORTH&&cy-2-ROOMSIZE>=0&&move(NORTH)){
         win++
-      }else if(direction===EAST&&cx+7<map.width&&move(EAST)){
+      }else if(direction===EAST&&cx+2+ROOMSIZE<map.width&&move(EAST)){
         win++;
-      }else if(direction===SOUTH&&cy+7<map.height&&move(SOUTH)){
+      }else if(direction===SOUTH&&cy+2+ROOMSIZE<map.height&&move(SOUTH)){
         win++
-      }else if(direction===WEST&&cx-7>=0&&move(WEST)){
+      }else if(direction===WEST&&cx-2-ROOMSIZE>=0&&move(WEST)){
         win++
       }else{
         fail++;
