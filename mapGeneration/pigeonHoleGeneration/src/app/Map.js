@@ -48,14 +48,13 @@ export class Map{
       err2 = 2*err;
       if(err2>-dy){ err-=dy; x1+=sx; } //eslint-disable-line no-param-reassign
       if(err2<dx){ err+=dx; y1+=sy; } //eslint-disable-line no-param-reassign
-      if(x1<1||x1>this.width-2||y1<1||y1>this.height-2){
+      if(x1<=1||x1>this.width-2||y1<=1||y1>this.height-2){
         path.length=0
         break; //no need to continue, it fails
       }else{
         path.push({x: x1,y: y1});
       } //end if
     } //end while()
-    path.pop();
     return path;
   }
   isPathEmpty(path){
@@ -63,7 +62,7 @@ export class Map{
 
     if(!path.length){
       result = false;
-    }else if(!path.every(p=> this.isEmpty(p.x,p.y))){
+    }else if(!path.slice(1,path.length-1).every(p=> this.isEmpty(p.x,p.y))){
       result = false;
     } //end if
     return result;
@@ -73,7 +72,7 @@ export class Map{
 
     for(let y = y1;y!==y2+dy;y+=dy){
       for(let x = x1;x!==x2+dx;x+=dx){
-        if(x<1||x>this.width-2||y<1||y>=this.height-2||!this.isEmpty(x,y)){
+        if(x<1||x>this.width-1||y<1||y>=this.height-1||!this.isEmpty(x,y)){
           return false; //exit early
         } //end if
       } //end for
@@ -85,7 +84,7 @@ export class Map{
 
     for(let y = y1;y!==y2+dy;y+=dy){
       for(let x = x1;x!==x2+dx;x+=dx){
-        if(x<1||x>this.width-2||y<1||y>this.height-2|!this.isEmpty(x,y)){
+        if(x<1||x>this.width-1||y<1||y>this.height-1||!this.isEmpty(x,y)){
           return; //exit early
         }else if(y===y1||y===y2||x===x1||x===x2){
           this.setWall(x,y);

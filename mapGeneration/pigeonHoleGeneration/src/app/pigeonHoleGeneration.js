@@ -45,7 +45,6 @@ function shuffle(array){
   return array;
 } //end shuffle()
 
-
 export function PHG(map){
   let x=Math.floor(Math.random()*map.width/2)+Math.floor(map.width/4),
       y=Math.floor(Math.random()*map.height/2)+Math.floor(map.height/4),
@@ -65,7 +64,9 @@ export function PHG(map){
       nodes.push({x,y,direction: 'south'});
       nodes.push({x,y,direction: 'east'});
       nodes.push({x,y,direction: 'west'});
-      path.forEach(p=> map.setFloor(p.x,p.y));
+      path.forEach(p=>{
+        if(map.isEmpty(p.x,p.y)) map.setCorridor(p.x,p.y);
+      });
       shuffle(nodes);
       buildRooms(JSON.parse(JSON.stringify(path)));
       leafs = [].concat(
@@ -75,18 +76,18 @@ export function PHG(map){
             return {x: p.x,y: p.y,direction};
           }))
       );
-      path = [];
+      path.length=0;
       continue;
     }else if(nodes.length){
       [x,y,direction]=Object.values(nodes.pop());
     }else if(leafs.length){
       [x,y,direction]=Object.values(leafs.pop());
-      console.log('super doom');
     }//end if
     length = getHallwayLength();
     target = getTargetCoordinates({x,y,direction,length});
     path = map.getPath(x,y,target.x,target.y);
   }while(nodes.length||leafs.length)
+  wallifyCorridors();
 
   function buildRooms(path){
     while(path.length){
@@ -119,26 +120,44 @@ export function PHG(map){
         if(map.isSquareEmpty(x,y,t.x,t.y)){
           map.fillRoom(x,y,t.x,t.y);
           result = true;
-          if(direction==='north'&&map.isFloor(Math.floor((x+t.x)/2),y+1)){
-            map.setCorridor(Math.floor((x+t.x)/2),y);
-          }else if(direction==='north'&&map.isFloor(Math.ceil((x+t.x)/2),y+1)){
-            map.setCorridor(Math.ceil((x+t.x)/2),y);
-          }else if(direction==='south'&&map.isFloor(Math.floor((x+t.x)/2),y-1)){
-            map.setCorridor(Math.floor((x+t.x)/2),y);
-          }else if(direction==='south'&&map.isFloor(Math.ceil((x+t.x)/2),y-1)){
-            map.setCorridor(Math.ceil((x+t.x)/2),y);
-          }else if(direction==='east'&&map.isFloor(x-1,Math.floor((y+t.y)/2))){
-            map.setCorridor(x,Math.floor((y+t.y)/2));
-          }else if(direction==='east'&&map.isFloor(x-1,Math.ceil((y+t.y)/2))){
-            map.setCorridor(x,Math.ceil((y+t.y)/2));
-          }else if(direction==='west'&&map.isFloor(x+1,Math.floor((y+t.y)/2))){
-            map.setCorridor(x,Math.floor((y+t.y)/2));
-          }else if(direction==='west'&&map.isFloor(x+1,Math.ceil((y+t.y)/2))){
-            map.setCorridor(x,Math.ceil((y+t.y)/2));
+          if(direction==='north'&&map.isCorridor(Math.floor((x+t.x)/2),y+1)){
+            map.setDoor(Math.floor((x+t.x)/2),y);
+          }else if(direction==='north'&&map.isCorridor(Math.ceil((x+t.x)/2),y+1)){
+            map.setDoor(Math.ceil((x+t.x)/2),y);
+          }else if(direction==='south'&&map.isCorridor(Math.floor((x+t.x)/2),y-1)){
+            map.setDoor(Math.floor((x+t.x)/2),y);
+          }else if(direction==='south'&&map.isCorridor(Math.ceil((x+t.x)/2),y-1)){
+            map.setDoor(Math.ceil((x+t.x)/2),y);
+          }else if(direction==='east'&&map.isCorridor(x-1,Math.floor((y+t.y)/2))){
+            map.setDoor(x,Math.floor((y+t.y)/2));
+          }else if(direction==='east'&&map.isCorridor(x-1,Math.ceil((y+t.y)/2))){
+            map.setDoor(x,Math.ceil((y+t.y)/2));
+          }else if(direction==='west'&&map.isCorridor(x+1,Math.floor((y+t.y)/2))){
+            map.setDoor(x,Math.floor((y+t.y)/2));
+          }else if(direction==='west'&&map.isCorridor(x+1,Math.ceil((y+t.y)/2))){
+            map.setDoor(x,Math.ceil((y+t.y)/2));
           } //end if
         } //end if
         return result;
       });
     } //end while()
   } //end buildRoom()
+
+  // surround the corridors that arent surrounded with walls yet with walls now.
+  function wallifyCorridors(){
+    map.sectors.forEach((row,y)=>{
+      row.forEach((sector,x)=>{
+        if(sector.isCorridor()){
+          if(x>0&&map.isEmpty(x-1,y)) map.setWall(x-1,y);
+          if(x>0&&y>0&&map.isEmpty(x-1,y-1)) map.setWall(x-1,y-1);
+          if(y>0&&map.isEmpty(x,y-1)) map.setWall(x,y-1);
+          if(y>0&&x<map.width-1&&map.isEmpty(x+1,y-1)) map.setWall(x+1,y-1);
+          if(x<map.width-1&&map.isEmpty(x+1,y)) map.setWall(x+1,y);
+          if(x<map.width-1&&y<map.height-1&&map.isEmpty(x+1,y+1)) map.setWall(x+1,y+1);
+          if(y<map.height-1&&map.isEmpty(x,y+1)) map.setWall(x,y+1);
+          if(y<map.height-1&&x>0&&map.isEmpty(x-1,y+1)) map.setWall(x-1,y+1);
+        } //end if
+      });
+    });
+  } //end wallifyCorridors()
 } //end function
