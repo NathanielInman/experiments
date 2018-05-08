@@ -55,6 +55,7 @@ export class Map{
         path.push({x: x1,y: y1});
       } //end if
     } //end while()
+    path.pop();
     return path;
   }
   isPathEmpty(path){

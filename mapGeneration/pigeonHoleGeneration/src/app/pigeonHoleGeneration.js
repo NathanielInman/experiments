@@ -67,55 +67,74 @@ export function PHG(map){
       nodes.push({x,y,direction: 'west'});
       path.forEach(p=> map.setFloor(p.x,p.y));
       shuffle(nodes);
-      [x,y,direction]=Object.values(nodes.pop());
-      buildRooms(path);
+      buildRooms(JSON.parse(JSON.stringify(path)));
+      leafs = [].concat(
+        leafs,
+        ...JSON.parse(JSON.stringify(path))
+          .map(p=>directions.map(direction=>{
+            return {x: p.x,y: p.y,direction};
+          }))
+      );
+      path = [];
+      continue;
     }else if(nodes.length){
       [x,y,direction]=Object.values(nodes.pop());
     }else if(leafs.length){
       [x,y,direction]=Object.values(leafs.pop());
+      console.log('super doom');
     }//end if
     length = getHallwayLength();
     target = getTargetCoordinates({x,y,direction,length});
     path = map.getPath(x,y,target.x,target.y);
-    if(nodes.length){
-      leafs = [].concat(
-        leafs,
-        ...path.map(p=>directions.map(direction=>{
-          return {x: p.x,y: p.y,direction};
-        }))
-      );
-    } //end if
-  }while(nodes.length||leafs.length) //end for
+  }while(nodes.length||leafs.length)
 
   function buildRooms(path){
     while(path.length){
       shuffle(path);
       shuffle(directions);
       let [x,y] = Object.values(path.pop()),
+          ox = x, oy = y,
           w, h, t; //width and height and target(x,y)
 
       directions.find(direction=>{
         let result = false;
 
+        x = ox; y = oy; //restore to values before last try
         w = Math.floor(Math.random()*(maxRoomSize-minRoomSize)+minRoomSize);
         h = Math.floor(Math.random()*(maxRoomSize-minRoomSize)+minRoomSize);
         t = getTargetCoordinates({x,y,direction,w,h});
         if(direction==='north'){
-          y-=1; t.y-=1; x-=w/2|0; t.x-=w/2|0;
+          y-=1; t.y-=1;
+          if(x<t.x){ x-=w/2|0; t.x-=w/2|0; }else{ x+=w/2|0; t.x+=w/2|0; }
         }else if(direction==='south'){
-          y+=1; t.y+=1; x-=w/2|0; t.x-=w/2|0;
+          y+=1; t.y+=1;
+          if(x<t.x){ x-=w/2|0; t.x-=w/2|0; }else{ x+=w/2|0; t.x+=w/2|0; }
         }else if(direction==='east'){
-          x+=1; t.x+=1; y-=h/2|0; t.y-=h/2|0;
+          x+=1; t.x+=1;
+          if(y<t.y){ y-=h/2|0; t.y-=h/2|0; }else{ y+=h/2|0; t.y+=h/2|0; }
         }else if(direction==='west'){
-          x-=1; t.x-=1; y-=h/2|0; t.y-=h/2|0;
+          x-=1; t.x-=1;
+          if(y<t.y){ y-=h/2|0; t.y-=h/2|0; }else{ y+=h/2|0; t.y+=h/2|0; }
         } //end if
         if(map.isSquareEmpty(x,y,t.x,t.y)){
           map.fillRoom(x,y,t.x,t.y);
           result = true;
-          if(direction==='north'||direction==='south'){
-            map.setCorridor((x+t.x)/2|0,y);
-          }else if(direction==='east'||direction==='west'){
-            map.setCorridor(x,(y+t.y)/2|0);
+          if(direction==='north'&&map.isFloor(Math.floor((x+t.x)/2),y+1)){
+            map.setCorridor(Math.floor((x+t.x)/2),y);
+          }else if(direction==='north'&&map.isFloor(Math.ceil((x+t.x)/2),y+1)){
+            map.setCorridor(Math.ceil((x+t.x)/2),y);
+          }else if(direction==='south'&&map.isFloor(Math.floor((x+t.x)/2),y-1)){
+            map.setCorridor(Math.floor((x+t.x)/2),y);
+          }else if(direction==='south'&&map.isFloor(Math.ceil((x+t.x)/2),y-1)){
+            map.setCorridor(Math.ceil((x+t.x)/2),y);
+          }else if(direction==='east'&&map.isFloor(x-1,Math.floor((y+t.y)/2))){
+            map.setCorridor(x,Math.floor((y+t.y)/2));
+          }else if(direction==='east'&&map.isFloor(x-1,Math.ceil((y+t.y)/2))){
+            map.setCorridor(x,Math.ceil((y+t.y)/2));
+          }else if(direction==='west'&&map.isFloor(x+1,Math.floor((y+t.y)/2))){
+            map.setCorridor(x,Math.floor((y+t.y)/2));
+          }else if(direction==='west'&&map.isFloor(x+1,Math.ceil((y+t.y)/2))){
+            map.setCorridor(x,Math.ceil((y+t.y)/2));
           } //end if
         } //end if
         return result;
