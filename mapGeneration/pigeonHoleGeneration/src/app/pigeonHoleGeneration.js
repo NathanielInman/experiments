@@ -49,24 +49,25 @@ function shuffle(array){
 export function PHG(map){
   let x=Math.floor(Math.random()*map.width/2)+Math.floor(map.width/4),
       y=Math.floor(Math.random()*map.height/2)+Math.floor(map.height/4),
-      nodes = [], leafs = [];
+      nodes = [], leafs = [], direction, target, path;
 
   nodes.push({x,y,direction: 'north'});
   nodes.push({x,y,direction: 'south'});
   nodes.push({x,y,direction: 'east'});
   nodes.push({x,y,direction: 'west'});
   shuffle(nodes);
-  for(let i=0,length,direction,t,path;i<500;i++){
-    if(i===0){
+  do{
+    if(!direction){
       [x,y,direction]=Object.values(nodes.pop());
     }else if(map.isPathEmpty(path)){
+      x = target.x; y = target.y;
       nodes.push({x,y,direction: 'north'});
       nodes.push({x,y,direction: 'south'});
       nodes.push({x,y,direction: 'east'});
       nodes.push({x,y,direction: 'west'});
       path.forEach(p=> map.setFloor(p.x,p.y));
-      x = t.x; y = t.y;
       shuffle(nodes);
+      [x,y,direction]=Object.values(nodes.pop());
       buildRooms(path);
     }else if(nodes.length){
       [x,y,direction]=Object.values(nodes.pop());
@@ -74,15 +75,17 @@ export function PHG(map){
       [x,y,direction]=Object.values(leafs.pop());
     }//end if
     length = getHallwayLength();
-    t = getTargetCoordinates({x,y,direction,length});
-    path = map.getPath(x,y,t.x,t.y);
-    leafs = [].concat(
-      leafs,
-      ...path.map(p=>directions.map(direction=>{
-        return {x: p.x,y: p.y,direction};
-      }))
-    );
-  } //end for
+    target = getTargetCoordinates({x,y,direction,length});
+    path = map.getPath(x,y,target.x,target.y);
+    if(nodes.length){
+      leafs = [].concat(
+        leafs,
+        ...path.map(p=>directions.map(direction=>{
+          return {x: p.x,y: p.y,direction};
+        }))
+      );
+    } //end if
+  }while(nodes.length||leafs.length) //end for
 
   function buildRooms(path){
     while(path.length){
@@ -98,17 +101,22 @@ export function PHG(map){
         h = Math.floor(Math.random()*(maxRoomSize-minRoomSize)+minRoomSize);
         t = getTargetCoordinates({x,y,direction,w,h});
         if(direction==='north'){
-          y-=1; t.y-=1;
+          y-=1; t.y-=1; x-=w/2|0; t.x-=w/2|0;
         }else if(direction==='south'){
-          y+=1; t.y+=1;
+          y+=1; t.y+=1; x-=w/2|0; t.x-=w/2|0;
         }else if(direction==='east'){
-          x+=1; t.x+=1;
+          x+=1; t.x+=1; y-=h/2|0; t.y-=h/2|0;
         }else if(direction==='west'){
-          x-=1; t.x-=1;
+          x-=1; t.x-=1; y-=h/2|0; t.y-=h/2|0;
         } //end if
         if(map.isSquareEmpty(x,y,t.x,t.y)){
           map.fillRoom(x,y,t.x,t.y);
           result = true;
+          if(direction==='north'||direction==='south'){
+            map.setCorridor((x+t.x)/2|0,y);
+          }else if(direction==='east'||direction==='west'){
+            map.setCorridor(x,(y+t.y)/2|0);
+          } //end if
         } //end if
         return result;
       });
