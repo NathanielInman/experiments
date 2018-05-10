@@ -30,6 +30,8 @@ if(!easel.activated){
           easel.ctx.fillStyle='#b94';
         }else if(sector.isCorridor()){
           easel.ctx.fillStyle='#774';
+        }else if(sector.isRemoved()){
+          easel.ctx.fillStyle='#833';
         }else{ //floor
           easel.ctx.fillStyle='#383';
         } //end if

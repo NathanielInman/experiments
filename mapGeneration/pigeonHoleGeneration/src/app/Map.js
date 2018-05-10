@@ -69,7 +69,7 @@ export class Map{
 
     if(!path.length){
       result = false;
-    }else if(!path.slice(1,path.length-1).every(p=> this.isEmpty(p.x,p.y))){
+    }else if(!path.slice(1,path.length).every(p=> this.isEmpty(p.x,p.y))){
       result = false;
     } //end if
     return result;
@@ -92,7 +92,6 @@ export class Map{
     for(let y = y1;y!==y2+dy;y+=dy){
       for(let x = x1;x!==x2+dx;x+=dx){
         if(x<1||x>this.width-1||y<1||y>this.height-1||!this.isEmpty(x,y)){
-          console.log('fill room failure',[x1,x2],[y1,y2],[x,y]);
           return; //exit early
         }else if(y===y1||y===y2||x===x1||x===x2){
           this.setWall(x,y);

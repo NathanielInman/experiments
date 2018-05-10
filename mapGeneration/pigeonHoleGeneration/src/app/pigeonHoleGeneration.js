@@ -15,12 +15,6 @@ function getHallwayLength(){
   return y|0||1; //we're on a grid, can't have partial/0 hallway lengths
 } //end getHallwayLength()
 
-function getRandomDirection(){
-  let randomIndex = Math.floor(Math.random()*directions.length);
-
-  return directions[randomIndex];
-} //end getRandomDirection()
-
 function getTargetCoordinates({x,y,direction,length,w,h}){
   let result, r = Math.random()<0.5?1:-1;
 
@@ -45,7 +39,7 @@ function shuffle(array){
   return array;
 } //end shuffle()
 
-export function PHG(map){
+export function PHG(map,retry=5){
   let x=Math.floor(Math.random()*map.width/2)+Math.floor(map.width/4),
       y=Math.floor(Math.random()*map.height/2)+Math.floor(map.height/4),
       nodes = [], leafs = [], direction, target, path, rooms = 0;
@@ -92,17 +86,19 @@ export function PHG(map){
   // with rooms; otherwise we restart the process.
   let requiredRooms = map.width*map.height/Math.pow(maxRoomSize,2)/2;
 
+  // if we don't meet the requiredRooms and we still have retries left then
+  // go ahead and retry; otherwise accept the current result
   if(rooms>requiredRooms){
-    console.info(`Generation went well with ${rooms}/${requiredRooms} rooms.`);
+    wallifyCorridors();
+  }else if(!retry){
     wallifyCorridors();
   }else{
-    console.info(`Generation was too small with ${rooms}/${requiredRooms}, restarted...`);
     map.reset();
-    PHG(map);
+    PHG(map,retry-1);
   } //end if
 
   function buildRooms(path){
-    let rooms = 0, validation = JSON.stringify(path);
+    let rooms = 0;
 
     while(path.length){
       shuffle(path);
@@ -111,6 +107,7 @@ export function PHG(map){
 
       // sometimes a path has been closed, only try to build if we know
       // we can connect it to a hallway/floor
+      // eslint-disable-next-line complexity,curly,no-loop-func
       if(map.isWalkable(ox,oy)) directions.find(direction=>{
         let result = false,
             x = ox, y = oy, // restore values before last try
@@ -163,6 +160,8 @@ export function PHG(map){
   // surround the corridors that arent surrounded with walls yet with walls now.
   function wallifyCorridors(){
     map.sectors.forEach((row,y)=>{
+
+      //eslint-disable-next-line complexity
       row.forEach((sector,x)=>{
         if(sector.isCorridor()){
           if(x>0&&map.isEmpty(x-1,y)) map.setWall(x-1,y);
