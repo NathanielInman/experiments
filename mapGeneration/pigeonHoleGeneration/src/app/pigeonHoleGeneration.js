@@ -48,7 +48,7 @@ function shuffle(array){
 export function PHG(map){
   let x=Math.floor(Math.random()*map.width/2)+Math.floor(map.width/4),
       y=Math.floor(Math.random()*map.height/2)+Math.floor(map.height/4),
-      nodes = [], leafs = [], direction, target, path;
+      nodes = [], leafs = [], direction, target, path, rooms = 0;
 
   nodes.push({x,y,direction: 'north'});
   nodes.push({x,y,direction: 'south'});
@@ -68,7 +68,7 @@ export function PHG(map){
         if(map.isEmpty(p.x,p.y)) map.setCorridor(p.x,p.y);
       });
       shuffle(nodes);
-      buildRooms(JSON.parse(JSON.stringify(path)));
+      rooms += buildRooms(JSON.parse(JSON.stringify(path)));
       leafs = [].concat(
         leafs,
         ...JSON.parse(JSON.stringify(path))
@@ -87,20 +87,35 @@ export function PHG(map){
     target = getTargetCoordinates({x,y,direction,length});
     path = map.getPath(x,y,target.x,target.y);
   }while(nodes.length||leafs.length)
-  wallifyCorridors();
+
+  // we require a certain percentage of the screen to be populated
+  // with rooms; otherwise we restart the process.
+  let requiredRooms = map.width*map.height/Math.pow(maxRoomSize,2)/2;
+
+  if(rooms>requiredRooms){
+    console.info(`Generation went well with ${rooms}/${requiredRooms} rooms.`);
+    wallifyCorridors();
+  }else{
+    console.info(`Generation was too small with ${rooms}/${requiredRooms}, restarted...`);
+    map.reset();
+    PHG(map);
+  } //end if
 
   function buildRooms(path){
+    let rooms = 0, validation = JSON.stringify(path);
+
     while(path.length){
       shuffle(path);
       shuffle(directions);
-      let [x,y] = Object.values(path.pop()),
-          ox = x, oy = y,
-          w, h, t; //width and height and target(x,y)
+      let [ox,oy] = Object.values(path.pop());
 
-      directions.find(direction=>{
-        let result = false;
+      // sometimes a path has been closed, only try to build if we know
+      // we can connect it to a hallway/floor
+      if(map.isWalkable(ox,oy)) directions.find(direction=>{
+        let result = false,
+            x = ox, y = oy, // restore values before last try
+            w, h, t; //width, height and target(x,y)
 
-        x = ox; y = oy; //restore to values before last try
         w = Math.floor(Math.random()*(maxRoomSize-minRoomSize)+minRoomSize);
         h = Math.floor(Math.random()*(maxRoomSize-minRoomSize)+minRoomSize);
         t = getTargetCoordinates({x,y,direction,w,h});
@@ -137,10 +152,12 @@ export function PHG(map){
           }else if(direction==='west'&&map.isCorridor(x+1,Math.ceil((y+t.y)/2))){
             map.setDoor(x,Math.ceil((y+t.y)/2));
           } //end if
+          rooms++;
         } //end if
         return result;
       });
     } //end while()
+    return rooms;
   } //end buildRoom()
 
   // surround the corridors that arent surrounded with walls yet with walls now.

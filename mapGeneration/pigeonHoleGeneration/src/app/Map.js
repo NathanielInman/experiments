@@ -15,6 +15,13 @@ export class Map{
       } //end for
     } //end for
   }
+  reset(){
+    for(let y=0;y<=this.height;y++){
+      for(let x=0;x<=this.width;x++){
+        this.sectors[y][x].setEmpty();
+      } //end for
+    } //end for
+  }
   getSector(x,y){ return this.sectors[y][x]; }
   isEmpty(x,y){ return this.getSector(x,y).isEmpty(); }
   setEmpty(x,y){ this.getSector(x,y).setEmpty(); }
@@ -85,6 +92,7 @@ export class Map{
     for(let y = y1;y!==y2+dy;y+=dy){
       for(let x = x1;x!==x2+dx;x+=dx){
         if(x<1||x>this.width-1||y<1||y>this.height-1||!this.isEmpty(x,y)){
+          console.log('fill room failure',[x1,x2],[y1,y2],[x,y]);
           return; //exit early
         }else if(y===y1||y===y2||x===x1||x===x2){
           this.setWall(x,y);
