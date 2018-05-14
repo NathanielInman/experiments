@@ -10,13 +10,13 @@ constrainLightness(color)
   else
     colorLightness
 getFloorBackground(color)
-  lightness(mix(environmentColor,color,environmentStrength),backgroundFloorLightness)
+  lightness(mix(environmentColor,color,environmentStrength),floorBackgroundLightness)
 getFloorForeground(color)
-  lightness(mix(environmentColor,color,environmentStrength),foregroundFloorLightness)
+  lightness(mix(environmentColor,color,environmentStrength),floorForegroundLightness)
 getWallBackground(color)
-  lightness(mix(environmentColor,color,environmentStrength),backgroundWallLightness)
+  lightness(mix(environmentColor,color,environmentStrength),wallBackgroundLightness)
 getWallForeground(color)
-  lightness(mix(environmentColor,color,environmentStrength),foregroundWallLightness)
+  lightness(mix(environmentColor,color,environmentStrength),wallForegroundLightness)
 
 // constants
 gridSize = 50
@@ -30,16 +30,16 @@ gridSize = 50
 environmentColor = #17806e
 environmentLightness = constrainLightness(environmentColor)
 environmentStrength = 38%
-backgroundWallLightness = environmentLightness + 5%
-foregroundWallLightness = environmentLightness
-backgroundFloorLightness = environmentLightness - 13%
-foregroundFloorLightness = environmentLightness - 3%
+wallBackgroundLightness = environmentLightness + 5%
+wallForegroundLightness = environmentLightness
+floorBackgroundLightness = environmentLightness - 13%
+floorForegroundLightness = environmentLightness - 3%
 
 body
   margin 0
   background black
   font-family 'Roboto Mono', monospace
-  font-size 'calc(100vmin / %s)' % gridSize
+  font-size 'calc(80vmin / %s)' % gridSize
 
 .grid
   display grid
