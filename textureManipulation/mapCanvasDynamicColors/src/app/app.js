@@ -18,7 +18,8 @@ if(!easel.activated){
 
   PHG(map); //perform pigeon hole generation
   easel.onDraw = function(){
-    let rh = easel.viewport.h/map.height, rw = easel.viewport.w/map.width;
+    let rh = easel.viewport.h/map.height, rw = easel.viewport.w/map.width,
+        rs = rh<rw?rh:rw;
 
     map.sectors.forEach((row,y)=>{
       row.forEach((sector,x)=>{
@@ -38,7 +39,7 @@ if(!easel.activated){
 
         // the -0.4 & +0.8 is to remove sub-pixel issues
         // that might cause lines to appear between cells
-        easel.ctx.fillRect(x*rw-0.4,y*rh-0.4,rw+0.8,rh+0.8);
+        easel.ctx.fillRect(x*rs-0.4,y*rs-0.4,rs+0.8,rs+0.8);
       });
     });
   };
