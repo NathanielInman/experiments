@@ -39,7 +39,7 @@ body
   margin 0
   background black
   font-family 'Roboto Mono', monospace
-  font-size 8vmin
+  font-size 'calc(100vmin / %s)' % gridSize
 
 .grid
   display grid
@@ -50,7 +50,7 @@ body
     display inherit
     align-content center
     justify-content center
-    height calc(100vmin / 11)
+    height 'calc(100vmin / %s)' % gridSize
     box-shadow inset 0 0 0.5vmin black
     &[type='+'] //rock wall
       background getWallBackground(#777)
