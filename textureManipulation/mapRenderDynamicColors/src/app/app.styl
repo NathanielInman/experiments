@@ -27,7 +27,7 @@ gridSize = 50
 // #17806e = closed forest taiga (medium)
 // #961a1d = fissure vent (brighter)
 // #e1e195 = rocky shoreline (brightest)
-environmentColor = #17806e
+environmentColor = #381c4a
 environmentLightness = constrainLightness(environmentColor)
 environmentStrength = 38%
 wallBackgroundLightness = environmentLightness + 5%
@@ -52,6 +52,8 @@ body
     justify-content center
     height 'calc(100vmin / %s)' % gridSize
     box-shadow inset 0 0 0.5vmin black
+    user-select none
+    cursor default
     &[type='+'] //rock wall
       background getWallBackground(#777)
       color getWallForeground(#999)
