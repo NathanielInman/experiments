@@ -19,11 +19,18 @@ if(!easel.activated){
       environmentIndex = Math.floor(Math.random()*environments.length),
       environment = environments[environmentIndex];
 
+  easel.config = ()=>{
+    let s = easel.viewport.w<easel.viewport.h?easel.viewport.w:easel.viewport.h;
+
+    easel.ctx.font = `${s/50}px monospace`;
+    easel.ctx.textBaseline = 'middle';
+    easel.ctx.textAlign = 'center';
+  };
   PHG(map); //perform pigeon hole generation
   easel.onDraw = function(){
-    let rh = easel.viewport.h/map.height,
-        rw = easel.viewport.w/map.width,
-        rs = rh<rw?rh:rw;
+    let rh = easel.viewport.h/map.height, //row height
+        rw = easel.viewport.w/map.width, //row width
+        rs = rh<rw?rh:rw; //row size (takes lesser of width/height)
 
     // start by cleaning the map
     easel.ctx.fillStyle=environment.color;
@@ -32,20 +39,37 @@ if(!easel.activated){
     // now draw the sectors
     map.sectors.forEach((row,y)=>{
       row.forEach((sector,x)=>{
+        let ox = x*rs, oy = y*rs, mx = ox+rs/2, my = oy+rs/2;
+
         if(sector.isEmpty()){
           easel.ctx.fillStyle=environment.color;
+          easel.ctx.fillRect(ox,oy,rs,rs);
         }else if(sector.isWall()){
-          easel.ctx.fillStyle=ink('#333',{a:0.5});
+          easel.ctx.fillStyle=ink('#333',{a: 0.5});
+          easel.ctx.fillRect(ox,oy,rs,rs);
+          easel.ctx.fillStyle='#888';
+          easel.ctx.fillText('#',mx,my);
         }else if(sector.isDoor()){
-          easel.ctx.fillStyle=ink('#b94',{a:0.5});
+          easel.ctx.fillStyle=ink('#b94',{a: 0.5});
+          easel.ctx.fillRect(ox,oy,rs,rs);
+          easel.ctx.fillStyle='#222';
+          easel.ctx.fillText('+',mx,my);
         }else if(sector.isCorridor()){
-          easel.ctx.fillStyle=ink('#774',{a:0.5});
+          easel.ctx.fillStyle=ink('#774',{a: 0.5});
+          easel.ctx.fillRect(ox,oy,rs,rs);
+          easel.ctx.fillStyle='#999';
+          easel.ctx.fillText('.',mx,my);
         }else if(sector.isRemoved()){
-          easel.ctx.fillStyle=ink('#833',{a:0.5});
+          easel.ctx.fillStyle=ink('#833',{a: 0.5});
+          easel.ctx.fillRect(ox,oy,rs,rs);
+          easel.ctx.fillStyle='#999';
+          easel.ctx.fillText('?',mx,my);
         }else{ //floor
-          easel.ctx.fillStyle=ink('#383',{a:0.5});
+          easel.ctx.fillStyle=ink('#383',{a: 0.5});
+          easel.ctx.fillRect(ox,oy,rs,rs);
+          easel.ctx.fillStyle='#666';
+          easel.ctx.fillText('.',mx,my);
         } //end if
-        easel.ctx.fillRect(x*rs,y*rs,rs,rs);
       });
     });
   };

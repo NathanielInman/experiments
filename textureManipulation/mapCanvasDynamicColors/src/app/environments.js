@@ -1,3 +1,4 @@
+/* eslint-disable */
 export const environments = [
   {
     "name": "mountain",
