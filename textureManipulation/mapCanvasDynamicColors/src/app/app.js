@@ -35,6 +35,7 @@ if(!easel.activated){
     // start by cleaning the map
     easel.ctx.fillStyle=environment.color;
     easel.ctx.fillRect(0,0,easel.viewport.w,easel.viewport.h);
+    easel.ctx.shadowColor = 'black';
 
     // now draw the sectors
     map.sectors.forEach((row,y)=>{
@@ -42,32 +43,38 @@ if(!easel.activated){
         let ox = x*rs, oy = y*rs, mx = ox+rs/2, my = oy+rs/2;
 
         if(sector.isEmpty()){
-          easel.ctx.fillStyle=environment.color;
-          easel.ctx.fillRect(ox,oy,rs,rs);
         }else if(sector.isWall()){
+          easel.ctx.shadowBlur = 10;
           easel.ctx.fillStyle=ink('#333',{a: 0.5});
           easel.ctx.fillRect(ox,oy,rs,rs);
-          easel.ctx.fillStyle='#888';
+          easel.ctx.fillStyle=ink('#888',{a: 0.5});
           easel.ctx.fillText('#',mx,my);
         }else if(sector.isDoor()){
+          easel.ctx.shadowBlur = 10;
           easel.ctx.fillStyle=ink('#b94',{a: 0.5});
           easel.ctx.fillRect(ox,oy,rs,rs);
-          easel.ctx.fillStyle='#222';
+          easel.ctx.fillStyle=ink('#222',{a: 0.5});
           easel.ctx.fillText('+',mx,my);
         }else if(sector.isCorridor()){
+          easel.ctx.shadowBlur = 10;
           easel.ctx.fillStyle=ink('#774',{a: 0.5});
           easel.ctx.fillRect(ox,oy,rs,rs);
-          easel.ctx.fillStyle='#999';
+          easel.ctx.shadowBlur = 0;
+          easel.ctx.fillStyle=ink('#999',{a: 0.5});
           easel.ctx.fillText('.',mx,my);
         }else if(sector.isRemoved()){
+          easel.ctx.shadowBlur = 10;
           easel.ctx.fillStyle=ink('#833',{a: 0.5});
           easel.ctx.fillRect(ox,oy,rs,rs);
-          easel.ctx.fillStyle='#999';
+          easel.ctx.shadowBlur = 0;
+          easel.ctx.fillStyle=ink('#999',{a: 0.5});
           easel.ctx.fillText('?',mx,my);
         }else{ //floor
+          easel.ctx.shadowBlur = 10;
           easel.ctx.fillStyle=ink('#383',{a: 0.5});
           easel.ctx.fillRect(ox,oy,rs,rs);
-          easel.ctx.fillStyle='#666';
+          easel.ctx.shadowBlur = 0;
+          easel.ctx.fillStyle=ink('#666',{a: 0.5});
           easel.ctx.fillText('.',mx,my);
         } //end if
       });
