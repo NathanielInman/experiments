@@ -10,7 +10,9 @@ let noscript = document.querySelector('noscript'),
     map = new Map(50,50,environment),
     player = new Player(map); //create the player and tie map to it
 
-console.log(`environment: ${environment.name}`);
+//eslint-disable-next-line no-console
+console.info(`environment: ${environment.name}`);
+
 if(!easel.activated){
   noscript.innerHTML = `
   <p class="browsehappy">
@@ -43,10 +45,12 @@ if(!easel.activated){
             s = sector.getColors();
 
         if(s){
-          easel.ctx.shadowColor = s.shadowColor;
-          easel.ctx.shadowBlur = s.shadowBlur;
+          easel.ctx.shadowColor = s.backgroundShadowColor;
+          easel.ctx.shadowBlur = s.backgroundShadowBlur;
           easel.ctx.fillStyle = s.backgroundColor;
           easel.ctx.fillRect(ox,oy,rs,rs);
+          easel.ctx.shadowColor = s.foregroundShadowColor;
+          easel.ctx.shadowBlur = s.foregroundShadowBlur;
           easel.ctx.fillStyle = s.foregroundColor;
           easel.ctx.fillText(s.character,mx,my);
         } //end if

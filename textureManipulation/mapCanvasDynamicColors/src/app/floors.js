@@ -2,97 +2,97 @@ export const floors = [
   {
     name: 'empty',
     character: ' ',
-    color: '#000',
-    background: '#000'
+    color: '#262626',
+    background: '#333333'
   },
   {
     name: 'dirt',
     character: '.',
-    color: '#210',
-    background: '#431'
+    color: '#32261b',
+    background: '#423824'
   },
   {
     name: 'lava',
     character: '~',
-    color: '#a11',
-    background: '#511'
+    color: '#321b1b',
+    background: '#422424'
   },
   {
     name: 'water',
     character: '~',
-    color: '#55a',
-    background: '#224'
+    color: '#1b1b32',
+    background: '#242442'
   },
   {
     name: 'grass',
     character: ',',
-    color: '#261',
-    background: '#131'
+    color: '#20311b',
+    background: '#244224'
   },
   {
     name: 'snow',
     character: '\'',
-    color: '#69f',
-    background: '#ccc'
+    color: '#1b2331',
+    background: '#333333'
   },
   {
     name: 'sand',
     character: '`',
-    color: '#ff9',
-    background: '#dd5'
+    color: '#31311b',
+    background: '#434324'
   },
   {
     name: 'rocky',
     character: '^',
-    color: '#555',
-    background: '#444'
+    color: '#262626',
+    background: '#333333'
   },
   {
     name: 'muddy',
     character: ';',
-    color: '#431',
-    background: '#210'
+    color: '#322a1b',
+    background: '#423324'
   },
   {
     name: 'cobbled',
-    character: ':',
-    color: '#110',
-    background: '#333'
+    character: ': ',
+    color: '#32321b',
+    background: '#333333'
   },
   {
     name: 'wood',
     character: '=',
-    color: '#210',
-    background: '#421'
+    color: '#32261b',
+    background: '#422e24'
   },
   {
     name: 'dirt and rock',
     character: '*',
-    color: '#211',
-    background: '#431'
+    color: '#321b1b',
+    background: '#423824'
   },
   {
     name: 'underground',
     character: '.',
-    color: '#112',
-    background: '#334'
+    color: '#1b1b32',
+    background: '#2c2c3a'
   },
   {
     name: 'sandstone',
     character: '=',
-    color: '#553',
-    background: '#442'
+    color: '#30301d',
+    background: '#424224'
   },
   {
     name: 'brick',
-    character: ':',
-    color: '#533',
-    background: '#422'
+    character: ': ',
+    color: '#301d1d',
+    background: '#422424'
   },
   {
     name: 'ice',
     character: '+',
-    color: '#55d',
-    background: '#44a'
+    color: '#1b1b32',
+    background: '#242442'
   }
 ]

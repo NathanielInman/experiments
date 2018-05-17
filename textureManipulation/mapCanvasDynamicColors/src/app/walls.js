@@ -2,85 +2,85 @@ export const walls = [
   {
     name: 'dirt',
     character: '%',
-    color: '#974',
-    background: '#752'
+    color: '#b89e7a',
+    background: '#ae916b'
   },
   {
     name: 'rock and dirt',
-    character: '+',
-    color: '#999',
-    background: '#764'
+    character: '⅌',
+    color: '#999999',
+    background: '#ac976d'
   },
   {
     name: 'rock',
-    character: '+',
-    color: '#999',
-    background: '#777'
+    character: '⅊',
+    color: '#999999',
+    background: '#8c8c8c'
   },
   {
     name: 'cobbled',
     character: '#',
-    color: '#999',
-    background: '#777'
+    color: '#999999',
+    background: '#8c8c8c'
   },
   {
     name: 'clay',
     character: '*',
-    color: '#a84',
-    background: '#862'
+    color: '#b8a37a',
+    background: '#ae986a'
   },
   {
     name: 'wood',
-    character: '-',
-    color: '#a75',
-    background: '#853'
+    character: '+',
+    color: '#b8937a',
+    background: '#af8469'
   },
   {
     name: 'cobbled',
     character: '#',
-    color: '#999',
-    background: '#777'
+    color: '#999999',
+    background: '#8c8c8c'
   },
   {
     name: 'underground',
     character: '*',
-    color: '#778',
-    background: '#556'
+    color: '#9292a0',
+    background: '#828297'
   },
   {
     name: 'ice',
     character: '%',
-    color: '#9af',
-    background: '#569'
+    color: '#7b85b7',
+    background: '#6b7cad'
   },
   {
     name: 'sandstone',
     character: '-',
-    color: '#995',
-    background: '#773'
+    color: '#b6b67c',
+    background: '#aeae6a'
   },
   {
     name: 'brick',
     character: '#',
-    color: '#955',
-    background: '#733'
+    color: '#b67c7c',
+    background: '#ae6a6a'
   },
   {
     name: 'tree',
-    character: '|',
-    color: '#353',
-    background: '#585'
+    character: 'ℸ',
+    color: '#80b380',
+    background: '#72a772'
   },
   {
     name: 'vegetation',
     character: 'o',
-    color: '#353',
-    background: '#585'
+    color: '#80b380',
+    background: '#72a772'
   },
   {
     name: 'underwater',
     character: '~',
-    color: '#335',
-    background: '#558'
+    color: '#8080b3',
+    background: '#7272a7'
   }
 ]

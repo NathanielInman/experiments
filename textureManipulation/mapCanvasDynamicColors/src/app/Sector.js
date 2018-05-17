@@ -11,16 +11,20 @@ export class Sector{
     this.roomNumber = 0;
   }
   getColors(){
-    let result = {}, a;
+    let result = {}, a; //a(alpha) is represents how strong env color is
 
     if(this.isVisible()){
-      result.shadowColor = ink('#000',{a: 0.3});
-      result.shadowBlur = 10;
-      a = 0.5;
+      result.backgroundShadowColor = '#000';
+      result.backgroundShadowBlur = 0;
+      result.foregroundShadowColor = ink('#000',{a: 0.4});
+      result.foregroundShadowBlur = 3;
+      a = 0.75;
     }else{
-      result.shadowColor = '#000';
-      result.shadowBlur = 10;
-      a = 0.15;
+      result.backgroundShadowColor = ink('#000',{a: 1});
+      result.backgroundShadowBlur = 10;
+      result.foregroundShadowColor = ink('#000',{a: 1});
+      result.foregroundShadowBlur = 3;
+      a = 0.07;
     } //end if
     if(this.type!=='none'){
       result.backgroundColor = ink(this.type.background,{a});
