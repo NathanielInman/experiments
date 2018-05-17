@@ -16,8 +16,8 @@ export class Sector{
     if(this.isVisible()){
       result.backgroundShadowColor = '#000';
       result.backgroundShadowBlur = 0;
-      result.foregroundShadowColor = ink('#000',{a: 0.4});
-      result.foregroundShadowBlur = 3;
+      result.foregroundShadowColor = ink('#000',{a: 1});
+      result.foregroundShadowBlur = 10;
       a = 0.75;
     }else{
       result.backgroundShadowColor = ink('#000',{a: 1});

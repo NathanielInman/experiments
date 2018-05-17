@@ -55,7 +55,7 @@ export const floors = [
   },
   {
     name: 'cobbled',
-    character: ': ',
+    character: ':',
     color: '#32321b',
     background: '#333333'
   },
