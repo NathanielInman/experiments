@@ -1,4 +1,5 @@
 import {Sector} from './Sector';
+import {PHG} from './pigeonHoleGeneration';
 
 export class Map{
   constructor(width,height){
@@ -6,6 +7,7 @@ export class Map{
     this.height = height;
     this.sectors = [];
     this.initialize();
+    PHG(this); //apply pigeon hole generation
   }
   initialize(){
     for(let y=0;y<=this.height;y++){
@@ -39,6 +41,9 @@ export class Map{
   isRoom(x,y){ return this.getSector(x,y).roomNumber>0; }
   setRoom(x,y,num){ this.getSector(x,y).roomNumber = num; }
   getRoom(x,y){ return this.getSector(x,y).roomNumber; }
+  unsetVisible(x,y){ this.getSector(x,y).visible = false; }
+  setVisible(x,y){ this.getSector(x,y).visible = true; }
+  isVisible(x,y){ return this.getSector(x,y).visible; }
   isSameRoom(x1,y1,x2,y2){
     return this.getSector(x1,y1).roomNumber===this.getSector(x2,y2).roomNumber;
   }

@@ -15,6 +15,9 @@ export class Sector{
   setDoor(){ this.type = 4; }
   isRemoved(){ return this.type === 5; }
   setRemoved(){ this.type = 5; }
+  isVisible(){ return this.visible; }
+  setVisible(){ this.visible = true; }
+  unsetVisible(){ this.visible = false; }
   isWalkable(){
     let walkable = false;
 
