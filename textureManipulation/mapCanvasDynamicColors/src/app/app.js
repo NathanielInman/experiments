@@ -25,13 +25,13 @@ if(!easel.activated){
   easel.config = ()=>{
     let s = easel.viewport.w<easel.viewport.h?easel.viewport.w:easel.viewport.h;
 
-    easel.ctx.font = `${s/50}px monospace`;
+    easel.ctx.font = `${s/(player.sight*2+1)}px monospace`;
     easel.ctx.textBaseline = 'middle';
     easel.ctx.textAlign = 'center';
   };
   easel.onDraw = function(){
-    let rh = easel.viewport.h/map.height, //row height
-        rw = easel.viewport.w/map.width, //row width
+    let rh = easel.viewport.h/(player.sight*2+1), //row height
+        rw = easel.viewport.w/(player.sight*2+1), //row width
         rs = rh<rw?rh:rw; //row size (takes lesser of width/height)
 
     // start by cleaning the map
@@ -39,10 +39,13 @@ if(!easel.activated){
     easel.ctx.fillRect(0,0,easel.viewport.w,easel.viewport.h);
 
     // now draw the sectors
-    map.sectors.forEach((row,y)=>{
-      row.forEach((sector,x)=>{
-        let ox = x*rs, oy = y*rs, mx = ox+rs/2, my = oy+rs/2,
-            s = sector.getColors();
+    for(let y=player.y-player.sight;y<player.y+player.sight;y++){
+      for(let x=player.x-player.sight;x<player.x+player.sight;x++){
+        if(x<0||y<0||x>map.width-1||y>map.height-1) continue;
+        let ox = (x-player.x+player.sight)*rs,
+            oy = (y-player.y+player.sight)*rs,
+            mx = ox+rs/2, my = oy+rs/2,
+            s = map.getColors(x,y);
 
         if(s){
           easel.ctx.shadowColor = s.backgroundShadowColor;
@@ -54,13 +57,13 @@ if(!easel.activated){
           easel.ctx.fillStyle = s.foregroundColor;
           easel.ctx.fillText(s.character,mx,my);
         } //end if
-      });
-    });
+      } //end for
+    } //end for
 
     // now that we've drawn the map, draw the player
     easel.ctx.shadowBlur = 5;
     easel.ctx.fillStyle=ink('#0f0',{a: 0.5});
-    easel.ctx.fillText('@',player.x*rs+rs/2,player.y*rs+rs/2);
+    easel.ctx.fillText('@',player.sight*rs+rs/2,player.sight*rs+rs/2);
   };
   easel.redraw();
 } //end if
