@@ -5,11 +5,12 @@ import {Player} from './Player';
 
 let noscript = document.querySelector('noscript'),
     easel = new Easel(),
-    map = new Map(50,50),
-    player = new Player(map), //create the player and tie map to it
     environmentIndex = Math.floor(Math.random()*environments.length),
-    environment = environments[environmentIndex];
+    environment = environments[environmentIndex],
+    map = new Map(50,50,environment),
+    player = new Player(map); //create the player and tie map to it
 
+console.log(`environment: ${environment.name}`);
 if(!easel.activated){
   noscript.innerHTML = `
   <p class="browsehappy">
@@ -39,39 +40,15 @@ if(!easel.activated){
     map.sectors.forEach((row,y)=>{
       row.forEach((sector,x)=>{
         let ox = x*rs, oy = y*rs, mx = ox+rs/2, my = oy+rs/2,
-            a = 0.5;
+            s = sector.getColors();
 
-        if(sector.isVisible()){
-          easel.ctx.shadowColor = ink('#000',{a: 0.3});
-          easel.ctx.shadowBlur = 10;
-          a = 0.5;
-        }else{
-          easel.ctx.shadowColor = '#000';
-          easel.ctx.shadowBlur = 10;
-          a = 0.15;
-        } //end if
-        if(sector.isWall()){
-          easel.ctx.fillStyle=ink('#333',{a});
+        if(s){
+          easel.ctx.shadowColor = s.shadowColor;
+          easel.ctx.shadowBlur = s.shadowBlur;
+          easel.ctx.fillStyle = s.backgroundColor;
           easel.ctx.fillRect(ox,oy,rs,rs);
-          easel.ctx.fillStyle=ink('#888',{a});
-          easel.ctx.fillText('#',mx,my);
-        }else if(sector.isDoor()){
-          easel.ctx.fillStyle=ink('#b94',{a});
-          easel.ctx.fillRect(ox,oy,rs,rs);
-          easel.ctx.fillStyle=ink('#222',{a});
-          easel.ctx.fillText('+',mx,my);
-        }else if(sector.isCorridor()){
-          easel.ctx.fillStyle=ink('#774',{a});
-          easel.ctx.fillRect(ox,oy,rs,rs);
-          easel.ctx.shadowBlur = 0;
-          easel.ctx.fillStyle=ink('#999',{a});
-          easel.ctx.fillText('.',mx,my);
-        }else if(sector.isFloor()){ //floor
-          easel.ctx.fillStyle=ink('#383',{a});
-          easel.ctx.fillRect(ox,oy,rs,rs);
-          easel.ctx.shadowBlur = 0;
-          easel.ctx.fillStyle=ink('#666',{a});
-          easel.ctx.fillText('.',mx,my);
+          easel.ctx.fillStyle = s.foregroundColor;
+          easel.ctx.fillText(s.character,mx,my);
         } //end if
       });
     });

@@ -1,135 +1,134 @@
-/* eslint-disable */
 export const environments = [
   {
-    "name": "mountain",
-    "color": "#505050",
-    "walls": [
-      "rock",
-      "cobbled"
+    name: 'mountain',
+    color: '#505050',
+    walls: [
+      'rock',
+      'cobbled'
     ],
-    "floors": [
-      "rocky",
-      "cobbled"
+    floors: [
+      'rocky',
+      'cobbled'
     ],
-    "obstructions": [
-      "rock"
+    obstructions: [
+      'rock'
     ],
-    "description": "a large natural elevation of earth's surface rises abruptly from the surrounding level with little to no trees or vegetation."
+    description: 'a large natural elevation of earth\'s surface rises abruptly from the surrounding level with little to no trees or vegetation.'
   },
   {
-    "name": "anchialine cave",
-    "color": "#434323",
-    "walls": [
-      "underground"
+    name: 'anchialine cave',
+    color: '#434323',
+    walls: [
+      'underground'
     ],
-    "floors": [
-      "underground"
+    floors: [
+      'underground'
     ],
-    "obstructions": [
-      "rock"
+    obstructions: [
+      'rock'
     ],
-    "description": "this is a cave containing fresh water with an influx of salt water near the base, located near the coast."
+    description: 'this is a cave containing fresh water with an influx of salt water near the base, located near the coast.'
   },
   {
-    "name": "graveyard",
-    "color": "#4b3232",
-    "walls": [
-      "brick",
-      "tree"
+    name: 'graveyard',
+    color: '#4b3232',
+    walls: [
+      'brick',
+      'tree'
     ],
-    "floors": [
-      "dirt",
-      "grass",
-      "cobbled"
+    floors: [
+      'dirt',
+      'grass',
+      'cobbled'
     ],
-    "obstructions": [
-      "wall",
-      "rock"
+    obstructions: [
+      'wall',
+      'rock'
     ],
-    "description": "here is a burial ground for poor-class citizens and wanderers."
+    description: 'here is a burial ground for poor-class citizens and wanderers.'
   },
   {
-    "name": "arctic tundra",
-    "color": "#7a75d4",
-    "walls": [
-      "ice",
-      "rock"
+    name: 'arctic tundra',
+    color: '#7a75d4',
+    walls: [
+      'ice',
+      'rock'
     ],
-    "floors": [
-      "water",
-      "snow",
-      "ice"
+    floors: [
+      'water',
+      'snow',
+      'ice'
     ],
-    "obstructions": [
-      "rock",
-      "floor",
-      "tree"
+    obstructions: [
+      'rock',
+      'floor',
+      'tree'
     ],
-    "description": "north of the taiga belt is this arctic tundra where the subsoil is frozen. there are few trees here."
+    description: 'north of the taiga belt is this arctic tundra where the subsoil is frozen. there are few trees here.'
   },
   {
-    "name": "park tundra",
-    "color": "#178080",
-    "walls": [
-      "rock and dirt",
-      "rock",
-      "vegetation"
+    name: 'park tundra',
+    color: '#178080',
+    walls: [
+      'rock and dirt',
+      'rock',
+      'vegetation'
     ],
-    "floors": [
-      "rocky",
-      "dirt and rock"
+    floors: [
+      'rocky',
+      'dirt and rock'
     ],
-    "obstructions": [
-      "tree",
-      "shrub"
+    obstructions: [
+      'tree',
+      'shrub'
     ],
-    "description": "high enough that strong winds occur a lot but just low enough for trees to grow, this park tundra is generally pretty cold."
+    description: 'high enough that strong winds occur a lot but just low enough for trees to grow, this park tundra is generally pretty cold.'
   },
   {
-    "name": "sea cove",
-    "color": "#161551",
-    "walls": [
-      "rock"
+    name: 'sea cove',
+    color: '#161551',
+    walls: [
+      'rock'
     ],
-    "floors": [
-      "water",
-      "rocky"
+    floors: [
+      'water',
+      'rocky'
     ],
-    "obstructions": [
-      "rock",
-      "floor"
+    obstructions: [
+      'rock',
+      'floor'
     ],
-    "description": "this cave beneath a cliff was caused by erosion from the waves of water crashing in on weak rock and soil."
+    description: 'this cave beneath a cliff was caused by erosion from the waves of water crashing in on weak rock and soil.'
   },
   {
-    "name": "alpine tundra",
-    "color": "#1a4b95",
-    "walls": [
-      "rock and dirt"
+    name: 'alpine tundra',
+    color: '#1a4b95',
+    walls: [
+      'rock and dirt'
     ],
-    "floors": [
-      "dirt and rock"
+    floors: [
+      'dirt and rock'
     ],
-    "obstructions": [
-      "rock"
+    obstructions: [
+      'rock'
     ],
-    "description": "here is a natural biome that doesn't contain trees because the altitude is too high."
+    description: 'here is a natural biome that doesn\'t contain trees because the altitude is too high.'
   },
   {
-    "name": "closed forest taiga",
-    "color": "#17806e",
-    "walls": [
-      "tree",
-      "vegetation"
+    name: 'closed forest taiga',
+    color: '#17806e',
+    walls: [
+      'tree',
+      'vegetation'
     ],
-    "floors": [
-      "grass"
+    floors: [
+      'grass'
     ],
-    "obstructions": [
-      "tree",
-      "shrub",
-      "flora"
+    obstructions: [
+      'tree',
+      'shrub',
+      'flora'
     ],
-    "description": "composed prediminately of coniferous trees like larch, spruce, fire, and pine, this area is high in altitude."
+    description: 'composed prediminately of coniferous trees like larch, spruce, fire, and pine, this area is high in altitude.'
   }
 ]

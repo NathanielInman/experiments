@@ -2,10 +2,11 @@ import {Sector} from './Sector';
 import {PHG} from './pigeonHoleGeneration';
 
 export class Map{
-  constructor(width,height){
+  constructor(width,height,environment){
     this.width = width;
     this.height = height;
     this.sectors = [];
+    this.environment = environment;
     this.initialize();
     PHG(this); //apply pigeon hole generation
   }
@@ -13,7 +14,7 @@ export class Map{
     for(let y=0;y<=this.height;y++){
       this.sectors[y]=[];
       for(let x=0;x<=this.width;x++){
-        this.sectors[y][x]=new Sector();
+        this.sectors[y][x]=new Sector(this);
       } //end for
     } //end for
   }
@@ -25,6 +26,7 @@ export class Map{
     } //end for
   }
   getSector(x,y){ return this.sectors[y][x]; }
+  getColors(x,y){ return this.getSector(x,y).getColors(); }
   isEmpty(x,y){ return this.getSector(x,y).isEmpty(); }
   setEmpty(x,y){ this.getSector(x,y).setEmpty(); }
   isFloor(x,y){ return this.getSector(x,y).isFloor(); }
