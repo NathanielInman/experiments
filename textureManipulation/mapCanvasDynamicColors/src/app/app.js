@@ -39,8 +39,8 @@ if(!easel.activated){
     easel.ctx.fillRect(0,0,easel.viewport.w,easel.viewport.h);
 
     // now draw the sectors
-    for(let y=player.y-player.sight;y<player.y+player.sight;y++){
-      for(let x=player.x-player.sight;x<player.x+player.sight;x++){
+    for(let y=player.y-player.sight-1;y<=player.y+player.sight;y++){
+      for(let x=player.x-player.sight;x<=player.x+player.sight+1;x++){
         if(x<0||y<0||x>map.width-1||y>map.height-1) continue;
         let ox = (x-player.x+player.sight)*rs,
             oy = (y-player.y+player.sight)*rs,

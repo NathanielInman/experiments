@@ -34,25 +34,67 @@ export class Player{
       this.visible.push({x,y});
     });
   }
+
+  //eslint-disable-next-line complexity
   move(direction){
     let result = false;
 
     if(direction==='north'&&this.map.isWalkable(this.x,this.y-1)){
-      this.unsetVisible(); this.y-=1; result = true; this.setVisible();
+      if(this.map.isDoorClosed(this.x,this.y-1)){
+        this.map.setDoorOpen(this.x,this.y-1);
+      }else{
+        this.unsetVisible(); this.y-=1; this.setVisible();
+      } //end if
+      result = true;
     }else if(direction==='east'&&this.map.isWalkable(this.x+1,this.y)){
-      this.unsetVisible(); this.x+=1; result = true; this.setVisible();
+      if(this.map.isDoorClosed(this.x+1,this.y)){
+        this.map.setDoorOpen(this.x+1,this.y);
+      }else{
+        this.unsetVisible(); this.x+=1; this.setVisible();
+      } //end if
+      result = true;
     }else if(direction==='west'&&this.map.isWalkable(this.x-1,this.y)){
-      this.unsetVisible(); this.x-=1; result = true; this.setVisible();
+      if(this.map.isDoorClosed(this.x-1,this.y)){
+        this.map.setDoorOpen(this.x-1,this.y);
+      }else{
+        this.unsetVisible(); this.x-=1; this.setVisible();
+      } //end if
+      result = true;
     }else if(direction==='south'&&this.map.isWalkable(this.x,this.y+1)){
-      this.unsetVisible(); this.y+=1; result = true; this.setVisible();
+      if(this.map.isDoorClosed(this.x,this.y+1)){
+        this.map.setDoorOpen(this.x,this.y+1);
+      }else{
+        this.unsetVisible(); this.y+=1; this.setVisible();
+      } //end if
+      result = true;
     }else if(direction==='northwest'&&this.map.isWalkable(this.x-1,this.y-1)){
-      this.unsetVisible(); this.x-=1; this.y-=1; result = true; this.setVisible();
+      if(this.map.isDoorClosed(this.x-1,this.y-1)){
+        this.map.setDoorOpen(this.x-1,this.y-1);
+      }else{
+        this.unsetVisible(); this.x-=1; this.y-=1; this.setVisible();
+      } //end if
+      result = true;
     }else if(direction==='northeast'&&this.map.isWalkable(this.x+1,this.y-1)){
-      this.unsetVisible(); this.x+=1; this.y-=1; result = true; this.setVisible();
+      if(this.map.isDoorClosed(this.x+1,this.y-1)){
+        this.map.setDoorOpen(this.x+1,this.y-1);
+      }else{
+        this.unsetVisible(); this.x+=1; this.y-=1; this.setVisible();
+      } //end if
+      result = true;
     }else if(direction==='southwest'&&this.map.isWalkable(this.x-1,this.y+1)){
-      this.unsetVisible(); this.x-=1; this.y+=1; result = true; this.setVisible();
+      if(this.map.isDoorClosed(this.x-1,this.y+1)){
+        this.map.setDoorOpen(this.x-1,this.y+1);
+      }else{
+        this.unsetVisible(); this.x-=1; this.y+=1; this.setVisible();
+      } //end if
+      result = true;
     }else if(direction==='southeast'&&this.map.isWalkable(this.x+1,this.y+1)){
-      this.unsetVisible(); this.x+=1; this.y+=1; result = true; this.setVisible();
+      if(this.map.isDoorClosed(this.x+1,this.y+1)){
+        this.map.setDoorOpen(this.x+1,this.y+1);
+      }else{
+        this.unsetVisible(); this.x+=1; this.y+=1; this.setVisible();
+      } //end if
+      result = true;
     } //end if
     return result;
   }

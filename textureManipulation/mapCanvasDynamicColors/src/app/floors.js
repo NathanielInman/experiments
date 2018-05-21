@@ -56,7 +56,7 @@ export const floors = [
   {
     name: 'cobbled',
     character: ':',
-    color: '#32321b',
+    color: '#262626',
     background: '#333333'
   },
   {
@@ -68,7 +68,7 @@ export const floors = [
   {
     name: 'dirt and rock',
     character: '*',
-    color: '#321b1b',
+    color: '#30301d',
     background: '#423824'
   },
   {

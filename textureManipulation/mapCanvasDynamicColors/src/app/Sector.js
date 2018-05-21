@@ -16,17 +16,25 @@ export class Sector{
     if(this.isVisible()){
       result.backgroundShadowColor = '#000';
       result.backgroundShadowBlur = 0;
-      result.foregroundShadowColor = ink('#000',{a: 1});
+      result.foregroundShadowColor = ink(this.type.color,{a: 0.6});
       result.foregroundShadowBlur = 10;
-      a = 0.75;
+      a = 0.63;
     }else{
-      result.backgroundShadowColor = ink('#000',{a: 1});
-      result.backgroundShadowBlur = 10;
-      result.foregroundShadowColor = ink('#000',{a: 1});
-      result.foregroundShadowBlur = 3;
+      result.backgroundShadowColor = '#000';
+      result.backgroundShadowBlur = 0;
+      result.foregroundShadowColor = '#000';
+      result.foregroundShadowBlur = 0;
       a = 0.07;
     } //end if
-    if(this.type!=='none'){
+    if(this.category==='door'&&!this.doorOpen){
+      result.backgroundColor = ink(this.typeOpen.background,{a});
+      result.foregroundColor = ink(this.typeOpen.color,{a});
+      result.character = '+';
+    }else if(this.category==='door'&&this.doorOpen){
+      result.backgroundColor = ink(this.typeClosed.background,{a});
+      result.foregroundColor = ink(this.typeClosed.color,{a});
+      result.character = '-';
+    }else if(this.type!=='none'){
       result.backgroundColor = ink(this.type.background,{a});
       result.foregroundColor = ink(this.type.color,{a});
       result.character = this.type.character;
@@ -66,10 +74,14 @@ export class Sector{
     this.type = this.getRandomFloorType();
   }
   isDoor(){ return this.category === 'door'; }
+  isDoorClosed(){ return this.category==='door'&&!this.doorOpen; }
+  setDoorOpen(){ this.doorOpen = true; }
+  setDoorClosed(){ this.doorOpen = false; }
   setDoor(){
     this.category = 'door';
-    this.type = walls.find(w=> w.name==='wood');
-    this.type.character = '+'; //override wooden wall with door symbol
+    this.typeOpen = walls.find(w=> w.name==='wood');
+    this.typeClosed = floors.find(w=> w.name==='wood');
+    this.doorOpen = Math.random()<0.5?true:false; //random
   }
   isVisible(){ return this.visible; }
   setVisible(){ this.visible = true; }
