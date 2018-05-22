@@ -66,12 +66,11 @@ if(!easel.activated){
     easel.ctx.beginPath();
     for(let y=player.y-player.sight-1;y<=player.y+player.sight;y++){
       for(let x=player.x-player.sight;x<=player.x+player.sight+1;x++){
-        if(x<0||y<0||x>map.width-1||y>map.height-1) continue;
         let ox = (x-player.x+player.sight)*rs,
             oy = (y-player.y+player.sight)*rs,
-            ss = 2; //shadow size is based off the row size
+            ss = 3; //shadow size is based off the row size
 
-        if(!map.isVisible(x,y)){
+        if(x<0||y<0||x>map.width-1||y>map.height-1||!map.isVisible(x,y)){
           let shadows = map.getNearVisible(x,y);
 
           if(shadows.includes('west')){

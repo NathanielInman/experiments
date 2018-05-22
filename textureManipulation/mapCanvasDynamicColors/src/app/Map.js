@@ -50,19 +50,38 @@ export class Map{
   unsetVisible(x,y){ this.getSector(x,y).visible = false; }
   setVisible(x,y){ this.getSector(x,y).visible = true; }
   isVisible(x,y){ return this.getSector(x,y).visible; }
+  inBounds(x,y){
+    return x>=0&&x<=this.width-1&&y>=0&&y<=this.height-1;
+  }
 
   //eslint-disable-next-line complexity
   getNearVisible(x,y){
     let result = [];
 
-    if(x>0&&this.isVisible(x-1,y)) result.push('west');
-    if(x<this.width-1&&this.isVisible(x+1,y)) result.push('east');
-    if(y>0&&this.isVisible(x,y-1)) result.push('north');
-    if(y<this.height-1&&this.isVisible(x,y+1)) result.push('south');
-    if(x>0&&y>0&&this.isVisible(x-1,y-1)) result.push('northwest');
-    if(x<this.width-1&&y>0&&this.isVisible(x+1,y-1)) result.push('northeast');
-    if(x>0&&y<this.height-1&&this.isVisible(x-1,y+1)) result.push('southwest');
-    if(x<this.width-1&&y<this.height-1&&this.isVisible(x+1,y+1)) result.push('southeast');
+    if(this.inBounds(x-1,y)&&x===this.width&&this.isVisible(x-1,y)||
+      this.inBounds(x-1,y)&&this.isVisible(x-1,y))
+      result.push('west');
+    if(this.inBounds(x+1,y)&&x===-1&&this.isVisible(x+1,y)||
+      this.inBounds(x+1,y)&&this.isVisible(x+1,y))
+      result.push('east');
+    if(this.inBounds(x,y-1)&&y===this.height&&this.isVisible(x,y-1)||
+      this.inBounds(x,y-1)&&this.isVisible(x,y-1))
+      result.push('north');
+    if(this.inBounds(x,y+1)&&y===-1&&this.isVisible(x,y+1)||
+      this.inBounds(x,y+1)&&this.isVisible(x,y+1))
+      result.push('south');
+    if(this.inBounds(x-1,y-1)&&x===this.width&&y===this.height&&this.isVisible(x-1,y-1)||
+      this.inBounds(x-1,y-1)&&this.isVisible(x-1,y-1))
+      result.push('northwest');
+    if(this.inBounds(x+1,y-1)&&x===-1&&y===this.height&&this.isVisible(x+1,y-1)||
+      this.inBounds(x+1,y-1)&&this.isVisible(x+1,y-1))
+      result.push('northeast');
+    if(this.inBounds(x-1,y+1)&&x===this.width&&y===-1&&this.isVisible(x-1,y+1)||
+      this.inBounds(x-1,y+1)&&this.isVisible(x-1,y+1))
+      result.push('southwest');
+    if(this.inBounds(x+1,y+1)&&x===-1&&y===-1&&this.isVisible(x+1,y+1)||
+      this.inBounds(x+1,y+1)&&this.isVisible(x+1,y+1))
+      result.push('southeast');
     return result;
   }
   isSameRoom(x1,y1,x2,y2){

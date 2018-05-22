@@ -31,7 +31,7 @@ export const environments = [
   },
   {
     name: 'graveyard',
-    color: '#4b3232',
+    color: '#444',
     walls: [
       'brick',
       'tree'

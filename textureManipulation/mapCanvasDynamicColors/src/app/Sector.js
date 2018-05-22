@@ -18,7 +18,7 @@ export class Sector{
       result.backgroundShadowBlur = 0;
       result.foregroundShadowColor = ink(this.type.color,{a: 0.6});
       result.foregroundShadowBlur = 10;
-      a = 0.63;
+      a = 0.33;
     }else{
       result.backgroundShadowColor = '#000';
       result.backgroundShadowBlur = 0;
