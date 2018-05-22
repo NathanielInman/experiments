@@ -37,6 +37,7 @@ export class Map{
   setCorridor(x,y){ this.getSector(x,y).setCorridor(); }
   isDoor(x,y){ return this.getSector(x,y).isDoor(); }
   isDoorClosed(x,y){ return this.getSector(x,y).isDoorClosed(); }
+  isDoorOpen(x,y){ return this.getSector(x,y).isDoorOpen(); }
   setDoorOpen(x,y){ return this.getSector(x,y).setDoorOpen(); }
   setDoorClosed(x,y){ return this.getSector(x,y).setDoorClosed(); }
   setDoor(x,y){ this.getSector(x,y).setDoor(); }

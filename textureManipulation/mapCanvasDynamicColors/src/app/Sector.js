@@ -75,6 +75,7 @@ export class Sector{
   }
   isDoor(){ return this.category === 'door'; }
   isDoorClosed(){ return this.category==='door'&&!this.doorOpen; }
+  isDoorOpen(){ return this.category==='door'&&this.doorOpen; }
   setDoorOpen(){ this.doorOpen = true; }
   setDoorClosed(){ this.doorOpen = false; }
   setDoor(){

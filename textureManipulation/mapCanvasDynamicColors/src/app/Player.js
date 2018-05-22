@@ -1,11 +1,14 @@
 import Mrpas from 'mrpas';
 
 export class Player{
-  constructor(map){
+  constructor(map,easel){
     this.map = map;
+    this.easel = easel;
     this.sight = 7;
     this.visible = [];
+    this.state = 'free';
     this.initialize();
+    this.setKeybindings();
   }
   initialize(){
     do{
@@ -16,6 +19,113 @@ export class Player{
       return this.map.isWalkable(x,y);
     });
     this.setVisible();
+  }
+  setKeybindings(){
+
+    //eslint-disable-next-line complexity
+    document.addEventListener('keydown',event=>{
+      let keyName = event.key;
+
+      if(keyName==='a'||keyName==='h'||keyName==='ArrowLeft'){
+        if(this.state==='free'&&this.move('west')){
+          this.easel.redraw();
+        }else if(this.state==='door'){
+          if(this.map.isDoorClosed(this.x-1,this.y)){
+            this.map.setDoorOpen(this.x-1,this.y);
+          }else if(this.map.isDoorOpen(this.x-1,this.y)){
+            this.map.setDoorClosed(this.x-1,this.y);
+          } //end if
+          this.easel.redraw();
+          this.state='free';
+        } //end if
+      }else if(keyName==='x'||keyName==='j'||keyName==='ArrowDown'){
+        if(this.state==='free'&&this.move('south')){
+          this.easel.redraw();
+        }else if(this.state==='door'){
+          if(this.map.isDoorClosed(this.x,this.y+1)){
+            this.map.setDoorOpen(this.x,this.y+1);
+          }else if(this.map.isDoorOpen(this.x,this.y+1)){
+            this.map.setDoorClosed(this.x,this.y+1);
+          } //end if
+          this.easel.redraw();
+          this.state='free';
+        } //end if
+      }else if(keyName==='w'||keyName==='k'||keyName==='ArrowUp'){
+        if(this.state==='free'&&this.move('north')){
+          this.easel.redraw();
+        }else if(this.state==='door'){
+          if(this.map.isDoorClosed(this.x,this.y-1)){
+            this.map.setDoorOpen(this.x,this.y-1);
+          }else if(this.map.isDoorOpen(this.x,this.y-1)){
+            this.map.setDoorClosed(this.x,this.y-1);
+          } //end if
+          this.easel.redraw();
+          this.state='free';
+        } //end if
+      }else if(keyName==='d'||keyName==='l'||keyName==='ArrowRight'){
+        if(this.state==='free'&&this.move('east')){
+          this.easel.redraw();
+        }else if(this.state==='door'){
+          if(this.map.isDoorClosed(this.x+1,this.y)){
+            this.map.setDoorOpen(this.x+1,this.y);
+          }else if(this.map.isDoorOpen(this.x+1,this.y)){
+            this.map.setDoorClosed(this.x+1,this.y);
+          } //end if
+          this.easel.redraw();
+          this.state='free';
+        } //end if
+      }else if(keyName==='q'||keyName==='y'){
+        if(this.state==='free'&&this.move('northwest')){
+          this.easel.redraw();
+        }else if(this.state==='door'){
+          if(this.map.isDoorClosed(this.x-1,this.y-1)){
+            this.map.setDoorOpen(this.x-1,this.y-1);
+          }else if(this.map.isDoorOpen(this.x-1,this.y-1)){
+            this.map.setDoorClosed(this.x-1,this.y-1);
+          } //end if
+          this.easel.redraw();
+          this.state='free';
+        } //end if
+      }else if(keyName==='e'||keyName==='u'){
+        if(this.state==='free'&&this.move('northeast')){
+          this.easel.redraw();
+        }else if(this.state==='door'){
+          if(this.map.isDoorClosed(this.x+1,this.y-1)){
+            this.map.setDoorOpen(this.x+1,this.y-1);
+          }else if(this.map.isDoorOpen(this.x+1,this.y-1)){
+            this.map.setDoorClosed(this.x+1,this.y-1);
+          } //end if
+          this.easel.redraw();
+          this.state='free';
+        } //end if
+      }else if(keyName==='z'||keyName==='b'){
+        if(this.state==='free'&&this.move('southwest')){
+          this.easel.redraw();
+        }else if(this.state==='door'){
+          if(this.map.isDoorClosed(this.x-1,this.y+1)){
+            this.map.setDoorOpen(this.x-1,this.y+1);
+          }else if(this.map.isDoorOpen(this.x-1,this.y+1)){
+            this.map.setDoorClosed(this.x-1,this.y+1);
+          } //end if
+          this.easel.redraw();
+          this.state='free';
+        } //end if
+      }else if(keyName==='c'||keyName==='n'){
+        if(this.state==='free'&&this.move('southeast')){
+          this.easel.redraw();
+        }else if(this.state==='door'){
+          if(this.map.isDoorClosed(this.x+1,this.y+1)){
+            this.map.setDoorOpen(this.x+1,this.y+1);
+          }else if(this.map.isDoorOpen(this.x+1,this.y+1)){
+            this.map.setDoorClosed(this.x+1,this.y+1);
+          } //end if
+          this.easel.redraw();
+          this.state='free';
+        } //end if
+      }else if(keyName==='o'){
+        this.state='door';
+      }//end if
+    });
   }
 
   // we have to turn off visible sectors before moving to new sectors
