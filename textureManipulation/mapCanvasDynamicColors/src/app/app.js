@@ -29,6 +29,8 @@ if(!easel.activated){
     easel.ctx.textBaseline = 'middle';
     easel.ctx.textAlign = 'center';
   };
+
+  //eslint-disable-next-line complexity
   easel.onDraw = function(){
     let rh = easel.viewport.h/(player.sight*2+1), //row height
         rw = easel.viewport.w/(player.sight*2+1), //row width
@@ -59,6 +61,50 @@ if(!easel.activated){
         } //end if
       } //end for
     } //end for
+
+    // now draw the shadows
+    easel.ctx.beginPath();
+    for(let y=player.y-player.sight-1;y<=player.y+player.sight;y++){
+      for(let x=player.x-player.sight;x<=player.x+player.sight+1;x++){
+        if(x<0||y<0||x>map.width-1||y>map.height-1) continue;
+        let ox = (x-player.x+player.sight)*rs,
+            oy = (y-player.y+player.sight)*rs,
+            ss = 2; //shadow size is based off the row size
+
+        if(!map.isVisible(x,y)){
+          let shadows = map.getNearVisible(x,y);
+
+          if(shadows.includes('west')){
+            easel.ctx.rect(ox,oy,ss,rs);
+          } //end if
+          if(shadows.includes('east')){
+            easel.ctx.rect(ox+rs-ss,oy,ss,rs);
+          } //end if
+          if(shadows.includes('north')){
+            easel.ctx.rect(ox,oy,rs,ss);
+          } //end if
+          if(shadows.includes('south')){
+            easel.ctx.rect(ox,oy+rs-ss,rs,ss);
+          } //end if
+          if(shadows.includes('northwest')){
+            easel.ctx.rect(ox,oy,ss,ss);
+          } //end if
+          if(shadows.includes('northeast')){
+            easel.ctx.rect(ox+rs-ss,oy,ss,ss);
+          } //end if
+          if(shadows.includes('southwest')){
+            easel.ctx.rect(ox,oy+rs-ss,ss,ss);
+          } //end if
+          if(shadows.includes('southeast')){
+            easel.ctx.rect(ox+rs-ss,oy+rs-ss,ss,ss);
+          } //end if
+        } //end if
+      } //end for
+    } //end for
+    easel.ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    easel.ctx.shadowColor = '#000';
+    easel.ctx.shadowBlur = 10;
+    easel.ctx.fill();
 
     // now that we've drawn the map, draw the player
     easel.ctx.shadowBlur = 5;

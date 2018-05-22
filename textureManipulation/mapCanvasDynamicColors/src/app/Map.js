@@ -50,6 +50,21 @@ export class Map{
   unsetVisible(x,y){ this.getSector(x,y).visible = false; }
   setVisible(x,y){ this.getSector(x,y).visible = true; }
   isVisible(x,y){ return this.getSector(x,y).visible; }
+
+  //eslint-disable-next-line complexity
+  getNearVisible(x,y){
+    let result = [];
+
+    if(x>0&&this.isVisible(x-1,y)) result.push('west');
+    if(x<this.width-1&&this.isVisible(x+1,y)) result.push('east');
+    if(y>0&&this.isVisible(x,y-1)) result.push('north');
+    if(y<this.height-1&&this.isVisible(x,y+1)) result.push('south');
+    if(x>0&&y>0&&this.isVisible(x-1,y-1)) result.push('northwest');
+    if(x<this.width-1&&y>0&&this.isVisible(x+1,y-1)) result.push('northeast');
+    if(x>0&&y<this.height-1&&this.isVisible(x-1,y+1)) result.push('southwest');
+    if(x<this.width-1&&y<this.height-1&&this.isVisible(x+1,y+1)) result.push('southeast');
+    return result;
+  }
   isSameRoom(x1,y1,x2,y2){
     return this.getSector(x1,y1).roomNumber===this.getSector(x2,y2).roomNumber;
   }
