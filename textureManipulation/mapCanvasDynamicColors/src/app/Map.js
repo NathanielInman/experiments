@@ -59,29 +59,37 @@ export class Map{
     let result = [];
 
     if(this.inBounds(x-1,y)&&x===this.width&&this.isVisible(x-1,y)||
-      this.inBounds(x-1,y)&&this.isVisible(x-1,y))
+      this.inBounds(x-1,y)&&this.isVisible(x-1,y)){
       result.push('west');
+    } //end if
     if(this.inBounds(x+1,y)&&x===-1&&this.isVisible(x+1,y)||
-      this.inBounds(x+1,y)&&this.isVisible(x+1,y))
+      this.inBounds(x+1,y)&&this.isVisible(x+1,y)){
       result.push('east');
+    } //end if
     if(this.inBounds(x,y-1)&&y===this.height&&this.isVisible(x,y-1)||
-      this.inBounds(x,y-1)&&this.isVisible(x,y-1))
+      this.inBounds(x,y-1)&&this.isVisible(x,y-1)){
       result.push('north');
+    } //end if
     if(this.inBounds(x,y+1)&&y===-1&&this.isVisible(x,y+1)||
-      this.inBounds(x,y+1)&&this.isVisible(x,y+1))
+      this.inBounds(x,y+1)&&this.isVisible(x,y+1)){
       result.push('south');
+    } //end if
     if(this.inBounds(x-1,y-1)&&x===this.width&&y===this.height&&this.isVisible(x-1,y-1)||
-      this.inBounds(x-1,y-1)&&this.isVisible(x-1,y-1))
+      this.inBounds(x-1,y-1)&&this.isVisible(x-1,y-1)){
       result.push('northwest');
+    } //end if
     if(this.inBounds(x+1,y-1)&&x===-1&&y===this.height&&this.isVisible(x+1,y-1)||
-      this.inBounds(x+1,y-1)&&this.isVisible(x+1,y-1))
+      this.inBounds(x+1,y-1)&&this.isVisible(x+1,y-1)){
       result.push('northeast');
+    } //end if
     if(this.inBounds(x-1,y+1)&&x===this.width&&y===-1&&this.isVisible(x-1,y+1)||
-      this.inBounds(x-1,y+1)&&this.isVisible(x-1,y+1))
+      this.inBounds(x-1,y+1)&&this.isVisible(x-1,y+1)){
       result.push('southwest');
+    } //end if
     if(this.inBounds(x+1,y+1)&&x===-1&&y===-1&&this.isVisible(x+1,y+1)||
-      this.inBounds(x+1,y+1)&&this.isVisible(x+1,y+1))
+      this.inBounds(x+1,y+1)&&this.isVisible(x+1,y+1)){
       result.push('southeast');
+    } //end if
     return result;
   }
   isSameRoom(x1,y1,x2,y2){
