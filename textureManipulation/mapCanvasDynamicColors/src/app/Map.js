@@ -49,7 +49,9 @@ export class Map{
   getRoom(x,y){ return this.getSector(x,y).roomNumber; }
   unsetVisible(x,y){ this.getSector(x,y).visible = false; }
   setVisible(x,y){ this.getSector(x,y).visible = true; }
-  isVisible(x,y){ return this.getSector(x,y).visible; }
+  isVisible(x,y){
+    return this.inBounds(x,y)&&this.getSector(x,y).visible;
+  }
   inBounds(x,y){
     return x>=0&&x<=this.width-1&&y>=0&&y<=this.height-1;
   }
@@ -58,36 +60,28 @@ export class Map{
   getNearVisible(x,y){
     let result = [];
 
-    if(this.inBounds(x-1,y)&&x===this.width&&this.isVisible(x-1,y)||
-      this.inBounds(x-1,y)&&this.isVisible(x-1,y)){
+    if(x===this.width&&this.isVisible(x-1,y)||this.isVisible(x-1,y)){
       result.push('west');
     } //end if
-    if(this.inBounds(x+1,y)&&x===-1&&this.isVisible(x+1,y)||
-      this.inBounds(x+1,y)&&this.isVisible(x+1,y)){
+    if(x===-1&&this.isVisible(x+1,y)||this.isVisible(x+1,y)){
       result.push('east');
     } //end if
-    if(this.inBounds(x,y-1)&&y===this.height&&this.isVisible(x,y-1)||
-      this.inBounds(x,y-1)&&this.isVisible(x,y-1)){
+    if(y===this.height&&this.isVisible(x,y-1)||this.isVisible(x,y-1)){
       result.push('north');
     } //end if
-    if(this.inBounds(x,y+1)&&y===-1&&this.isVisible(x,y+1)||
-      this.inBounds(x,y+1)&&this.isVisible(x,y+1)){
+    if(y===-1&&this.isVisible(x,y+1)||this.isVisible(x,y+1)){
       result.push('south');
     } //end if
-    if(this.inBounds(x-1,y-1)&&x===this.width&&y===this.height&&this.isVisible(x-1,y-1)||
-      this.inBounds(x-1,y-1)&&this.isVisible(x-1,y-1)){
+    if(x===this.width&&y===this.height&&this.isVisible(x-1,y-1)||this.isVisible(x-1,y-1)){
       result.push('northwest');
     } //end if
-    if(this.inBounds(x+1,y-1)&&x===-1&&y===this.height&&this.isVisible(x+1,y-1)||
-      this.inBounds(x+1,y-1)&&this.isVisible(x+1,y-1)){
+    if(x===-1&&y===this.height&&this.isVisible(x+1,y-1)||this.isVisible(x+1,y-1)){
       result.push('northeast');
     } //end if
-    if(this.inBounds(x-1,y+1)&&x===this.width&&y===-1&&this.isVisible(x-1,y+1)||
-      this.inBounds(x-1,y+1)&&this.isVisible(x-1,y+1)){
+    if(x===this.width&&y===-1&&this.isVisible(x-1,y+1)||this.isVisible(x-1,y+1)){
       result.push('southwest');
     } //end if
-    if(this.inBounds(x+1,y+1)&&x===-1&&y===-1&&this.isVisible(x+1,y+1)||
-      this.inBounds(x+1,y+1)&&this.isVisible(x+1,y+1)){
+    if(x===-1&&y===-1&&this.isVisible(x+1,y+1)||this.isVisible(x+1,y+1)){
       result.push('southeast');
     } //end if
     return result;
