@@ -49,7 +49,7 @@ if(!easel.activated){
             mx = ox+rs/2, my = oy+rs/2,
             s = map.getColors(x,y);
 
-        if(s){
+        if(map.isSeen(x,y)&&s){
           easel.ctx.shadowColor = s.backgroundShadowColor;
           easel.ctx.shadowBlur = s.backgroundShadowBlur;
           easel.ctx.fillStyle = s.backgroundColor;

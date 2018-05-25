@@ -84,8 +84,9 @@ export class Sector{
     this.typeClosed = floors.find(w=> w.name==='wood');
     this.doorOpen = Math.random()<0.5?true:false; //random
   }
+  isSeen(){ return this.seen; }
   isVisible(){ return this.visible; }
-  setVisible(){ this.visible = true; }
+  setVisible(){ this.visible = true; this.seen = true; }
   unsetVisible(){ this.visible = false; }
   isWalkable(){
     let walkable = false;

@@ -47,10 +47,13 @@ export class Map{
   isRoom(x,y){ return this.getSector(x,y).roomNumber>0; }
   setRoom(x,y,num){ this.getSector(x,y).roomNumber = num; }
   getRoom(x,y){ return this.getSector(x,y).roomNumber; }
-  unsetVisible(x,y){ this.getSector(x,y).visible = false; }
-  setVisible(x,y){ this.getSector(x,y).visible = true; }
+  unsetVisible(x,y){ this.getSector(x,y).unsetVisible(); }
+  setVisible(x,y){ this.getSector(x,y).setVisible(); }
+  isSeen(x,y){
+    return this.inBounds(x,y)&&this.getSector(x,y).isSeen();
+  }
   isVisible(x,y){
-    return this.inBounds(x,y)&&this.getSector(x,y).visible;
+    return this.inBounds(x,y)&&this.getSector(x,y).isVisible();
   }
   inBounds(x,y){
     return x>=0&&x<=this.width-1&&y>=0&&y<=this.height-1;
