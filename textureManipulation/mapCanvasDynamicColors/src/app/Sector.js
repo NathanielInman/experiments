@@ -92,7 +92,7 @@ export class Sector{
 
     if(this.isFloor()) walkable = true;
     if(this.isCorridor()) walkable = true;
-    if(this.isDoor()) walkable = true;
+    if(this.isDoorOpen()) walkable = true;
     return walkable;
   }
 }

@@ -30,11 +30,13 @@ export class Player{
         if(this.state==='free'&&this.move('west')){
           this.easel.redraw();
         }else if(this.state==='door'){
+          this.unsetVisible();
           if(this.map.isDoorClosed(this.x-1,this.y)){
             this.map.setDoorOpen(this.x-1,this.y);
           }else if(this.map.isDoorOpen(this.x-1,this.y)){
             this.map.setDoorClosed(this.x-1,this.y);
           } //end if
+          this.setVisible();
           this.easel.redraw();
           this.state='free';
         } //end if
@@ -42,11 +44,13 @@ export class Player{
         if(this.state==='free'&&this.move('south')){
           this.easel.redraw();
         }else if(this.state==='door'){
+          this.unsetVisible();
           if(this.map.isDoorClosed(this.x,this.y+1)){
             this.map.setDoorOpen(this.x,this.y+1);
           }else if(this.map.isDoorOpen(this.x,this.y+1)){
             this.map.setDoorClosed(this.x,this.y+1);
           } //end if
+          this.setVisible();
           this.easel.redraw();
           this.state='free';
         } //end if
@@ -54,11 +58,13 @@ export class Player{
         if(this.state==='free'&&this.move('north')){
           this.easel.redraw();
         }else if(this.state==='door'){
+          this.unsetVisible();
           if(this.map.isDoorClosed(this.x,this.y-1)){
             this.map.setDoorOpen(this.x,this.y-1);
           }else if(this.map.isDoorOpen(this.x,this.y-1)){
             this.map.setDoorClosed(this.x,this.y-1);
           } //end if
+          this.setVisible();
           this.easel.redraw();
           this.state='free';
         } //end if
@@ -66,11 +72,13 @@ export class Player{
         if(this.state==='free'&&this.move('east')){
           this.easel.redraw();
         }else if(this.state==='door'){
+          this.unsetVisible();
           if(this.map.isDoorClosed(this.x+1,this.y)){
             this.map.setDoorOpen(this.x+1,this.y);
           }else if(this.map.isDoorOpen(this.x+1,this.y)){
             this.map.setDoorClosed(this.x+1,this.y);
           } //end if
+          this.setVisible();
           this.easel.redraw();
           this.state='free';
         } //end if
@@ -78,11 +86,13 @@ export class Player{
         if(this.state==='free'&&this.move('northwest')){
           this.easel.redraw();
         }else if(this.state==='door'){
+          this.unsetVisible();
           if(this.map.isDoorClosed(this.x-1,this.y-1)){
             this.map.setDoorOpen(this.x-1,this.y-1);
           }else if(this.map.isDoorOpen(this.x-1,this.y-1)){
             this.map.setDoorClosed(this.x-1,this.y-1);
           } //end if
+          this.setVisible();
           this.easel.redraw();
           this.state='free';
         } //end if
@@ -90,11 +100,13 @@ export class Player{
         if(this.state==='free'&&this.move('northeast')){
           this.easel.redraw();
         }else if(this.state==='door'){
+          this.unsetVisible();
           if(this.map.isDoorClosed(this.x+1,this.y-1)){
             this.map.setDoorOpen(this.x+1,this.y-1);
           }else if(this.map.isDoorOpen(this.x+1,this.y-1)){
             this.map.setDoorClosed(this.x+1,this.y-1);
           } //end if
+          this.setVisible();
           this.easel.redraw();
           this.state='free';
         } //end if
@@ -102,11 +114,13 @@ export class Player{
         if(this.state==='free'&&this.move('southwest')){
           this.easel.redraw();
         }else if(this.state==='door'){
+          this.unsetVisible();
           if(this.map.isDoorClosed(this.x-1,this.y+1)){
             this.map.setDoorOpen(this.x-1,this.y+1);
           }else if(this.map.isDoorOpen(this.x-1,this.y+1)){
             this.map.setDoorClosed(this.x-1,this.y+1);
           } //end if
+          this.setVisible();
           this.easel.redraw();
           this.state='free';
         } //end if
@@ -114,11 +128,13 @@ export class Player{
         if(this.state==='free'&&this.move('southeast')){
           this.easel.redraw();
         }else if(this.state==='door'){
+          this.unsetVisible();
           if(this.map.isDoorClosed(this.x+1,this.y+1)){
             this.map.setDoorOpen(this.x+1,this.y+1);
           }else if(this.map.isDoorOpen(this.x+1,this.y+1)){
             this.map.setDoorClosed(this.x+1,this.y+1);
           } //end if
+          this.setVisible();
           this.easel.redraw();
           this.state='free';
         } //end if
@@ -150,60 +166,52 @@ export class Player{
     let result = false;
 
     if(direction==='north'&&this.map.isWalkable(this.x,this.y-1)){
-      if(this.map.isDoorClosed(this.x,this.y-1)){
-        this.map.setDoorOpen(this.x,this.y-1);
-      }else{
-        this.unsetVisible(); this.y-=1; this.setVisible();
-      } //end if
+      this.unsetVisible(); this.y-=1; this.setVisible();
+      result = true;
+    }else if(direction==='north'&&this.map.isDoorClosed(this.x,this.y-1)){
+      this.unsetVisible(); this.map.setDoorOpen(this.x,this.y-1); this.setVisible();
       result = true;
     }else if(direction==='east'&&this.map.isWalkable(this.x+1,this.y)){
-      if(this.map.isDoorClosed(this.x+1,this.y)){
-        this.map.setDoorOpen(this.x+1,this.y);
-      }else{
-        this.unsetVisible(); this.x+=1; this.setVisible();
-      } //end if
+      this.unsetVisible(); this.x+=1; this.setVisible();
+      result = true;
+    }else if(direction==='east'&&this.map.isDoorClosed(this.x+1,this.y)){
+      this.unsetVisible(); this.map.setDoorOpen(this.x+1,this.y); this.setVisible();
       result = true;
     }else if(direction==='west'&&this.map.isWalkable(this.x-1,this.y)){
-      if(this.map.isDoorClosed(this.x-1,this.y)){
-        this.map.setDoorOpen(this.x-1,this.y);
-      }else{
-        this.unsetVisible(); this.x-=1; this.setVisible();
-      } //end if
+      this.unsetVisible(); this.x-=1; this.setVisible();
+      result = true;
+    }else if(direction==='west'&&this.map.isDoorClosed(this.x-1,this.y)){
+      this.unsetVisible(); this.map.setDoorOpen(this.x-1,this.y); this.setVisible();
       result = true;
     }else if(direction==='south'&&this.map.isWalkable(this.x,this.y+1)){
-      if(this.map.isDoorClosed(this.x,this.y+1)){
-        this.map.setDoorOpen(this.x,this.y+1);
-      }else{
-        this.unsetVisible(); this.y+=1; this.setVisible();
-      } //end if
+      this.unsetVisible(); this.y+=1; this.setVisible();
+      result = true;
+    }else if(direction==='south'&&this.map.isDoorClosed(this.x,this.y+1)){
+      this.unsetVisible(); this.map.setDoorOpen(this.x,this.y+1); this.setVisible();
       result = true;
     }else if(direction==='northwest'&&this.map.isWalkable(this.x-1,this.y-1)){
-      if(this.map.isDoorClosed(this.x-1,this.y-1)){
-        this.map.setDoorOpen(this.x-1,this.y-1);
-      }else{
-        this.unsetVisible(); this.x-=1; this.y-=1; this.setVisible();
-      } //end if
+      this.unsetVisible(); this.x-=1; this.y-=1; this.setVisible();
+      result = true;
+    }else if(direction==='northwest'&&this.map.isDoorClosed(this.x-1,this.y-1)){
+      this.unsetVisible(); this.map.setDoorOpen(this.x-1,this.y-1); this.setVisible();
       result = true;
     }else if(direction==='northeast'&&this.map.isWalkable(this.x+1,this.y-1)){
-      if(this.map.isDoorClosed(this.x+1,this.y-1)){
-        this.map.setDoorOpen(this.x+1,this.y-1);
-      }else{
-        this.unsetVisible(); this.x+=1; this.y-=1; this.setVisible();
-      } //end if
+      this.unsetVisible(); this.x+=1; this.y-=1; this.setVisible();
+      result = true;
+    }else if(direction==='northeast'&&this.map.isDoorClosed(this.x+1,this.y-1)){
+      this.unsetVisible(); this.map.setDoorOpen(this.x+1,this.y-1); this.setVisible();
       result = true;
     }else if(direction==='southwest'&&this.map.isWalkable(this.x-1,this.y+1)){
-      if(this.map.isDoorClosed(this.x-1,this.y+1)){
-        this.map.setDoorOpen(this.x-1,this.y+1);
-      }else{
-        this.unsetVisible(); this.x-=1; this.y+=1; this.setVisible();
-      } //end if
+      this.unsetVisible(); this.x-=1; this.y+=1; this.setVisible();
+      result = true;
+    }else if(direction==='southwest'&&this.map.isDoorClosed(this.x-1,this.y+1)){
+      this.unsetVisible(); this.map.setDoorOpen(this.x-1,this.y+1); this.setVisible();
       result = true;
     }else if(direction==='southeast'&&this.map.isWalkable(this.x+1,this.y+1)){
-      if(this.map.isDoorClosed(this.x+1,this.y+1)){
-        this.map.setDoorOpen(this.x+1,this.y+1);
-      }else{
-        this.unsetVisible(); this.x+=1; this.y+=1; this.setVisible();
-      } //end if
+      this.unsetVisible(); this.x+=1; this.y+=1; this.setVisible();
+      result = true;
+    }else if(direction==='southeast'&&this.map.isDoorClosed(this.x+1,this.y+1)){
+      this.unsetVisible(); this.map.setDoorOpen(this.x+1,this.y+1); this.setVisible();
       result = true;
     } //end if
     return result;
