@@ -2,6 +2,15 @@ import {floors} from './floors';
 import {walls} from './walls';
 import {ink} from 'ion-cloud';
 
+function avgHue(hue1,hue2){
+  let [radius1,radius2] = [(hue1+hue2)/2,((hue1+hue2+360)/2)%360];
+
+  if(Math.min(Math.abs(hue1-radius1),Math.abs(hue2-radius1))<Math.min(Math.abs(hue1-radius2),Math.abs(hue2-radius2)))
+    return radius1
+  else
+    return radius2
+}
+
 export class Sector{
   constructor(map){
     this.map = map;

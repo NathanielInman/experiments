@@ -1,4 +1,5 @@
 export const environments = [
+  /*
   {
     name: 'mountain',
     color: '#505050',
@@ -83,10 +84,21 @@ export const environments = [
       'shrub'
     ],
     description: 'high enough that strong winds occur a lot but just low enough for trees to grow, this park tundra is generally pretty cold.'
-  },
+  },*/
   {
     name: 'sea cove',
-    color: '#161551',
+    //color: '#161551',
+    color: {
+      hue: 237.85714285714286,
+      saturation: 0.5490196078431372,
+      lightness: {
+        ambient: 0.2,
+        floorVisible: 0.2,
+        floorHidden: 0.2,
+        wallVisible: 0.2,
+        wallHidden: 0.2
+      }
+    },
     walls: [
       'rock'
     ],
@@ -99,7 +111,7 @@ export const environments = [
       'floor'
     ],
     description: 'this cave beneath a cliff was caused by erosion from the waves of water crashing in on weak rock and soil.'
-  },
+  } /*,
   {
     name: 'alpine tundra',
     color: '#1a4b95',
@@ -130,5 +142,5 @@ export const environments = [
       'flora'
     ],
     description: 'composed prediminately of coniferous trees like larch, spruce, fire, and pine, this area is high in altitude.'
-  }
+  } */
 ]

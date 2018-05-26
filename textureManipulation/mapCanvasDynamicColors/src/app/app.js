@@ -3,6 +3,8 @@ import {Map} from './Map';
 import {environments} from './environments';
 import {Player} from './Player';
 
+window.ink = ink;
+
 let noscript = document.querySelector('noscript'),
     easel = new Easel(),
     environmentIndex = Math.floor(Math.random()*environments.length),
