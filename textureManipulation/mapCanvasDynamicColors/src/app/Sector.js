@@ -2,14 +2,18 @@ import {floors} from './floors';
 import {walls} from './walls';
 import {ink} from 'ion-cloud';
 
-function avgHue(hue1,hue2){
+function getAverageHue(hue1,hue2){
   let [radius1,radius2] = [(hue1+hue2)/2,((hue1+hue2+360)/2)%360];
 
   if(Math.min(Math.abs(hue1-radius1),Math.abs(hue2-radius1))<Math.min(Math.abs(hue1-radius2),Math.abs(hue2-radius2)))
     return radius1
   else
     return radius2
-}
+} //end getAverageHue()
+
+function getHueFromHex(hex){
+  return ink(hex,{format: 'hsl'}).replace(/(hsl\(|\))/g,'').split(',')[0];
+} //end getHueFromHex()
 
 export class Sector{
   constructor(map){
@@ -20,33 +24,77 @@ export class Sector{
     this.roomNumber = 0;
   }
   getColors(){
-    let result = {}, a; //a(alpha) is represents how strong env color is
+    let result = {}, color = this.type.background;
 
-    if(this.isVisible()){
-      result.backgroundShadowColor = '#000';
-      result.backgroundShadowBlur = 0;
-      result.foregroundShadowColor = ink(this.type.color,{a: 0.6});
-      result.foregroundShadowBlur = 10;
-      a = 0.33;
-    }else{
-      result.backgroundShadowColor = '#000';
-      result.backgroundShadowBlur = 0;
-      result.foregroundShadowColor = '#000';
-      result.foregroundShadowBlur = 0;
-      a = 0.07;
-    } //end if
+    // set character defaults and override color
+    // if it's a dynamic sector like a door
+    result.character = this.type.character;
     if(this.category==='door'&&!this.doorOpen){
-      result.backgroundColor = ink(this.typeOpen.background,{a});
-      result.foregroundColor = ink(this.typeOpen.color,{a});
+      color = this.typeOpen.color;
       result.character = '+';
     }else if(this.category==='door'&&this.doorOpen){
-      result.backgroundColor = ink(this.typeClosed.background,{a});
-      result.foregroundColor = ink(this.typeClosed.color,{a});
+      color = this.typeClosed.color;
       result.character = '-';
-    }else if(this.type!=='none'){
-      result.backgroundColor = ink(this.type.background,{a});
-      result.foregroundColor = ink(this.type.color,{a});
-      result.character = this.type.character;
+    } //end if
+
+    // now acquire the color based on whether its visible and either a floor
+    // or a wall
+    if(this.isVisible()&&this.isWalkable()){
+      let hue = getHueFromHex(this.type.background),
+          avg = getAverageHue(hue,this.environment.color.hue);
+
+      result.backgroundColor = ink(`hsl(${
+        avg},${
+        this.environment.color.saturation},${
+        this.environment.color.lightness.floorVisible
+      })`);
+      result.foregroundColor = ink(`hsl(${
+        avg},${
+        this.environment.color.saturation},${
+        this.environment.color.lightness.floorVisible+0.2
+      })`);
+    }else if(!this.isVisible&&this.isWalkable()){
+      let hue = getHueFromHex(this.type.background),
+          avg = getAverageHue(hue,this.environment.color.hue);
+
+      result.backgroundColor = ink(`hsl(${
+        avg},${
+        this.environment.color.saturation},${
+        this.environment.color.lightness.floorHidden
+      })`);
+      result.foregroundColor = ink(`hsl(${
+        avg},${
+        this.environment.color.saturation},${
+        this.environment.color.lightness.floorHidden+0.2
+      })`);
+    }else if(this.isVisible()&&this.isWall()){
+      let hue = getHueFromHex(this.type.background),
+          avg = getAverageHue(hue,this.environment.color.hue);
+
+      result.backgroundColor = ink(`hsl(${
+        avg},${
+        this.environment.color.saturation},${
+        this.environment.color.lightness.wallVisible
+      })`);
+      result.foregroundColor = ink(`hsl(${
+        avg},${
+        this.environment.color.saturation},${
+        this.environment.color.lightness.wallVisible+0.2
+      })`);
+    }else if(!this.isVisible()&&this.isWall()){
+      let hue = getHueFromHex(this.type.background),
+          avg = getAverageHue(hue,this.environment.color.hue);
+
+      result.backgroundColor = ink(`hsl(${
+        avg},${
+        this.environment.color.saturation},${
+        this.environment.color.lightness.wallHidden
+      })`);
+      result.foregroundColor = ink(`hsl(${
+        avg},${
+        this.environment.color.saturation},${
+        this.environment.color.lightness.wallHidden+0.2
+      })`);
     }else{
       result = null;
     } //end if
