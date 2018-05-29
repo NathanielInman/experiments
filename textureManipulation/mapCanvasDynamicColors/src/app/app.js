@@ -39,7 +39,10 @@ if(!easel.activated){
         rs = rh<rw?rh:rw; //row size (takes lesser of width/height)
 
     // start by cleaning the map
-    easel.ctx.fillStyle=environment.color;
+    easel.ctx.fillStyle=ink(`hsl(${
+      environment.color.hue},${
+      environment.color.saturation},${
+      environment.color.lightness.ambient})`);
     easel.ctx.fillRect(0,0,easel.viewport.w,easel.viewport.h);
 
     // now draw the sectors
@@ -52,12 +55,12 @@ if(!easel.activated){
             s = map.getColors(x,y);
 
         if(map.isSeen(x,y)&&s){
-          easel.ctx.shadowColor = s.backgroundShadowColor;
-          easel.ctx.shadowBlur = s.backgroundShadowBlur;
+          //easel.ctx.shadowColor = s.backgroundShadowColor;
+          //easel.ctx.shadowBlur = s.backgroundShadowBlur;
           easel.ctx.fillStyle = s.backgroundColor;
           easel.ctx.fillRect(ox,oy,rs,rs);
-          easel.ctx.shadowColor = s.foregroundShadowColor;
-          easel.ctx.shadowBlur = s.foregroundShadowBlur;
+          //easel.ctx.shadowColor = s.foregroundShadowColor;
+          //easel.ctx.shadowBlur = s.foregroundShadowBlur;
           easel.ctx.fillStyle = s.foregroundColor;
           easel.ctx.fillText(s.character,mx,my);
         } //end if
