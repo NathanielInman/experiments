@@ -58,7 +58,7 @@ export class Sector{
       l = this.environment.color.lightness.floorHidden;
       result.backgroundColor = ink(`hsla(${h},${s},${l},0.3)`);
       l += this.environment.color.lightness.floorLetter;
-      result.foregroundColor = ink(`hsla(${h},${s},${l},0)`);
+      result.foregroundColor = ink('rgba(0,0,0,0)');
     }else if(this.isVisible()&&(this.isWall()||this.isDoor())){
       [h,s] = getBlendedHSL(colorEnv,color,f);
       l = this.environment.color.lightness.wallVisible;
@@ -70,7 +70,7 @@ export class Sector{
       l = this.environment.color.lightness.wallHidden;
       result.backgroundColor = ink(`hsla(${h},${s},${l},0.2)`);
       l += this.environment.color.lightness.wallLetter;
-      result.foregroundColor = ink(`hsla(${h},${s},${l},0)`);
+      result.foregroundColor = ink('rgba(0,0,0,0)');
     }else{
       result = null;
     } //end if
