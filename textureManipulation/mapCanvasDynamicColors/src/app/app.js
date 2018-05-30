@@ -46,6 +46,7 @@ if(!easel.activated){
     easel.ctx.fillRect(0,0,easel.viewport.w,easel.viewport.h);
 
     // now draw the sectors
+    easel.ctx.shadowBlur = 0;
     for(let y=player.y-player.sight-1;y<=player.y+player.sight;y++){
       for(let x=player.x-player.sight;x<=player.x+player.sight+1;x++){
         if(x<0||y<0||x>map.width-1||y>map.height-1) continue;
@@ -55,12 +56,8 @@ if(!easel.activated){
             s = map.getColors(x,y);
 
         if(map.isSeen(x,y)&&s){
-          //easel.ctx.shadowColor = s.backgroundShadowColor;
-          //easel.ctx.shadowBlur = s.backgroundShadowBlur;
           easel.ctx.fillStyle = s.backgroundColor;
           easel.ctx.fillRect(ox,oy,rs,rs);
-          //easel.ctx.shadowColor = s.foregroundShadowColor;
-          //easel.ctx.shadowBlur = s.foregroundShadowBlur;
           easel.ctx.fillStyle = s.foregroundColor;
           easel.ctx.fillText(s.character,mx,my);
         } //end if

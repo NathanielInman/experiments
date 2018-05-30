@@ -43,7 +43,7 @@ export class Sector{
     // now acquire the color based on whether its visible and either a floor
     // or a wall
     if(this.isVisible()&&this.isWalkable()){
-      let hue = getHueFromHex(this.type.background),
+      let hue = getHueFromHex(color),
           avg = getBlendedHue(hue,this.environment.color.hue,this.environment.color.strength);
 
       result.backgroundColor = ink(`hsl(${
@@ -56,8 +56,8 @@ export class Sector{
         this.environment.color.saturation},${
         this.environment.color.lightness.floorVisible+0.2
       })`);
-    }else if(!this.isVisible&&this.isWalkable()){
-      let hue = getHueFromHex(this.type.background),
+    }else if(!this.isVisible()&&this.isWalkable()){
+      let hue = getHueFromHex(color),
           avg = getBlendedHue(hue,this.environment.color.hue,this.environment.color.strength);
 
       result.backgroundColor = ink(`hsl(${
@@ -70,8 +70,8 @@ export class Sector{
         this.environment.color.saturation},${
         this.environment.color.lightness.floorHidden+0.2
       })`);
-    }else if(this.isVisible()&&this.isWall()){
-      let hue = getHueFromHex(this.type.background),
+    }else if(this.isVisible()&&(this.isWall()||this.isDoor())){
+      let hue = getHueFromHex(color),
           avg = getBlendedHue(hue,this.environment.color.hue,this.environment.color.strength);
 
       result.backgroundColor = ink(`hsl(${
@@ -84,8 +84,8 @@ export class Sector{
         this.environment.color.saturation},${
         this.environment.color.lightness.wallVisible+0.2
       })`);
-    }else if(!this.isVisible()&&this.isWall()){
-      let hue = getHueFromHex(this.type.background),
+    }else if(!this.isVisible()&&(this.isWall()||this.isDoor())){
+      let hue = getHueFromHex(color),
           avg = getBlendedHue(hue,this.environment.color.hue,this.environment.color.strength);
 
       result.backgroundColor = ink(`hsl(${
@@ -99,6 +99,7 @@ export class Sector{
         this.environment.color.lightness.wallHidden+0.2
       })`);
     }else{
+      if(this.isSeen()) console.log('doomtrain',result,this);
       result = null;
     } //end if
     return result;

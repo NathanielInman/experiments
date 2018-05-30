@@ -95,7 +95,7 @@ export const environments = [
       lightness: {
         ambient: 0.2,
         floorVisible: 0.1,
-        floorHidden: 0.01,
+        floorHidden: 0.02,
         wallVisible: 0.2,
         wallHidden: 0.02
       }
