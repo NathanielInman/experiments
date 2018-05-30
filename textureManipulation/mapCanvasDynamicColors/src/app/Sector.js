@@ -2,21 +2,19 @@ import {floors} from './floors';
 import {walls} from './walls';
 import {ink} from 'ion-cloud';
 
-function getBlendedHue(hue1,hue2,hue1weight){
-  if(hue1===0||hue2===0) return hue1||hue2; //ignore grays
-  let [radius1,radius2] = [
-    hue1*hue1weight+hue2*(1-hue1weight),
-    ((hue1*hue1weight+hue2*(1-hue1weight)+360)/2)%360
-  ];
+// blend top and bottom colors together
+function getBlendedHSL(topColor,bottomColor,topWeight){
+  let top = ink(topColor,{format: 'object'}),
+      bottom = ink(bottomColor,{format: 'object'}),
+      r = top.r*topWeight+bottom.r*(1-topWeight),
+      g = top.g*topWeight+bottom.g*(1-topWeight),
+      b = top.b*topWeight+bottom.b*(1-topWeight);
 
-  if(Math.min(Math.abs(hue1-radius1),Math.abs(hue2-radius1))<Math.min(Math.abs(hue1-radius2),Math.abs(hue2-radius2)))
-    return radius1
-  else
-    return radius2
-} //end getBlendedHue()
+  return getHSLFromHex(ink(`rgb(${r},${g},${b})`,{format: 'hex'}));
+} //end getBlendedHSL()
 
-function getHueFromHex(hex){
-  return +ink(hex,{format: 'hsl'}).replace(/(hsl\(|\))/g,'').split(',')[0];
+function getHSLFromHex(hex){
+  return ink(hex,{format: 'hsl'}).replace(/(hsl\(|\))/g,'').split(',');
 } //end getHueFromHex()
 
 export class Sector{
@@ -28,10 +26,13 @@ export class Sector{
     this.roomNumber = 0;
   }
   getColors(){
-    let result = {}, color = this.type.color,
+    let result = {},
         h = this.environment.color.hue,
         s = this.environment.color.saturation,
-        l = 0;
+        l = this.environment.color.lightness.ambient,
+        f = this.environment.color.fog,
+        color = this.type.color,
+        colorEnv = ink(`hsl(${h},${s},${l})`,{format: 'hex'});
 
     // set character defaults and override color
     // if it's a dynamic sector like a door
@@ -47,33 +48,29 @@ export class Sector{
     // now acquire the color based on whether its visible and either a floor
     // or a wall
     if(this.isVisible()&&this.isWalkable()){
-      let hue = getHueFromHex(color);
-
-      h = getBlendedHue(hue,h,this.environment.color.strength);
+      [h,s] = getBlendedHSL(colorEnv,color,f);
       l = this.environment.color.lightness.floorVisible;
       result.backgroundColor = ink(`hsl(${h},${s},${l})`);
-      result.foregroundColor = ink(`hsl(${h},${s},${l+0.2})`);
+      l += this.environment.color.lightness.floorLetter;
+      result.foregroundColor = ink(`hsl(${h},${s},${l})`);
     }else if(!this.isVisible()&&this.isWalkable()){
-      let hue = getHueFromHex(color);
-
-      h = getBlendedHue(hue,h,this.environment.color.strength);
+      [h,s] = getBlendedHSL(colorEnv,color,f);
       l = this.environment.color.lightness.floorHidden;
-      result.backgroundColor = ink(`hsl(${h},${s},${l})`);
-      result.foregroundColor = ink(`hsl(${h},${s},${l+0.2})`);
+      result.backgroundColor = ink(`hsla(${h},${s},${l},0.3)`);
+      l += this.environment.color.lightness.floorLetter;
+      result.foregroundColor = ink(`hsla(${h},${s},${l},0)`);
     }else if(this.isVisible()&&(this.isWall()||this.isDoor())){
-      let hue = getHueFromHex(color);
-
-      h = getBlendedHue(hue,h,this.environment.color.strength);
+      [h,s] = getBlendedHSL(colorEnv,color,f);
       l = this.environment.color.lightness.wallVisible;
       result.backgroundColor = ink(`hsl(${h},${s},${l})`);
-      result.foregroundColor = ink(`hsl(${h},${s},${l+0.2})`);
+      l += this.environment.color.lightness.wallLetter;
+      result.foregroundColor = ink(`hsl(${h},${s},${l})`);
     }else if(!this.isVisible()&&(this.isWall()||this.isDoor())){
-      let hue = getHueFromHex(color);
-
-      h = getBlendedHue(hue,h,this.environment.color.strength);
+      [h,s] = getBlendedHSL(colorEnv,color,f);
       l = this.environment.color.lightness.wallHidden;
-      result.backgroundColor = ink(`hsl(${h},${s},${l})`);
-      result.foregroundColor = ink(`hsl(${h},${s},${l+0.2})`);
+      result.backgroundColor = ink(`hsla(${h},${s},${l},0.2)`);
+      l += this.environment.color.lightness.wallLetter;
+      result.foregroundColor = ink(`hsla(${h},${s},${l},0)`);
     }else{
       result = null;
     } //end if

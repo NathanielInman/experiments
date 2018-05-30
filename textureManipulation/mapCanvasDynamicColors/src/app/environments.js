@@ -66,10 +66,23 @@ export const environments = [
       'tree'
     ],
     description: 'north of the taiga belt is this arctic tundra where the subsoil is frozen. there are few trees here.'
-  },
+  }, */
   {
     name: 'park tundra',
-    color: '#178080',
+    color: {
+      hue: 180,
+      saturation: 0.70,
+      fog: 0.78,
+      lightness: {
+        ambient: 0.30,
+        floorVisible: 0.1,
+        floorHidden: 0.02,
+        floorLetter: 0.06,
+        wallVisible: 0.2,
+        wallHidden: 0.02,
+        wallLetter: 0.15
+      }
+    },
     walls: [
       'rock and dirt',
       'rock',
@@ -84,20 +97,21 @@ export const environments = [
       'shrub'
     ],
     description: 'high enough that strong winds occur a lot but just low enough for trees to grow, this park tundra is generally pretty cold.'
-  },*/
+  } /*,
   {
     name: 'sea cove',
-    //color: '#161551',
     color: {
-      hue: 237.85714285714286,
-      saturation: 0.5490196078431372,
-      strength: 0.5,
+      hue: 241,
+      saturation: 0.59,
+      fog: 0.68,
       lightness: {
-        ambient: 0.2,
+        ambient: 0.19,
         floorVisible: 0.1,
         floorHidden: 0.02,
+        floorLetter: 0.2,
         wallVisible: 0.2,
-        wallHidden: 0.02
+        wallHidden: 0.02,
+        wallLetter: 0.2
       }
     },
     walls: [

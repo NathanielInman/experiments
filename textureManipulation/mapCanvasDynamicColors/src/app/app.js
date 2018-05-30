@@ -102,9 +102,9 @@ if(!easel.activated){
         } //end if
       } //end for
     } //end for
-    easel.ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    easel.ctx.fillStyle = 'rgba(0,0,0,0.7)';
     easel.ctx.shadowColor = '#000';
-    easel.ctx.shadowBlur = 10;
+    easel.ctx.shadowBlur = 15;
     easel.ctx.fill();
 
     // now that we've drawn the map, draw the player
