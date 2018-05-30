@@ -28,7 +28,10 @@ export class Sector{
     this.roomNumber = 0;
   }
   getColors(){
-    let result = {}, color = this.type.color;
+    let result = {}, color = this.type.color,
+        h = this.environment.color.hue,
+        s = this.environment.color.saturation,
+        l = 0;
 
     // set character defaults and override color
     // if it's a dynamic sector like a door
@@ -44,64 +47,34 @@ export class Sector{
     // now acquire the color based on whether its visible and either a floor
     // or a wall
     if(this.isVisible()&&this.isWalkable()){
-      let hue = getHueFromHex(color),
-          avg = getBlendedHue(hue,this.environment.color.hue,this.environment.color.strength);
+      let hue = getHueFromHex(color);
 
-      console.log(color,hue,this.environment.color.hue,avg,this.environment.color.strength);
-      result.backgroundColor = ink(`hsl(${
-        avg},${
-        this.environment.color.saturation},${
-        this.environment.color.lightness.floorVisible
-      })`);
-      result.foregroundColor = ink(`hsl(${
-        avg},${
-        this.environment.color.saturation},${
-        this.environment.color.lightness.floorVisible+0.2
-      })`);
+      h = getBlendedHue(hue,h,this.environment.color.strength);
+      l = this.environment.color.lightness.floorVisible;
+      result.backgroundColor = ink(`hsl(${h},${s},${l})`);
+      result.foregroundColor = ink(`hsl(${h},${s},${l+0.2})`);
     }else if(!this.isVisible()&&this.isWalkable()){
-      let hue = getHueFromHex(color),
-          avg = getBlendedHue(hue,this.environment.color.hue,this.environment.color.strength);
+      let hue = getHueFromHex(color);
 
-      result.backgroundColor = ink(`hsl(${
-        avg},${
-        this.environment.color.saturation},${
-        this.environment.color.lightness.floorHidden
-      })`);
-      result.foregroundColor = ink(`hsl(${
-        avg},${
-        this.environment.color.saturation},${
-        this.environment.color.lightness.floorHidden+0.2
-      })`);
+      h = getBlendedHue(hue,h,this.environment.color.strength);
+      l = this.environment.color.lightness.floorHidden;
+      result.backgroundColor = ink(`hsl(${h},${s},${l})`);
+      result.foregroundColor = ink(`hsl(${h},${s},${l+0.2})`);
     }else if(this.isVisible()&&(this.isWall()||this.isDoor())){
-      let hue = getHueFromHex(color),
-          avg = getBlendedHue(hue,this.environment.color.hue,this.environment.color.strength);
+      let hue = getHueFromHex(color);
 
-      result.backgroundColor = ink(`hsl(${
-        avg},${
-        this.environment.color.saturation},${
-        this.environment.color.lightness.wallVisible
-      })`);
-      result.foregroundColor = ink(`hsl(${
-        avg},${
-        this.environment.color.saturation},${
-        this.environment.color.lightness.wallVisible+0.2
-      })`);
+      h = getBlendedHue(hue,h,this.environment.color.strength);
+      l = this.environment.color.lightness.wallVisible;
+      result.backgroundColor = ink(`hsl(${h},${s},${l})`);
+      result.foregroundColor = ink(`hsl(${h},${s},${l+0.2})`);
     }else if(!this.isVisible()&&(this.isWall()||this.isDoor())){
-      let hue = getHueFromHex(color),
-          avg = getBlendedHue(hue,this.environment.color.hue,this.environment.color.strength);
+      let hue = getHueFromHex(color);
 
-      result.backgroundColor = ink(`hsl(${
-        avg},${
-        this.environment.color.saturation},${
-        this.environment.color.lightness.wallHidden
-      })`);
-      result.foregroundColor = ink(`hsl(${
-        avg},${
-        this.environment.color.saturation},${
-        this.environment.color.lightness.wallHidden+0.2
-      })`);
+      h = getBlendedHue(hue,h,this.environment.color.strength);
+      l = this.environment.color.lightness.wallHidden;
+      result.backgroundColor = ink(`hsl(${h},${s},${l})`);
+      result.foregroundColor = ink(`hsl(${h},${s},${l+0.2})`);
     }else{
-      if(this.isSeen()) console.log('doomtrain',result,this);
       result = null;
     } //end if
     return result;
