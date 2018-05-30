@@ -2,97 +2,81 @@ export const floors = [
   {
     name: 'empty',
     character: ' ',
-    color: '#262626',
-    background: '#333333'
+    color: '#262626'
   },
   {
     name: 'dirt',
     character: '.',
-    color: '#32261b',
-    background: '#423824'
+    color: '#32261b'
   },
   {
     name: 'lava',
     character: '~',
-    color: '#321b1b',
-    background: '#422424'
+    color: '#321b1b'
   },
   {
     name: 'water',
     character: '~',
-    color: '#1b1b32',
-    background: '#242442'
+    color: '#1b1b32'
   },
   {
     name: 'grass',
     character: ',',
-    color: '#20311b',
-    background: '#244224'
+    color: '#20311b'
   },
   {
     name: 'snow',
     character: '\'',
-    color: '#1b2331',
-    background: '#333333'
+    color: '#1b2331'
   },
   {
     name: 'sand',
     character: '`',
-    color: '#31311b',
-    background: '#434324'
+    color: '#31311b'
   },
   {
     name: 'rocky',
     character: '^',
-    color: '#262626',
-    background: '#333333'
+    color: '#262626'
   },
   {
     name: 'muddy',
     character: ';',
-    color: '#322a1b',
-    background: '#423324'
+    color: '#322a1b'
   },
   {
     name: 'cobbled',
     character: ':',
-    color: '#262626',
-    background: '#333333'
+    color: '#262626'
   },
   {
     name: 'wood',
     character: '=',
-    color: '#32261b',
-    background: '#422e24'
+    color: '#32261b'
   },
   {
     name: 'dirt and rock',
     character: '*',
-    color: '#30301d',
-    background: '#423824'
+    color: '#30301d'
   },
   {
     name: 'underground',
     character: '.',
-    color: '#1b1b32',
-    background: '#2c2c3a'
+    color: '#1b1b32'
   },
   {
     name: 'sandstone',
     character: '=',
-    color: '#30301d',
-    background: '#424224'
+    color: '#30301d'
   },
   {
     name: 'brick',
     character: ': ',
-    color: '#301d1d',
-    background: '#422424'
+    color: '#301d1d'
   },
   {
     name: 'ice',
     character: '+',
-    color: '#1b1b32',
-    background: '#242442'
+    color: '#1b1b32'
   }
 ]

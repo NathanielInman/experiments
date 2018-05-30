@@ -2,6 +2,21 @@ import {floors} from './floors';
 import {walls} from './walls';
 import {ink} from 'ion-cloud';
 
+// blend top and bottom colors together
+function getBlendedHSL(topColor,bottomColor,topWeight){
+  let top = ink(topColor,{format: 'object'}),
+      bottom = ink(bottomColor,{format: 'object'}),
+      r = top.r*topWeight+bottom.r*(1-topWeight),
+      g = top.g*topWeight+bottom.g*(1-topWeight),
+      b = top.b*topWeight+bottom.b*(1-topWeight);
+
+  return getHSLFromHex(ink(`rgb(${r},${g},${b})`,{format: 'hex'}));
+} //end getBlendedHSL()
+
+function getHSLFromHex(hex){
+  return ink(hex,{format: 'hsl'}).replace(/(hsl\(|\))/g,'').split(',');
+} //end getHueFromHex()
+
 export class Sector{
   constructor(map){
     this.map = map;
@@ -11,33 +26,51 @@ export class Sector{
     this.roomNumber = 0;
   }
   getColors(){
-    let result = {}, a; //a(alpha) is represents how strong env color is
+    let result = {},
+        h = this.environment.color.hue,
+        s = this.environment.color.saturation,
+        l = this.environment.color.lightness.ambient,
+        f = this.environment.color.fog,
+        color = this.type.color,
+        colorEnv = ink(`hsl(${h},${s},${l})`,{format: 'hex'});
 
-    if(this.isVisible()){
-      result.backgroundShadowColor = '#000';
-      result.backgroundShadowBlur = 0;
-      result.foregroundShadowColor = ink(this.type.color,{a: 0.6});
-      result.foregroundShadowBlur = 10;
-      a = 0.33;
-    }else{
-      result.backgroundShadowColor = '#000';
-      result.backgroundShadowBlur = 0;
-      result.foregroundShadowColor = '#000';
-      result.foregroundShadowBlur = 0;
-      a = 0.07;
-    } //end if
-    if(this.category==='door'&&!this.doorOpen){
-      result.backgroundColor = ink(this.typeOpen.background,{a});
-      result.foregroundColor = ink(this.typeOpen.color,{a});
+    // set character defaults and override color
+    // if it's a dynamic sector like a door
+    result.character = this.type.character;
+    if(this.isDoorClosed()){
+      color = this.typeOpen.color;
       result.character = '+';
-    }else if(this.category==='door'&&this.doorOpen){
-      result.backgroundColor = ink(this.typeClosed.background,{a});
-      result.foregroundColor = ink(this.typeClosed.color,{a});
+    }else if(this.isDoorOpen()){
+      color = this.typeClosed.color;
       result.character = '-';
-    }else if(this.type!=='none'){
-      result.backgroundColor = ink(this.type.background,{a});
-      result.foregroundColor = ink(this.type.color,{a});
-      result.character = this.type.character;
+    } //end if
+
+    // now acquire the color based on whether its visible and either a floor
+    // or a wall
+    if(this.isVisible()&&this.isWalkable()){
+      [h,s] = getBlendedHSL(colorEnv,color,f);
+      l = this.environment.color.lightness.floorVisible;
+      result.backgroundColor = ink(`hsl(${h},${s},${l})`);
+      l += this.environment.color.lightness.floorLetter;
+      result.foregroundColor = ink(`hsl(${h},${s},${l})`);
+    }else if(!this.isVisible()&&this.isWalkable()){
+      [h,s] = getBlendedHSL(colorEnv,color,f);
+      l = this.environment.color.lightness.floorHidden;
+      result.backgroundColor = ink(`hsla(${h},${s},${l},0.3)`);
+      l += this.environment.color.lightness.floorLetter;
+      result.foregroundColor = ink('rgba(0,0,0,0)');
+    }else if(this.isVisible()&&(this.isWall()||this.isDoor())){
+      [h,s] = getBlendedHSL(colorEnv,color,f);
+      l = this.environment.color.lightness.wallVisible;
+      result.backgroundColor = ink(`hsl(${h},${s},${l})`);
+      l += this.environment.color.lightness.wallLetter;
+      result.foregroundColor = ink(`hsl(${h},${s},${l})`);
+    }else if(!this.isVisible()&&(this.isWall()||this.isDoor())){
+      [h,s] = getBlendedHSL(colorEnv,color,f);
+      l = this.environment.color.lightness.wallHidden;
+      result.backgroundColor = ink(`hsla(${h},${s},${l},0.2)`);
+      l += this.environment.color.lightness.wallLetter;
+      result.foregroundColor = ink('rgba(0,0,0,0)');
     }else{
       result = null;
     } //end if

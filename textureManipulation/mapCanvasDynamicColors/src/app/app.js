@@ -3,6 +3,8 @@ import {Map} from './Map';
 import {environments} from './environments';
 import {Player} from './Player';
 
+window.ink = ink;
+
 let noscript = document.querySelector('noscript'),
     easel = new Easel(),
     environmentIndex = Math.floor(Math.random()*environments.length),
@@ -37,10 +39,14 @@ if(!easel.activated){
         rs = rh<rw?rh:rw; //row size (takes lesser of width/height)
 
     // start by cleaning the map
-    easel.ctx.fillStyle=environment.color;
+    easel.ctx.fillStyle=ink(`hsl(${
+      environment.color.hue},${
+      environment.color.saturation},${
+      environment.color.lightness.ambient})`);
     easel.ctx.fillRect(0,0,easel.viewport.w,easel.viewport.h);
 
     // now draw the sectors
+    easel.ctx.shadowBlur = 0;
     for(let y=player.y-player.sight-1;y<=player.y+player.sight;y++){
       for(let x=player.x-player.sight;x<=player.x+player.sight+1;x++){
         if(x<0||y<0||x>map.width-1||y>map.height-1) continue;
@@ -50,12 +56,8 @@ if(!easel.activated){
             s = map.getColors(x,y);
 
         if(map.isSeen(x,y)&&s){
-          easel.ctx.shadowColor = s.backgroundShadowColor;
-          easel.ctx.shadowBlur = s.backgroundShadowBlur;
           easel.ctx.fillStyle = s.backgroundColor;
           easel.ctx.fillRect(ox,oy,rs,rs);
-          easel.ctx.shadowColor = s.foregroundShadowColor;
-          easel.ctx.shadowBlur = s.foregroundShadowBlur;
           easel.ctx.fillStyle = s.foregroundColor;
           easel.ctx.fillText(s.character,mx,my);
         } //end if
@@ -100,9 +102,9 @@ if(!easel.activated){
         } //end if
       } //end for
     } //end for
-    easel.ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    easel.ctx.fillStyle = 'rgba(0,0,0,0.7)';
     easel.ctx.shadowColor = '#000';
-    easel.ctx.shadowBlur = 10;
+    easel.ctx.shadowBlur = 15;
     easel.ctx.fill();
 
     // now that we've drawn the map, draw the player

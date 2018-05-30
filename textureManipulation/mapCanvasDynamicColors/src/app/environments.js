@@ -1,7 +1,20 @@
 export const environments = [
   {
     name: 'mountain',
-    color: '#505050',
+    color: {
+      hue: 0,
+      saturation: 0,
+      fog: 0.34,
+      lightness: {
+        ambient: 0.31,
+        floorVisible: 0.3,
+        floorHidden: 0.02,
+        floorLetter: -0.02,
+        wallVisible: 0.4,
+        wallHidden: 0.02,
+        wallLetter: 0.15
+      }
+    },
     walls: [
       'rock',
       'cobbled'
@@ -17,7 +30,20 @@ export const environments = [
   },
   {
     name: 'anchialine cave',
-    color: '#434323',
+    color: {
+      hue: 60,
+      saturation: 0.31,
+      fog: 0.79,
+      lightness: {
+        ambient: 0.2,
+        floorVisible: 0.1,
+        floorHidden: 0.02,
+        floorLetter: 0.06,
+        wallVisible: 0.2,
+        wallHidden: 0.02,
+        wallLetter: 0.15
+      }
+    },
     walls: [
       'underground'
     ],
@@ -31,7 +57,20 @@ export const environments = [
   },
   {
     name: 'graveyard',
-    color: '#444',
+    color: {
+      hue: 0,
+      saturation: 0,
+      fog: 0.79,
+      lightness: {
+        ambient: 0.22,
+        floorVisible: 0.1,
+        floorHidden: 0.02,
+        floorLetter: 0.06,
+        wallVisible: 0.2,
+        wallHidden: 0.02,
+        wallLetter: 0.15
+      }
+    },
     walls: [
       'brick',
       'tree'
@@ -49,7 +88,20 @@ export const environments = [
   },
   {
     name: 'arctic tundra',
-    color: '#7a75d4',
+    color: {
+      hue: 243,
+      saturation: 0.52,
+      fog: 0.72,
+      lightness: {
+        ambient: 0.65,
+        floorVisible: 0.3,
+        floorHidden: 0.02,
+        floorLetter: -0.09,
+        wallVisible: 0.5,
+        wallHidden: 0.02,
+        wallLetter: 0.05
+      }
+    },
     walls: [
       'ice',
       'rock'
@@ -68,7 +120,20 @@ export const environments = [
   },
   {
     name: 'park tundra',
-    color: '#178080',
+    color: {
+      hue: 180,
+      saturation: 0.70,
+      fog: 0.78,
+      lightness: {
+        ambient: 0.30,
+        floorVisible: 0.1,
+        floorHidden: 0.02,
+        floorLetter: 0.06,
+        wallVisible: 0.2,
+        wallHidden: 0.02,
+        wallLetter: 0.15
+      }
+    },
     walls: [
       'rock and dirt',
       'rock',
@@ -83,10 +148,23 @@ export const environments = [
       'shrub'
     ],
     description: 'high enough that strong winds occur a lot but just low enough for trees to grow, this park tundra is generally pretty cold.'
-  },
+  } ,
   {
     name: 'sea cove',
-    color: '#161551',
+    color: {
+      hue: 241,
+      saturation: 0.59,
+      fog: 0.68,
+      lightness: {
+        ambient: 0.19,
+        floorVisible: 0.1,
+        floorHidden: 0.02,
+        floorLetter: 0.2,
+        wallVisible: 0.2,
+        wallHidden: 0.02,
+        wallLetter: 0.2
+      }
+    },
     walls: [
       'rock'
     ],
@@ -102,7 +180,20 @@ export const environments = [
   },
   {
     name: 'alpine tundra',
-    color: '#1a4b95',
+    color: {
+      hue: 216,
+      saturation: 0.70,
+      fog: 0.43,
+      lightness: {
+        ambient: 0.34,
+        floorVisible: 0.2,
+        floorHidden: 0.02,
+        floorLetter: -0.08,
+        wallVisible: 0.3,
+        wallHidden: 0.02,
+        wallLetter: 0.13
+      }
+    },
     walls: [
       'rock and dirt'
     ],
@@ -116,7 +207,20 @@ export const environments = [
   },
   {
     name: 'closed forest taiga',
-    color: '#17806e',
+    color: {
+      hue: 170,
+      saturation: 0.70,
+      fog: 0.52,
+      lightness: {
+        ambient: 0.3,
+        floorVisible: 0.2,
+        floorHidden: 0.02,
+        floorLetter: -0.06,
+        wallVisible: 0.3,
+        wallHidden: 0.02,
+        wallLetter: 0.13
+      }
+    },
     walls: [
       'tree',
       'vegetation'
