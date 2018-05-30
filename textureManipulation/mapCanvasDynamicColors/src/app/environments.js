@@ -93,10 +93,10 @@ export const environments = [
       saturation: 0.5490196078431372,
       lightness: {
         ambient: 0.2,
-        floorVisible: 0.2,
-        floorHidden: 0.2,
+        floorVisible: 0.1,
+        floorHidden: 0.01,
         wallVisible: 0.2,
-        wallHidden: 0.2
+        wallHidden: 0.02
       }
     },
     walls: [
