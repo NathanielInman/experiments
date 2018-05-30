@@ -94,10 +94,10 @@ export const environments = [
       fog: 0.72,
       lightness: {
         ambient: 0.65,
-        floorVisible: 0.3,
+        floorVisible: 0.4,
         floorHidden: 0.02,
         floorLetter: -0.09,
-        wallVisible: 0.5,
+        wallVisible: 0.7,
         wallHidden: 0.02,
         wallLetter: 0.05
       }
