@@ -2,14 +2,17 @@ import {floors} from './floors';
 import {walls} from './walls';
 import {ink} from 'ion-cloud';
 
-function getAverageHue(hue1,hue2){
-  let [radius1,radius2] = [(hue1+hue2)/2,((hue1+hue2+360)/2)%360];
+function getBlendedHue(hue1,hue2,hue1weight){
+  let [radius1,radius2] = [
+    hue1*hue1weight+hue2*(1-hue1weight),
+    ((hue1*hue1weight+hue2*(1-hue1weight)+360)/2)%360
+  ];
 
   if(Math.min(Math.abs(hue1-radius1),Math.abs(hue2-radius1))<Math.min(Math.abs(hue1-radius2),Math.abs(hue2-radius2)))
     return radius1
   else
     return radius2
-} //end getAverageHue()
+} //end getBlendedHue()
 
 function getHueFromHex(hex){
   return ink(hex,{format: 'hsl'}).replace(/(hsl\(|\))/g,'').split(',')[0];
@@ -29,10 +32,10 @@ export class Sector{
     // set character defaults and override color
     // if it's a dynamic sector like a door
     result.character = this.type.character;
-    if(this.category==='door'&&!this.doorOpen){
+    if(this.isDoorClosed()){
       color = this.typeOpen.color;
       result.character = '+';
-    }else if(this.category==='door'&&this.doorOpen){
+    }else if(this.isDoorOpen()){
       color = this.typeClosed.color;
       result.character = '-';
     } //end if
@@ -41,7 +44,7 @@ export class Sector{
     // or a wall
     if(this.isVisible()&&this.isWalkable()){
       let hue = getHueFromHex(this.type.background),
-          avg = getAverageHue(hue,this.environment.color.hue);
+          avg = getBlendedHue(hue,this.environment.color.hue,this.environment.color.strength);
 
       result.backgroundColor = ink(`hsl(${
         avg},${
@@ -55,7 +58,7 @@ export class Sector{
       })`);
     }else if(!this.isVisible&&this.isWalkable()){
       let hue = getHueFromHex(this.type.background),
-          avg = getAverageHue(hue,this.environment.color.hue);
+          avg = getBlendedHue(hue,this.environment.color.hue,this.environment.color.strength);
 
       result.backgroundColor = ink(`hsl(${
         avg},${
@@ -69,7 +72,7 @@ export class Sector{
       })`);
     }else if(this.isVisible()&&this.isWall()){
       let hue = getHueFromHex(this.type.background),
-          avg = getAverageHue(hue,this.environment.color.hue);
+          avg = getBlendedHue(hue,this.environment.color.hue,this.environment.color.strength);
 
       result.backgroundColor = ink(`hsl(${
         avg},${
@@ -83,7 +86,7 @@ export class Sector{
       })`);
     }else if(!this.isVisible()&&this.isWall()){
       let hue = getHueFromHex(this.type.background),
-          avg = getAverageHue(hue,this.environment.color.hue);
+          avg = getBlendedHue(hue,this.environment.color.hue,this.environment.color.strength);
 
       result.backgroundColor = ink(`hsl(${
         avg},${

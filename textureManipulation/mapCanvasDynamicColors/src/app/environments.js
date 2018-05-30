@@ -91,6 +91,7 @@ export const environments = [
     color: {
       hue: 237.85714285714286,
       saturation: 0.5490196078431372,
+      strength: 0.5,
       lightness: {
         ambient: 0.2,
         floorVisible: 0.1,
