@@ -3,6 +3,7 @@ import {walls} from './walls';
 import {ink} from 'ion-cloud';
 
 function getBlendedHue(hue1,hue2,hue1weight){
+  if(hue1===0||hue2===0) return hue1||hue2; //ignore grays
   let [radius1,radius2] = [
     hue1*hue1weight+hue2*(1-hue1weight),
     ((hue1*hue1weight+hue2*(1-hue1weight)+360)/2)%360
@@ -15,7 +16,7 @@ function getBlendedHue(hue1,hue2,hue1weight){
 } //end getBlendedHue()
 
 function getHueFromHex(hex){
-  return ink(hex,{format: 'hsl'}).replace(/(hsl\(|\))/g,'').split(',')[0];
+  return +ink(hex,{format: 'hsl'}).replace(/(hsl\(|\))/g,'').split(',')[0];
 } //end getHueFromHex()
 
 export class Sector{
@@ -27,7 +28,7 @@ export class Sector{
     this.roomNumber = 0;
   }
   getColors(){
-    let result = {}, color = this.type.background;
+    let result = {}, color = this.type.color;
 
     // set character defaults and override color
     // if it's a dynamic sector like a door
@@ -46,6 +47,7 @@ export class Sector{
       let hue = getHueFromHex(color),
           avg = getBlendedHue(hue,this.environment.color.hue,this.environment.color.strength);
 
+      console.log(color,hue,this.environment.color.hue,avg,this.environment.color.strength);
       result.backgroundColor = ink(`hsl(${
         avg},${
         this.environment.color.saturation},${

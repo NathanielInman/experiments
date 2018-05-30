@@ -2,85 +2,71 @@ export const walls = [
   {
     name: 'dirt',
     character: '%',
-    color: '#b89e7a',
-    background: '#ae916b'
+    color: '#b89e7a'
   },
   {
     name: 'rock and dirt',
     character: '⅌',
-    color: '#999999',
-    background: '#ac976d'
+    color: '#999999'
   },
   {
     name: 'rock',
     character: '⅊',
-    color: '#999999',
-    background: '#8c8c8c'
+    color: '#999999'
   },
   {
     name: 'cobbled',
     character: '#',
-    color: '#999999',
-    background: '#8c8c8c'
+    color: '#999999'
   },
   {
     name: 'clay',
     character: '*',
-    color: '#b8a37a',
-    background: '#ae986a'
+    color: '#b8a37a'
   },
   {
     name: 'wood',
     character: '+',
-    color: '#b8937a',
-    background: '#af8469'
+    color: '#b8937a'
   },
   {
     name: 'cobbled',
     character: '#',
-    color: '#999999',
-    background: '#8c8c8c'
+    color: '#999999'
   },
   {
     name: 'underground',
     character: '*',
-    color: '#9292a0',
-    background: '#828297'
+    color: '#9292a0'
   },
   {
     name: 'ice',
     character: '%',
-    color: '#7b85b7',
-    background: '#6b7cad'
+    color: '#7b85b7'
   },
   {
     name: 'sandstone',
     character: '-',
-    color: '#b6b67c',
-    background: '#aeae6a'
+    color: '#b6b67c'
   },
   {
     name: 'brick',
     character: '#',
-    color: '#b67c7c',
-    background: '#ae6a6a'
+    color: '#b67c7c'
   },
   {
     name: 'tree',
     character: 'ℸ',
-    color: '#80b380',
-    background: '#72a772'
+    color: '#80b380'
   },
   {
     name: 'vegetation',
     character: 'o',
-    color: '#80b380',
-    background: '#72a772'
+    color: '#80b380'
   },
   {
     name: 'underwater',
     character: '~',
-    color: '#8080b3',
-    background: '#7272a7'
+    color: '#8080b3'
   }
 ]
