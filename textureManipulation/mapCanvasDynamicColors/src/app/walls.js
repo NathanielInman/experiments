@@ -60,6 +60,16 @@ export const walls = [
     color: '#80b380'
   },
   {
+    name: 'shrub',
+    character: 'ℷ',
+    color: '#80b380'
+  },
+  {
+    name: 'flora',
+    character: '℩',
+    color: '#80b380'
+  },
+  {
     name: 'vegetation',
     character: 'o',
     color: '#80b380'
@@ -68,5 +78,10 @@ export const walls = [
     name: 'underwater',
     character: '~',
     color: '#8080b3'
+  },
+  {
+    name: 'lava',
+    character: '~',
+    color: '#b38080'
   }
 ]
