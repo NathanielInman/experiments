@@ -1,5 +1,5 @@
 export const environments = [
-  /*{
+  {
     name: 'mountain',
     color: {
       hue: 0,
@@ -10,9 +10,11 @@ export const environments = [
         floorVisible: 0.3,
         floorHidden: 0.02,
         floorLetter: -0.02,
-        wallVisible: 0.4,
+        floorLetterActive: 0.08,
+        wallVisible: 0.5,
         wallHidden: 0.02,
-        wallLetter: 0.15
+        wallLetter: 0.06,
+        wallLetterActive: 0.15
       }
     },
     walls: [
@@ -27,7 +29,7 @@ export const environments = [
       'rock'
     ],
     description: 'a large natural elevation of earth\'s surface rises abruptly from the surrounding level with little to no trees or vegetation.'
-  },
+  }/*,
   {
     name: 'anchialine cave',
     color: {
@@ -85,7 +87,7 @@ export const environments = [
       'rock'
     ],
     description: 'here is a burial ground for poor-class citizens and wanderers.'
-  },*/
+  },
   {
     name: 'arctic tundra',
     color: {
@@ -119,7 +121,7 @@ export const environments = [
       'tree'
     ],
     description: 'north of the taiga belt is this arctic tundra where the subsoil is frozen. there are few trees here.'
-  }/*,
+  },
   {
     name: 'park tundra',
     color: {
