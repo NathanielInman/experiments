@@ -29,7 +29,7 @@ export const environments = [
       'rock'
     ],
     description: 'a large natural elevation of earth\'s surface rises abruptly from the surrounding level with little to no trees or vegetation.'
-  }/*,
+  },
   {
     name: 'anchialine cave',
     color: {
@@ -41,9 +41,11 @@ export const environments = [
         floorVisible: 0.1,
         floorHidden: 0.02,
         floorLetter: 0.06,
+        floorLetterActive: 0.14,
         wallVisible: 0.2,
         wallHidden: 0.02,
-        wallLetter: 0.15
+        wallLetter: 0.05,
+        wallLetterActive: 0.15
       }
     },
     walls: [
@@ -67,10 +69,12 @@ export const environments = [
         ambient: 0.22,
         floorVisible: 0.1,
         floorHidden: 0.02,
-        floorLetter: 0.06,
+        floorLetter: 0.04,
+        floorLetterActive: 0.15,
         wallVisible: 0.2,
         wallHidden: 0.02,
-        wallLetter: 0.15
+        wallLetter: 0.04,
+        wallLetterActive: 0.15
       }
     },
     walls: [
@@ -132,10 +136,12 @@ export const environments = [
         ambient: 0.30,
         floorVisible: 0.1,
         floorHidden: 0.02,
-        floorLetter: 0.06,
-        wallVisible: 0.2,
+        floorLetter: -0.02,
+        floorLetterActive: 0.15,
+        wallVisible: 0.3,
         wallHidden: 0.02,
-        wallLetter: 0.15
+        wallLetter: 0.04,
+        wallLetterActive: 0.15
       }
     },
     walls: [
@@ -152,7 +158,7 @@ export const environments = [
       'shrub'
     ],
     description: 'high enough that strong winds occur a lot but just low enough for trees to grow, this park tundra is generally pretty cold.'
-  } ,
+  },
   {
     name: 'sea cove',
     color: {
@@ -163,10 +169,12 @@ export const environments = [
         ambient: 0.19,
         floorVisible: 0.1,
         floorHidden: 0.02,
-        floorLetter: 0.2,
-        wallVisible: 0.2,
+        floorLetter: 0.11,
+        floorLetterActive: 0.25,
+        wallVisible: 0.25,
         wallHidden: 0.02,
-        wallLetter: 0.2
+        wallLetter: 0.08,
+        wallLetterActive: 0.25
       }
     },
     walls: [
@@ -190,12 +198,14 @@ export const environments = [
       fog: 0.43,
       lightness: {
         ambient: 0.34,
-        floorVisible: 0.2,
+        floorVisible: 0.12,
         floorHidden: 0.02,
-        floorLetter: -0.08,
+        floorLetter: -0.03,
+        floorLetterActive: 0.15,
         wallVisible: 0.3,
         wallHidden: 0.02,
-        wallLetter: 0.13
+        wallLetter: 0.07,
+        wallLetterActive: 0.18
       }
     },
     walls: [
@@ -217,12 +227,14 @@ export const environments = [
       fog: 0.52,
       lightness: {
         ambient: 0.3,
-        floorVisible: 0.2,
+        floorVisible: 0.18,
         floorHidden: 0.02,
-        floorLetter: -0.06,
-        wallVisible: 0.3,
+        floorLetter: -0.03,
+        floorLetterActive: 0.15,
+        wallVisible: 0.35,
         wallHidden: 0.02,
-        wallLetter: 0.13
+        wallLetter: 0.07,
+        wallLetterActive: 0.18
       }
     },
     walls: [
@@ -238,5 +250,5 @@ export const environments = [
       'flora'
     ],
     description: 'composed prediminately of coniferous trees like larch, spruce, fire, and pine, this area is high in altitude.'
-  }*/
+  }
 ]
