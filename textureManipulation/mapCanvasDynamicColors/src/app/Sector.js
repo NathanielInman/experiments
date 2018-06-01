@@ -51,25 +51,31 @@ export class Sector{
       [h,s] = getBlendedHSL(colorEnv,color,f);
       l = this.environment.color.lightness.floorVisible;
       result.backgroundColor = ink(`hsl(${h},${s},${l})`);
-      l += this.environment.color.lightness.floorLetter;
+      if(this.isDoor()){
+        l += this.environment.color.lightness.floorLetterActive;
+      }else{
+        l += this.environment.color.lightness.floorLetter;
+      } //end if
       result.foregroundColor = ink(`hsl(${h},${s},${l})`);
     }else if(!this.isVisible()&&this.isWalkable()){
       [h,s] = getBlendedHSL(colorEnv,color,f);
       l = this.environment.color.lightness.floorHidden;
       result.backgroundColor = ink(`hsla(${h},${s},${l},0.3)`);
-      l += this.environment.color.lightness.floorLetter;
       result.foregroundColor = ink('rgba(0,0,0,0)');
     }else if(this.isVisible()&&(this.isWall()||this.isDoor())){
       [h,s] = getBlendedHSL(colorEnv,color,f);
       l = this.environment.color.lightness.wallVisible;
       result.backgroundColor = ink(`hsl(${h},${s},${l})`);
-      l += this.environment.color.lightness.wallLetter;
+      if(this.isDoor()){
+        l += this.environment.color.lightness.wallLetterActive;
+      }else{
+        l += this.environment.color.lightness.wallLetter;
+      } //end if
       result.foregroundColor = ink(`hsl(${h},${s},${l})`);
     }else if(!this.isVisible()&&(this.isWall()||this.isDoor())){
       [h,s] = getBlendedHSL(colorEnv,color,f);
       l = this.environment.color.lightness.wallHidden;
       result.backgroundColor = ink(`hsla(${h},${s},${l},0.2)`);
-      l += this.environment.color.lightness.wallLetter;
       result.foregroundColor = ink('rgba(0,0,0,0)');
     }else{
       result = null;

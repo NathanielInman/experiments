@@ -1,5 +1,5 @@
 export const environments = [
-  {
+  /*{
     name: 'mountain',
     color: {
       hue: 0,
@@ -85,7 +85,7 @@ export const environments = [
       'rock'
     ],
     description: 'here is a burial ground for poor-class citizens and wanderers.'
-  },
+  },*/
   {
     name: 'arctic tundra',
     color: {
@@ -97,9 +97,11 @@ export const environments = [
         floorVisible: 0.4,
         floorHidden: 0.02,
         floorLetter: -0.09,
+        floorLetterActive: 0.13,
         wallVisible: 0.7,
         wallHidden: 0.02,
-        wallLetter: 0.05
+        wallLetter: 0.02,
+        wallLetterActive: 0.13
       }
     },
     walls: [
@@ -117,7 +119,7 @@ export const environments = [
       'tree'
     ],
     description: 'north of the taiga belt is this arctic tundra where the subsoil is frozen. there are few trees here.'
-  },
+  }/*,
   {
     name: 'park tundra',
     color: {
@@ -234,5 +236,5 @@ export const environments = [
       'flora'
     ],
     description: 'composed prediminately of coniferous trees like larch, spruce, fire, and pine, this area is high in altitude.'
-  }
+  }*/
 ]
