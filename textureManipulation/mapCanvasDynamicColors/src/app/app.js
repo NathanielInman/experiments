@@ -1,4 +1,5 @@
-import {Ion,ink,Easel} from 'ion-cloud';
+import {ink,Easel} from 'ion-cloud';
+import {Ion} from './Ion';
 import {IonCloud} from './IonCloud';
 import {Map} from './Map';
 import {environments} from './environments';
@@ -10,7 +11,7 @@ let noscript = document.querySelector('noscript'),
     environmentIndex = Math.floor(Math.random()*environments.length),
     environment = environments[environmentIndex],
     map = new Map(50,50,environment),
-    player = new Player(map,easel); //create the player and tie map to it
+    player = new Player(map,easel,scene); //create the player and tie map to it
 
 //eslint-disable-next-line no-console
 console.info(`environment: ${environment.name}`);
@@ -43,14 +44,14 @@ if(!easel.activated){
   easel.onDraw = function(){
     let rh = easel.viewport.h/(player.sight*2+1), //row height
         rw = easel.viewport.w/(player.sight*2+1), //row width
-        rs = rh<rw?rh:rw; //row size (takes lesser of width/height)
+        rs = rh<rw?rh:rw, //row size (takes lesser of width/height)
+        c = environment.color,
+        ambient = ink(`hsl(${c.hue},${c.saturation},${c.lightness.ambient})`);
 
     // start by cleaning the map
-    easel.ctx.fillStyle=ink(`hsl(${
-      environment.color.hue},${
-      environment.color.saturation},${
-      environment.color.lightness.ambient})`);
+    easel.ctx.fillStyle=ambient;
     easel.ctx.fillRect(0,0,easel.viewport.w,easel.viewport.h);
+    scene.clean(); //ensure we don't have leftover particles
 
     // now draw the sectors
     easel.ctx.shadowBlur = 0;
@@ -73,9 +74,10 @@ if(!easel.activated){
               startY: oy,
               width: rs,
               height: rs,
-              color: 'rgba(250,50,0,0.05)',
+              color: ambient,
               distance: 10,
-              quality: 100
+              quantity: 100,
+              duration: 200
             });
           } //end if
         } //end if
@@ -142,36 +144,4 @@ if(!easel.activated){
     scene.draw();
   };
   easel.redraw();
-
-  /*
-  bubbles.quantity = 1000;
-  bubbles.tweenDuration = 1000;
-  bubbles.startX = ()=> Math.random()*easel.viewport.w;
-  bubbles.startY = ()=> Math.random()*easel.viewport.h;
-  bubbles.endX = x=> x;
-  bubbles.endY = y=> y-50;
-  bubbles.size = ()=> Math.random()*2;
-  bubbles.color = (atom)=>{
-    let p, halfTween = bubbles.tweenDuration/2;
-
-    if(atom.tweenCurrent<=halfTween){
-      p = atom.tweenCurrent/halfTween;
-    }else{
-      p = (halfTween-Math.abs(halfTween-atom.tweenCurrent))/halfTween;
-    } //end if
-    return `rgba(25,150,255,${p})`;
-  };
-  bubbles.tweenType = 6;
-  bubbles.onEscape = function(atom){ this.onParticleEnd(atom); };
-  bubbles.onParticleEnd = function(atom){
-    atom.x = atom.startX = atom.originX = bubbles.startX();
-    atom.y = atom.startY = atom.originY = bubbles.startY();
-    atom.endX = atom.terminalX = bubbles.endX(atom.x);
-    atom.endY = atom.terminalY = bubbles.endY(atom.y);
-    atom.tweenCurrent = 0;
-  };
-  bubbles.background = easel.ctx.getImageData(0,0,easel.viewport.w,easel.viewport.h);
-  bubbles.populate();
-  bubbles.process();
-  */
 } //end if

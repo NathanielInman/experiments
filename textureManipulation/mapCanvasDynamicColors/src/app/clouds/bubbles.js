@@ -1,12 +1,17 @@
 export function bubbles(name,parameters){
-  let {startX,startY,width,height,color,quality,distance} = parameters,
+  let {
+        startX,startY,width,height,
+        color,quantity,distance,duration
+      } = parameters,
       bubbles = new this.Ion(this.easel);
 
   startX = startX||0;
   startY = startY||0;
   width = width||100;
   height = height||100;
-  bubbles.quantity = 2*(quality||100);
+  bubbles.tweenDuration = duration||1000;
+  bubbles.tweenCurrent = ()=> Math.floor(Math.random()*bubbles.tweenDuration);
+  bubbles.quantity = quantity;
   bubbles.states = ['initial'];
   bubbles.clear = false;
   bubbles.color = color||'rgba(250,170,0,0.2)';
@@ -29,7 +34,6 @@ export function bubbles(name,parameters){
   bubbles.onEscape = function onEscape(p){ this.onParticleEnd(p); };
   bubbles.onParticleEnd =  bubbles.reevaluate;
   bubbles.populate();
-  console.log(bubbles);
   return bubbles;
 } //end bubbles()
 

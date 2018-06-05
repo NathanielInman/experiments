@@ -35,6 +35,9 @@ export class IonCloud{
       this.easel.ctx.fillRect(0,0,this.easel.viewport.w,this.easel.viewport.h);
     } //end if
   }
+  clean(){
+    this.collection.length=0;
+  }
   draw(){
     this.clearScene();
     if(this.beforeDraw[this.state]) this.beforeDraw[this.state]();
