@@ -1,4 +1,5 @@
 export const environments = [
+  /*
   {
     name: 'mountain',
     color: {
@@ -159,6 +160,7 @@ export const environments = [
     ],
     description: 'high enough that strong winds occur a lot but just low enough for trees to grow, this park tundra is generally pretty cold.'
   },
+  */
   {
     name: 'sea cove',
     color: {
@@ -189,7 +191,7 @@ export const environments = [
       'floor'
     ],
     description: 'this cave beneath a cliff was caused by erosion from the waves of water crashing in on weak rock and soil.'
-  },
+  }/*,
   {
     name: 'alpine tundra',
     color: {
@@ -251,4 +253,5 @@ export const environments = [
     ],
     description: 'composed prediminately of coniferous trees like larch, spruce, fire, and pine, this area is high in altitude.'
   }
+  */
 ]

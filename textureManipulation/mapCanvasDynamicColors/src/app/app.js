@@ -1,4 +1,5 @@
 import {ink,Easel} from 'ion-cloud';
+import {Ion} from './Ion';
 import {Map} from './Map';
 import {environments} from './environments';
 import {Player} from './Player';
@@ -64,6 +65,20 @@ if(!easel.activated){
       } //end for
     } //end for
 
+    // now that we've drawn the map, draw the player
+    easel.ctx.shadowBlur = 5;
+    easel.ctx.fillStyle=ink('#0f0',{a: 0.5});
+    easel.ctx.fillText('@',player.sight*rs+rs/2,player.sight*rs+rs/2);
+    if(map.getSector(player.x,player.y).type.sunk){
+      let s = map.getColors(player.x,player.y);
+
+      easel.ctx.shadowBlur = 0;
+      easel.ctx.fillStyle = s.backgroundColor;
+      easel.ctx.fillRect(player.sight*rs,player.sight*rs+rs/2,rs,rs/2-1);
+      easel.ctx.fillStyle = s.foregroundColor;
+      easel.ctx.fillText(s.character,player.sight*rs+rs/2,player.sight*rs+rs/2);
+    } //end if
+
     // now draw the shadows
     easel.ctx.beginPath();
     for(let y=player.y-player.sight-1;y<=player.y+player.sight;y++){
@@ -106,11 +121,42 @@ if(!easel.activated){
     easel.ctx.shadowColor = '#000';
     easel.ctx.shadowBlur = 15;
     easel.ctx.fill();
-
-    // now that we've drawn the map, draw the player
-    easel.ctx.shadowBlur = 5;
-    easel.ctx.fillStyle=ink('#0f0',{a: 0.5});
-    easel.ctx.fillText('@',player.sight*rs+rs/2,player.sight*rs+rs/2);
   };
   easel.redraw();
+  let magic=new Ion(1000),
+      r=function(f,g,e){
+        g=g||0;e=e||true;
+        g=Math.random()*(g-f);
+        g=g<0?Math.random()*g:g+f;
+        return e==false?Math.floor(g):g
+      };
+
+  magic.easel          = easel;
+  magic.tween_duration = 1000;
+  magic.sx             = function(){return r(0,easel.viewport.w);};
+  magic.sy             = function(){return r(0,easel.viewport.h);};
+  magic.dx             = function(x){return x;};
+  magic.dy             = function(y){return y-50;};
+  magic.size           = function(){return r(0,2);};
+  magic.color          = function(atom){
+    let p, halfTween = magic.tween_duration/2;
+
+    if(atom.c<=halfTween){
+      p = atom.c/halfTween;
+    }else{
+      p = (halfTween-Math.abs(halfTween-atom.c))/halfTween;
+    } //end if
+    return `rgba(25,150,255,${p})`;
+  };
+  magic.tween_type     = 6;
+  magic.onEscape       = function(atom){this.onEnd(atom);};
+  magic.onEnd          = function(atom){
+    this.particle[atom].x = this.particle[atom].sx = magic.sx();
+    this.particle[atom].y = this.particle[atom].sy = magic.sy();
+    this.particle[atom].dx = magic.dx(this.particle[atom].x);
+    this.particle[atom].dy = magic.dy(this.particle[atom].y);
+    this.particle[atom].c  =0;
+  };
+  magic.populate();
+  magic.process();
 } //end if

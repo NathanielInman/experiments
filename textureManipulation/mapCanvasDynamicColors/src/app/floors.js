@@ -12,12 +12,14 @@ export const floors = [
   {
     name: 'lava',
     character: '~',
-    color: '#321b1b'
+    color: '#321b1b',
+    sunk: true
   },
   {
     name: 'water',
     character: '~',
-    color: '#1b1b32'
+    color: '#1b1b32',
+    sunk: true
   },
   {
     name: 'grass',
