@@ -1,9 +1,10 @@
-export function bubbles(name,parameters){
+export function bubbles(parameters){
   let {
         startX,startY,width,height,
-        color,quantity,distance,duration
+        color,quantity,distance,duration,
+        ion
       } = parameters,
-      bubbles = new this.Ion(this.easel);
+      bubbles = ion ||  new this.Ion(this.easel);
 
   startX = startX||0;
   startY = startY||0;
@@ -33,7 +34,12 @@ export function bubbles(name,parameters){
   bubbles.tweenType = 6;
   bubbles.onEscape = function onEscape(p){ this.onParticleEnd(p); };
   bubbles.onParticleEnd =  bubbles.reevaluate;
-  bubbles.populate();
+  if(ion){
+    bubbles.collection.forEach(particle => bubbles.reevaluate(particle));
+    bubbles.active = true;
+  }else{
+    bubbles.populate();
+  } //end if
   return bubbles;
 } //end bubbles()
 

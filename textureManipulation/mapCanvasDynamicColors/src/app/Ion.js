@@ -1,5 +1,6 @@
 export class Ion{
   constructor(easel){
+    this.active = true;
     this.easel = easel;
     this.ctx = easel.ctx;
     this.viewport = easel.viewport;
@@ -373,6 +374,7 @@ export class Ion{
   // also auto-clear. This function is mostly used for testing a single
   // Ion instance. Most mock-ups of Ion should be done using the getFrame
   process(){
+    if(!this.active) return;
     this.clearFrame();
     this.getFrame();
     this.afterDraw();

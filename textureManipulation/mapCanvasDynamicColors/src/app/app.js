@@ -68,7 +68,7 @@ if(!easel.activated){
           easel.ctx.fillRect(ox,oy,rs,rs);
           easel.ctx.fillStyle = s.foregroundColor;
           easel.ctx.fillText(s.character,mx,my);
-          if(map.getSector(x,y).type.sunk){
+          if(map.isVisible(x,y)&&map.getSector(x,y).type.sunk){
             scene.animate('bubbles',{
               startX: ox,
               startY: oy,

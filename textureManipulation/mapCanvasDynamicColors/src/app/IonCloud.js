@@ -17,11 +17,13 @@ export class IonCloud{
     this.clouds = clouds;
     this.state = 'initial';
   }
-  animate(type){
-    if(typeof type === 'string'){
-      this.collection.push(this.clouds[type].apply(this,arguments));
+  animate(type,parameters){
+    let ion = this.collection.find(ion=> !ion.active); //inactive
+
+    if(!ion){
+      this.collection.push(this.clouds[type].call(this,parameters));
     }else{
-      this.collection.push(type.apply(this,arguments));
+      this.clouds[type].call(this,{ion,...parameters})
     } //end if
   }
   makeState(state,beforeDraw){
@@ -36,7 +38,7 @@ export class IonCloud{
     } //end if
   }
   clean(){
-    this.collection.length=0;
+    this.collection.forEach(ion=> ion.active = false);
   }
   draw(){
     this.clearScene();
@@ -46,7 +48,7 @@ export class IonCloud{
         if(animation.finished){
           if(typeof animation.onFinished === 'function') animation.onFinished();
           collection.splice(index,1);
-        }else{
+        }else if(animation.active){
           animation.getFrame();
         } //end if
       } //end if
