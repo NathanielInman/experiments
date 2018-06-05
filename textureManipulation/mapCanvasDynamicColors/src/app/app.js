@@ -1,12 +1,12 @@
-import {ink,Easel} from 'ion-cloud';
-import {Ion} from 'ion-cloud/src/lib/ion';
+import {Ion,ink,Easel} from 'ion-cloud';
+import {IonCloud} from './IonCloud';
 import {Map} from './Map';
 import {environments} from './environments';
 import {Player} from './Player';
 
 let noscript = document.querySelector('noscript'),
     easel = new Easel(),
-    bubbles = new Ion(easel),
+    scene = new IonCloud(easel,Ion),
     environmentIndex = Math.floor(Math.random()*environments.length),
     environment = environments[environmentIndex],
     map = new Map(50,50,environment),
@@ -14,6 +14,13 @@ let noscript = document.querySelector('noscript'),
 
 //eslint-disable-next-line no-console
 console.info(`environment: ${environment.name}`);
+
+scene.camera = {
+  x: 0,
+  y: 0,
+  dx: 0,
+  dy: 0
+};
 
 if(!easel.activated){
   noscript.innerHTML = `
@@ -60,6 +67,17 @@ if(!easel.activated){
           easel.ctx.fillRect(ox,oy,rs,rs);
           easel.ctx.fillStyle = s.foregroundColor;
           easel.ctx.fillText(s.character,mx,my);
+          if(map.getSector(x,y).type.sunk){
+            scene.animate('bubbles',{
+              startX: ox,
+              startY: oy,
+              width: rs,
+              height: rs,
+              color: 'rgba(250,50,0,0.05)',
+              distance: 10,
+              quality: 100
+            });
+          } //end if
         } //end if
       } //end for
     } //end for
@@ -120,10 +138,12 @@ if(!easel.activated){
     easel.ctx.shadowColor = '#000';
     easel.ctx.shadowBlur = 15;
     easel.ctx.fill();
-    bubbles.background = easel.ctx.getImageData(0,0,easel.viewport.w,easel.viewport.h);
+    scene.background = easel.ctx.getImageData(0,0,easel.viewport.w,easel.viewport.h);
+    scene.draw();
   };
   easel.redraw();
 
+  /*
   bubbles.quantity = 1000;
   bubbles.tweenDuration = 1000;
   bubbles.startX = ()=> Math.random()*easel.viewport.w;
@@ -153,4 +173,5 @@ if(!easel.activated){
   bubbles.background = easel.ctx.getImageData(0,0,easel.viewport.w,easel.viewport.h);
   bubbles.populate();
   bubbles.process();
+  */
 } //end if

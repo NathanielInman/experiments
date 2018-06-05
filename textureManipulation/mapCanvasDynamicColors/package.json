@@ -50,7 +50,7 @@
   },
   "dependencies": {
     "collections": "^5.1.2",
-    "ion-cloud": "^1.7.1",
+    "ion-cloud": "^1.7.6",
     "mrpas": "^1.2.1"
   },
   "readmeFilename": "README.md",
