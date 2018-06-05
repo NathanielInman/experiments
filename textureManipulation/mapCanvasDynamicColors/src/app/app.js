@@ -6,6 +6,14 @@ import {Player} from './Player';
 
 window.ink = ink;
 
+let magic=new Ion(1000),
+    r=function(f,g,e){
+      g=g||0;e=e||true;
+      g=Math.random()*(g-f);
+      g=g<0?Math.random()*g:g+f;
+      return e==false?Math.floor(g):g
+    };
+
 let noscript = document.querySelector('noscript'),
     easel = new Easel(),
     environmentIndex = Math.floor(Math.random()*environments.length),
@@ -121,15 +129,9 @@ if(!easel.activated){
     easel.ctx.shadowColor = '#000';
     easel.ctx.shadowBlur = 15;
     easel.ctx.fill();
+    magic.background = easel.ctx.getImageData(0,0,easel.viewport.w,easel.viewport.h);
   };
   easel.redraw();
-  let magic=new Ion(1000),
-      r=function(f,g,e){
-        g=g||0;e=e||true;
-        g=Math.random()*(g-f);
-        g=g<0?Math.random()*g:g+f;
-        return e==false?Math.floor(g):g
-      };
 
   magic.easel          = easel;
   magic.tween_duration = 1000;
