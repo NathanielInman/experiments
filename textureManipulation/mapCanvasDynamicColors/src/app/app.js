@@ -157,6 +157,7 @@ if(!easel.activated){
     this.particle[atom].dy = magic.dy(this.particle[atom].y);
     this.particle[atom].c  =0;
   };
+  magic.background = easel.ctx.getImageData(0,0,easel.viewport.w,easel.viewport.h);
   magic.populate();
   magic.process();
 } //end if

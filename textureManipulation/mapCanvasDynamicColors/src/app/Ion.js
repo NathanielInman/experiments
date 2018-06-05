@@ -325,6 +325,7 @@ Ion.prototype.process=function(){
  * @return {Void} Function doesn't return a value
  */
 Ion.prototype.getFrame=function(){
+  this.easel.ctx.putImageData(this.background,0,0);
   for(let atom in this.particle){
     let p=this.particle[atom]; //reference to clean up code
 
