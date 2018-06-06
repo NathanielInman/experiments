@@ -89,7 +89,7 @@
     "no-implicit-coercion": 0,       // disallow the type conversions with shorter notations
     "no-implicit-globals": 1,        // disallow variable and function declarations in the global scope
     "no-implied-eval": 1,            // disallow use of eval()-like methods
-    "no-invalid-this": 1,            // disallow this keywords outside of classes or class-like objects
+    "no-invalid-this": 0,            // disallow this keywords outside of classes or class-like objects
     "no-iterator": 1,                // disallow usage of __iterator__ property
     "no-labels": 1,                  // disallow use of labeled statements
     "no-lone-blocks": 1,             // disallow unnecessary nested blocks

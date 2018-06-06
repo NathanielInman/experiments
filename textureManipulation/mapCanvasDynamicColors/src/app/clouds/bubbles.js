@@ -6,7 +6,7 @@ export function bubbles(parameters){
         color,quantity,distance,duration,
         ion
       } = parameters,
-      bubbles = ion ||  new this.Ion(this.easel);
+      bubbles = ion || new this.Ion(this.easel);
 
   startX = startX||0;
   startY = startY||0;
@@ -31,6 +31,7 @@ export function bubbles(parameters){
       a = (halfTween-Math.abs(halfTween-atom.tweenCurrent))/halfTween;
     } //end if
     let {r,g,b} = ink(color,{format: 'object'});
+
     return `rgba(${r},${g},${b},${a})`;
   };
   bubbles.tweenType = 6;

@@ -22,12 +22,14 @@ export function laser(name,parameters){
   laser.tweenDuration = ()=> r(100,150,true);
   laser.onParticleEnd = function onParticleEnd(particle){
     this.collection.splice(particle.id,1);
-    this.collection.forEach((p,i)=>p.id=i); //re-index array
+
+    //eslint-disable-next-line no-return-assign
+    this.collection.forEach((p,i)=>p.id=i); //re-index
   };
   laser.onCreate = ()=> status--;
   laser.populate();
-  laser.draw = (particle)=>{
-    ctx.strokeStyle='rgba(100,100,250,'+0.1/200*status+')';
+  laser.draw = ()=>{
+    ctx.strokeStyle=`rgba(100,100,250,${0.1/200*status})`;
     ctx.lineWidth=17;
     if(status>0){
       ctx.beginPath();

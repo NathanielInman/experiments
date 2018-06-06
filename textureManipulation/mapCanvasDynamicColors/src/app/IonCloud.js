@@ -7,10 +7,10 @@ export class IonCloud{
     this.easel = easel;
     this.Ion = Ion;
     this.camera = {
-      x:easel.viewport.w/2,
-      y:easel.viewport.h/2,
-      dx:0, //direction x
-      dy:0 //direction y
+      x: easel.viewport.w/2,
+      y: easel.viewport.h/2,
+      dx: 0, //direction x
+      dy: 0 //direction y
     };
     this.collection=[];
     this.beforeDraw={};
@@ -38,6 +38,8 @@ export class IonCloud{
     } //end if
   }
   clean(){
+
+    //eslint-disable-next-line no-return-assign
     this.collection.forEach(ion=> ion.active = false);
   }
   draw(){

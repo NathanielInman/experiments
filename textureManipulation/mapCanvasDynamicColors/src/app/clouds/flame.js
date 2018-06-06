@@ -18,7 +18,7 @@ export function flame(name,parameters){
   flame.tweenType = ()=> Math.floor(Math.random()*10+10)
   flame.tweenDuration = ()=> Math.floor(Math.random()*300+300);
   flame.onEscape = function onEscape(p){ this.onParticleEnd(p); };
-  flame.onParticleEnd =  flame.reevaluate;
+  flame.onParticleEnd = flame.reevaluate;
   flame.onMove = function onMove(particle){
     let size=(height+width)/4;
 

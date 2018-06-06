@@ -23,8 +23,8 @@ export function smoke(parameters){
       a = (halfTween-Math.abs(halfTween-atom.tweenCurrent))/halfTween;
     } //end if
     let {r,g,b} = ink(color,{format: 'object'});
+
     return `rgba(${r},${g},${b},${a})`;
-    console.log(a);
   };
   smoke.startX = ()=> this.camera.x+startX+Math.random()*width;
   smoke.startY = ()=> this.camera.y+startY+Math.random()*height;
@@ -34,7 +34,7 @@ export function smoke(parameters){
   smoke.tweenDuration = ()=> Math.floor(Math.random()*300+300);
   smoke.tweenCurrent = ()=> Math.floor(Math.random()*smoke.tweenDuration());
   smoke.onEscape = function onEscape(p){ this.onParticleEnd(p); };
-  smoke.onParticleEnd =  smoke.reevaluate;
+  smoke.onParticleEnd = smoke.reevaluate;
   smoke.size = ()=> Math.random()*4;
   smoke.onMove = function onMove(particle){
     let size=(height+width)/8;
