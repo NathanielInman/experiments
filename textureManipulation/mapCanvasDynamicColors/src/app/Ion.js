@@ -254,7 +254,7 @@ export class Ion{
     particle.y = particle.originY = particle.startY = startY;
     particle.endX = particle.terminalX = endX;
     particle.endY = particle.terminalY = endY;
-    particle.tweenCurrent = 0;
+    particle.tweenCurrent = typeof this.tweenCurrent==='function'?this.tweenCurrent():0;
   }
 
   // Populate pushes a new particle into the particles array then checks to see

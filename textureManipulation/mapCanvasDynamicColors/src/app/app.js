@@ -13,6 +13,7 @@ let noscript = document.querySelector('noscript'),
     map = new Map(50,50,environment),
     player = new Player(map,easel,scene); //create the player and tie map to it
 
+window.scene = scene;
 //eslint-disable-next-line no-console
 console.info(`environment: ${environment.name}`);
 
@@ -141,7 +142,7 @@ if(!easel.activated){
     easel.ctx.shadowBlur = 15;
     easel.ctx.fill();
     scene.background = easel.ctx.getImageData(0,0,easel.viewport.w,easel.viewport.h);
-    scene.draw();
   };
   easel.redraw();
+  scene.draw();
 } //end if
