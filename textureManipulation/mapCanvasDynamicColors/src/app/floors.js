@@ -13,13 +13,15 @@ export const floors = [
     name: 'lava',
     character: '~',
     color: '#321b1b',
-    sunk: true
+    sunk: true,
+    animation: 'flame'
   },
   {
     name: 'water',
     character: '~',
     color: '#1b1b32',
-    sunk: true
+    sunk: true,
+    animation: 'bubbles'
   },
   {
     name: 'grass',

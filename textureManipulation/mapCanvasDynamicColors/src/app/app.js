@@ -69,7 +69,7 @@ if(!easel.activated){
           easel.ctx.fillRect(ox,oy,rs,rs);
           easel.ctx.fillStyle = s.foregroundColor;
           easel.ctx.fillText(s.character,mx,my);
-          if(map.isVisible(x,y)&&map.getSector(x,y).type.sunk){
+          if(map.isVisible(x,y)&&map.getSector(x,y).type.animation==='bubbles'){
             scene.animate('bubbles',{
               startX: ox,
               startY: oy,
@@ -79,6 +79,15 @@ if(!easel.activated){
               distance: 10,
               quantity: 50,
               duration: 500
+            });
+          }else if(map.isVisible(x,y)&&map.getSector(x,y).type.animation==='flame'){
+            scene.animate('smoke',{
+              startX: ox,
+              startY: oy,
+              width: rs,
+              color: ink(s.backgroundColor,{lightness: 0.4, format: 'hex',a: 0.1}),
+              height: rs,
+              quantity: 100
             });
           } //end if
         } //end if
@@ -142,6 +151,7 @@ if(!easel.activated){
     easel.ctx.shadowBlur = 15;
     easel.ctx.fill();
     scene.background = easel.ctx.getImageData(0,0,easel.viewport.w,easel.viewport.h);
+    easel.ctx.shadowBlur = 0;
   };
   easel.redraw();
   scene.draw();
