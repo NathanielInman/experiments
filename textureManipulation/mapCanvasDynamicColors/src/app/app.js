@@ -75,10 +75,10 @@ if(!easel.activated){
               startY: oy,
               width: rs,
               height: rs,
-              color: ambient,
+              color: ink(ambient,{lightness: 0.5, format: 'hex'}),
               distance: 10,
-              quantity: 100,
-              duration: 200
+              quantity: 50,
+              duration: 500
             });
           } //end if
         } //end if

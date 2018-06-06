@@ -1,3 +1,5 @@
+import {ink} from 'ion-cloud';
+
 export function bubbles(parameters){
   let {
         startX,startY,width,height,
@@ -15,27 +17,29 @@ export function bubbles(parameters){
   bubbles.quantity = quantity;
   bubbles.states = ['initial'];
   bubbles.clear = false;
-  bubbles.color = color||'rgba(250,170,0,0.2)';
   bubbles.startX = ()=> this.camera.x+startX+Math.random()*width;
   bubbles.startY = ()=> this.camera.y+startY+Math.random()*height;
   bubbles.endX = startX=> startX;
   bubbles.endY = startY=> startY-distance;
   bubbles.size = ()=> Math.random()*2;
   bubbles.color = atom=>{
-    let alpha, halfTween = bubbles.tweenDuration/2;
+    let a, halfTween = bubbles.tweenDuration/2;
 
     if(atom.tweenCurrent<=halfTween){
-      alpha = atom.tweenCurrent/halfTween;
+      a = atom.tweenCurrent/halfTween;
     }else{
-      alpha = (halfTween-Math.abs(halfTween-atom.tweenCurrent))/halfTween;
+      a = (halfTween-Math.abs(halfTween-atom.tweenCurrent))/halfTween;
     } //end if
-    return `rgba(25,150,255,${alpha})`;
+    let {r,g,b} = ink(color,{format: 'object'});
+    return `rgba(${r},${g},${b},${a})`;
   };
   bubbles.tweenType = 6;
-  bubbles.onEscape = function onEscape(p){ this.onParticleEnd(p); };
-  bubbles.onParticleEnd =  bubbles.reevaluate;
+  bubbles.onParticleEnd = bubbles.reevaluate;
   if(ion){
-    bubbles.collection.forEach(particle => bubbles.reevaluate(particle));
+    bubbles.collection.forEach(particle =>{
+      bubbles.reevaluate(particle);
+      particle.tweenCurrent = bubbles.tweenCurrent();
+    });
     bubbles.active = true;
   }else{
     bubbles.populate();
