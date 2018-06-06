@@ -46,12 +46,12 @@
     "style-loader": "^0.21.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
-    "webpack": "^4.11.0",
+    "webpack": "^4.11.1",
     "webpack-cli": "^3.0.2"
   },
   "dependencies": {
     "collections": "^5.1.2",
-    "ion-cloud": "^1.7.6",
+    "ion-cloud": "^1.8.0",
     "mrpas": "^1.2.1"
   },
   "readmeFilename": "README.md",

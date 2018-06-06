@@ -1,6 +1,4 @@
-import {ink,Easel} from 'ion-cloud';
-import {Ion} from './Ion';
-import {IonCloud} from './IonCloud';
+import {ink,Easel,Ion,IonCloud} from 'ion-cloud';
 import {Map} from './Map';
 import {environments} from './environments';
 import {Player} from './Player';
