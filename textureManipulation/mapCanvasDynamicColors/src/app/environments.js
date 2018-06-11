@@ -1,4 +1,4 @@
-export const environments = [/*
+export const environments = [
   {
     name: 'mountain',
     color: {
@@ -23,7 +23,7 @@ export const environments = [/*
     ],
     floors: [
       'rocky',
-      'cobbled';
+      'cobbled'
     ],
     obstructions: [
       'rock'
@@ -58,7 +58,7 @@ export const environments = [/*
       'rock'
     ],
     description: 'this is a cave containing fresh water with an influx of salt water near the base, located near the coast.'
-  },*/
+  },
   {
     name: 'graveyard',
     color: {
@@ -92,7 +92,7 @@ export const environments = [/*
       'rock'
     ],
     description: 'here is a burial ground for poor-class citizens and wanderers.'
-  }/*,
+  },
   {
     name: 'arctic tundra',
     color: {
@@ -251,5 +251,5 @@ export const environments = [/*
       'flora'
     ],
     description: 'composed prediminately of coniferous trees like larch, spruce, fire, and pine, this area is high in altitude.'
-  }*/
+  }
 ]
