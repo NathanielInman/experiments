@@ -2,6 +2,7 @@ import {ink,Easel,Ion,IonCloud} from 'ion-cloud';
 import {Map} from './Map';
 import {environments} from './environments';
 import {Player} from './Player';
+import {capitalize} from './capitalize';
 
 let noscript = document.querySelector('noscript'),
     easel = new Easel(),
@@ -10,10 +11,6 @@ let noscript = document.querySelector('noscript'),
     environment = environments[environmentIndex],
     map = new Map(50,50,environment),
     player = new Player(map,easel,scene); //create the player and tie map to it
-
-window.scene = scene;
-//eslint-disable-next-line no-console
-console.info(`environment: ${environment.name}`);
 
 scene.camera = {
   x: 0,
@@ -32,11 +29,7 @@ if(!easel.activated){
   </p>`;
 }else{
   easel.config = ()=>{
-    let s = easel.viewport.w<easel.viewport.h?easel.viewport.w:easel.viewport.h;
-
-    easel.ctx.font = `${s/(player.sight*2+1)}px monospace`;
     easel.ctx.textBaseline = 'middle';
-    easel.ctx.textAlign = 'center';
   };
 
   //eslint-disable-next-line complexity
@@ -45,9 +38,12 @@ if(!easel.activated){
         rw = easel.viewport.w/(player.sight*2+1), //row width
         rs = rh<rw?rh:rw, //row size (takes lesser of width/height)
         c = environment.color,
+        s = easel.viewport.w<easel.viewport.h?easel.viewport.w:easel.viewport.h,
         ambient = ink(`hsl(${c.hue},${c.saturation},${c.lightness.ambient})`);
 
     // start by cleaning the map
+    easel.ctx.font = `${s/(player.sight*2+1)}px monospace`;
+    easel.ctx.textAlign = 'center';
     easel.ctx.fillStyle=ambient;
     easel.ctx.fillRect(0,0,easel.viewport.w,easel.viewport.h);
     scene.clean(); //ensure we don't have leftover particles
@@ -148,6 +144,10 @@ if(!easel.activated){
     easel.ctx.shadowColor = '#000';
     easel.ctx.shadowBlur = 15;
     easel.ctx.fill();
+    easel.ctx.textAlign = 'left';
+    easel.ctx.font = '14px monospace';
+    easel.ctx.fillStyle =  ink(`hsl(${c.hue},${c.saturation},${c.lightness.ambient+0.3})`);
+    easel.ctx.fillText(capitalize(environment.name),20,20);
     scene.background = easel.ctx.getImageData(0,0,easel.viewport.w,easel.viewport.h);
     easel.ctx.shadowBlur = 0;
   };

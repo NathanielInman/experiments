@@ -75,7 +75,7 @@ export const floors = [
   },
   {
     name: 'brick',
-    character: ': ',
+    character: ':',
     color: '#301d1d'
   },
   {
