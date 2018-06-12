@@ -146,7 +146,7 @@ if(!easel.activated){
     easel.ctx.fill();
     easel.ctx.textAlign = 'left';
     easel.ctx.font = '14px monospace';
-    easel.ctx.fillStyle =  ink(`hsl(${c.hue},${c.saturation},${c.lightness.ambient+0.3})`);
+    easel.ctx.fillStyle = ink(`hsl(${c.hue},${c.saturation},${c.lightness.ambient+0.3})`);
     easel.ctx.fillText(capitalize(environment.name),20,20);
     scene.background = easel.ctx.getImageData(0,0,easel.viewport.w,easel.viewport.h);
     easel.ctx.shadowBlur = 0;
