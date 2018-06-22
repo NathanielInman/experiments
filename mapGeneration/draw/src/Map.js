@@ -1,7 +1,7 @@
 import {Sector} from './Sector';
 
 export class Map{
-  constructor(width,height){
+  constructor({width=50,height=50}){
     this.width = width;
     this.height = height;
     this.sectors = [];
@@ -11,16 +11,14 @@ export class Map{
     for(let y=0;y<=this.height;y++){
       this.sectors[y]=[];
       for(let x=0;x<=this.width;x++){
-        this.sectors[y][x]=new Sector();
+        this.sectors[y][x]=new Sector({x,y});
       } //end for
     } //end for
   }
   reset(){
-    for(let y=0;y<=this.height;y++){
-      for(let x=0;x<=this.width;x++){
-        this.sectors[y][x].setEmpty();
-      } //end for
-    } //end for
+    this.sectors.forEach(row=>{
+      row.forEach(sector=> sector.setEmpty());
+    });
   }
   getSector({x=0,y=0}={}){ return this.sectors[y][x]; }
   isEmpty({x=0,y=0}={}){
@@ -32,6 +30,8 @@ export class Map{
   setFloor({x=0,y=0}={}){ this.getSector({x,y}).setFloor(); }
   isWall({x=0,y=0}={}){ return this.getSector({x,y}).isWall(); }
   setWall({x=0,y=0}={}){ this.getSector({x,y}).setWall(); }
+  isWater({x=0,y=0}={}){ return this.getSector({x,y}).isWater(); }
+  setWater({x=0,y=0}={}){ this.getSector({x,y}).setWater(); }
   isObstruction({x=0,y=0}={}){ this.getSector({x,y}).isObstruction(); }
   setObstruction({x=0,y=0}={}){ this.getSector({x,y}).setObstruction(); }
   isCorridor({x=0,y=0}={}){ return this.getSector({x,y}).isCorridor(); }
@@ -41,6 +41,7 @@ export class Map{
   isRemoved({x=0,y=0}={}){ return this.getSector({x,y}).isRemoved(); }
   setRemoved({x=0,y=0}={}){ this.getSector({x,y}).setRemoved(); }
   isWalkable({x=0,y=0}={}){ return this.getSector({x,y}).isWalkable(); }
+  isWalkableOrEmpty({x=0,y=0}={}){ return this.getSector({x,y}).isWalkableOrEmpty(); }
   isRoom({x=0,y=0}={}){ return this.getSector({x,y}).id>0; }
   setRoom({x=0,y=0,id=0}={}){ this.getSector({x,y}).roomNumber = id; }
   getRoom({x=0,y=0}={}){ return this.getSector({x,y}).roomNumber; }
@@ -48,7 +49,7 @@ export class Map{
     return this.getSector({x: x1,y: y1}).roomNumber===
       this.getSector({x: x2,y: y2}).roomNumber;
   }
-  inBounds({x=0,y=0}={}){
+  isInbounds({x=0,y=0}={}){
     return x>=0&&x<=this.width-1&&y>=0&&y<=this.height-1;
   }
 
@@ -89,6 +90,20 @@ export class Map{
     for(let y = y1;y!==y2+dy;y+=dy){
       for(let x = x1;x!==x2+dx;x+=dx){
         if(x<1||x>this.width-1||y<1||y>=this.height-1||!this.isEmpty({x,y})){
+          return false; //exit early
+        } //end if
+      } //end for
+    } //end for
+    return true;
+  }
+  isSquareEmptyOfWater({x1=0,y1=0,x2=0,y2=0}={}){
+    let dx = x1<x2?1:-1, dy = y1<y2?1:-1;
+
+    for(let y = y1;y!==y2+dy;y+=dy){
+      for(let x = x1;x!==x2+dx;x+=dx){
+        if(x<1||x>this.width-1||y<1||y>=this.height-1){
+          continue; //not valid to check
+        }else if(this.isWater({x,y})){
           return false; //exit early
         } //end if
       } //end for
