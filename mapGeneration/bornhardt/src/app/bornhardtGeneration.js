@@ -111,7 +111,7 @@ function clipOrphaned(map){
   });
   map.sectors.forEach(row=>{
     row.forEach(sector=>{
-      if(!sector.isEmpty()&&sector.roomNumber!==locStats.num){
+      if(sector.isEmpty()&&sector.roomNumber!==locStats.num){
         sector.setWall();
       }else if(sector.isEmpty()){
         sector.setFloor();
