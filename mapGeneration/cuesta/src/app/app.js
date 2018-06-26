@@ -1,5 +1,5 @@
 import {Easel} from 'ion-cloud';
-import {PHG} from './pigeonHoleGeneration';
+import {cuesta} from './cuestaGeneration';
 import {Map} from './Map';
 
 let noscript = document.querySelector('noscript'),
@@ -16,7 +16,7 @@ if(!easel.activated){
 }else{
   let map = new Map(50,50);
 
-  PHG(map); //perform pigeon hole generation
+  cuesta(map); //perform pigeon hole generation
   easel.onDraw = function(){
     let rh = easel.viewport.h/map.height, rw = easel.viewport.w/map.width;
 

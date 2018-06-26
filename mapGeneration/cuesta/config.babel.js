@@ -30,7 +30,7 @@ export default {
       template: indexTemplate,
       mobile: true,
       injectExtras: index,
-      title: 'pigeonHoleGeneration'
+      title: 'Cuesta Generation'
     }),
     new BrowserSync({
       host: 'localhost',

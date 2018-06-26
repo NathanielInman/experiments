@@ -23,7 +23,9 @@ export class Map{
     } //end for
   }
   getSector(x,y){ return this.sectors[y][x]; }
-  isEmpty(x,y){ return this.getSector(x,y).isEmpty(); }
+  isEmpty(x,y){
+    return this.inBounds(x,y)&&this.getSector(x,y).isEmpty();
+  }
   setEmpty(x,y){ this.getSector(x,y).setEmpty(); }
   isFloor(x,y){ return this.getSector(x,y).isFloor(); }
   setFloor(x,y){ this.getSector(x,y).setFloor(); }
@@ -41,6 +43,9 @@ export class Map{
   getRoom(x,y){ return this.getSector(x,y).roomNumber; }
   isSameRoom(x1,y1,x2,y2){
     return this.getSector(x1,y1).roomNumber===this.getSector(x2,y2).roomNumber;
+  }
+  inBounds(x,y){
+    return x>=0&&x<=this.width-1&&y>=0&&y<=this.height-1;
   }
 
   // uses bresenhams line algorithm to acquire an array of points
