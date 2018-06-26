@@ -8,7 +8,7 @@ function shuffle(array){
 } //end shuffle()
 
 export function bornhardt(map){
- let numberOfBornhardts = Math.floor(2+Math.random()*4),
+  let numberOfBornhardts = Math.floor(2+Math.random()*4),
       sizeOfBornhardts = map.width*map.height/50; //2%
 
   // first create all the bornhardts
@@ -20,10 +20,10 @@ export function bornhardt(map){
     do{
       cSize++;
       map.setObstruction({x,y});
-      if(map.isEmpty({x:x-1,y})) sparks.push({x:x-1,y});
-      if(map.isEmpty({x:x+1,y})) sparks.push({x:x+1,y});
-      if(map.isEmpty({x,y:y-1})) sparks.push({x,y:y-1});
-      if(map.isEmpty({x,y:y+1})) sparks.push({x,y:y+1});
+      if(map.isEmpty({x: x-1,y})) sparks.push({x: x-1,y});
+      if(map.isEmpty({x: x+1,y})) sparks.push({x: x+1,y});
+      if(map.isEmpty({x,y: y-1})) sparks.push({x,y: y-1});
+      if(map.isEmpty({x,y: y+1})) sparks.push({x,y: y+1});
       if(sparks.length) ({x,y}=shuffle(sparks).pop());
     }while(cSize<sizeOfBornhardts&&sparks.length)
   } //end for
@@ -60,12 +60,12 @@ function traverse(map,locStats,unmapped,x,y){
   let newLoc = null; //we pull from unmapped
 
   locStats.val=1; //set the current mas size to 1
-  map.setRoom({x,y,id:locStats.cur});
+  map.setRoom({x,y,id: locStats.cur});
   traverseLook(map,unmapped,x,y);
   while(unmapped.length>0){
     newLoc=unmapped.pop();
     traverseLook(map,unmapped,newLoc.x,newLoc.y);
-    map.setRoom({x:newLoc.x,y:newLoc.y,id:locStats.cur});
+    map.setRoom({x: newLoc.x,y: newLoc.y,id: locStats.cur});
     locStats.val++;
     if(locStats.val>locStats.max){
       locStats.max=locStats.val;
@@ -73,24 +73,24 @@ function traverse(map,locStats,unmapped,x,y){
     } //end manage maximum mass
   } //end while
 } //end traverse()
-  
+
 //look around at location and push unmapped nodes to stack
 function traverseLook(map,unmapped,x,y){
-  if(x>0&&map.isEmpty({x:x-1,y})&&!map.getRoom({x:x-1,y})){
+  if(x>0&&map.isEmpty({x: x-1,y})&&!map.getRoom({x: x-1,y})){
     unmapped.push({x: x-1, y});
-    map.setRoom({x:x-1,y,id:-1});
+    map.setRoom({x: x-1,y,id: -1});
   } //end if
-  if(y>0&&map.isEmpty({x,y:y-1})&&!map.getRoom({x,y:y-1})){
+  if(y>0&&map.isEmpty({x,y: y-1})&&!map.getRoom({x,y: y-1})){
     unmapped.push({x,y: y-1});
-    map.setRoom({x,y:y-1,id:-1});
+    map.setRoom({x,y: y-1,id: -1});
   } //end if
-  if(x<map.width&&map.isEmpty({x:x+1,y})&&!map.getRoom({x:x+1,y})){
+  if(x<map.width&&map.isEmpty({x: x+1,y})&&!map.getRoom({x: x+1,y})){
     unmapped.push({x: x+1, y});
-    map.setRoom({x:x+1,y,id:-1});
+    map.setRoom({x: x+1,y,id: -1});
   } //end if
-  if(y<map.height&&map.isEmpty({x,y:y+1})&&!map.getRoom({x,y:y+1})){
+  if(y<map.height&&map.isEmpty({x,y: y+1})&&!map.getRoom({x,y: y+1})){
     unmapped.push({x,y: y+1});
-    map.setRoom({x,y:y+1,id:-1});
+    map.setRoom({x,y: y+1,id: -1});
   } //end if
 } //end traverseLook()
 
@@ -118,5 +118,4 @@ function clipOrphaned(map){
       } //end if
     });
   });
-  console.log(map);
 } //end clipOrphaned()

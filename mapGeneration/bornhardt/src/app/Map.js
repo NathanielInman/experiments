@@ -45,8 +45,8 @@ export class Map{
   setRoom({x=0,y=0,id=0}={}){ this.getSector({x,y}).roomNumber = id; }
   getRoom({x=0,y=0}={}){ return this.getSector({x,y}).roomNumber; }
   isSameRoom({x1=0,y1=0,x2=0,y2=0}={}){
-    return this.getSector({x:x1,y:y1}).roomNumber===
-      this.getSector({x:x2,y:y2}).roomNumber;
+    return this.getSector({x: x1,y: y1}).roomNumber===
+      this.getSector({x: x2,y: y2}).roomNumber;
   }
   inBounds({x=0,y=0}={}){
     return x>=0&&x<=this.width-1&&y>=0&&y<=this.height-1;
