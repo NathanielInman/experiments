@@ -1,28 +1,40 @@
 export class Sector{
-  constructor(){
-    this.type = 0;
+  constructor({x=0,y=0}={}){
+    this.x = x;
+    this.y = y;
+    this.type = 'empty';
     this.roomNumber = 0;
   }
-  isEmpty(){ return this.type === 0; }
-  setEmpty(){ this.type = 0; }
-  isFloor(){ return this.type === 1; }
-  setFloor(){ this.type = 1; }
-  isWall(){ return this.type === 2; }
-  setWall(){ this.type = 2; }
-  isCorridor(){ return this.type === 3; }
-  setCorridor(){ this.type = 3; }
-  isDoor(){ return this.type === 4; }
-  setDoor(){ this.type = 4; }
-  isRemoved(){ return this.type === 5; }
-  setRemoved(){ this.type = 5; }
-  isObstruction(){ return this.type === 6; }
-  setObstruction(){ this.type = 6; }
+  isEmpty(){ return this.type === 'empty'; }
+  setEmpty(){ this.type = 'empty'; }
+  isFloor(){ return this.type === 'floor'; }
+  setFloor(){ this.type = 'floor'; }
+  isWater(){ return this.type === 'water'; }
+  setWater(){ this.type = 'water'; }
+  isWall(){ return this.type === 'wall'; }
+  setWall(){ this.type = 'wall'; }
+  isCorridor(){ return this.type === 'corridor'; }
+  setCorridor(){ this.type = 'corridor'; }
+  isDoor(){ return this.type === 'door'; }
+  setDoor(){ this.type = 'door'; }
+  isRemoved(){ return this.type === 'removed'; }
+  setRemoved(){ this.type = 'removed'; }
+  isObstruction(){ return this.type === 'obstruction'; }
+  setObstruction(){ this.type = 'obstruction'; }
+  isWalkableOrEmpty(){
+    let result = false;
+
+    result = this.isWalkable();
+    if(this.isEmpty()) result = true;
+    return result;
+  }
   isWalkable(){
     let walkable = false;
 
     if(this.isFloor()) walkable = true;
     if(this.isCorridor()) walkable = true;
     if(this.isDoor()) walkable = true;
+    if(this.isWater()) walkable = true;
     return walkable;
   }
 }
