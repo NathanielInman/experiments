@@ -34,6 +34,8 @@ if(!easel.activated){
           easel.ctx.fillStyle='#774';
         }else if(sector.isRemoved()){
           easel.ctx.fillStyle='#833';
+        }else if(sector.isWater()){
+          easel.ctx.fillStyle='#33b';
         }else{ //floor
           easel.ctx.fillStyle='#383';
         } //end if
