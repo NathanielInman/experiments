@@ -7,104 +7,137 @@ function shuffle(array){
   return array;
 } //end shuffle()
 
-export function butte(map){
-  let butteSize = map.width*map.height/5, //20%
-      sparks = [], butte = [], x, y, cSize = 0;
+class Spark{
+  constructor(map,startNode,endNode,possibleNodes=[]){
+    this.map = map; //will need to be able to speakt to map
+    this.cx = startNode.x; this.cy = startNode.y;
+    this.dx = endNode.x; this.dy = endNode.y;
+    this.possible = possibleNodes
+    this.process();
+  }
+  process(){
+    let ox,oy, //may have to reset position
+        wx,wy; //will need to hold the weight based on d
 
-  // first create the butte
-  x = Math.floor(map.width/4+Math.random()*map.width/2);
-  y = Math.floor(map.height/4+Math.random()*map.height/2);
-  sparks = [];
-  do{
-    cSize++
-    map.setObstruction({x,y});
-    butte.push({x,y});
-    if(map.isEmpty({x: x-1,y})) sparks.push({x: x-1,y});
-    if(map.isEmpty({x: x+1,y})) sparks.push({x: x+1,y});
-    if(map.isEmpty({x,y: y-1})) sparks.push({x,y: y-1});
-    if(map.isEmpty({x,y: y+1})) sparks.push({x,y: y+1});
-    if(sparks.length) ({x,y}=shuffle(sparks).pop());
-  }while(cSize<butteSize&&sparks.length)
+    this.map.setWater({x:this.cx,y:this.cy});
+    do{
+      ox = this.cx; oy = this.cy;
+      wx = this.cx<this.dx?0.35:-0.35;
+      wy = this.cy<this.dy?0.35:-0.35;
+      if(Math.random()<0.5){
+        this.cx += (Math.random()+wx)<0.5?-1:1;;
+      }else{
+        this.cy += (Math.random()+wy)<0.5?-1:1;
+      } //end if
 
-  // now we'll create a map boundary that's fuzzy to contain
-  // the player
-  for(let y=0,yd;y<map.height;y++){
-    for(let x=0,xd,r1,r2,d;x<map.width;x++){
-      if(map.isObstruction({x,y})) continue; //don't override
+      // allow possibility of river splitting, passing
+      // on a possible node
+      if(this.possible.length&&Math.random()<0.1){
+        new Spark(this.map,{x: this.cx, y: this.cy},this.possible.pop());
+      } //end if
 
-      // we get this distance from the axis to the sides
-      // and then appropriate the ratio so that points
-      // closer to the edge have a higher yield of being
-      // a wall.
-      yd = Math.abs(y-map.height/2)/(map.height/2);
-      xd = Math.abs(x-map.width/2)/(map.width/2);
-      d = Math.sqrt(Math.pow(xd,2)+Math.pow(yd,2));
-      r1 = Math.random();
-      r2 = Math.random();
+      // if cx and cy isn't within the map we need to reset;
+      // otherwise we can draw it
+      if(!this.map.isInbounds({x:this.cx,y:this.cy})){
+        this.cx = ox; this.cy = oy;
+      }else{
+        this.map.setWater({x: this.cx,y: this.cy});
+      } //end if
+    }while(this.cx!==this.dx||this.cy!==this.dy)
+    this.map.setWater({x:this.cx,y:this.cy});
+  }
+}
+export function draw(map){
+  let t = [
+    {
+      x: Math.floor(map.width/4+Math.random()*map.width/2),
+      y: 0
+    },
+    {
+      x: Math.floor(map.width/4+Math.random()*map.width/2),
+      y: map.height-1
+    },
+    {
+      x: 0,
+      y: Math.floor(map.height/4+Math.random()*map.height/2)
+    },
+    {
+      x: map.width-1,
+      y: Math.floor(map.height/4+Math.random()*map.height/2)
+    }
+  ], r = Math.random();
 
-      // d turns it into a circle
-      if(r1<d-0.5||r2<0.05) map.setWall({x,y});
-    } //end for
-  } //end for
+  // 25% chance to have no split rivers, 25% to have 1, 50% to have 2
+  if(r<0.25){
+    t = shuffle(t);
+    t.length = 2;
+  }else if(r<0.85){
+    t = shuffle(t);
+    t.length = 3;
+  }else{
+    t = shuffle(t);
+  } //end if
 
-  // now that we've represented the map fully, lets
-  // find the largest walkable space and fill in all the
-  // rest
+  // start the recursive sparks
+  new Spark(map,t.pop(),t.pop(),t);
+
+  // now close everything not close enough to river
+  map.sectors.forEach(row=>{
+    row.forEach(sector=>{
+      if(map.isSquareEmptyOfWater({
+        x1: sector.x-3,
+        y1: sector.y-3,
+        x2: sector.x+3,
+        y2: sector.y+3
+      })&&Math.random()<0.7){
+        sector.setWall();
+      }else if(!sector.isWater()&&Math.random()<0.1){
+        sector.setObstruction();
+      }
+    });
+  });
+
+  // now that we've represented the map fully, lets find the largest walkable
+  // space and fill in all the rest
   clipOrphaned(map);
 
-  // now we'll mark the center of the butte for removal
-  butte.forEach(sector=>{
-    if(
-      !map.isWalkable({x: sector.x-1,y: sector.y})&&
-      !map.isWalkable({x: sector.x+1,y: sector.y})&&
-      !map.isWalkable({x: sector.x,y: sector.y-1})&&
-      !map.isWalkable({x: sector.x,y: sector.y+1})&&
-      !map.isWalkable({x: sector.x-1,y: sector.y-1})&&
-      !map.isWalkable({x: sector.x+1,y: sector.y-1})&&
-      !map.isWalkable({x: sector.x-1,y: sector.y+1})&&
-      !map.isWalkable({x: sector.x+1,y: sector.y+1})
-    ){
-      sector.remove = true;
-    } //end if
-  });
+  // lastly lets find all floor that's near water and give it a large chance
+  // to be a corridor (sand)
+  map.sectors.forEach(row=>{
+    row.forEach(sector=>{
+      if(sector.isWater()) return; //leave water alone
+      let x = sector.x,y = sector.y;
 
-  // finally we'll remove all the center that's marked
-  butte.filter(s=>s.remove).forEach(sector=>{
-    map.setCorridor({x,y}=sector);
-  });
-
-  // now we'll make the entrance to the butte
-  butte.filter(s=>!s.remove).some(sector=>{
-    let result = false;
-
-    if(
-      map.isWalkable({x: sector.x-1,y: sector.y})&&
-      map.isWalkable({x: sector.x+1,y: sector.y})
-    ){
-      result = true;
-      map.setDoor({x,y}=sector);
-    }else if(
-      map.isWalkable({x: sector.x,y: sector.y-1})&&
-      map.isWalkable({x: sector.x,y: sector.y+1})
-    ){
-      result = true;
-      map.setDoor({x,y}=sector);
-    } //end if
-    return result;
+      if(map.isInbounds({x:x-1,y})&&map.isWater({x:x-1,y})||
+         map.isInbounds({x:x+1,y})&&map.isWater({x:x+1,y})||
+         map.isInbounds({x,y:y-1})&&map.isWater({x,y:y-1})||
+         map.isInbounds({x,y:y+1})&&map.isWater({x,y:y+1})){
+        if(Math.random()<0.5) sector.setCorridor();
+      } //end if
+    });
   });
 } //end function
+
+// shuffles an array in place
+function shuffle(array){
+  for(let i = array.length - 1,j; i > 0; i--){
+    j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  } //end for
+  return array;
+} //end shuffle()
 
 // Traverse a location completely
 function traverse(map,locStats,unmapped,x,y){
   let newLoc = null; //we pull from unmapped
 
   locStats.val=1; //set the current mas size to 1
-  map.setRoom({x,y,id: locStats.cur});
+  map.setRoom({x,y,id:locStats.cur});
   traverseLook(map,unmapped,x,y);
   while(unmapped.length>0){
     newLoc=unmapped.pop();
     traverseLook(map,unmapped,newLoc.x,newLoc.y);
-    map.setRoom({x: newLoc.x,y: newLoc.y,id: locStats.cur});
+    map.setRoom({x:newLoc.x,y:newLoc.y,id:locStats.cur});
     locStats.val++;
     if(locStats.val>locStats.max){
       locStats.max=locStats.val;
@@ -115,21 +148,21 @@ function traverse(map,locStats,unmapped,x,y){
 
 //look around at location and push unmapped nodes to stack
 function traverseLook(map,unmapped,x,y){
-  if(x>0&&map.isEmpty({x: x-1,y})&&!map.getRoom({x: x-1,y})){
+  if(x>0&&map.isWalkableOrEmpty({x:x-1,y})&&!map.getRoom({x:x-1,y})){
     unmapped.push({x: x-1, y});
-    map.setRoom({x: x-1,y,id: -1});
+    map.setRoom({x:x-1,y,id:-1});
   } //end if
-  if(y>0&&map.isEmpty({x,y: y-1})&&!map.getRoom({x,y: y-1})){
+  if(y>0&&map.isWalkableOrEmpty({x,y:y-1})&&!map.getRoom({x,y:y-1})){
     unmapped.push({x,y: y-1});
-    map.setRoom({x,y: y-1,id: -1});
+    map.setRoom({x,y:y-1,id:-1});
   } //end if
-  if(x<map.width&&map.isEmpty({x: x+1,y})&&!map.getRoom({x: x+1,y})){
+  if(x<map.width&&map.isWalkableOrEmpty({x:x+1,y})&&!map.getRoom({x:x+1,y})){
     unmapped.push({x: x+1, y});
-    map.setRoom({x: x+1,y,id: -1});
+    map.setRoom({x:x+1,y,id:-1});
   } //end if
-  if(y<map.height&&map.isEmpty({x,y: y+1})&&!map.getRoom({x,y: y+1})){
+  if(y<map.height&&map.isWalkableOrEmpty({x,y:y+1})&&!map.getRoom({x,y:y+1})){
     unmapped.push({x,y: y+1});
-    map.setRoom({x,y: y+1,id: -1});
+    map.setRoom({x,y:y+1,id:-1});
   } //end if
 } //end traverseLook()
 
@@ -142,7 +175,7 @@ function clipOrphaned(map){
 
   map.sectors.forEach((row,y)=>{
     row.forEach((sector,x)=>{
-      if(!sector.isEmpty()&&!sector.roomNumber){
+      if(sector.isWalkableOrEmpty()&&!sector.roomNumber){
         locStats.cur++;
         traverse(map,locStats,unmapped,x,y);
       } //end if
@@ -150,11 +183,12 @@ function clipOrphaned(map){
   });
   map.sectors.forEach(row=>{
     row.forEach(sector=>{
-      if(sector.isEmpty()&&sector.roomNumber!==locStats.num){
-        sector.setWall();
-      }else if(sector.isEmpty()){
+      if(sector.isWalkableOrEmpty()&&sector.roomNumber!==locStats.num){
+        sector.setObstruction();
+      }else if(sector.isWalkableOrEmpty()&&!sector.isWater()){
         sector.setFloor();
       } //end if
     });
   });
+  console.log(locStats,map);
 } //end clipOrphaned()
