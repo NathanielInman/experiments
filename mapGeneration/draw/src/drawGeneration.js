@@ -190,5 +190,4 @@ function clipOrphaned(map){
       } //end if
     });
   });
-  console.log(locStats,map);
 } //end clipOrphaned()
