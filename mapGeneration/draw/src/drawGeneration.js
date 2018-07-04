@@ -150,19 +150,19 @@ function traverse(map,locStats,unmapped,x,y){
 function traverseLook(map,unmapped,x,y){
   if(x>0&&map.isWalkableOrEmpty({x:x-1,y})&&!map.getRoom({x:x-1,y})){
     unmapped.push({x: x-1, y});
-    map.setRoom({x:x-1,y,id:-1});
+    map.setRoom({x: x-1,y,id: -1});
   } //end if
   if(y>0&&map.isWalkableOrEmpty({x,y:y-1})&&!map.getRoom({x,y:y-1})){
     unmapped.push({x,y: y-1});
-    map.setRoom({x,y:y-1,id:-1});
+    map.setRoom({x,y: y-1,id: -1});
   } //end if
   if(x<map.width&&map.isWalkableOrEmpty({x:x+1,y})&&!map.getRoom({x:x+1,y})){
     unmapped.push({x: x+1, y});
-    map.setRoom({x:x+1,y,id:-1});
+    map.setRoom({x: x+1,y,id: -1});
   } //end if
   if(y<map.height&&map.isWalkableOrEmpty({x,y:y+1})&&!map.getRoom({x,y:y+1})){
     unmapped.push({x,y: y+1});
-    map.setRoom({x,y:y+1,id:-1});
+    map.setRoom({x,y: y+1,id: -1});
   } //end if
 } //end traverseLook()
 
