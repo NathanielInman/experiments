@@ -79,6 +79,7 @@ export function draw(map){
   } //end if
 
   // start the recursive sparks
+  // eslint-disable-next line no-new
   new Spark(map,t.pop(),t.pop(),t);
 
   // now close everything not close enough to river
