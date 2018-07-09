@@ -48,6 +48,9 @@ class Spark{
   }
 }
 export function draw(map){
+  const r = Math.random(); //used to detail how many rivers
+
+  // this holds the terminal points for the river(s)
   let t = [
     {
       x: Math.floor(map.width/4+Math.random()*map.width/2),
@@ -65,7 +68,7 @@ export function draw(map){
       x: map.width-1,
       y: Math.floor(map.height/4+Math.random()*map.height/2)
     }
-  ], r = Math.random();
+  ];
 
   // 25% chance to have no split rivers, 25% to have 1, 50% to have 2
   if(r<0.25){
