@@ -122,15 +122,6 @@ export function draw(map){
   });
 } //end function
 
-// shuffles an array in place
-function shuffle(array){
-  for(let i = array.length - 1,j; i > 0; i--){
-    j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  } //end for
-  return array;
-} //end shuffle()
-
 // Traverse a location completely
 function traverse(map,locStats,unmapped,x,y){
   let newLoc = null; //we pull from unmapped
