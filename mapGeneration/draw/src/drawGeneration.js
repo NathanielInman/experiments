@@ -19,13 +19,13 @@ class Spark{
     let ox,oy, //may have to reset position
         wx,wy; //will need to hold the weight based on d
 
-    this.map.setWater({x:this.cx,y:this.cy});
+    this.map.setWater({x: this.cx,y: this.cy});
     do{
       ox = this.cx; oy = this.cy;
       wx = this.cx<this.dx?0.35:-0.35;
       wy = this.cy<this.dy?0.35:-0.35;
       if(Math.random()<0.5){
-        this.cx += (Math.random()+wx)<0.5?-1:1;;
+        this.cx += (Math.random()+wx)<0.5?-1:1;
       }else{
         this.cy += (Math.random()+wy)<0.5?-1:1;
       } //end if
@@ -33,18 +33,20 @@ class Spark{
       // allow possibility of river splitting, passing
       // on a possible node
       if(this.possible.length&&Math.random()<0.1){
+
+        //eslint-disable-next-line no-new
         new Spark(this.map,{x: this.cx, y: this.cy},this.possible.pop());
       } //end if
 
       // if cx and cy isn't within the map we need to reset;
       // otherwise we can draw it
-      if(!this.map.isInbounds({x:this.cx,y:this.cy})){
+      if(!this.map.isInbounds({x: this.cx,y: this.cy})){
         this.cx = ox; this.cy = oy;
       }else{
         this.map.setWater({x: this.cx,y: this.cy});
       } //end if
     }while(this.cx!==this.dx||this.cy!==this.dy)
-    this.map.setWater({x:this.cx,y:this.cy});
+    this.map.setWater({x: this.cx,y: this.cy});
   }
 }
 export function draw(map){
@@ -82,7 +84,7 @@ export function draw(map){
   } //end if
 
   // start the recursive sparks
-  // eslint-disable-next line no-new
+  // eslint-disable-next-line no-new
   new Spark(map,t.pop(),t.pop(),t);
 
   // now close everything not close enough to river
@@ -112,10 +114,10 @@ export function draw(map){
       if(sector.isWater()) return; //leave water alone
       let x = sector.x,y = sector.y;
 
-      if(map.isInbounds({x:x-1,y})&&map.isWater({x:x-1,y})||
-         map.isInbounds({x:x+1,y})&&map.isWater({x:x+1,y})||
-         map.isInbounds({x,y:y-1})&&map.isWater({x,y:y-1})||
-         map.isInbounds({x,y:y+1})&&map.isWater({x,y:y+1})){
+      if(map.isInbounds({x: x-1,y})&&map.isWater({x: x-1,y})||
+         map.isInbounds({x: x+1,y})&&map.isWater({x: x+1,y})||
+         map.isInbounds({x,y: y-1})&&map.isWater({x,y: y-1})||
+         map.isInbounds({x,y: y+1})&&map.isWater({x,y: y+1})){
         if(Math.random()<0.5) sector.setCorridor();
       } //end if
     });
@@ -127,12 +129,12 @@ function traverse(map,locStats,unmapped,x,y){
   let newLoc = null; //we pull from unmapped
 
   locStats.val=1; //set the current mas size to 1
-  map.setRoom({x,y,id:locStats.cur});
+  map.setRoom({x,y,id: locStats.cur});
   traverseLook(map,unmapped,x,y);
   while(unmapped.length>0){
     newLoc=unmapped.pop();
     traverseLook(map,unmapped,newLoc.x,newLoc.y);
-    map.setRoom({x:newLoc.x,y:newLoc.y,id:locStats.cur});
+    map.setRoom({x: newLoc.x,y: newLoc.y,id: locStats.cur});
     locStats.val++;
     if(locStats.val>locStats.max){
       locStats.max=locStats.val;
@@ -143,19 +145,19 @@ function traverse(map,locStats,unmapped,x,y){
 
 //look around at location and push unmapped nodes to stack
 function traverseLook(map,unmapped,x,y){
-  if(x>0&&map.isWalkableOrEmpty({x:x-1,y})&&!map.getRoom({x:x-1,y})){
+  if(x>0&&map.isWalkableOrEmpty({x: x-1,y})&&!map.getRoom({x: x-1,y})){
     unmapped.push({x: x-1, y});
     map.setRoom({x: x-1,y,id: -1});
   } //end if
-  if(y>0&&map.isWalkableOrEmpty({x,y:y-1})&&!map.getRoom({x,y:y-1})){
+  if(y>0&&map.isWalkableOrEmpty({x,y: y-1})&&!map.getRoom({x,y: y-1})){
     unmapped.push({x,y: y-1});
     map.setRoom({x,y: y-1,id: -1});
   } //end if
-  if(x<map.width&&map.isWalkableOrEmpty({x:x+1,y})&&!map.getRoom({x:x+1,y})){
+  if(x<map.width&&map.isWalkableOrEmpty({x: x+1,y})&&!map.getRoom({x: x+1,y})){
     unmapped.push({x: x+1, y});
     map.setRoom({x: x+1,y,id: -1});
   } //end if
-  if(y<map.height&&map.isWalkableOrEmpty({x,y:y+1})&&!map.getRoom({x,y:y+1})){
+  if(y<map.height&&map.isWalkableOrEmpty({x,y: y+1})&&!map.getRoom({x,y: y+1})){
     unmapped.push({x,y: y+1});
     map.setRoom({x,y: y+1,id: -1});
   } //end if
