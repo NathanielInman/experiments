@@ -95,7 +95,7 @@ export function draw(map){
         y1: sector.y-3,
         x2: sector.x+3,
         y2: sector.y+3
-      })&&Math.random()<0.7){
+      })&&Math.random()<0.6){
         sector.setWall();
       }else if(!sector.isWater()&&Math.random()<0.1){
         sector.setObstruction();
