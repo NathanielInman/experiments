@@ -37,18 +37,18 @@ export function chine(map){
     // now apply the movement, if it's diagonal we'll move vertically
     // then horizontally
     if(d==='northeast'){
-      y--; map.setWater({x,y});
-      x++; map.setWater({x,y});
+      y--; map.isInbounds({x,y})&&map.setWater({x,y});
+      x++; map.isInbounds({x,y})&&map.setWater({x,y});
     }else if(d==='east'){
-      x++; map.setWater({x,y});
+      x++; map.isInbounds({x,y})&&map.setWater({x,y});
     }else if(d==='southeast'){
-      y++; map.setWater({x,y});
-      x++; map.setWater({x,y});
+      y++; map.isInbounds({x,y})&&map.setWater({x,y});
+      x++; map.isInbounds({x,y})&&map.setWater({x,y});
     }else if(d==='south'){
-      y++; map.setWater({x,y});
+      y++; map.isInbounds({x,y})&&map.setWater({x,y});
     }else if(d==='southwest'){
-      y++; map.setWater({x,y});
-      x--; map.setWater({x,y});
+      y++; map.isInbounds({x,y})&&map.setWater({x,y});
+      x--; map.isInbounds({x,y})&&map.setWater({x,y});
     } //end if
 
     // now if we're in the center of the map and the waterfall hasn't been
