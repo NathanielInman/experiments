@@ -36,6 +36,7 @@ export function chine(map){
 
     // now apply the movement, if it's diagonal we'll move vertically
     // then horizontally
+    /* eslint-disable no-unused-expressions */
     if(d==='northeast'){
       y--; map.isInbounds({x,y})&&map.setWater({x,y});
       x++; map.isInbounds({x,y})&&map.setWater({x,y});
@@ -50,6 +51,7 @@ export function chine(map){
       y++; map.isInbounds({x,y})&&map.setWater({x,y});
       x--; map.isInbounds({x,y})&&map.setWater({x,y});
     } //end if
+    /* eslint-enable no-unused-expressions */
 
     // now if we're in the center of the map and the waterfall hasn't been
     // drawn then we can do that now
