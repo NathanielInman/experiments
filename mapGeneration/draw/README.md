@@ -1,3 +1,3 @@
-# Pigeon Hole Generation
+# Draw generator
 
-Check [here](http://theoestudio.com/pigeon-hole-stepping-v2/) for motivation for experiment.
+This is a environmental map generator for a draw.
