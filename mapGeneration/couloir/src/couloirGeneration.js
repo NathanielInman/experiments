@@ -12,6 +12,8 @@ export function couloir(map){
       } //end if
     });
   });
+
+  // clip all non-walkable parts of the map away
   clipOrphaned(map);
 } //end function
 
