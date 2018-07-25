@@ -5,8 +5,12 @@ const noise = new Noise(Math.random());
 export function couloir(map){
   map.sectors.forEach(row=>{
     row.forEach(sector=>{
-      if(noise.simplex2(sector.x/map.width*5,sector.y/map.height*5)<0.05){
+      let n = noise.simplex2(sector.x/map.width*5,sector.y/map.height*5);
+
+      if(n<0.05){
         sector.setFloor();
+      }else if(n<0.2||Math.random()<0.2){
+        sector.setObstruction();
       }else{
         sector.setWall();
       } //end if
@@ -74,7 +78,7 @@ function clipOrphaned(map){
   map.sectors.forEach(row=>{
     row.forEach(sector=>{
       if(sector.isWalkableOrEmpty()&&sector.roomNumber!==locStats.num){
-        sector.setObstruction();
+        sector.setWall();
       }else if(sector.isWalkableOrEmpty()&&!sector.isWater()){
         sector.setFloor();
       } //end if
