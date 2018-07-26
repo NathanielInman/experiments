@@ -7,8 +7,10 @@ export function couloir(map){
     row.forEach(sector=>{
       let n = noise.simplex2(sector.x/map.width*5,sector.y/map.height*5);
 
-      if(n<0.05){
+      if(n<0.05&&Math.random()<0.95){
         sector.setFloor();
+      }else if(n<0.05){
+        sector.setObstruction();
       }else if(n<0.2||Math.random()<0.2){
         sector.setObstruction();
       }else{
