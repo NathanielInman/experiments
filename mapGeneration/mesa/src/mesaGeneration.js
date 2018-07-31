@@ -5,7 +5,9 @@ const noise = new Noise(Math.random());
 export function mesa(map){
   map.sectors.forEach(row=>{
     row.forEach(sector=>{
-      let n = noise.simplex2(sector.x/map.width*5,sector.y/map.height*5);
+      let n1 = noise.perlin2(sector.x/map.width*12,sector.y/map.height*10),
+          n2 = noise.perlin2(sector.x/map.width*6,sector.y/map.height*6),
+          n = (n1+n2)/2;
 
       if(n<0.05&&Math.random()<0.95){
         sector.setFloor();
