@@ -1,4 +1,5 @@
 import {Sector} from './Sector';
+import Heap from 'collections/heap';
 
 export class Map{
   constructor({width=50,height=50}){
@@ -75,6 +76,106 @@ export class Map{
       } //end if
     } //end while()
     return path;
+  }
+  getWalkableNeighbors({x=0,y=0}={}){
+    const list=[],
+          sx=Math.min(Math.max(x-1,0),this.width-1),
+          sy=Math.min(Math.max(y-1,0),this.height-1),
+          ex=Math.min(Math.max(x+1,0),this.width-1),
+          ey=Math.min(Math.max(y+1,0),this.height-1);
+
+    for(let cy=sy;cy<=ey;cy++){
+      for(let cx=sx;cx<=ex;cx++){
+        if(this.isInbounds({x: cx,y: cy})&&this.isWalkable({x: cy,y: cy})){
+          list.push(this.getSector({x: cx,y: cy}));
+        } //end if
+      } //end for
+    } //end for
+    return list;
+  }
+  findPath(){
+    let weight = 1,
+        heuristic = (dx, dy) => dx + dy, //manhattan heuristic
+        openList = new Heap([],(a,b)=>a.f===b.f,(a,b)=>a.f - b.f),
+        abs = Math.abs, //shorten reference
+        SQRT2 = Math.SQRT2, //shorten reference
+        altered = [], //keep track of which sectors we modulate (to clean later)
+        node = this.getSector({x:x1,y:y1}); //acquire starting node
+
+    // set the g and f value of the start node to be 0
+    node.g = 0;
+    node.f = 0;
+
+    // push the start node into the open list
+    openList.push(node);
+    node.opened = true;
+
+    // while the open list is not empty
+    while (!openList.length) {
+
+      // pop the position of node which has the minimum f value
+      node = openList.pop();
+      node.closed = true;
+
+      // if reached the end position, construct the path and return it
+      if (node.location.x === targetX && node.location.y === targetY) {
+        let path = []; //final path
+
+        // Add all successful nodes to the path array except starting node
+        do{
+          path.push({x:node.location.x,y:node.location.y});
+          node = node.parent;
+        }while(node.parent);
+
+        // Clean up fields we've added
+        altered.forEach(node=>{
+          delete node.g; delete node.h; delete node.f;
+          delete node.closed; delete node.parent;
+          delete node.opened;
+        });
+
+        return path; //pop from list to get path in order
+      } //end if
+
+      // get neighbours of the current node
+      let neighbors = this.getWalkableNeighbors({x:node.x,y:node.y}),
+          neighbor;
+
+      altered.push.apply(altered,neighbors); //flat push
+      for (let i = 0,closed=0,ng, l = neighbors.length; i < l; ++i) {
+        neighbor = neighbors[i];
+
+        let x = neighbor.location.x,
+            y = neighbor.location.y;
+
+        // get the distance between current node and the neighbor
+        // and calculate the next g score
+        ng = node.g + ((x - node.location.x === 0 || y - node.location.y === 0) ? 1 : SQRT2);
+
+        // check if the neighbor has not been inspected yet, or
+        // can be reached with smaller cost from the current node
+        if (!neighbor.opened || ng < neighbor.g) {
+          neighbor.g = ng;
+          neighbor.h = neighbor.h || weight * heuristic(abs(x - targetX), abs(y - targetY));
+          neighbor.f = neighbor.g + neighbor.h;
+          neighbor.parent = node;
+
+          if (!neighbor.opened) {
+            openList.push(neighbor);
+            neighbor.opened = true;
+            /*
+          } else {
+            // the neighbor can be reached with smaller cost.
+            // Since its f value has been updated, we have to
+            // update its position in the open list
+            openList.updateItem(neighbor);*/
+          }
+        }
+      } // end for each neighbor
+    } // end while not open list empty
+
+    // fail to find the path
+    return [{x:startX,y:startY}];
   }
   isPathEmpty(path=[]){
     let result = true;

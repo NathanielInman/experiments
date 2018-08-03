@@ -46,7 +46,7 @@
     "webpack-cli": "^3.0.8"
   },
   "dependencies": {
-    "collections": "^5.1.2",
+    "collections": "^5.1.5",
     "ion-cloud": "^1.13.9",
     "noisejs": "^2.1.0"
   },
