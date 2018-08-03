@@ -2,7 +2,7 @@ import {Noise} from 'noisejs';
 
 const noise = new Noise(Math.random());
 
-export function cliff(map){
+export function exhumedRiverChannel(map){
   map.sectors.forEach(row=>{
     row.forEach(sector=>{
       let n1 = noise.perlin2(sector.x/map.width*12,sector.y/map.height*10),

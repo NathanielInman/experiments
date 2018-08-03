@@ -1,5 +1,5 @@
 import {Easel} from 'ion-cloud';
-import {cliff} from './cliffGeneration';
+import {exhumedRiverChannel} from './exhumedRiverChannelGeneration';
 import {Map} from './Map';
 
 let noscript = document.querySelector('noscript'),
@@ -16,7 +16,7 @@ if(!easel.activated){
 }else{
   let map = new Map(50,50);
 
-  cliff(map); //perform pigeon hole generation
+  exhumedRiverChannel(map); //perform pigeon hole generation
   easel.onDraw = function(){
     let rh = easel.viewport.h/map.height, rw = easel.viewport.w/map.width;
 
