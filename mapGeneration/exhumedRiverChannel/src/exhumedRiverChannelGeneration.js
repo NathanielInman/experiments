@@ -17,15 +17,23 @@ export function exhumedRiverChannel(map){
   clipOrphaned(map);
 
   let x = 0, y;
+
   do{
     y = Math.floor(Math.random()*map.height);
   }while(!map.isWalkable({x,y}))
   map.setFloorSpecial({x,y});
+  let sx = x, sy = y;
+
   x = map.width-1;
   do{
     y = Math.floor(Math.random()*map.height);
   }while(!map.isWalkable({x,y}))
   map.setFloorSpecial({x,y});
+  map.findPath({x1: sx,y1: sy,x2: x,y2: y})
+    .forEach(sector=>{
+      x = sector.x; y = sector.y;
+      map.setFloorSpecial({x,y});
+    });
 } //end function
 
 // Traverse a location completely
@@ -57,11 +65,11 @@ function traverseLook(map,unmapped,x,y){
     unmapped.push({x,y: y-1});
     map.setRoom({x,y: y-1,id: -1});
   } //end if
-  if(x<map.width&&map.isWalkableOrEmpty({x: x+1,y})&&!map.getRoom({x: x+1,y})){
+  if(x<map.width-1&&map.isWalkableOrEmpty({x: x+1,y})&&!map.getRoom({x: x+1,y})){
     unmapped.push({x: x+1, y});
     map.setRoom({x: x+1,y,id: -1});
   } //end if
-  if(y<map.height&&map.isWalkableOrEmpty({x,y: y+1})&&!map.getRoom({x,y: y+1})){
+  if(y<map.height-1&&map.isWalkableOrEmpty({x,y: y+1})&&!map.getRoom({x,y: y+1})){
     unmapped.push({x,y: y+1});
     map.setRoom({x,y: y+1,id: -1});
   } //end if
