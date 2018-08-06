@@ -1,8 +1,34 @@
 import {Noise} from 'noisejs';
 
+// shuffles an array in place
+function shuffle(array){
+  for(let i = array.length - 1,j; i > 0; i--){
+    j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  } //end for
+  return array;
+} //end shuffle()
+
 const noise = new Noise(Math.random());
 
+function getValidTerminalPoint(map,{xmin,xmax,ymin,ymax}){
+  let x, y;
+
+  do{
+    x = Math.floor(xmin+Math.random()*(xmax-xmin));
+    y = Math.floor(ymin+Math.random()*(ymax-ymin));
+  }while(!map.isWalkable({x,y}))
+  return {x,y};
+} //end getValidTerminalPoint()
+
 export function exhumedRiverChannel(map){
+  let x,y,x1,y1,x2,y2,terminalPositions = shuffle([
+    {xmin: 0, xmax: 0, ymin: 0, ymax: map.height-1},
+    {xmin: map.width-1, xmax: map.width-1, ymin: 0, ymax: map.height-1},
+    {xmin: 0, xmax: map.width-1, ymin: 0, ymax: 0},
+    {xmin: 0, xmax: map.width-1, ymin: map.height-1, ymax: map.height-1}
+  ]);
+
   map.sectors.forEach(row=>{
     row.forEach(sector=>{
       let n = (1+noise.simplex2(sector.x/map.width*10,sector.y/map.height*10))/2;
@@ -16,20 +42,18 @@ export function exhumedRiverChannel(map){
   });
   clipOrphaned(map);
 
-  let x = 0, y;
-
-  do{
-    y = Math.floor(Math.random()*map.height);
-  }while(!map.isWalkable({x,y}))
+  // get the start position, set floor and save it
+  ({x,y}=getValidTerminalPoint(map,terminalPositions.pop()));
   map.setFloorSpecial({x,y});
-  let sx = x, sy = y;
+  x1 = x; y1 = y;
 
-  x = map.width-1;
-  do{
-    y = Math.floor(Math.random()*map.height);
-  }while(!map.isWalkable({x,y}))
+  // get the end position, set floor
+  ({x,y}=getValidTerminalPoint(map,terminalPositions.pop()));
   map.setFloorSpecial({x,y});
-  map.findPath({x1: sx,y1: sy,x2: x,y2: y})
+  x2 = x; y2 = y;
+
+  // now we'll draw the path between the points
+  map.findPath({x1,y1,x2,y2})
     .forEach(sector=>{
       let n=false,s=false,e=false,w=false;
 
