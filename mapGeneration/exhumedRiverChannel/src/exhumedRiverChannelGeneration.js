@@ -31,8 +31,46 @@ export function exhumedRiverChannel(map){
   map.setFloorSpecial({x,y});
   map.findPath({x1: sx,y1: sy,x2: x,y2: y})
     .forEach(sector=>{
+      let n=false,s=false,e=false,w=false;
+
       x = sector.x; y = sector.y;
       map.setFloorSpecial({x,y});
+      if(map.isInbounds({x: x-1,y})&&map.isWalkable({x:x-1,y})){
+        if(Math.random()<0.5){
+          map.setFloorSpecial({x:x-1,y});
+          w = true;
+        } //end if
+      } //end if
+      if(map.isInbounds({x: x+1,y})&&map.isWalkable({x:x+1,y})){
+        if(Math.random()<0.5){
+          map.setFloorSpecial({x:x+1,y});
+          e = true;
+        } //end if
+      } //end if
+      if(map.isInbounds({x, y:y-1})&&map.isWalkable({x, y:y-1})){
+        if(Math.random()<0.5){
+          map.setFloorSpecial({x,y:y-1});
+          n = true;
+        } //end if
+      } //end if
+      if(map.isInbounds({x, y:y+1})&&map.isWalkable({x, y:y+1})){
+        if(Math.random()<0.5){
+          map.setFloorSpecial({x,y:y+1});
+          s = true;
+        } //end if
+      } //end if
+      if(map.isInbounds({x:x+1,y:y-1})&&map.isWalkable({x:x+1,y:y-1})&&(n||e)){
+        if(Math.random()<0.5) map.setFloorSpecial({x:x+1,y:y-1});
+      } //end if
+      if(map.isInbounds({x:x+1,y:y+1})&&map.isWalkable({x:x+1,y:y+1})&&(s||e)){
+        if(Math.random()<0.5) map.setFloorSpecial({x:x+1,y:y+1});
+      } //end if
+      if(map.isInbounds({x:x-1,y:y+1})&&map.isWalkable({x:x-1,y:y+1})&&(s||w)){
+        if(Math.random()<0.5) map.setFloorSpecial({x:x-1,y:y+1});
+      } //end if
+      if(map.isInbounds({x:x-1,y:y-1})&&map.isWalkable({x:x-1,y:y-1})&&(n||w)){
+        if(Math.random()<0.5) map.setFloorSpecial({x:x-1,y:y-1});
+      } //end if
     });
 } //end function
 
