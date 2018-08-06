@@ -11,22 +11,32 @@ function shuffle(array){
 
 const noise = new Noise(Math.random());
 
-function getValidTerminalPoint(map,{xmin,xmax,ymin,ymax}){
-  let x, y;
-
-  do{
-    x = Math.floor(xmin+Math.random()*(xmax-xmin));
-    y = Math.floor(ymin+Math.random()*(ymax-ymin));
-  }while(!map.isWalkable({x,y}))
-  return {x,y};
-} //end getValidTerminalPoint()
-
 export function exhumedRiverChannel(map){
   let x,y,x1,y1,x2,y2,terminalPositions = shuffle([
-    {xmin: 0, xmax: 0, ymin: 0, ymax: map.height-1},
-    {xmin: map.width-1, xmax: map.width-1, ymin: 0, ymax: map.height-1},
-    {xmin: 0, xmax: map.width-1, ymin: 0, ymax: 0},
-    {xmin: 0, xmax: map.width-1, ymin: map.height-1, ymax: map.height-1}
+    {
+      xmin: 0,
+      xmax: 0,
+      ymin: Math.floor(map.height/4),
+      ymax: Math.floor(map.height/4*3)
+    },
+    {
+      xmin: map.width-1,
+      xmax: map.width-1,
+      ymin: Math.floor(map.height/4),
+      ymax: Math.floor(map.height/4*3)
+    },
+    {
+      xmin: Math.floor(map.width/4),
+      xmax: Math.floor(map.width/4*3),
+      ymin: 0,
+      ymax: 0
+    },
+    {
+      xmin: Math.floor(map.width/4),
+      xmax: Math.floor(map.width/4*3),
+      ymin: map.height-1,
+      ymax: map.height-1
+    }
   ]);
 
   map.sectors.forEach(row=>{
@@ -42,61 +52,105 @@ export function exhumedRiverChannel(map){
   });
   clipOrphaned(map);
 
-  // get the start position, set floor and save it
+  // get the start position, set water and save it
   ({x,y}=getValidTerminalPoint(map,terminalPositions.pop()));
-  map.setFloorSpecial({x,y});
+  map.setWater({x,y});
   x1 = x; y1 = y;
 
-  // get the end position, set floor
+  // get the end position, set water
   ({x,y}=getValidTerminalPoint(map,terminalPositions.pop()));
-  map.setFloorSpecial({x,y});
+  map.setWater({x,y});
   x2 = x; y2 = y;
 
   // now we'll draw the path between the points
-  map.findPath({x1,y1,x2,y2})
-    .forEach(sector=>{
-      let n=false,s=false,e=false,w=false;
+  map.findPath({x1,y1,x2,y2}).forEach(sector=> drawPath(map,sector));
 
-      x = sector.x; y = sector.y;
-      map.setFloorSpecial({x,y});
-      if(map.isInbounds({x: x-1,y})&&map.isWalkable({x:x-1,y})){
-        if(Math.random()<0.5){
-          map.setFloorSpecial({x:x-1,y});
-          w = true;
-        } //end if
-      } //end if
-      if(map.isInbounds({x: x+1,y})&&map.isWalkable({x:x+1,y})){
-        if(Math.random()<0.5){
-          map.setFloorSpecial({x:x+1,y});
-          e = true;
-        } //end if
-      } //end if
-      if(map.isInbounds({x, y:y-1})&&map.isWalkable({x, y:y-1})){
-        if(Math.random()<0.5){
-          map.setFloorSpecial({x,y:y-1});
-          n = true;
-        } //end if
-      } //end if
-      if(map.isInbounds({x, y:y+1})&&map.isWalkable({x, y:y+1})){
-        if(Math.random()<0.5){
-          map.setFloorSpecial({x,y:y+1});
-          s = true;
-        } //end if
-      } //end if
-      if(map.isInbounds({x:x+1,y:y-1})&&map.isWalkable({x:x+1,y:y-1})&&(n||e)){
-        if(Math.random()<0.5) map.setFloorSpecial({x:x+1,y:y-1});
-      } //end if
-      if(map.isInbounds({x:x+1,y:y+1})&&map.isWalkable({x:x+1,y:y+1})&&(s||e)){
-        if(Math.random()<0.5) map.setFloorSpecial({x:x+1,y:y+1});
-      } //end if
-      if(map.isInbounds({x:x-1,y:y+1})&&map.isWalkable({x:x-1,y:y+1})&&(s||w)){
-        if(Math.random()<0.5) map.setFloorSpecial({x:x-1,y:y+1});
-      } //end if
-      if(map.isInbounds({x:x-1,y:y-1})&&map.isWalkable({x:x-1,y:y-1})&&(n||w)){
-        if(Math.random()<0.5) map.setFloorSpecial({x:x-1,y:y-1});
+  // 50% chance to have a forked river
+  if(Math.random()<0.5){
+    ({x,y}=getValidTerminalPoint(map,terminalPositions.pop()));
+    map.setWater({x,y});
+    x2 = x; y2 = y;
+
+    // now we'll draw the fork of the path
+    map.findPath({x1,y1,x2,y2}).forEach(sector=> drawPath(map,sector));
+  } //end if
+
+  // now close everything not close enough to the exhumed channel
+  map.sectors.forEach(row=>{
+    row.forEach(sector=>{
+      if(map.isSquareEmptyOfWater({
+        x1: sector.x-3,
+        y1: sector.y-3,
+        x2: sector.x+3,
+        y2: sector.y+3
+      })&&Math.random()<0.6){
+        sector.setWall();
+      }else if(!sector.isWater()&&Math.random()<0.1){
+        sector.setWallSpecial();
+      }else if(sector.isWater()){
+        sector.setFloorSpecial();
+      }else if(!sector.isWater()){
+        sector.setFloor();
       } //end if
     });
+  });
+
+  clipOrphaned(map);
 } //end function
+
+function getValidTerminalPoint(map,{xmin,xmax,ymin,ymax}){
+  let x, y;
+
+  do{
+    x = Math.floor(xmin+Math.random()*(xmax-xmin));
+    y = Math.floor(ymin+Math.random()*(ymax-ymin));
+  }while(!map.isWalkable({x,y}))
+  return {x,y};
+} //end getValidTerminalPoint()
+
+//eslint-disable-next-line complexity
+function drawPath(map, sector){
+  let n=false,s=false,e=false,w=false,
+      x = sector.x, y = sector.y;
+
+  map.setWater({x,y});
+  if(map.isInbounds({x: x-1,y})&&map.isWalkable({x: x-1,y})){
+    if(Math.random()<0.5){
+      map.setWater({x: x-1,y});
+      w = true;
+    } //end if
+  } //end if
+  if(map.isInbounds({x: x+1,y})&&map.isWalkable({x: x+1,y})){
+    if(Math.random()<0.5){
+      map.setWater({x: x+1,y});
+      e = true;
+    } //end if
+  } //end if
+  if(map.isInbounds({x,y: y-1})&&map.isWalkable({x,y: y-1})){
+    if(Math.random()<0.5){
+      map.setWater({x,y: y-1});
+      n = true;
+    } //end if
+  } //end if
+  if(map.isInbounds({x,y: y+1})&&map.isWalkable({x,y: y+1})){
+    if(Math.random()<0.5){
+      map.setWater({x,y: y+1});
+      s = true;
+    } //end if
+  } //end if
+  if(map.isInbounds({x: x+1,y: y-1})&&map.isWalkable({x: x+1,y: y-1})&&(n||e)){
+    if(Math.random()<0.5) map.setWater({x: x+1,y: y-1});
+  } //end if
+  if(map.isInbounds({x: x+1,y: y+1})&&map.isWalkable({x: x+1,y: y+1})&&(s||e)){
+    if(Math.random()<0.5) map.setWater({x: x+1,y: y+1});
+  } //end if
+  if(map.isInbounds({x: x-1,y: y+1})&&map.isWalkable({x: x-1,y: y+1})&&(s||w)){
+    if(Math.random()<0.5) map.setWater({x: x-1,y: y+1});
+  } //end if
+  if(map.isInbounds({x: x-1,y: y-1})&&map.isWalkable({x: x-1,y: y-1})&&(n||w)){
+    if(Math.random()<0.5) map.setWater({x: x-1,y: y-1});
+  } //end if
+} //end drawPath()
 
 // Traverse a location completely
 function traverse(map,locStats,unmapped,x,y){
@@ -144,6 +198,13 @@ function clipOrphaned(map){
   let locStats = {val: 0,cur: 0,num: 0,max: 0},
       unmapped = [];
 
+  // we have to start by removing roomNumbers if they exist because
+  // we run this function more than once
+  map.sectors.forEach(row=>{
+
+    //eslint-disable-next-line no-return-assign
+    row.forEach(sector=> sector.roomNumber = 0);
+  });
   map.sectors.forEach((row,y)=>{
     row.forEach((sector,x)=>{
       if(sector.isWalkableOrEmpty()&&!sector.roomNumber){
@@ -156,8 +217,6 @@ function clipOrphaned(map){
     row.forEach(sector=>{
       if(sector.isWalkableOrEmpty()&&sector.roomNumber!==locStats.num){
         sector.setWallSpecial();
-      }else if(sector.isWalkableOrEmpty()&&!sector.isWater()){
-        sector.setFloor();
       } //end if
     });
   });

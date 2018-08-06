@@ -126,7 +126,11 @@ export class Map{
           node = node.path.parent;
         }while(node.path.parent);
 
-        return path; //pop from list to get path in order
+        // we'll remove all the added attributes
+        this.sectors.forEach(row=> row.forEach(sector=> delete sector.path));
+
+        // pop from list to get path in order
+        return path;
       } //end if
 
       // get neighbours of the current node
@@ -189,8 +193,9 @@ export class Map{
     let dx = x1<x2?1:-1, dy = y1<y2?1:-1;
 
     for(let y = y1;y!==y2+dy;y+=dy){
+      if(y<1||y>=this.height) continue;
       for(let x = x1;x!==x2+dx;x+=dx){
-        if(x<1||x>this.width-1||y<1||y>=this.height-1){
+        if(x<1||x>this.width-1){
           continue; //not valid to check
         }else if(this.isWater({x,y})){
           return false; //exit early
