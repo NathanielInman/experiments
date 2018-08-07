@@ -1,5 +1,4 @@
-# Flatiron Rock Formation
-
+# Marsh Generator
 This is an environmental map generator.
 
 ## Setup

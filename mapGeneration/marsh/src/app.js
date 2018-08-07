@@ -1,5 +1,5 @@
 import {Easel} from 'ion-cloud';
-import {flatiron} from './flatiron';
+import {marsh} from './marsh';
 import {Map} from './Map';
 
 const noscript = document.querySelector('noscript'),
@@ -16,7 +16,7 @@ if(!easel.activated){
 }else{
   const map = new Map(50,50);
 
-  flatiron(map);
+  marsh(map);
   easel.onDraw = function(){
     const rh = easel.viewport.h/map.height, rw = easel.viewport.w/map.width;
 

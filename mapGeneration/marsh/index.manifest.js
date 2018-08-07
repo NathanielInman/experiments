@@ -4,7 +4,7 @@ export const index = {
   inject: false,
   template: indexTemplate,
   mobile: true,
-  title: 'Flatiron Generator',
+  title: 'Marsh Generator',
   injectExtras: {
     head: [
       {

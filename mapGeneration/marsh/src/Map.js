@@ -229,27 +229,15 @@ export class Map{
     } //end if
     return result;
   }
-  isSquareEmpty({x1=0,y1=0,x2=0,y2=0}={}){
+  isSquare({x1=0,y1=0,x2=0,y2=0}={},testFn){
     const dx = x1<x2?1:-1, dy = y1<y2?1:-1;
 
     for(let y = y1;y!==y2+dy;y+=dy){
       for(let x = x1;x!==x2+dx;x+=dx){
-        if(x<1||x>this.width-1||y<1||y>=this.height-1||!this.isEmpty({x,y})){
-          return false; //exit early
-        } //end if
-      } //end for
-    } //end for
-    return true;
-  }
-  isSquareEmptyOfWater({x1=0,y1=0,x2=0,y2=0}={}){
-    const dx = x1<x2?1:-1, dy = y1<y2?1:-1;
-
-    for(let y = y1;y!==y2+dy;y+=dy){
-      if(y<1||y>=this.height) continue;
-      for(let x = x1;x!==x2+dx;x+=dx){
-        if(x<1||x>this.width-1){
-          continue; //not valid to check
-        }else if(this.isWater({x,y})){
+        if(
+          x<1||x>this.width-1||y<1||y>=this.height-1||
+          testFn(this.getSector({x,y}))
+        ){
           return false; //exit early
         } //end if
       } //end for
