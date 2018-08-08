@@ -219,12 +219,12 @@ export class Map{
     // fail to find the path
     return [{x: x1,y: y1}];
   }
-  isPathEmpty(path=[]){
+  isPath(path=[],testFn){
     let result = true;
 
     if(!path.length){
       result = false;
-    }else if(!path.slice(1,path.length).every(p=> this.isEmpty(p))){
+    }else if(!path.slice(1,path.length).every(p=> testFn(this.getSector(p)))){
       result = false;
     } //end if
     return result;
@@ -259,7 +259,7 @@ export class Map{
       } //end for
     } //end for
   }
-  clipOrphaned(testFn,setFn){
+  clipOrphaned(testFn,setFailureFn,setSuccessFn){
     const locStats = {val: 0,cur: 0,num: 0,max: 0},
           unmapped = [];
 
@@ -320,7 +320,11 @@ export class Map{
     });
     this.sectors.forEach(row=>{
       row.forEach(sector=>{
-        if(testFn(sector)&&sector.roomNumber!==locStats.num) setFn(sector);
+        if(testFn(sector)&&sector.roomNumber!==locStats.num&&setFailureFn){
+          setFailureFn(sector);
+        }else if(testFn(sector)&&sector.roomNumber===locStats.num&&setSuccessFn){
+          setSuccessFn(sector);
+        } //end if
       });
     });
   }
