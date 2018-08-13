@@ -4,7 +4,7 @@ export const index = {
   inject: false,
   template: indexTemplate,
   mobile: true,
-  title: 'Gully Generator',
+  title: 'Gulch Generator',
   injectExtras: {
     head: [
       {
