@@ -1,4 +1,4 @@
-# Marsh Generator
+# Gulch Generator
 This is an environmental map generator.
 
 ## Setup
