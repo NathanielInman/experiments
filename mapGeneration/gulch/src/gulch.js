@@ -2,7 +2,7 @@ import {Noise} from 'noisejs';
 
 const noise = new Noise(Math.random());
 
-export function gully(map){
+export function gulch(map){
   const d = Math.random()<0.5,
         h = d?2:10,
         v = d?10:2;
@@ -21,7 +21,7 @@ export function gully(map){
     });
   });
 
-  // remove all but the largest gully
+  // remove all but the largest gulch
   map.clipOrphaned(
     sector=> sector.isFloorSpecial(),
     sector=> Math.random()<0.4?sector.setWall():sector.setFloor()
