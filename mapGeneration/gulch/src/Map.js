@@ -128,21 +128,25 @@ export class Map{
     } //end while()
     return path;
   }
-  getWalkableNeighbors({x=0,y=0}={}){
-    const list=[];
+  getNeighbors({x=0,y=0,orthogonal=true,cardinal=true,self=false,test}={}){
+    const list=[],
+          listAdd = loc=>{
+            if(this.isInbounds(loc)&&test(this.getSector(loc))){
+              list.push(this.getSector(loc));
+            } //end if
+          };
 
-    if(this.isInbounds({x: x-1,y})&&this.isWalkable({x: x-1,y})){
-      list.push(this.getSector({x: x-1,y}));
-    } //end if
-    if(this.isInbounds({x: x+1,y})&&this.isWalkable({x: x+1,y})){
-      list.push(this.getSector({x: x+1,y}));
-    } //end if
-    if(this.isInbounds({x,y: y-1})&&this.isWalkable({x,y: y-1})){
-      list.push(this.getSector({x,y: y-1}));
-    } //end if
-    if(this.isInbounds({x,y: y+1})&&this.isWalkable({x,y: y+1})){
-      list.push(this.getSector({x,y: y+1}));
-    } //end if
+    for(let cy=y-1;cy<=y+1;cy++){
+      for(let cx=x-1;cx<=x+1;cx++){
+        if(cx===x&&cy===y&&self){
+          listAdd({x: cx, y: cy});
+        }else if(cx===x&&cardinal||cy===y&&cardinal){ //cardinal
+          listAdd({x: cx, y: cy});
+        }else if(orthogonal){ //orthogonal
+          listAdd({x: cx, y: cy});
+        } //end if
+      } //end for
+    } //end for
     return list;
   }
   findPath({x1=0,y1=0,x2=0,y2=0}={}){
@@ -186,7 +190,12 @@ export class Map{
       } //end if
 
       // get neighbours of the current node
-      const neighbors = this.getWalkableNeighbors({x: node.x,y: node.y});
+      const neighbors = this.getNeighbors({
+        x: node.x,y: node.y, orthogonal: false,
+        test(sector){
+          return sector.isWalkable();
+        }
+      });
 
       for (let i = 0, ng; i < neighbors.length; ++i) {
         const neighbor = neighbors[i],
@@ -219,24 +228,24 @@ export class Map{
     // fail to find the path
     return [{x: x1,y: y1}];
   }
-  isPath(path=[],testFn){
+  isPath(path=[],test){
     let result = true;
 
     if(!path.length){
       result = false;
-    }else if(!path.slice(1,path.length).every(p=> testFn(this.getSector(p)))){
+    }else if(!path.slice(1,path.length).every(p=> test(this.getSector(p)))){
       result = false;
     } //end if
     return result;
   }
-  isSquare({x1=0,y1=0,x2=0,y2=0}={},testFn){
+  isSquare({x1=0,y1=0,x2=0,y2=0}={},test){
     const dx = x1<x2?1:-1, dy = y1<y2?1:-1;
 
     for(let y = y1;y!==y2+dy;y+=dy){
       for(let x = x1;x!==x2+dx;x+=dx){
         if(
           x<1||x>this.width-1||y<1||y>=this.height-1||
-          testFn(this.getSector({x,y}))
+          test(this.getSector({x,y}))
         ){
           return false; //exit early
         } //end if
@@ -259,7 +268,7 @@ export class Map{
       } //end for
     } //end for
   }
-  clipOrphaned(testFn,setFailureFn,setSuccessFn){
+  clipOrphaned(test,setFailure,setSuccess){
     const locStats = {val: 0,cur: 0,num: 0,max: 0},
           unmapped = [];
 
@@ -272,7 +281,7 @@ export class Map{
     });
     this.sectors.forEach((row,sectorY)=>{
       row.forEach((sector,sectorX)=>{
-        if(testFn(sector)&&!sector.roomNumber){
+        if(test(sector)&&!sector.roomNumber){
           locStats.cur++; locStats.val = 1; //init new room
           let newLoc = {x:sectorX,y:sectorY,id: locStats.cur},
               x, y;
@@ -281,28 +290,28 @@ export class Map{
             ({x,y}=newLoc);
             if(
               this.isInbounds({x: x-1,y})&&!this.getRoom({x: x-1,y})&&
-              testFn(this.getSector({x: x-1,y}))
+              test(this.getSector({x: x-1,y}))
             ){
               unmapped.push({x: x-1, y});
               this.setRoom({x: x-1,y,id: -1});
             } //end if
             if(
               this.isInbounds({x,y: y-1})&&!this.getRoom({x,y: y-1})&&
-              testFn(this.getSector({x,y: y-1}))
+              test(this.getSector({x,y: y-1}))
             ){
               unmapped.push({x,y: y-1});
               this.setRoom({x,y: y-1,id: -1});
             } //end if
             if(
               this.isInbounds({x: x+1,y})&&!this.getRoom({x: x+1,y})&&
-              testFn(this.getSector({x: x+1,y}))
+              test(this.getSector({x: x+1,y}))
             ){
               unmapped.push({x: x+1, y});
               this.setRoom({x: x+1,y,id: -1});
             } //end if
             if(
               this.isInbounds({x,y: y+1})&&!this.getRoom({x,y: y+1})&&
-              testFn(this.getSector({x,y: y+1}))
+              test(this.getSector({x,y: y+1}))
             ){
               unmapped.push({x,y: y+1});
               this.setRoom({x,y: y+1,id: -1});
@@ -320,10 +329,10 @@ export class Map{
     });
     this.sectors.forEach(row=>{
       row.forEach(sector=>{
-        if(testFn(sector)&&sector.roomNumber!==locStats.num&&setFailureFn){
-          setFailureFn(sector);
-        }else if(testFn(sector)&&sector.roomNumber===locStats.num&&setSuccessFn){
-          setSuccessFn(sector);
+        if(test(sector)&&sector.roomNumber!==locStats.num&&setFailure){
+          setFailure(sector);
+        }else if(test(sector)&&sector.roomNumber===locStats.num&&setSuccess){
+          setSuccess(sector);
         } //end if
       });
     });
