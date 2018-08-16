@@ -1,5 +1,5 @@
 {
-  "name": "flatironGeneration",
+  "name": "marshGeneration",
   "version": "0.1.0",
   "description": "n/a",
   "main": "config.babel.js",
