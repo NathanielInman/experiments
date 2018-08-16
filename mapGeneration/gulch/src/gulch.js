@@ -100,12 +100,22 @@ function drawPath(map, sector){
     }
   }).forEach(sector=> sector.setWater());
   map.getNeighbors({
-    x, y, cardinal: false,
+    x, y, cardinal: false, size: 2,
     test(sector){
       return sector.isWalkable()&&!sector.isWater();
     }
   }).forEach(sector=>{
-    if(Math.random()<0.5) sector.setFloorSpecial();
-  });
+    sector.setFloorSpecial();
 
+    // small chance to venture slightly further
+    if(Math.random()<0.5){
+      map.getNeighbors({
+        x: sector.x, y: sector.y, size: 2,
+        test(sector){
+          return sector.isWalkable()&&
+            !sector.isWater()&&!sector.isFloorSpecial();
+        }
+      }).forEach(sector=> Math.random()<0.5?sector.setFloorSpecial():null);
+    } //end if
+  });
 } //end drawPath()

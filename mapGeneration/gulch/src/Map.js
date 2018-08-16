@@ -128,7 +128,11 @@ export class Map{
     } //end while()
     return path;
   }
-  getNeighbors({x=0,y=0,orthogonal=true,cardinal=true,self=false,test}={}){
+  getNeighbors({
+    x=0,y=0,size=1,
+    orthogonal=true,cardinal=true,self=false,
+    test=()=>true
+  }={}){
     const list=[],
           listAdd = loc=>{
             if(this.isInbounds(loc)&&test(this.getSector(loc))){
@@ -136,8 +140,8 @@ export class Map{
             } //end if
           };
 
-    for(let cy=y-1;cy<=y+1;cy++){
-      for(let cx=x-1;cx<=x+1;cx++){
+    for(let cy=y-size;cy<=y+size;cy++){
+      for(let cx=x-size;cx<=x+size;cx++){
         if(cx===x&&cy===y&&self){
           listAdd({x: cx, y: cy});
         }else if(cx===x&&cardinal||cy===y&&cardinal){ //cardinal
