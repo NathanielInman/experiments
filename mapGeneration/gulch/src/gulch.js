@@ -20,8 +20,10 @@ export function gulch(map){
     row.forEach(sector=>{
       const n = (1+noise.simplex2(sector.x/map.width*h,sector.y/map.height*v))/2;
 
-      if(n<0.4){
-        Math.random()<0.4?sector.setWall():sector.setFloor();
+      if(n<0.4&&Math.random()<0.4){
+        sector.setWall()
+      }else if(n<0.4){
+        sector.setFloor();
       }else if(n>0.5&&Math.random()<0.4){
         sector.setWall();
       }else{
@@ -36,7 +38,7 @@ export function gulch(map){
     sector=> sector.setWallSpecial()
   );
 
-  let x,y,x1,y1,x2,y2,terminalPositions = shuffle([
+  const terminalPositions = shuffle([
     {
       xmin: 0,
       xmax: 0,
@@ -63,15 +65,17 @@ export function gulch(map){
     }
   ]);
 
+  let x,y;
+
   // get the start position, set water and save it
   ({x,y}=getValidTerminalPoint(map,terminalPositions.pop()));
   map.setWater({x,y});
-  x1 = x; y1 = y;
+  const x1 = x, y1 = y;
 
   // get the end position, set water
   ({x,y}=getValidTerminalPoint(map,terminalPositions.pop()));
   map.setWater({x,y});
-  x2 = x; y2 = y;
+  const x2 = x, y2 = y;
 
   // now we'll draw the path between the points
   map.findPath({x1,y1,x2,y2}).forEach(sector=> drawPath(map,sector));
@@ -89,8 +93,7 @@ function getValidTerminalPoint(map,{xmin,xmax,ymin,ymax}){
 
 //eslint-disable-next-line complexity
 function drawPath(map, sector){
-  let n=false,s=false,e=false,w=false,
-      x = sector.x, y = sector.y;
+  const x = sector.x, y = sector.y;
 
   map.setWater({x,y});
   map.getNeighbors({
