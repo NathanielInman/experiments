@@ -330,7 +330,7 @@ export class Map{
       } //end for
     } //end for
   }
-  clipOrphaned(test,setFailure,setSuccess){
+  clipOrphaned(test,setFailure,setSuccess,setHardFailure){
     const locStats = {val: 0,cur: 0,num: 0,max: 0},
           unmapped = [];
 
@@ -395,6 +395,8 @@ export class Map{
           setFailure(sector);
         }else if(test(sector)&&sector.roomNumber===locStats.num&&setSuccess){
           setSuccess(sector);
+        }else if(setHardFailure){
+          setHardFailure(sector);
         } //end if
       });
     });
