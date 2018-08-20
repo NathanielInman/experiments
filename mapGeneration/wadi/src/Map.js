@@ -29,11 +29,6 @@ export class Map{
       }),
       initialize: false
     });
-    return this.sectors.map(row=>{
-      return row.map(sector=>{
-        sector.clone();
-      })
-    })
   }
   reset(){
     this.sectors.forEach(row=>{
