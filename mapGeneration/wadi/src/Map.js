@@ -172,38 +172,54 @@ export class Map{
     } //end for
     return list;
   }
-  drunkenPath({x1=0,y1=0,x2=0,y2=0,draw=()=>true}={}){
-    let cx = x1, cy = y1,
-        ox, oy, wx, wy; //wind x and y allows deviation
+  drunkenPath({x1=0,y1=0,x2=0,y2=0,wide=false,draw=()=>true}={}){
+    const map = this.clone();
 
-    draw(this.getSector({x: x1,y: y1}));
+    let path;
+
+    // randomly populate noise on a cloned map until there's a viable
+    // path from x1,y1 to x2,y2
     do{
-      ox = cx; oy = cy; //allows resetting if we go off-map
-      wx = cx/x2*(cx<x2?1:-1);
-      wy = cy/y2*(cy<y2?1:-1);
-      if(Math.random()<0.5){
-        cx += (Math.random()+wx)<0.5?-1:1;
-      }else{
-        cy += (Math.random()+wy)<0.5?-1:1;
-      } //end if
+      map.sectors.forEach(row=>{
+        row.forEach(sector=>{
+          if(
+            Math.random()<0.7||
+            Math.abs(sector.x-x1)<3&&Math.abs(sector.y-y1)<3||
+            Math.abs(sector.x-x2)<3&&Math.abs(sector.y-y2)<3
+          ){
+            sector.setFloor();
+          }else{
+            sector.setWall();
+          } //end if
+        });
+      });
+      path = map.findPath({x1,y1,x2,y2});
+    }while(path.length===1)
 
-      // reset if we go off-map
-      if(!this.isInbounds({x: cx,y: cy})){
-        cx = ox; cy = oy;
+    // now we'll draw the path between the points
+    path.forEach(sector=>{
+      if(wide){
+        map.getNeighbors({
+          x: sector.x,y: sector.y,orthogonal: false,
+          test(sector){
+            return Math.random()<0.35&&sector.isWalkable();
+          }
+        }).forEach(sector=> draw(this.getSector({x: sector.x,y: sector.y})));
+        draw(this.getSector({x: sector.x,y: sector.y}));
       }else{
-        draw(this.getSector({x: cx, y: cy}));
+        draw(this.getSector({x: sector.x,y: sector.y}));
       } //end if
-    }while(cx!==x2||cy!==y2)
-    draw(this.getSector({x: cx,y: cy}));
+    });
   }
   findPath({x1=0,y1=0,x2=0,y2=0}={}){
     const weight = 1,
           heuristic = (dx, dy) => dx + dy, //manhattan heuristic
           openList = new Heap([],(a,b)=>a.f===b.f,(a,b)=>b.path.f - a.path.f),
           abs = Math.abs, //shorten reference
+          map = this.clone(), //so we can mutate it and destroy it when done
           SQRT2 = Math.SQRT2; //shorten reference
 
-    let node = this.getSector({x: x1,y: y1}); //acquire starting node
+    let node = map.getSector({x: x1,y: y1}); //acquire starting node
 
     // set the g and f value of the start node to be 0
     node.path = {g: 0, f: 0, opened: false, closed: false, parent: null};
@@ -225,19 +241,16 @@ export class Map{
 
         // Add all successful nodes to the path array except starting node
         do{
-          path.push({x: node.x,y: node.y});
+          path.push(this.getSector({x: node.x,y: node.y}));
           node = node.path.parent;
         }while(node.path.parent);
-
-        // we'll remove all the added attributes
-        this.sectors.forEach(row=> row.forEach(sector=> delete sector.path));
 
         // pop from list to get path in order
         return path;
       } //end if
 
       // get neighbours of the current node
-      const neighbors = this.getNeighbors({
+      const neighbors = map.getNeighbors({
         x: node.x,y: node.y, orthogonal: false,
         test(sector){
           return sector.isWalkable();

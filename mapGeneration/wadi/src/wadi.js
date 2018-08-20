@@ -89,41 +89,29 @@ export function wadi(map){
   const x3 = x, y3 = y;
 
   map.drunkenPath({
-    x1,y1,x2,y2,
+    x1,y1,x2,y2,wide: true,
     draw(sector){
       sector.setWater();
+      map.getNeighbors({
+        x: sector.x,y: sector.y,size: 2,
+        test(sector){
+          return sector.isWalkable()&&!sector.isWater();
+        }
+      }).forEach(sector=> sector.setFloor());
     }
   });
   map.drunkenPath({
-    x1: x2,y1: y2,x2: x3, y2: y3,
+    x1: x2,y1: y2,x2: x3, y2: y3, wide: true,
     draw(sector){
       sector.setWater();
+      map.getNeighbors({
+        x: sector.x, y: sector.y,size: 2,
+        test(sector){
+          return sector.isWalkable()&&!sector.isWater();
+        }
+      }).forEach(sector=> sector.setFloor());
     }
   });
-  console.log(map.clone());
-  // now we'll draw the path between the points
-  //map.findPath({x1,y1,x2,y2}).forEach(sector=> drawPath(map,sector));
-
-  /*
-  // convert gulch to arroyo
-  map.sectors.forEach(row=>{
-    row.forEach(sector=>{
-      if(sector.isFloorSpecial()){
-        sector.setFloor();
-      }else if(sector.isFloor()){
-        sector.setFloorSpecial();
-      }else if(sector.isWall()&&Math.random()<0.3){
-        sector.setFloor();
-      } //end if
-    });
-  });
-
-  // now remove unwalkable
-  map.clipOrphaned(
-    sector=> sector.isWalkable(),
-    sector=> sector.setWallSpecial()
-  );
-  */
 } //end function
 
 function getTerminalPoint(map,{xmin,xmax,ymin,ymax}){
@@ -132,35 +120,3 @@ function getTerminalPoint(map,{xmin,xmax,ymin,ymax}){
     y: Math.floor(ymin+Math.random()*(ymax-ymin))
   };
 } //end getValidTerminalPoint()
-
-//eslint-disable-next-line complexity
-function drawPath(map, sector){
-  const x = sector.x, y = sector.y;
-
-  map.setWater({x,y});
-  map.getNeighbors({
-    x, y, self: true, orthogonal: false,
-    test(sector){
-      return sector.isWalkable();
-    }
-  }).forEach(sector=> Math.random()<0.5?sector.setWater():null);
-  map.getNeighbors({
-    x, y, cardinal: false,
-    test(sector){
-      return sector.isWalkable()&&!sector.isWater();
-    }
-  }).forEach(sector=>{
-    sector.setFloorSpecial();
-
-    // small chance to venture slightly further
-    if(Math.random()<0.5){
-      map.getNeighbors({
-        x: sector.x, y: sector.y, size: 3,
-        test(sector){
-          return sector.isWalkable()&&
-            !sector.isWater()&&!sector.isFloorSpecial();
-        }
-      }).forEach(sector=> Math.random()<0.5?sector.setFloorSpecial():null);
-    } //end if
-  });
-} //end drawPath()
