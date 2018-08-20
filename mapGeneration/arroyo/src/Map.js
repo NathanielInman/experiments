@@ -1,12 +1,14 @@
 import {Sector} from './Sector';
 import Heap from 'collections/heap';
+import {Noise} from 'noisejs';
 
 export class Map{
-  constructor({width=50,height=50}){
+  constructor({width=50,height=50,sectors=[],initialize=true}={}){
     this.width = width;
     this.height = height;
-    this.sectors = [];
-    this.initialize();
+    this.noise = new Noise(Math.random());
+    this.sectors = sectors;
+    if(initialize) this.initialize();
   }
   initialize(){
     for(let y=0;y<=this.height;y++){
@@ -15,6 +17,18 @@ export class Map{
         this.sectors[y][x]=new Sector({x,y});
       } //end for
     } //end for
+  }
+  clone(){
+    return new Map({
+      width: this.width,
+      height: this.height,
+      sectors: this.sectors.map(row=>{
+        return row.map(sector=>{
+          return sector.clone();
+        });
+      }),
+      initialize: false
+    });
   }
   reset(){
     this.sectors.forEach(row=>{
@@ -30,6 +44,13 @@ export class Map{
   }
   setEmpty({x=0,y=0}={}){
     this.getSector({x,y}).setEmpty();
+  }
+  isVoid({x=0,y=0}={}){
+    return this.isInbounds({x,y})&&
+      this.getSector({x,y}).isVoid();
+  }
+  setVoid({x=0,y=0}={}){
+    this.getSector({x,y}).setVoid();
   }
   isFloor({x=0,y=0}={}){
     return this.getSector({x,y}).isFloor();
@@ -153,14 +174,54 @@ export class Map{
     } //end for
     return list;
   }
+  drunkenPath({x1=0,y1=0,x2=0,y2=0,wide=false,draw=()=>true}={}){
+    const map = this.clone();
+
+    let path;
+
+    // randomly populate noise on a cloned map until there's a viable
+    // path from x1,y1 to x2,y2
+    do{
+      map.sectors.forEach(row=>{
+        row.forEach(sector=>{
+          if(
+            Math.random()<0.7||
+            Math.abs(sector.x-x1)<3&&Math.abs(sector.y-y1)<3||
+            Math.abs(sector.x-x2)<3&&Math.abs(sector.y-y2)<3
+          ){
+            sector.setFloor();
+          }else{
+            sector.setWall();
+          } //end if
+        });
+      });
+      path = map.findPath({x1,y1,x2,y2});
+    }while(path.length===1)
+
+    // now we'll draw the path between the points
+    path.forEach(sector=>{
+      if(wide){
+        map.getNeighbors({
+          x: sector.x,y: sector.y,orthogonal: false,
+          test(sector){
+            return Math.random()<0.35&&sector.isWalkable();
+          }
+        }).forEach(sector=> draw(this.getSector({x: sector.x,y: sector.y})));
+        draw(this.getSector({x: sector.x,y: sector.y}));
+      }else{
+        draw(this.getSector({x: sector.x,y: sector.y}));
+      } //end if
+    });
+  }
   findPath({x1=0,y1=0,x2=0,y2=0}={}){
     const weight = 1,
           heuristic = (dx, dy) => dx + dy, //manhattan heuristic
           openList = new Heap([],(a,b)=>a.f===b.f,(a,b)=>b.path.f - a.path.f),
           abs = Math.abs, //shorten reference
+          map = this.clone(), //so we can mutate it and destroy it when done
           SQRT2 = Math.SQRT2; //shorten reference
 
-    let node = this.getSector({x: x1,y: y1}); //acquire starting node
+    let node = map.getSector({x: x1,y: y1}); //acquire starting node
 
     // set the g and f value of the start node to be 0
     node.path = {g: 0, f: 0, opened: false, closed: false, parent: null};
@@ -182,19 +243,16 @@ export class Map{
 
         // Add all successful nodes to the path array except starting node
         do{
-          path.push({x: node.x,y: node.y});
+          path.push(this.getSector({x: node.x,y: node.y}));
           node = node.path.parent;
         }while(node.path.parent);
-
-        // we'll remove all the added attributes
-        this.sectors.forEach(row=> row.forEach(sector=> delete sector.path));
 
         // pop from list to get path in order
         return path;
       } //end if
 
       // get neighbours of the current node
-      const neighbors = this.getNeighbors({
+      const neighbors = map.getNeighbors({
         x: node.x,y: node.y, orthogonal: false,
         test(sector){
           return sector.isWalkable();
@@ -272,7 +330,7 @@ export class Map{
       } //end for
     } //end for
   }
-  clipOrphaned(test,setFailure,setSuccess){
+  clipOrphaned(test,setFailure,setSuccess,setHardFailure){
     const locStats = {val: 0,cur: 0,num: 0,max: 0},
           unmapped = [];
 
@@ -337,9 +395,12 @@ export class Map{
           setFailure(sector);
         }else if(test(sector)&&sector.roomNumber===locStats.num&&setSuccess){
           setSuccess(sector);
+        }else if(setHardFailure){
+          setHardFailure(sector);
         } //end if
       });
     });
   }
 }
+
 
