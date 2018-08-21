@@ -300,14 +300,14 @@ export class Map{
     } //end if
     return result;
   }
-  isSquare({x1=0,y1=0,x2=0,y2=0}={},test){
+  isSquare({x1=0,y1=0,x2=0,y2=0,hard=true,test=()=>false}={}){
     const dx = x1<x2?1:-1, dy = y1<y2?1:-1;
 
     for(let y = y1;y!==y2+dy;y+=dy){
       for(let x = x1;x!==x2+dx;x+=dx){
         if(
-          x<1||x>this.width-1||y<1||y>=this.height-1||
-          test(this.getSector({x,y}))
+          hard&&(!this.isInbounds({x,y}))||
+          this.isInbounds({x,y})&&test(this.getSector({x,y}))
         ){
           return false; //exit early
         } //end if
@@ -402,3 +402,6 @@ export class Map{
     });
   }
 }
+
+
+

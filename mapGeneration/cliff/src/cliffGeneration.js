@@ -1,16 +1,12 @@
-import {Noise} from 'noisejs';
-
-const noise = new Noise(Math.random());
-
 export function cliff(map){
   map.sectors.forEach(row=>{
     row.forEach(sector=>{
-      let n1 = noise.perlin2(sector.x/map.width*12,sector.y/map.height*10),
-          n1w = 1,
-          n2 = noise.perlin2(sector.x/map.width*3,sector.y/map.height*3),
-          n2w = 3,
-          n = (n1*n1w+n2*n2w)/(n1w+n2w),
-          c = noise.perlin2(sector.x/map.width*3,sector.y/map.height*3);
+      const n1 = map.noise.perlin2(sector.x/map.width*12,sector.y/map.height*10),
+            n1w = 1,
+            n2 = map.noise.perlin2(sector.x/map.width*3,sector.y/map.height*3),
+            n2w = 3,
+            n = (n1*n1w+n2*n2w)/(n1w+n2w),
+            c = map.noise.perlin2(sector.x/map.width*3,sector.y/map.height*3);
 
       if(n<0.01){
         sector.setWaterSpecial();

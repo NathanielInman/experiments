@@ -1,28 +1,78 @@
 export class Sector{
-  constructor({x=0,y=0}={}){
+  constructor({x=0,y=0,type='empty',roomNumber=0}={}){
     this.x = x;
     this.y = y;
-    this.type = 'empty';
-    this.roomNumber = 0;
+    this.type = type;
+    this.roomNumber = roomNumber;
   }
-  isEmpty(){ return this.type === 'empty'; }
-  setEmpty(){ this.type = 'empty'; }
-  isRemoved(){ return this.type === 'removed'; }
-  setRemoved(){ this.type = 'removed'; }
-  isDoor(){ return this.type === 'door'; }
-  setDoor(){ this.type = 'door'; }
-  isFloor(){ return this.type === 'floor' || this.type === 'floorSpecial'; }
-  setFloor(){ this.type = 'floor'; }
-  isFloorSpecial(){ return this.type === 'floorSpecial'; }
-  setFloorSpecial(){ this.type = 'floorSpecial'; }
-  isWater(){ return this.type === 'water' || this.type === 'waterSpecial'; }
-  setWater(){ this.type = 'water'; }
-  isWaterSpecial(){ return this.type === 'waterSpecial'; }
-  setWaterSpecial(){ this.type = 'waterSpecial'; }
-  isWall(){ return this.type === 'wall' || this.type === 'wallSpecial'; }
-  setWall(){ this.type = 'wall'; }
-  isWallSpecial(){ return this.type === 'wallSpecial'; }
-  setWallSpecial(){ this.type = 'wallSpecial'; }
+  clone(){
+    return new Sector({
+      x: this.x,
+      y: this.y,
+      type: this.type,
+      roomNumber: this.roomNumber
+    });
+  }
+  isEmpty(){
+    return this.type === 'empty';
+  }
+  setEmpty(){
+    this.type = 'empty';
+  }
+  isVoid(){
+    return this.type === 'void';
+  }
+  setVoid(){
+    this.type = 'void';
+  }
+  isRemoved(){
+    return this.type === 'removed';
+  }
+  setRemoved(){
+    this.type = 'removed';
+  }
+  isDoor(){
+    return this.type === 'door';
+  }
+  setDoor(){
+    this.type = 'door';
+  }
+  isFloor(){
+    return this.type === 'floor' || this.type === 'floorSpecial';
+  }
+  setFloor(){
+    this.type = 'floor';
+  }
+  isFloorSpecial(){
+    return this.type === 'floorSpecial';
+  }
+  setFloorSpecial(){
+    this.type = 'floorSpecial';
+  }
+  isWater(){
+    return this.type === 'water' || this.type === 'waterSpecial';
+  }
+  setWater(){
+    this.type = 'water';
+  }
+  isWaterSpecial(){
+    return this.type === 'waterSpecial';
+  }
+  setWaterSpecial(){
+    this.type = 'waterSpecial';
+  }
+  isWall(){
+    return this.type === 'wall' || this.type === 'wallSpecial';
+  }
+  setWall(){
+    this.type = 'wall';
+  }
+  isWallSpecial(){
+    return this.type === 'wallSpecial';
+  }
+  setWallSpecial(){
+    this.type = 'wallSpecial';
+  }
   isWalkableOrEmpty(){
     let result = false;
 
@@ -40,3 +90,4 @@ export class Sector{
     return walkable;
   }
 }
+

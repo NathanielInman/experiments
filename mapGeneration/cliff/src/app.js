@@ -2,8 +2,8 @@ import {Easel} from 'ion-cloud';
 import {cliff} from './cliffGeneration';
 import {Map} from './Map';
 
-let noscript = document.querySelector('noscript'),
-    easel = new Easel();
+const noscript = document.querySelector('noscript'),
+      easel = new Easel();
 
 if(!easel.activated){
   noscript.innerHTML = `
@@ -14,11 +14,11 @@ if(!easel.activated){
     <span style="color:red;"><br/>Canvas isn't supported in your browser.</span>
   </p>`;
 }else{
-  let map = new Map(50,50);
+  const map = new Map(50,50);
 
   cliff(map); //perform pigeon hole generation
   easel.onDraw = function(){
-    let rh = easel.viewport.h/map.height, rw = easel.viewport.w/map.width;
+    const rh = easel.viewport.h/map.height, rw = easel.viewport.w/map.width;
 
     map.sectors.forEach((row,y)=>{
       row.forEach((sector,x)=>{
@@ -40,6 +40,8 @@ if(!easel.activated){
           easel.ctx.fillStyle='#563';
         }else if(sector.isFloor()){
           easel.ctx.fillStyle='#373';
+        }else if(sector.isVoid()){
+          easel.ctx.fillStyle='#111';
         }else{ //unknown
           easel.ctx.fillStyle='#f00';
         } //end if
