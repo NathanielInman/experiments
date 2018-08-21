@@ -50,7 +50,8 @@
   },
   "dependencies": {
     "collections": "^5.1.2",
-    "ion-cloud": "^1.6.3"
+    "ion-cloud": "^1.6.3",
+    "noisejs": "^2.1.0"
   },
   "readmeFilename": "README.md",
   "homepage": "https://github.com/NathanielInman/Experiments"
