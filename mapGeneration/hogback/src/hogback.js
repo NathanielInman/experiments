@@ -66,8 +66,8 @@ export function hogback(map){
   });
 
   // remove all but the largest gully
-  map.clipOrphaned(
-    sector=> sector.isWalkable(),
-    sector=> sector.setWallSpecial()
-  );
+  map.clipOrphaned({
+    test: sector=> sector.isWalkable(),
+    failure: sector=> sector.setWallSpecial()
+  });
 } //end function

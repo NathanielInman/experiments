@@ -40,6 +40,8 @@ if(!easel.activated){
           easel.ctx.fillStyle='#563';
         }else if(sector.isFloor()){
           easel.ctx.fillStyle='#373';
+        }else if(sector.isVoid()){
+          easel.ctx.fillStyle='#111';
         }else{ //unknown
           easel.ctx.fillStyle='#f00';
         } //end if

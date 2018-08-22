@@ -19,6 +19,12 @@ export class Sector{
   setEmpty(){
     this.type = 'empty';
   }
+  isVoid(){
+    return this.type === 'void';
+  }
+  setVoid(){
+    this.type = 'void';
+  }
   isRemoved(){
     return this.type === 'removed';
   }
@@ -84,3 +90,5 @@ export class Sector{
     return walkable;
   }
 }
+
+
