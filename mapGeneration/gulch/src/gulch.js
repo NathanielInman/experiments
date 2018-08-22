@@ -1,15 +1,4 @@
-import {Noise} from 'noisejs';
-
-// shuffles an array in place
-function shuffle(array){
-  for(let i = array.length - 1,j; i > 0; i--){
-    j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  } //end for
-  return array;
-} //end shuffle()
-
-const noise = new Noise(Math.random());
+import {shuffle} from './shuffle';
 
 export function gulch(map){
   const d = Math.random()<0.5,
@@ -18,9 +7,9 @@ export function gulch(map){
 
   map.sectors.forEach(row=>{
     row.forEach(sector=>{
-      const n = (1+noise.simplex2(sector.x/map.width*h,sector.y/map.height*v))/2;
+      const n = (1+map.noise.simplex2(sector.x/map.width*h,sector.y/map.height*v))/2;
 
-      if(n<0.4&&Math.random()<0.4){
+      if(n<0.3&&Math.random()<0.4){
         sector.setWall()
       }else if(n<0.4){
         sector.setFloor();
@@ -33,10 +22,10 @@ export function gulch(map){
   });
 
   // now remove unwalkable
-  map.clipOrphaned(
-    sector=> sector.isWalkable(),
-    sector=> sector.setWallSpecial()
-  );
+  map.clipOrphaned({
+    test: sector=> sector.isWalkable(),
+    failure: sector=> sector.setWallSpecial()
+  });
 
   const terminalPositions = shuffle([
     {
@@ -65,29 +54,40 @@ export function gulch(map){
     }
   ]);
 
-  let x,y;
+  let x,y,failure=false;
 
   // get the start position, set water and save it
-  ({x,y}=getValidTerminalPoint(map,terminalPositions.pop()));
+  do{
+    ({x,y,failure}=getValidTerminalPoint(map,terminalPositions.pop()));
+  }while(failure&&terminalPositions.length)
   map.setWater({x,y});
   const x1 = x, y1 = y;
 
   // get the end position, set water
-  ({x,y}=getValidTerminalPoint(map,terminalPositions.pop()));
+  do{
+    ({x,y,failure}=getValidTerminalPoint(map,terminalPositions.pop()));
+  }while(failure&&terminalPositions.length)
   map.setWater({x,y});
   const x2 = x, y2 = y;
 
   // now we'll draw the path between the points
-  map.findPath({x1,y1,x2,y2}).forEach(sector=> drawPath(map,sector));
+  map.findPath({
+    x1,y1,x2,y2,
+    test(sector){
+      return sector.isWalkable();
+    }
+  }).forEach(sector=> drawPath(map,sector));
 } //end function
 
 function getValidTerminalPoint(map,{xmin,xmax,ymin,ymax}){
-  let x, y;
+  let x, y, failure=0;
 
   do{
     x = Math.floor(xmin+Math.random()*(xmax-xmin));
     y = Math.floor(ymin+Math.random()*(ymax-ymin));
-  }while(!map.isWalkable({x,y}))
+    failure++;
+  }while(!map.isWalkable({x,y})&&failure<1000)
+  if(failure===1000) return {x,y,failure:true};
   return {x,y};
 } //end getValidTerminalPoint()
 
