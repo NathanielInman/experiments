@@ -27,12 +27,12 @@ export function tepui(map){
   });
 
   // remove all but the center
-  map.clipOrphaned(
-    sector=> sector.isFloorSpecial(),
-    sector=> sector.setVoid(),
-    sector=> sector.setFloor(),
-    sector=> sector.setVoid()
-  );
+  map.clipOrphaned({
+    test: sector=> sector.isFloorSpecial(),
+    failure: sector=> sector.setVoid(),
+    success: sector=> sector.setFloor(),
+    hardFailure: sector=> sector.setVoid()
+  });
 
   const clone = map.clone();
 
