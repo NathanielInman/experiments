@@ -45,11 +45,11 @@ export function butte(map){
   // now that we've represented the map fully, lets
   // find the largest walkable space and fill in all the
   // rest
-  map.clipOrphaned(
-    sector=> sector.isEmpty(),
-    sector=> sector.setWall(),
-    sector=> sector.setFloor()
-  );
+  map.clipOrphaned({
+    test: sector=> sector.isEmpty(),
+    failure: sector=> sector.setWall(),
+    success: sector=> sector.setFloor()
+  });
 
   // now we'll mark the center of the butte for removal
   butte.forEach(sector=>{

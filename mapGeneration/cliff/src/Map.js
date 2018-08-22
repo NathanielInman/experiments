@@ -149,6 +149,10 @@ export class Map{
     } //end while()
     return path;
   }
+
+  // return the neighbors of a given sector that pass the `test` function.
+  // Can specify whether or not testing of orthogonal, cardinal or the
+  // originating sector. `size` will expand to not just nearby sectors
   getNeighbors({
     x=0,y=0,size=1,
     orthogonal=true,cardinal=true,self=false,
@@ -174,6 +178,10 @@ export class Map{
     } //end for
     return list;
   }
+
+  // return a seemingly random path between two points. `wide` will
+  // have the path be occasionally wider than 1 sector. `draw` function
+  // will be applied to each sector in the path
   drunkenPath({x1=0,y1=0,x2=0,y2=0,wide=false,draw=()=>true}={}){
     const map = this.clone();
 
@@ -213,7 +221,10 @@ export class Map{
       } //end if
     });
   }
-  findPath({x1=0,y1=0,x2=0,y2=0}={}){
+
+  // find a path between two points that passes the `test` function when applied
+  // to each sector
+  findPath({x1=0,y1=0,x2=0,y2=0,test=()=>true}={}){
     const weight = 1,
           heuristic = (dx, dy) => dx + dy, //manhattan heuristic
           openList = new Heap([],(a,b)=>a.f===b.f,(a,b)=>b.path.f - a.path.f),
@@ -253,10 +264,7 @@ export class Map{
 
       // get neighbours of the current node
       const neighbors = map.getNeighbors({
-        x: node.x,y: node.y, orthogonal: false,
-        test(sector){
-          return sector.isWalkable();
-        }
+        x: node.x,y: node.y, orthogonal: false, test
       });
 
       for (let i = 0, ng; i < neighbors.length; ++i) {
@@ -290,7 +298,10 @@ export class Map{
     // fail to find the path
     return [{x: x1,y: y1}];
   }
-  isPath(path=[],test){
+
+  // test that the entire path passes the specified test function and return
+  // boolean
+  isPath({path=[],test=()=>true}={}){
     let result = true;
 
     if(!path.length){
@@ -300,6 +311,10 @@ export class Map{
     } //end if
     return result;
   }
+
+  // test square to see if `test(sector)` is true for entire thing.
+  // if `hard` is set to true then it also ensures the sector is
+  // within bounds of the map. Returns boolean
   isSquare({x1=0,y1=0,x2=0,y2=0,hard=true,test=()=>false}={}){
     const dx = x1<x2?1:-1, dy = y1<y2?1:-1;
 
@@ -315,22 +330,40 @@ export class Map{
     } //end for
     return true;
   }
-  fillRoom({x1=0,y1=0,x2=0,y2=0}={}){
+
+  // can pass in a wall and floor draw function, or just a generic draw
+  // function to merely fill the entire area with something. `test` is
+  // also optional, it will test the sector before passing to draw fn's
+  fillRoom({
+    x1=0,y1=0,x2=0,y2=0,
+    draw=false,test=()=>true,wall=()=>true,floor=()=>true
+  }={}){
     const dx = x1<x2?1:-1, dy = y1<y2?1:-1;
 
     for(let y = y1;y!==y2+dy;y+=dy){
       for(let x = x1;x!==x2+dx;x+=dx){
-        if(x<1||x>this.width-1||y<1||y>this.height-1||!this.isEmpty({x,y})){
-          return; //exit early
+        if(!this.isInbounds({x,y})){
+          continue;
+        }else if(typeof draw === 'function'){
+          if(test(this.getSector({x,y}))) draw(this.getSector({x,y}));
         }else if(y===y1||y===y2||x===x1||x===x2){
-          this.setWall({x,y});
-        }else{
-          this.setFloor({x,y});
+          if(test(this.getSector({x,y}))) wall(this.getSector({x,y}));
+        }else if(test(this.getSector({x,y}))){
+          floor(this.getSector({x,y}));
         } //end if
       } //end for
     } //end for
   }
-  clipOrphaned(test,setFailure,setSuccess,setHardFailure){
+
+  // loop through the entire maps sectors and group them into walkable
+  // areas based on the `test` function. The largest room will have
+  // `success` called on each sector, all smaller rooms will have
+  // `failure` called on each sector, all sectors that didn't pass test
+  // will have `hardFailure` called on each sector
+  clipOrphaned({
+    test=()=>true,failure=()=>true,success=()=>true,
+    hardFailure=()=>true
+  }={}){
     const locStats = {val: 0,cur: 0,num: 0,max: 0},
           unmapped = [];
 
@@ -391,14 +424,15 @@ export class Map{
     });
     this.sectors.forEach(row=>{
       row.forEach(sector=>{
-        if(test(sector)&&sector.roomNumber!==locStats.num&&setFailure){
-          setFailure(sector);
-        }else if(test(sector)&&sector.roomNumber===locStats.num&&setSuccess){
-          setSuccess(sector);
-        }else if(setHardFailure){
-          setHardFailure(sector);
+        if(test(sector)&&sector.roomNumber!==locStats.num){
+          failure(sector);
+        }else if(test(sector)&&sector.roomNumber===locStats.num){
+          success(sector);
+        }else if(hardFailure){
+          hardFailure(sector);
         } //end if
       });
     });
   }
 }
+

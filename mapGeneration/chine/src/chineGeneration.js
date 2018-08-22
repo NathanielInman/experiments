@@ -108,13 +108,13 @@ export function chine(map){
 
   // now that we've represented the map fully, lets find the largest walkable
   // space and fill in all the rest
-  map.clipOrphaned(
-    sector=> sector.isEmpty()||sector.isWalkable(),
-    sector=> sector.setWallSpecial(),
-    sector=>{
+  map.clipOrphaned({
+    test: sector=> sector.isEmpty()||sector.isWalkable(),
+    failure: sector=> sector.setWallSpecial(),
+    success: sector=>{
       if(sector.isEmpty()) sector.setFloor();
-    },
-  );
+    }
+  });
 
   // lastly lets find all floor that's near water and give it a large chance
   // to be a corridor (sand)

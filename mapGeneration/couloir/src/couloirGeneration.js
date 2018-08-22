@@ -22,8 +22,8 @@ export function couloir(map){
   });
 
   // clip all non-walkable parts of the map away
-  map.clipOrphaned(
-    sector=> sector.isWalkable()||sector.isEmpty(),
-    sector=> sector.setWall()
-  );
+  map.clipOrphaned({
+    test: sector=> sector.isWalkable()||sector.isEmpty(),
+    failure: sector=> sector.setWall()
+  });
 } //end function

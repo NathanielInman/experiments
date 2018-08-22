@@ -40,9 +40,15 @@ export function bornhardt(map){
   // now that we've represented the map fully, lets
   // find the largest walkable space and fill in all the
   // rest
-  map.clipOrphaned(
-    sector=> sector.isEmpty(),
-    sector=> sector.setWallSpecial(),
-    sector=> sector.setFloor()
-  );
+  map.clipOrphaned({
+    test: sector=> sector.isEmpty(),
+    failure: sector=> sector.setWallSpecial(),
+    success: sector=>{
+      if(Math.random()<0.1){
+        sector.setFloorSpecial();
+      }else{
+        sector.setFloor();
+      } //end if
+    }
+  });
 } //end function
