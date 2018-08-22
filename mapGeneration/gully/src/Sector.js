@@ -1,15 +1,29 @@
 export class Sector{
-  constructor({x=0,y=0}={}){
+  constructor({x=0,y=0,type='empty',roomNumber=0}={}){
     this.x = x;
     this.y = y;
-    this.type = 'empty';
-    this.roomNumber = 0;
+    this.type = type;
+    this.roomNumber = roomNumber;
+  }
+  clone(){
+    return new Sector({
+      x: this.x,
+      y: this.y,
+      type: this.type,
+      roomNumber: this.roomNumber
+    });
   }
   isEmpty(){
     return this.type === 'empty';
   }
   setEmpty(){
     this.type = 'empty';
+  }
+  isVoid(){
+    return this.type === 'void';
+  }
+  setVoid(){
+    this.type = 'void';
   }
   isRemoved(){
     return this.type === 'removed';
@@ -76,3 +90,4 @@ export class Sector{
     return walkable;
   }
 }
+
