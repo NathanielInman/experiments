@@ -1,15 +1,4 @@
-import {Noise} from 'noisejs';
-
-// shuffles an array in place
-function shuffle(array){
-  for(let i = array.length - 1,j; i > 0; i--){
-    j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  } //end for
-  return array;
-} //end shuffle()
-
-const noise = new Noise(Math.random());
+import {shuffle} from './shuffle';
 
 export function wadi(map){
   const d = Math.random()<0.5,
@@ -18,7 +7,7 @@ export function wadi(map){
 
   map.sectors.forEach(row=>{
     row.forEach(sector=>{
-      const n = (1+noise.simplex2(sector.x/map.width*h,sector.y/map.height*v))/2;
+      const n = (1+map.noise.simplex2(sector.x/map.width*h,sector.y/map.height*v))/2;
 
       if(n<0.5&&Math.random()<0.5){
         sector.setWall()
@@ -33,10 +22,10 @@ export function wadi(map){
   });
 
   // now remove unwalkable
-  map.clipOrphaned(
-    sector=> sector.isWalkable(),
-    sector=> sector.setWallSpecial()
-  );
+  map.clipOrphaned({
+    test: sector=> sector.isWalkable(),
+    failure: sector=> sector.setWallSpecial()
+  });
 
   const terminalPositions = shuffle([
     {
