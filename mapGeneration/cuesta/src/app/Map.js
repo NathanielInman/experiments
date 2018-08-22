@@ -300,6 +300,10 @@ export class Map{
     } //end if
     return result;
   }
+
+  // test square to see if `test(sector)` is true for entire thing.
+  // if `hard` is set to true then it also ensures the sector is
+  // within bounds of the map
   isSquare({x1=0,y1=0,x2=0,y2=0,hard=true,test=()=>false}={}){
     const dx = x1<x2?1:-1, dy = y1<y2?1:-1;
 
@@ -315,17 +319,26 @@ export class Map{
     } //end for
     return true;
   }
-  fillRoom({x1=0,y1=0,x2=0,y2=0}={}){
+
+  // can pass in a wall and floor draw function, or just a generic draw
+  // function to merely fill the entire area with something. `test` is
+  // also optional, it will test the sector before passing to draw fn's
+  fillRoom({
+    x1=0,y1=0,x2=0,y2=0,
+    draw=false,test=()=>true,wall=()=>true,floor=()=>true
+  }={}){
     const dx = x1<x2?1:-1, dy = y1<y2?1:-1;
 
     for(let y = y1;y!==y2+dy;y+=dy){
       for(let x = x1;x!==x2+dx;x+=dx){
-        if(x<1||x>this.width-1||y<1||y>this.height-1||!this.isEmpty({x,y})){
-          return; //exit early
+        if(!this.isInbounds({x,y})){
+          continue;
+        }else if(typeof draw === 'function'){
+          if(test(this.getSector({x,y}))) draw(this.getSector({x,y}));
         }else if(y===y1||y===y2||x===x1||x===x2){
-          this.setWall({x,y});
-        }else{
-          this.setFloor({x,y});
+          if(test(this.getSector({x,y}))) wall(this.getSector({x,y}));
+        }else if(test(this.getSector({x,y}))){
+          floor(this.getSector({x,y}));
         } //end if
       } //end for
     } //end for

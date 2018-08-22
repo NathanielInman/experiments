@@ -47,21 +47,20 @@ export function cuesta(map=5){
   }while(filled<maxFilled);
 
   // surround the corridors that arent surrounded with walls yet with walls now.
-  map.sectors.forEach((row,y)=>{
+  map.fillRoom({
+    x1: 0,y1: 0,x2: map.width-1,y2: map.height-1,
+    test(sector){
+      const nearbyWalkable = map.getNeighbors({
+        x: sector.x,y: sector.y,
+        test(sector){
+          return sector.isWalkable();
+        }
+      }).length;
 
-    //eslint-disable-next-line complexity
-    row.forEach((sector,x)=>{
-      if(sector.isWalkable()){
-        if(x===0||x===map.width-1||y===0||y===map.height-1) map.setWall({x,y});
-        if(x>0&&map.isEmpty({x: x-1,y})) map.setWall({x: x-1,y});
-        if(x>0&&y>0&&map.isEmpty({x: x-1,y: y-1})) map.setWall({x: x-1,y: y-1});
-        if(y>0&&map.isEmpty({x,y: y-1})) map.setWall({x,y: y-1});
-        if(y>0&&x<map.width-1&&map.isEmpty({x: x+1,y: y-1})) map.setWall({x: x+1,y: y-1});
-        if(x<map.width-1&&map.isEmpty({x: x+1,y})) map.setWall({x: x+1,y});
-        if(x<map.width-1&&y<map.height-1&&map.isEmpty({x: x+1,y: y+1})) map.setWall({x: x+1,y: y+1});
-        if(y<map.height-1&&map.isEmpty({x,y: y+1})) map.setWall({x,y: y+1});
-        if(y<map.height-1&&x>0&&map.isEmpty({x: x-1,y: y+1})) map.setWall({x: x-1,y: y+1});
-      } //end if
-    });
+      return nearbyWalkable&&sector.isEmpty()?true:false;
+    },
+    draw(sector){
+      sector.setWall();
+    }
   });
 } //end function
