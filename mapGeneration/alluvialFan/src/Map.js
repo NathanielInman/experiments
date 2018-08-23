@@ -11,9 +11,9 @@ export class Map{
     if(initialize) this.initialize();
   }
   initialize(){
-    for(let y=0;y<=this.height;y++){
+    for(let y=0;y<this.height;y++){
       this.sectors[y]=[];
-      for(let x=0;x<=this.width;x++){
+      for(let x=0;x<this.width;x++){
         this.sectors[y][x]=new Sector({x,y});
       } //end for
     } //end for
@@ -204,7 +204,7 @@ export class Map{
         });
       });
       path = map.findPath({x1,y1,x2,y2});
-    }while(path.length===1)
+    }while(path===null)
 
     // now we'll draw the path between the points
     path.forEach(sector=>{
@@ -232,6 +232,7 @@ export class Map{
           map = this.clone(), //so we can mutate it and destroy it when done
           SQRT2 = Math.SQRT2; //shorten reference
 
+    if(!this.isInbounds({x:x1,y:y1})||!this.isInbounds({x:x2,y:y2})) return null;
     let node = map.getSector({x: x1,y: y1}); //acquire starting node
 
     // set the g and f value of the start node to be 0
@@ -296,7 +297,7 @@ export class Map{
     } // end while not open list empty
 
     // fail to find the path
-    return [{x: x1,y: y1}];
+    return null;
   }
 
   // test that the entire path passes the specified test function and return

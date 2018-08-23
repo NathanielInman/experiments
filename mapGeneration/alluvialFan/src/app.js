@@ -1,5 +1,5 @@
 import {Easel} from 'ion-cloud';
-import {wadi} from './wadi';
+import {alluvialFan} from './alluvialFan';
 import {Map} from './Map';
 
 const noscript = document.querySelector('noscript'),
@@ -16,7 +16,7 @@ if(!easel.activated){
 }else{
   const map = new Map(50,50);
 
-  wadi(map);
+  alluvialFan(map);
   easel.onDraw = function(){
     const rh = easel.viewport.h/map.height, rw = easel.viewport.w/map.width;
 
