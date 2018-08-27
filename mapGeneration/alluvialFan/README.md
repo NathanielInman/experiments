@@ -1,4 +1,4 @@
-# Wadi Generator
+# Alluvial Fan Generator
 This is an environmental map generator.
 
 ## Setup
