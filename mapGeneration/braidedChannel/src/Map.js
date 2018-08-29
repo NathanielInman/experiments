@@ -191,8 +191,24 @@ export class Map{
     // path from x1,y1 to x2,y2
     do{
       map.sectors.forEach(row=>{
+
+        //eslint-disable-next-line complexity
         row.forEach(sector=>{
           if(
+
+            // prevent all forms of L shapes based on origin and terminal
+            // point and cause a greater curve factor
+            sector.x===x1&&sector.y%5===0&&
+              !(sector.x===x1&&sector.y===y1||sector.x===x2&&sector.y===y2)||
+            sector.x===x2&&sector.y%5===0&&
+              !(sector.x===x1&&sector.y===y1||sector.x===x2&&sector.y===y2)||
+            sector.y===y1&&sector.x%5===0&&
+              !(sector.x===x1&&sector.y===y1||sector.x===x2&&sector.y===y2)||
+            sector.y===y2&&sector.x%5===0&&
+              !(sector.x===x1&&sector.y===y1||sector.x===x2&&sector.y===y2)
+          ){
+            sector.setWall();
+          }else if(
             Math.random()<0.7||
             Math.abs(sector.x-x1)<3&&Math.abs(sector.y-y1)<3||
             Math.abs(sector.x-x2)<3&&Math.abs(sector.y-y2)<3
@@ -224,16 +240,16 @@ export class Map{
 
   // find a path between two points that passes the `test` function when applied
   // to each sector
-  findPath({x1=0,y1=0,x2=0,y2=0,test=()=>true}={}){
+  findPath({x1=0,y1=0,x2=0,y2=0,test=()=>true,map=this}={}){
     const weight = 1,
           heuristic = (dx, dy) => dx + dy, //manhattan heuristic
           openList = new Heap([],(a,b)=>a.f===b.f,(a,b)=>b.path.f - a.path.f),
           abs = Math.abs, //shorten reference
-          map = this.clone(), //so we can mutate it and destroy it when done
+          clone = this.clone(), //so we can mutate it and destroy it when done
           SQRT2 = Math.SQRT2; //shorten reference
 
-    if(!this.isInbounds({x:x1,y:y1})||!this.isInbounds({x:x2,y:y2})) return null;
-    let node = map.getSector({x: x1,y: y1}); //acquire starting node
+    if(!map.isInbounds({x:x1,y:y1})||!map.isInbounds({x:x2,y:y2})) return null;
+    let node = clone.getSector({x: x1,y: y1}); //acquire starting node
 
     // set the g and f value of the start node to be 0
     node.path = {g: 0, f: 0, opened: false, closed: false, parent: null};
@@ -255,16 +271,17 @@ export class Map{
 
         // Add all successful nodes to the path array except starting node
         do{
-          path.push(this.getSector({x: node.x,y: node.y}));
+          path.push(map.getSector({x: node.x,y: node.y}));
           node = node.path.parent;
         }while(node.path.parent);
+        path.push(map.getSector({x: x1,y: y1})); //add start node
 
         // pop from list to get path in order
         return path;
       } //end if
 
       // get neighbours of the current node
-      const neighbors = map.getNeighbors({
+      const neighbors = clone.getNeighbors({
         x: node.x,y: node.y, orthogonal: false, test
       });
 
