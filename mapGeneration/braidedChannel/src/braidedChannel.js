@@ -1,5 +1,7 @@
 export function braidedChannel(map){
-  let x1,y1,x2,y2,direction=Math.random(),water=[];
+  const water = [];
+
+  let x1,y1,x2,y2,direction=Math.random();
 
   if(direction<0.25){
     direction = 'horizontal';
@@ -67,8 +69,8 @@ export function braidedChannel(map){
   });
 
   // now we'll generate some noise and populate all non-river data
-  let x=['horizontal','forward'].includes(direction)?6:12,
-      y=['vertical','backward'].includes(direction)?6:12;
+  const x=['horizontal','forward'].includes(direction)?6:12,
+        y=['vertical','backward'].includes(direction)?6:12;
 
   map.sectors.forEach(row=>{
     row.forEach(sector=>{
