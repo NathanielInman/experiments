@@ -195,20 +195,6 @@ export class Map{
         //eslint-disable-next-line complexity
         row.forEach(sector=>{
           if(
-
-            // prevent all forms of L shapes based on origin and terminal
-            // point and cause a greater curve factor
-            sector.x===x1&&sector.y%5===0&&
-              !(sector.x===x1&&sector.y===y1||sector.x===x2&&sector.y===y2)||
-            sector.x===x2&&sector.y%5===0&&
-              !(sector.x===x1&&sector.y===y1||sector.x===x2&&sector.y===y2)||
-            sector.y===y1&&sector.x%5===0&&
-              !(sector.x===x1&&sector.y===y1||sector.x===x2&&sector.y===y2)||
-            sector.y===y2&&sector.x%5===0&&
-              !(sector.x===x1&&sector.y===y1||sector.x===x2&&sector.y===y2)
-          ){
-            sector.setWall();
-          }else if(
             Math.random()<0.7||
             Math.abs(sector.x-x1)<3&&Math.abs(sector.y-y1)<3||
             Math.abs(sector.x-x2)<3&&Math.abs(sector.y-y2)<3
@@ -219,7 +205,12 @@ export class Map{
           } //end if
         });
       });
-      path = map.findPath({x1,y1,x2,y2});
+      path = map.findPath({
+        x1,y1,x2,y2,map,
+        test(sector){
+          return sector.isWalkable();
+        }
+      });
     }while(path===null)
 
     // now we'll draw the path between the points
