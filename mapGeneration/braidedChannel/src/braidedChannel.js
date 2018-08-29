@@ -1,5 +1,5 @@
 export function braidedChannel(map){
-  let x1,y1,x2,y2,direction=Math.random();
+  let x1,y1,x2,y2,direction=Math.random(),water=[];
 
   if(direction<0.25){
     direction = 'horizontal';
@@ -48,10 +48,46 @@ export function braidedChannel(map){
       } //end if
     } //end if
     map.drunkenPath({
-      x1,y1,x2,y2,
+      x1,y1,x2,y2,wide: true,
       draw(sector){
         sector.setWater();
+        water.push(sector);
       }
     });
   } //end for
+
+  // now we'll surround water with sand
+  water.forEach(sector=>{
+    map.getNeighbors({
+      x: sector.x,y: sector.y,
+      test(sector){
+        return sector.isEmpty();
+      }
+    }).forEach(sector=> sector.setFloorSpecial());
+  });
+
+  // now we'll generate some noise and populate all non-river data
+  let x=['horizontal','forward'].includes(direction)?6:12,
+      y=['vertical','backward'].includes(direction)?6:12;
+
+  map.sectors.forEach(row=>{
+    row.forEach(sector=>{
+      const n = (1+map.noise.simplex2(sector.x/map.width*x,sector.y/map.height*y))/2;
+
+      if(n<0.2&&!sector.isWater()){
+        sector.setWallSpecial();
+      }else if(n<0.5&&!sector.isWater()){
+        sector.setWall();
+      }else if(sector.isEmpty()){
+        sector.setFloor();
+      }else if(n<0.2&&sector.isWater()){
+        sector.setWaterSpecial();
+      } //end if
+    });
+  });
+
+  map.clipOrphaned({
+    test: sector=> sector.isWalkable(),
+    failure: sector=> sector.setWallSpecial()
+  });
 } //end function
