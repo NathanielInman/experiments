@@ -4,7 +4,7 @@ export const index = {
   inject: false,
   template: indexTemplate,
   mobile: true,
-  title: 'Wadi Generator',
+  title: 'Alluvial Fan Generator',
   injectExtras: {
     head: [
       {
