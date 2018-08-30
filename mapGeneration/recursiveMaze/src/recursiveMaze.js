@@ -1,77 +1,59 @@
-import {Noise} from 'noisejs';
+import {shuffle} from './shuffle';
 
-export function esker(map){
+// Recursive Maze Generation:
+//
+// 1. Choose a starting point in the field.
+//
+// 2. Randomly choose a wall at that point and carve a passage
+// through to the adjacent cell, but only if the adjacent cell
+// has not been visited yet. This becomes the new current cell.
+//
+// 3. All adjacent cells have been visited, back up to the last
+// cell that has uncarved walls and repeat.
+//
+// 4. The algorithm ends when the process has backed all the way
+// up to the starting point.
+export function recursiveMaze(map){
+  const sectors=[],
+        directions = [
+          {move: {x:-2,y:0}, carve: {x:-1,y:0}}, //west
+          {move: {x:2,y:0}, carve: {x:1,y:0}}, //east
+          {move: {x:0,y:-2}, carve: {x:0,y:-1}}, //north
+          {move: {x:0,y:2}, carve: {x:0,y:1}} //south
+        ],
+        sx = Math.floor(Math.random()*map.width),
+        sy = Math.floor(Math.random()*map.height);
 
-  // start by making the eskers themselves
-  map.sectors.forEach(row=>{
-    row.forEach(sector=>{
-      const {x,y} = sector;
+  let x = sx, y = sy,
+      direction, //represents the random chosen direction
+      sector=map.getSector({x,y}) //represents the sector we're testing
 
-      let n; // noise variable defines depth
-
-      // Weight: 2
-      // random noise map weight (small-sized)
-      n = (1+map.noise.simplex2(x/map.width*10,y/map.height*10));
-
-      // Weight: 1
-      // this weights things by how close to the center of map they are
-      n += 1*((
-        1-Math.sqrt(Math.pow(map.width/2-x,2)+Math.pow(map.height/2-y,2))
-        /
-        Math.sqrt(Math.pow(map.width/2,2)+Math.pow(map.height/2,2))
-      ));
-
-      // average the weight
-      n/=3;
-
-      // the noise is between 0 and 1
-      if(n<0.6){
+  sector.visited = true;
+  sector.setFloor(); //start tile is always floor
+  sectors.push(sector);
+  do{
+    shuffle(directions); //mutate in-place
+    for(let i=0;i<directions.length;i++){
+      direction=directions[i];
+      if(
+        map.isInbounds({x: x+direction.move.x,y: y+direction.move.y})&&
+        !map.getSector({x: x+direction.move.x,y: y+direction.move.y}).visited
+      ){
+        sector = map.getSector({x: x+direction.carve.x,y: y+direction.carve.y});
         sector.setFloor();
-      }else if(n<0.80){
-        sector.setFloorSpecial();
-      }else if(n<0.90){
-        sector.setWall();
-      }else{
-        sector.setWallSpecial();
-      } //end if
-    });
-  });
+        sector = map.getSector({x: x+direction.move.x,y: y+direction.move.y});
+        sector.visited = true;
+        sector.setFloor();
+        break;
+      }
+    } //end for
+    if(sector){
+      ({x,y}=sector);
+      sectors.push(sector);
+      sector = null;
+    }else{
+      ({x,y}=sectors.pop());
+    } //end if
+  }while(x!==sx||y!==sy);
 
-  // now we'll populate some noise obstructions to make it interesting
-  // we need to start by reseting the nosie map so it doesn't match
-  map.noise = new Noise(Math.random());
-  map.sectors.forEach(row=>{
-    row.forEach(sector=>{
-      const {x,y} = sector;
-
-      let n; //noise variable defines depth
-
-      // Weight: 1
-      // random noise map widght (large-sized)
-      n = (1+map.noise.simplex2(x/map.width*5,y/map.height*5))/2;
-
-      // Weight: 1
-      // This weights things by how far from teh center of map they are
-      n += 1*((
-        Math.sqrt(Math.pow(map.width/2-x,2)+Math.pow(map.height/2-y,2))
-        /
-        Math.sqrt(Math.pow(map.width/2,2)+Math.pow(map.height/2,2))
-      ));
-
-      n/=2;
-
-      // the noise is between 0 and 1
-      if(n>0.8){
-        sector.setWallSpecial()
-      }else if(n>0.68){
-        sector.setWall();
-      } //end if
-    });
-  });
-
-  // now remove all orphaned areas from map
-  map.clipOrphaned({
-    test: sector=> sector.isWalkable(),
-    failure: sector=> sector.setWall()
-  })
 } //end function
