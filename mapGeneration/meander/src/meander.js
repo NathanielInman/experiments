@@ -3,7 +3,10 @@ import {shuffle} from './shuffle';
 // Meander Calculation:
 //
 // 1. Choose a starting map edge and ending map edge, acquire
-// the terminal points based on tose edges.
+// the terminal points based on those edges. Usually this would
+// be a random point on those edges. Maybe you'd want to weight
+// it so it's predominately in the center, or you could restrict
+// it to a certain part.
 //
 // 2. Create bresenhams line between the terminal points. This
 // is called the pathing vector.
@@ -15,8 +18,8 @@ import {shuffle} from './shuffle';
 // 4. For each chunk, perform a recursive maze generation algorithm
 // on the chunk. Repeat this step until there is a path from the
 // start of the pathing vector within the chunk to the end of the
-// pathing vector in the chunk. A* can be used for the pathing
-// algorithm.
+// pathing vector in the chunk. A* pathing algorithm can be used
+// for the pathing.
 //
 // 5. Merely use bresenhams line to wrap up the extraneous pathing
 // vector not covered by chunks, alternatively break up the remaining
@@ -39,6 +42,65 @@ import {shuffle} from './shuffle';
 // 4. The algorithm ends when the process has backed all the way
 // up to the starting point.
 export function meander(map){
+  let direction=Math.random();
+
+  // acquire the direction, forward and backward are diagonals
+  if(direction<0.25){
+    direction = 'horizontal';
+  }else if(direction<0.5){
+    direction = 'vertical';
+  }else if(direction<0.75){
+    direction = 'forward';
+  }else{
+    direction = 'backward';
+  } //end if
+
+  let x1,y1,x2,y2;
+
+  // based on the direction randomly compute terminal points
+  if(direction==='horizontal'){
+    x1 = 0;
+    x2 = map.width-1;
+    y1 = Math.floor(Math.random()*map.height/2+map.height/4);
+    y2 = Math.floor(Math.random()*map.height/2+map.height/4);
+  }else if(direction==='vertical'){
+    x1 = Math.floor(Math.random()*map.width/2+map.width/4);
+    x2 = Math.floor(Math.random()*map.width/2+map.width/4);
+    y1 = 0;
+    y2 = map.height-1;
+  }else if(direction==='forward'){
+    if(Math.random()<0.5){ // most eastward
+      x1 = Math.floor(Math.random()*map.width/4);
+      x2 = map.width-1;
+      y1 = map.height-1;
+      y2 = Math.floor(Math.random()*map.height/4);
+    }else{
+      x1 = 0;
+      x2 = Math.floor(Math.random()*map.width/4+map.width/2);
+      y1 = Math.floor(Math.random()*map.height/4+map.height/2);
+      y2 = 0;
+    } //end if
+  }else if(direction==='backward'){
+    if(Math.random()<0.5){ //most eastward
+      x1 = Math.floor(Math.random()*map.width/4);
+      x2 = map.width-1;
+      y1 = 0;
+      y2 = Math.floor(Math.random()*map.height/4+map.height/2);
+    }else{
+      x1 = 0;
+      x2 = Math.floor(Math.random()*map.width/4+map.width/2);
+      y1 = Math.floor(Math.random()*map.height/4);
+      y2 = map.height-1;
+    } //end if
+  } //end if
+
+  let line = map.bresenhamsLine({x1,y1,x2,y2});
+  
+  console.log('line',line);
+  line.forEach(sector=> sector.setFloor());
+  console.log(x1,y1,x2,y2);
+  /*
+   * CHUNKING PART
   const sectors=[],
         directions = [
           {move: {x:-2,y:0}, carve: {x:-1,y:0}}, //west
@@ -97,5 +159,6 @@ export function meander(map){
     })
   }while(!path);
   path.forEach(sector=> sector.setFloorSpecial());
+  */
 
 } //end function

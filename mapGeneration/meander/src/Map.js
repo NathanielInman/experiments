@@ -125,13 +125,16 @@ export class Map{
 
   // uses bresenhams line algorithm to acquire an array of points
   // inclusively between A(x1,y1) and B(x2,y2)
-  getPath({x1=0,y1=0,x2=0,y2=0}={}){
+  bresenhamsLine({x1=0,y1=0,x2=0,y2=0}={}){
     const dx = Math.abs(x2-x1), dy = Math.abs(y2-y1),
           sx = x1<x2?1:-1, sy = y1<y2?1:-1,
-          path = [{x: x1,y: y1}];
+          path = [this.getSector({x: x1,y: y1})];
 
     let err = dx-dy, err2; //difference and difference*2
 
+    if(!this.isInbounds({x: x1,y: y1})||!this.isInbounds({x: x2,y: y2})){
+      return null;
+    } //end if
     while(!(x1===x2&&y1===y2)){
       err2 = 2*err;
       if(err2>-dy){
@@ -140,12 +143,7 @@ export class Map{
       if(err2<dx){
         err+=dx; y1+=sy; //eslint-disable-line no-param-reassign
       } //end if
-      if(x1<=1||x1>this.width-2||y1<=1||y1>this.height-2){
-        path.length=0
-        break; //no need to continue, it fails
-      }else{
-        path.push({x: x1,y: y1});
-      } //end if
+      path.push(this.getSector({x: x1,y: y1}));
     } //end while()
     return path;
   }
