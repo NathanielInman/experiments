@@ -61,9 +61,9 @@ export function esker(map){
       n/=2;
 
       // the noise is between 0 and 1
-      if(n>0.7){
+      if(n>0.8){
         sector.setWallSpecial()
-      }else if(n>0.6){
+      }else if(n>0.68){
         sector.setWall();
       } //end if
     });
