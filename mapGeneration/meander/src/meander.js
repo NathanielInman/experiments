@@ -1,5 +1,30 @@
 import {shuffle} from './shuffle';
 
+// Meander Calculation:
+//
+// 1. Choose a starting map edge and ending map edge, acquire
+// the terminal points based on tose edges.
+//
+// 2. Create bresenhams line between the terminal points. This
+// is called the pathing vector.
+//
+// 3. Break up the pathing vector into chunks of 9x9 where the
+// pathing vector crosses the center. There may be left-over of
+// the pathing vector.
+//
+// 4. For each chunk, perform a recursive maze generation algorithm
+// on the chunk. Repeat this step until there is a path from the
+// start of the pathing vector within the chunk to the end of the
+// pathing vector in the chunk. A* can be used for the pathing
+// algorithm.
+//
+// 5. Merely use bresenhams line to wrap up the extraneous pathing
+// vector not covered by chunks, alternatively break up the remaining
+// path into the largest odd number and chunk and process it similarly
+// to the previous part of the algorithm to make it more consistent.
+// Left overs in this optional way would still be filled in with
+// bresenhams line.
+//
 // Recursive Maze Generation:
 //
 // 1. Choose a starting point in the field.
