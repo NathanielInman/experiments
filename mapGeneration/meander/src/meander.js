@@ -42,63 +42,33 @@ import {shuffle} from './shuffle';
 // 4. The algorithm ends when the process has backed all the way
 // up to the starting point.
 export function meander(map){
-  let direction=Math.random();
 
-  // acquire the direction, forward and backward are diagonals
-  if(direction<0.25){
-    direction = 'horizontal';
-  }else if(direction<0.5){
-    direction = 'vertical';
-  }else if(direction<0.75){
-    direction = 'forward';
-  }else{
-    direction = 'backward';
-  } //end if
+  map
+    .bresenhamsLine(
+      map.getTerminalPoints({
+        x1: 0,y1: 0,
+        x2: map.width-1,y2: map.height-1
+      })
+    )
+    .reduce((arr,item,i)=>{
+      const chunkIndex = Math.floor(i/9); //9-sized chunks
 
-  let x1,y1,x2,y2;
+      if(!arr[chunkIndex]) arr[chunkIndex] = [];
+      arr[chunkIndex].push(item);
+      return arr;
+    },[])
+    .forEach(chunk=>{
+      console.log('chunk',chunk);
+      map.fillRoom({
+        x1: chunk[0].x, y1: chunk[0].y,
+        x2: chunk[chunk.length-1].x, y2: chunk[chunk.length-1].y,
+        draw(sector){
+          sector.setFloor();
+        }
+      });
+    })
 
-  // based on the direction randomly compute terminal points
-  if(direction==='horizontal'){
-    x1 = 0;
-    x2 = map.width-1;
-    y1 = Math.floor(Math.random()*map.height/2+map.height/4);
-    y2 = Math.floor(Math.random()*map.height/2+map.height/4);
-  }else if(direction==='vertical'){
-    x1 = Math.floor(Math.random()*map.width/2+map.width/4);
-    x2 = Math.floor(Math.random()*map.width/2+map.width/4);
-    y1 = 0;
-    y2 = map.height-1;
-  }else if(direction==='forward'){
-    if(Math.random()<0.5){ // most eastward
-      x1 = Math.floor(Math.random()*map.width/4);
-      x2 = map.width-1;
-      y1 = map.height-1;
-      y2 = Math.floor(Math.random()*map.height/4);
-    }else{
-      x1 = 0;
-      x2 = Math.floor(Math.random()*map.width/4+map.width/2);
-      y1 = Math.floor(Math.random()*map.height/4+map.height/2);
-      y2 = 0;
-    } //end if
-  }else if(direction==='backward'){
-    if(Math.random()<0.5){ //most eastward
-      x1 = Math.floor(Math.random()*map.width/4);
-      x2 = map.width-1;
-      y1 = 0;
-      y2 = Math.floor(Math.random()*map.height/4+map.height/2);
-    }else{
-      x1 = 0;
-      x2 = Math.floor(Math.random()*map.width/4+map.width/2);
-      y1 = Math.floor(Math.random()*map.height/4);
-      y2 = map.height-1;
-    } //end if
-  } //end if
-
-  let line = map.bresenhamsLine({x1,y1,x2,y2});
   
-  console.log('line',line);
-  line.forEach(sector=> sector.setFloor());
-  console.log(x1,y1,x2,y2);
   /*
    * CHUNKING PART
   const sectors=[],
@@ -162,3 +132,6 @@ export function meander(map){
   */
 
 } //end function
+
+function getTerminalPoints({x1=0,y1=0,x2=0,y2=0}={}){
+}
