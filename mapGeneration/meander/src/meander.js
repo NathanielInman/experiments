@@ -132,6 +132,3 @@ export function meander(map){
   */
 
 } //end function
-
-function getTerminalPoints({x1=0,y1=0,x2=0,y2=0}={}){
-}
