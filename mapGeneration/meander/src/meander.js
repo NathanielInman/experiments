@@ -58,10 +58,26 @@ export function meander(map){
       return arr;
     },[])
     .forEach(chunk=>{
+      let x1 = chunk[0].x, y1 = chunk[0].y,
+          x2 = chunk[chunk.length-1].x, y2 = chunk[chunk.length-1].y;
+
+
       console.log('chunk',chunk);
+      // If the pathing vector is horizontal or vertical completely then
+      // the chunks will be super thin, so we'll appropriately make the
+      // chunk more of a square and impose it on the center of the line
+      // so it can have enough room to actually meander
+      if(x2-x1<y2-y1){
+        let h = Math.round(((y2-y1)-(x2-x1))/2);
+
+        x1-=h; x2+=h;
+      }else{
+        let h = Math.round(((x2-x1)-(y2-y1))/2);
+
+        y1-=h; y2+=h;
+      } //end if
       map.fillRoom({
-        x1: chunk[0].x, y1: chunk[0].y,
-        x2: chunk[chunk.length-1].x, y2: chunk[chunk.length-1].y,
+        x1, y1, x2, y2,
         draw(sector){
           sector.setFloor();
         }
