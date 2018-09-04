@@ -1,5 +1,3 @@
-import {shuffle} from './shuffle';
-
 // Meander Calculation:
 //
 // 1. Choose a starting map edge and ending map edge, acquire
@@ -43,6 +41,7 @@ import {shuffle} from './shuffle';
 // up to the starting point.
 export function meander(map){
 
+  /*
   map
     .bresenhamsLine(
       map.getTerminalPoints({
@@ -83,10 +82,11 @@ export function meander(map){
         }
       });
     })
+*/
+  createMeander({map,x1:1,y1:1,x2:9,y2:9});
+} //end function
 
-  
-  /*
-   * CHUNKING PART
+function createMeander({map,x1=0,y1=0,x2=8,y2=8}={}){
   const sectors=[],
         directions = [
           {move: {x:-2,y:0}, carve: {x:-1,y:0}}, //west
@@ -94,36 +94,35 @@ export function meander(map){
           {move: {x:0,y:-2}, carve: {x:0,y:-1}}, //north
           {move: {x:0,y:2}, carve: {x:0,y:1}} //south
         ],
-        sx = 1, sy = 1,
-        tx = 9, ty = 9;
+        clone = map.clone();
 
   let path;
 
   do{
-    let x = sx, y = sy,
+    let x = x1, y = y1,
         direction, //represents the random chosen direction
-        sector=map.getSector({x,y}) //represents the sector we're testing
+        sector=clone.getSector({x,y}) //represents the sector we're testing
 
-    map.getSector({x: 9,y: 9}).setRemoved();
+    clone.getSector({x: 9,y: 9}).setRemoved();
     sector.visited = true;
     sector.setFloor(); //start tile is always floor
     sectors.push(sector);
     do{
-      shuffle(directions); //mutate in-place
+      clone.shuffle(directions); //mutate in-place
       for(let i=0;i<directions.length;i++){
         direction=directions[i];
         if(
-          map.isInbounds({
+          clone.isInbounds({
             x: x+direction.move.x,
             y: y+direction.move.y,
             width: 10,
             height: 10
           })&&
-          !map.getSector({x: x+direction.move.x,y: y+direction.move.y}).visited
+          !clone.getSector({x: x+direction.move.x,y: y+direction.move.y}).visited
         ){
-          sector = map.getSector({x: x+direction.carve.x,y: y+direction.carve.y});
+          sector = clone.getSector({x: x+direction.carve.x,y: y+direction.carve.y});
           sector.setFloor();
-          sector = map.getSector({x: x+direction.move.x,y: y+direction.move.y});
+          sector = clone.getSector({x: x+direction.move.x,y: y+direction.move.y});
           sector.visited = true;
           sector.setFloor();
           break;
@@ -136,15 +135,13 @@ export function meander(map){
       }else{
         ({x,y}=sectors.pop());
       } //end if
-    }while(x!==sx||y!==sy);
+    }while(x!==x1||y!==y1);
     path = map.findPath({
-      x1: sx, y1: sy, x2: tx, y2: ty,
+      x1, y1, x2, y2,
       test(sector){
-        return sector.isWalkable();
+        return clone.getSector({x: sector.x,y: sector.y}).isWalkable();
       }
     })
   }while(!path);
   path.forEach(sector=> sector.setFloorSpecial());
-  */
-
-} //end function
+}
