@@ -10,7 +10,7 @@ export class Map{
     this.sectors = sectors;
     if(initialize) this.initialize();
   }
-  shuffle(array){
+  static shuffle(array){
     for(let i = array.length - 1,j; i > 0; i--){
       j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
@@ -377,22 +377,20 @@ export class Map{
 
   // get start and ending coordinates given a boundary box that will
   // touch two separate edges
-  getTerminalPoints({
+  static getTerminalPoints({
     x1=0,y1=0,x2=0,y2=0,horizontal=true,vertical=true,
     forward=true,backward=true
   }={}){
+    const directionTypes = [];
+
     let direction=Math.random();
 
     // acquire the direction, forward and backward are diagonals
-    if(direction<0.25){
-      direction = 'horizontal';
-    }else if(direction<0.5){
-      direction = 'vertical';
-    }else if(direction<0.75){
-      direction = 'forward';
-    }else{
-      direction = 'backward';
-    } //end if
+    if(horizontal) directionTypes.push('horizontal');
+    if(vertical) directionTypes.push('vertical');
+    if(forward) directionTypes.push('forward');
+    if(backward) directionTypes.push('backward');
+    direction = directionTypes[Math.floor(Math.random()*directionTypes.length)];
 
     // based on the direction randomly compute terminal points
     if(direction==='horizontal'){
@@ -417,14 +415,13 @@ export class Map{
           y1: y2,
           y2: Math.floor(Math.random()*y2/4)
         };
-      }else{
-        return {
-          x1,
-          x2: Math.floor(Math.random()*x2/4+x2/2),
-          y1: Math.floor(Math.random()*y2/4+y2/2),
-          y2
-        };
       } //end if
+      return {
+        x1,
+        x2: Math.floor(Math.random()*x2/4+x2/2),
+        y1: Math.floor(Math.random()*y2/4+y2/2),
+        y2
+      };
     }else if(direction==='backward'){
       if(Math.random()<0.5){ //most eastward
         return {
@@ -433,15 +430,15 @@ export class Map{
           y1,
           y2: Math.floor(Math.random()*y2/4+y2/2)
         };
-      }else{
-        return {
-          x1,
-          x2: Math.floor(Math.random()*x2/4+x2/2),
-          y1: Math.floor(Math.random()*y2/4),
-          y2
-        };
       } //end if
+      return {
+        x1,
+        x2: Math.floor(Math.random()*x2/4+x2/2),
+        y1: Math.floor(Math.random()*y2/4),
+        y2
+      };
     } //end if
+    return null;
   }
 
   // loop through the entire maps sectors and group them into walkable
