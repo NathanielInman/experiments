@@ -126,8 +126,14 @@ export class Map{
     return this.getSector({x: x1,y: y1}).roomNumber===
       this.getSector({x: x2,y: y2}).roomNumber;
   }
-  isInbounds({x=0,y=0,width=this.width,height=this.height}={}){
-    return x>=0&&x<=width-1&&y>=0&&y<=height-1;
+
+  // test to make sure the points are within bounds of the map
+  // and optionally (and additionally) between a min/max x/y
+  isInbounds({
+    x=0,y=0,x1=0,y1=0,x2=this.width-1,y2=this.height-1
+  }={}){
+    return x>=x1&&x<=x2&&y>=y1&&y<=y2&&
+      x>=0&&y>=0&&x<=this.width-1&&y<=this.height-1;
   }
 
   // uses bresenhams line algorithm to acquire an array of points

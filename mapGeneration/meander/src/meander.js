@@ -91,9 +91,7 @@ export function meander(map){
       }else if((y2-y1)%2===1&&y2>0){
         y2--;
       } //end if
-      console.log(x1,y1,x2,y2);
-      console.log('width',x2-x1);
-      console.log('height',y2-y1);
+      console.log([x1,x2],[y1,y2],[x2-x1,y2-y1]);
       createMeander({map,x1,y1,x2,y2});
     });
 } //end function
@@ -116,7 +114,7 @@ function createMeander({map,x1=0,y1=0,x2=8,y2=8}={}){
         sector=clone.getSector({x,y}) //represents the sector we're testing
 
     sector.visited = true;
-    map.setFloor({x: sector.x, y: sector.y}); //start tile is always floor
+    //map.setFloor({x: sector.x, y: sector.y}); //start tile is always floor
     sectors.push(sector);
     do{
       clone.shuffle(directions); //mutate in-place
@@ -126,8 +124,7 @@ function createMeander({map,x1=0,y1=0,x2=8,y2=8}={}){
           clone.isInbounds({
             x: x+direction.move.x,
             y: y+direction.move.y,
-            width: x2-x1,
-            height: y2-y1
+            x1, x2, y1, y2
           })&&
           !clone.getSector({
             x: x+direction.move.x,
