@@ -49,7 +49,7 @@ export function meander(map){
 
     // create bresenhams line
     const line = map.bresenhamsLine(
-      map.getTerminalPoints({
+      map.constructor.getTerminalPoints({
         x1: 0,y1: 0,
         x2: map.width-1,y2: map.height-1,
         forward: false, backward: false //will prevent pruning
@@ -182,7 +182,7 @@ function createMaze({map,x1=0,y1=0,x2=8,y2=8}={}){
   map.setFloor({x: sector.x, y: sector.y}); //start tile is always floor
   sectors.push(sector);
   do{
-    clone.shuffle(directions); //mutate in-place
+    clone.constructor.shuffle(directions); //mutate in-place
     for(let i=0;i<directions.length;i++){
       direction=directions[i];
       if(
