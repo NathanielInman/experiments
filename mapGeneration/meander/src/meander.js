@@ -40,8 +40,6 @@
 // 4. The algorithm ends when the process has backed all the way
 // up to the starting point.
 export function meander(map){
-
-  /*
   map
     .bresenhamsLine(
       map.getTerminalPoints({
@@ -70,20 +68,34 @@ export function meander(map){
         let h = Math.round(((y2-y1)-(x2-x1))/2);
 
         x1-=h; x2+=h;
+        if(x1<0) x1=0;
+        if(x2>map.width-1) x2 = map.width-1;
       }else{
         let h = Math.round(((x2-x1)-(y2-y1))/2);
 
         y1-=h; y2+=h;
+        if(y1<0) y1=0;
+        if(y2>map.height-1) y2 = map.height-1;
       } //end if
-      map.fillRoom({
-        x1, y1, x2, y2,
-        draw(sector){
-          sector.setFloor();
-        }
-      });
-    })
-*/
-  createMeander({map,x1:1,y1:1,x2:9,y2:9});
+
+      // we need to make sure that the difference between widths and heights
+      // are all even so we can alternate between walls and floors in a maze
+      // successfully. Leftovers can just use bresenhams
+      if((x2-x1)%2===1&&x2<map.width-1){
+        x2++;
+      }else if((x2-x1)%2===1&&x2>0){
+        x2--;
+      } //end if
+      if((y2-y1)%2===1&&y2<map.height-1){
+        y2++;
+      }else if((y2-y1)%2===1&&y2>0){
+        y2--;
+      } //end if
+      console.log(x1,y1,x2,y2);
+      console.log('width',x2-x1);
+      console.log('height',y2-y1);
+      createMeander({map,x1,y1,x2,y2});
+    });
 } //end function
 
 function createMeander({map,x1=0,y1=0,x2=8,y2=8}={}){
@@ -103,9 +115,8 @@ function createMeander({map,x1=0,y1=0,x2=8,y2=8}={}){
         direction, //represents the random chosen direction
         sector=clone.getSector({x,y}) //represents the sector we're testing
 
-    clone.getSector({x: 9,y: 9}).setRemoved();
     sector.visited = true;
-    sector.setFloor(); //start tile is always floor
+    map.setFloor({x: sector.x, y: sector.y}); //start tile is always floor
     sectors.push(sector);
     do{
       clone.shuffle(directions); //mutate in-place
@@ -115,16 +126,25 @@ function createMeander({map,x1=0,y1=0,x2=8,y2=8}={}){
           clone.isInbounds({
             x: x+direction.move.x,
             y: y+direction.move.y,
-            width: 10,
-            height: 10
+            width: x2-x1,
+            height: y2-y1
           })&&
-          !clone.getSector({x: x+direction.move.x,y: y+direction.move.y}).visited
+          !clone.getSector({
+            x: x+direction.move.x,
+            y: y+direction.move.y
+          }).visited
         ){
-          sector = clone.getSector({x: x+direction.carve.x,y: y+direction.carve.y});
-          sector.setFloor();
-          sector = clone.getSector({x: x+direction.move.x,y: y+direction.move.y});
+          sector = clone.getSector({
+            x: x+direction.carve.x,
+            y: y+direction.carve.y
+          });
+          map.setFloor({x: sector.x, y: sector.y});
+          sector = clone.getSector({
+            x: x+direction.move.x,
+            y: y+direction.move.y
+          });
           sector.visited = true;
-          sector.setFloor();
+          map.setFloor({x: sector.x, y: sector.y});
           break;
         }
       } //end for
@@ -136,12 +156,14 @@ function createMeander({map,x1=0,y1=0,x2=8,y2=8}={}){
         ({x,y}=sectors.pop());
       } //end if
     }while(x!==x1||y!==y1);
+    /*
     path = map.findPath({
       x1, y1, x2, y2,
       test(sector){
         return clone.getSector({x: sector.x,y: sector.y}).isWalkable();
       }
-    })
+    }) */
+    path = [];
   }while(!path);
   path.forEach(sector=> sector.setFloorSpecial());
 }
