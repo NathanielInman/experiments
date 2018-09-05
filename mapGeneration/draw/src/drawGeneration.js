@@ -96,7 +96,7 @@ export function draw(map){
         sector.setWall();
       }else if(!sector.isWater()&&Math.random()<0.1){
         sector.setWallSpecial();
-      }
+      } //end if
     });
   });
 
@@ -111,7 +111,7 @@ export function draw(map){
   });
 
   // lastly lets find all floor that's near water and give it a large chance
-  // to be a corridor (sand)
+  // to be sand
   map.sectors.forEach(row=>{
     row.forEach(sector=>{
       if(sector.isWater()) return; //leave water alone
