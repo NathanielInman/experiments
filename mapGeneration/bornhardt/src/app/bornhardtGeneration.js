@@ -13,10 +13,18 @@ export function bornhardt(map){
     do{
       cSize++;
       map.setWallSpecial({x,y});
-      if(map.isEmpty({x: x-1,y})) sparks.push({x: x-1,y});
-      if(map.isEmpty({x: x+1,y})) sparks.push({x: x+1,y});
-      if(map.isEmpty({x,y: y-1})) sparks.push({x,y: y-1});
-      if(map.isEmpty({x,y: y+1})) sparks.push({x,y: y+1});
+      if(map.isInbounds({x: x-1,y})&&map.isEmpty({x: x-1,y})){
+        sparks.push({x: x-1,y});
+      } //end if
+      if(map.isInbounds({x: x+1,y})&&map.isEmpty({x: x+1,y})){
+        sparks.push({x: x+1,y});
+      } //end if
+      if(map.isInbounds({x, y: y-1})&&map.isEmpty({x,y: y-1})){
+        sparks.push({x,y: y-1});
+      } //end if
+      if(map.isInbounds({x, y: y+1})&&map.isEmpty({x,y: y+1})){
+        sparks.push({x,y: y+1});
+      } //end if
       if(sparks.length) ({x,y}=shuffle(sparks).pop());
     }while(cSize<sizeOfBornhardts&&sparks.length)
   } //end for

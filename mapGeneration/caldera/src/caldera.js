@@ -1,33 +1,58 @@
-export function ravine(map){
+export function caldera(map){
+  const calderaSize = map.width*map.height/10,
+        sparks = [];
 
-  // draw a bunch of rivers going every which way
-  const {x1,y1,x2,y2}= map.constructor.getTerminalPoints({
-    x1: 0, y1: 0, x2: map.width-1, y2: map.height-1
-  });
+  // first lets create the caldera itself
+  let x = Math.floor(map.width/3+Math.random()*map.width/3),
+      y = Math.floor(map.height/3+Math.random()*map.height/3),
+      size = 0;
 
-  // now draw that river
-  map.drunkenPath({
-    x1,y1,x2,y2,wide: true,
-    draw(sector){
-      sector.setWater();
-    }
-  });
+  do{
+    size++;
+    map.setWater({x,y});
+    if(map.isInbounds({x: x-1,y})&&map.isEmpty({x: x-1,y})){
+      sparks.push({x: x-1,y});
+    } //end if
+    if(map.isInbounds({x: x+1,y})&&map.isEmpty({x: x+1,y})){
+      sparks.push({x: x+1,y});
+    } //end if
+    if(map.isInbounds({x, y: y-1})&&map.isEmpty({x,y: y-1})){
+      sparks.push({x,y: y-1});
+    } //end if
+    if(map.isInbounds({x, y: y+1})&&map.isEmpty({x,y: y+1})){
+      sparks.push({x,y: y+1});
+    } //end if
+    if(sparks.length) ({x,y}=map.constructor.shuffle(sparks).pop());
+  }while(size<calderaSize&&sparks.length)
 
-  // now close everything not close enough to river
-  map.sectors.forEach(row=>{
-    row.forEach(sector=>{
-      if(
-        !map.getNeighbors({
-          x: sector.x,y: sector.y, size: 2
-        }).some(sector=> sector.isWater())
-        &&Math.random()<0.6
-      ){
+  // now we'll create a map boundary that's fuzzy to contain
+  // the player
+  map.sectors.forEach((row,y)=>{
+    row.forEach((sector,x)=>{
+      if(sector.isWater()) return; //don't override
+      const yd = Math.abs(y-map.height/2)/(map.height/2),
+            xd = Math.abs(x-map.width/2)/(map.width/2),
+            d = Math.sqrt(Math.pow(xd,2)+Math.pow(yd,2)),
+            r1 = Math.random(),
+            r2 = Math.random();
+
+      // d turns it into a circle
+      if(r1<d-0.5||r2<0.05){
         sector.setWall();
-      }else if(!sector.isWater()&&Math.random()<0.1){
-        sector.setWallSpecial();
+      }else if(
+        map.getNeighbors({
+          x: sector.x,y: sector.y, size: 2,
+          test(sector){
+            return sector.isWater()&&Math.random()<0.5;
+          }
+        }).length
+      ){
+        sector.setFloorSpecial();
+      }else{
+        sector.setFloor();
       } //end if
-    });
-  });
+    }); //end for
+  }); //end for
 
   // now that we've represented the map fully, lets find the largest walkable
   // space and fill in all the rest
@@ -37,18 +62,5 @@ export function ravine(map){
     success: sector=>{
       if(!sector.isWalkable()) sector.setFloor();
     }
-  });
-
-  // lastly lets find all floor that's near water and give it a large chance
-  // to be sand
-  map.sectors.forEach(row=>{
-    row.forEach(sector=>{
-      if(sector.isWater()) return; //leave water alone
-      const x = sector.x,y = sector.y;
-
-      if(map.getNeighbors({x,y}).some(sector=> sector.isWater())){
-        if(Math.random()<0.5) sector.setFloorSpecial();
-      } //end if
-    });
   });
 } //end function
