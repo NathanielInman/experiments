@@ -50,10 +50,8 @@ export function fjord(map){
       const x = sector.x,y = sector.y;
 
       if(
-        map.isInbounds({x: x-1,y})&&map.isWater({x: x-1,y})||
-        map.isInbounds({x: x+1,y})&&map.isWater({x: x+1,y})||
-        map.isInbounds({x,y: y-1})&&map.isWater({x,y: y-1})||
-        map.isInbounds({x,y: y+1})&&map.isWater({x,y: y+1})
+        map.getNeighbors({x,y}).some(sector=>sector.isWater())&&
+        Math.random()<0.5
       ){
         if(Math.random()<0.5) sector.setFloorSpecial();
       } //end if
