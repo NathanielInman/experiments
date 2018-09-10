@@ -1,6 +1,7 @@
 export function caldera(map){
   const calderaSize = map.width*map.height/10,
-        sparks = [];
+        sparks = [],
+        filled = Math.random()<0.5;
 
   // first lets create the caldera itself
   let x = Math.floor(map.width/3+Math.random()*map.width/3),
@@ -9,7 +10,11 @@ export function caldera(map){
 
   do{
     size++;
-    map.setWater({x,y});
+    if(filled){
+      map.setWater({x,y});
+    }else{
+      map.setFloorSpecial({x,y});
+    } //end if
     if(map.isInbounds({x: x-1,y})&&map.isEmpty({x: x-1,y})){
       sparks.push({x: x-1,y});
     } //end if
@@ -29,7 +34,7 @@ export function caldera(map){
   // the player
   map.sectors.forEach((row,y)=>{
     row.forEach((sector,x)=>{
-      if(sector.isWater()) return; //don't override
+      if(!sector.isEmpty()) return; //don't override
       const yd = Math.abs(y-map.height/2)/(map.height/2),
             xd = Math.abs(x-map.width/2)/(map.width/2),
             d = Math.sqrt(Math.pow(xd,2)+Math.pow(yd,2)),
@@ -40,6 +45,7 @@ export function caldera(map){
       if(r1<d-0.5||r2<0.05){
         sector.setWall();
       }else if(
+        filled&&
         map.getNeighbors({
           x: sector.x,y: sector.y, size: 2,
           test(sector){
