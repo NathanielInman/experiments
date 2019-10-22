@@ -1,5 +1,4 @@
-import 'file-loader?name=[name].html!./index.jade';
-import './app.styl';
+import './index.styl';
 window.M = Math;
 window.r = function randomInteger(f,g,e){
   f = !g ? 0 * (g = f) : f > g ? g + (d = f) - g : f;
@@ -21,7 +20,6 @@ let controlsEnabled=false, // Assume controls disabled until user allows
     moveLeftward = false,
     moveRightward = false,
     renderer = new THREE.WebGLRenderer({antialias: true}),
-    noscript = document.querySelector('#noscript'),
     instructions = document.querySelector('#instructions'),
     mapSize=100,
     prevTime = performance.now(), //used to determine moving velocity
@@ -55,7 +53,6 @@ let controlsEnabled=false, // Assume controls disabled until user allows
     };
 
 instructions.style.display = 'flex';
-noscript.style.display = 'none';
 acquirePointerLock(); //ask the user to user pointer lock
 document.addEventListener('keydown',onKeyDown,false);
 document.addEventListener('keyup',onKeyUp,false);
