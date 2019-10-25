@@ -1,3 +1,5 @@
+import * as THREE from 'three/build/three';
+
 export function loadPointerLockControls(){
   /**
    * @author mrdoob / http://mrdoob.com/

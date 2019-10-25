@@ -1,17 +1,22 @@
 import './index.styl';
-window.M = Math;
-window.r = function randomInteger(f,g,e){
-  f = !g ? 0 * (g = f) : f > g ? g + (d = f) - g : f;
-  e = e || 0;
-  g = M.random() * (g - f) + f;
-  return e ? g | 0 : g;
-};
-import {Map} from './Map';
+import {Map,Sector,maps} from '@ion-cloud/core';
 import * as StackBlur from 'stackblur-canvas';
 import * as THREE from 'three/build/three';
-window.THREE = THREE;
 import {loadPointerLockControls} from './PointerLockControls';
 
+const mapSize = 100;
+
+// Start by generating the map itself
+const map = new Map({width:mapSize,height:mapSize}),
+      binarySpacePartitioning = maps.find(map=> map.name==='caldera');
+
+for(let y=0;y<map.height;y++){
+  map.sectors[y]=[];
+  for(let x=0;x<map.width;x++){
+    map.sectors[y][x]=new Sector({x,y,map});
+  } //end for
+} //end for
+binarySpacePartitioning.generator({map});
 let controlsEnabled=false, // Assume controls disabled until user allows
     camera,scene,mesh,controls,mouseX=0,mouseY=0,
     initialized = false,
@@ -21,10 +26,8 @@ let controlsEnabled=false, // Assume controls disabled until user allows
     moveRightward = false,
     renderer = new THREE.WebGLRenderer({antialias: true}),
     instructions = document.querySelector('#instructions'),
-    mapSize=100,
     prevTime = performance.now(), //used to determine moving velocity
     velocity = new THREE.Vector3(), //helps with player movement
-    map = new Map(0,mapSize,mapSize),
     playerPlaced = false, //keep track of whether player was placed on map
     raycaster, //make sure we can't walk into walls
     onKeyDown = e=>{
@@ -87,7 +90,7 @@ function main(){
     position = controlClone.position;
     px = Math.floor((position.x+geoSize/2)/20+0.5);
     py = Math.floor((position.z+geoSize/2)/20+0.5);
-    if(map.getSector(px,py).isWalkable()){
+    if(map.isWalkable({x:px,y:py})){
       controls.getObject().translateX(velocity.x*timeDelta);
       controls.getObject().translateZ(velocity.z*timeDelta);
       controls.getObject().translateY(velocity.y*timeDelta);
@@ -106,7 +109,7 @@ function initialize(){
   let texture = new THREE.CanvasTexture(generateTexture(2048,2048)),
       material = new THREE.MeshLambertMaterial({
         color: '#009696',
-        shading: THREE.FlatShading,
+        flatShading: true,
         fog: true,
         map: texture
       }),
@@ -140,7 +143,10 @@ function initialize(){
     y = gz+gw;
     mx = Math.floor(x/20);
     my = Math.floor(y/20);
-    if(map.getSector(mx,my).isFloor()){
+
+    // make sure the value is in-bound of the map itself or ignore it
+    if(mx>=mapSize||my>=mapSize||Math.ceil(x/20)>=mapSize||Math.ceil(y/20)>=mapSize) continue;
+    if(map.isWalkable({x:mx,y:my})){
       geometry.vertices[face].y=0;
       mesh = new THREE.Mesh(floorGeometry,new THREE.MeshBasicMaterial({color:0x005555,wireframe:true}));
       mesh.position.set(gx,1,gz);
@@ -152,7 +158,7 @@ function initialize(){
       // which will face the camera towards the scene as the center scene is origin
       controls.getObject().position.x = geometry.vertices[face].x;
       controls.getObject().position.z = geometry.vertices[face].z;
-    }else if(map.getSector(Math.ceil(x/20),Math.ceil(y/20)).isFloor()){
+    }else if(map.isWalkable({x:Math.ceil(x/20),y:Math.ceil(y/20)})){
       geometry.vertices[face].y=0;
       mesh = new THREE.Mesh(floorGeometry,new THREE.MeshBasicMaterial({color:0x005555,wireframe:true}));
       mesh.position.set(gx,1,gz);
@@ -188,7 +194,8 @@ function generateTexture(width,height){
     for(let x=0;x<width;x++){
       nx = Math.floor(x/width*mapSize+0.5);
       ny = Math.floor(y/height*mapSize+0.5);
-      if(map.getSector(nx,ny).isFloor()){
+      if(nx>=mapSize||ny>=mapSize) continue;
+      if(map.isWalkable({x:nx,y:ny})){
         ctx.fillRect(x,y,1,1);
       } //end if
     } //end for
