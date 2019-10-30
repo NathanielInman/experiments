@@ -1,7 +1,7 @@
-import {shuffle} from './shuffle';
 import {Noise} from 'noisejs';
 
-export function alluvialFan(map){
+//eslint-disable-next-line complexity
+export function alluvialFan({map}){
   const viableStartSectors = [],
         viableEndSectors = [],
         alluvialDistance = 15,
@@ -11,11 +11,12 @@ export function alluvialFan(map){
 
   // very rarely we get all the way down to the bottom and the map failed
   // because the continents weren't appropriately placed
+  //eslint-disable-next-line no-labels
   generator:
   do{
     mapSuccess = false;
 
-    // we keep generating continent maps until we get one where there's 
+    // we keep generating continent maps until we get one where there's
     // land on the wall that a be a start of the stream and a water area
     // near the middle of the screen it can outlet into
     do{
@@ -61,10 +62,14 @@ export function alluvialFan(map){
       riverSectors.length = 0;
       terminalSector = null;
       do{
+
+        /*eslint-disable no-labels*/
         if(!viableStartSectors.length) continue generator;
         if(!viableEndSectors.length) continue generator;
-        startSector = shuffle(viableStartSectors).pop();
-        endSector = shuffle(viableEndSectors).pop();
+        /*eslint-enable no-labels*/
+
+        startSector = map.constructor.shuffle(viableStartSectors).pop();
+        endSector = map.constructor.shuffle(viableEndSectors).pop();
         a1 = Math.pow(endSector.x-startSector.x,2);
         a2 = Math.pow(endSector.y-startSector.y,2);
       }while(Math.sqrt(a1+a2)<=alluvialDistance*2)
@@ -73,6 +78,8 @@ export function alluvialFan(map){
       map.drunkenPath({
         x1: endSector.x, y1: endSector.y,
         x2: startSector.x, y2: startSector.y,
+
+        //eslint-disable-next-line no-loop-func
         draw(sector){
           if(!terminateEarly){
             const count = map.getNeighbors({
@@ -193,3 +200,4 @@ export function alluvialFan(map){
     });
   });
 } //end function
+
