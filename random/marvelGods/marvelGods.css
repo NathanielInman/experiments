@@ -45,7 +45,7 @@ body{
 }
 .title{ font-size:2em; }
 .entry{ font-style:italic; font-weight:500;}
-#multiverse{ background-color:#300; }
-#extraverse{ background-color:#030; }
-#universe{   background-color:#003; }
+#multiverse{ background-color:#100; }
+#extraverse{ background-color:#010; }
+#universe{   background-color:#001; }
 
