@@ -1,24 +1,27 @@
 {
-  "name": "v1",
+  "name": "BasicRandomMapGeneration",
   "version": "0.1.0",
   "description": "Map generation experiment.",
   "main": "Gulpfile.js",
   "author": {
     "name": "Nathaniel Inman",
-    "email": "nate041010@gmail.com"
+    "email": "nate@theoestudio.com"
+  },
+  "scripts": {
+    "start": "./node_modules/gulp/bin/gulp.js"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/Nathaniel Inman/v1.git"
+    "url": "git://github.com/NathanielInman/experiments.git"
   },
   "bugs": {
-    "url": "https://github.com/Nathaniel Inman/v1/issues"
+    "url": "https://github.com/NathanielInman/experiments/issues"
   },
   "devDependencies": {
     "gulp": "^3.8.11"
   },
   "readmeFilename": "README.md",
-  "homepage": "https://github.com/Nathaniel Inman/v1",
+  "homepage": "https://github.com/NathanielInman/experiments",
   "dependencies": {
     "browser-sync": "^2.2.1",
     "gulp-babel": "^4.0.0",
