@@ -1,58 +1,33 @@
 {
-  "name": "bornhardtGeneration",
+  "name": "bornhardt",
   "version": "0.1.0",
-  "description": "n/a",
+  "description": "bornhardt landform random map generation",
   "main": "config.babel.js",
   "author": {
-    "name": "Nathaniel Inman",
+    "name": "NathanielInman",
     "email": "nate@theoestudio.com"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/NathanielInman/Experiments.git"
+    "url": "git://github.com/NathanielInman/bornhardt.git"
   },
   "bugs": {
-    "url": "https://github.com/NathanielInman/Experiments/issues"
+    "url": "https://github.com/NathanielInman/bornhardt/issues"
   },
   "scripts": {
-    "build:clean": "rm -rf ./dist && mkdir ./dist",
-    "build:assets": "cp -rf src/assets/* ./dist",
-    "build": "npm run build:clean && npm run build:assets",
-    "prestart": "npm run build",
-    "start": "node ./node_modules/webpack/bin/webpack.js --config ./config.babel.js"
+    "prestart": "rm -rf ./parcel",
+    "start": "NODE_ENV=development ./node_modules/parcel/bin/cli.js ./src/index.pug -d dist --cache-dir .parcel"
   },
   "devDependencies": {
-    "autoprefixer": "^8.4.1",
-    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
-    "babel-eslint": "^8.2.3",
-    "babel-loader": "^7.1.4",
-    "babel-preset-env": "^1.6.1",
-    "browser-sync": "^2.24.4",
-    "browser-sync-webpack-plugin": "^2.2.2",
-    "css-loader": "^0.28.11",
-    "eslint": "^4.19.1",
-    "eslint-loader": "^2.0.0",
-    "estraverse-fb": "^1.3.2",
-    "file-loader": "^1.1.11",
-    "html-webpack-plugin": "^3.2.0",
-    "html-webpack-template-pug": "^1.1.1",
-    "poststylus": "^1.0.0",
-    "pug": "^2.0.3",
-    "pug-loader": "^2.4.0",
-    "source-loader": "^1.0.0",
-    "source-map-loader": "^0.2.3",
-    "style-loader": "^0.21.0",
-    "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.2",
-    "webpack": "^4.8.0",
-    "webpack-cli": "^2.1.3"
+    "babel-preset-env": "^1.7.0",
+    "parcel": "^1.12.4",
+    "pug": "^2.0.4",
+    "stylus": "^0.54.7"
   },
   "dependencies": {
-    "collections": "^5.1.2",
-    "ion-cloud": "^1.6.3",
-    "noisejs": "^2.1.0"
+    "@ion-cloud/core": "^2.0.0"
   },
   "readmeFilename": "README.md",
-  "homepage": "https://github.com/NathanielInman/Experiments"
+  "homepage": "https://github.com/NathanielInman/bornhardt"
 }

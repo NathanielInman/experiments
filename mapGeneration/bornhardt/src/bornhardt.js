@@ -1,6 +1,4 @@
-import {shuffle} from './shuffle';
-
-export function bornhardt(map){
+export function bornhardt({map}){
   const numberOfBornhardts = Math.floor(2+Math.random()*4),
         sizeOfBornhardts = map.width*map.height/50; //2%
 
@@ -25,7 +23,7 @@ export function bornhardt(map){
       if(map.isInbounds({x, y: y+1})&&map.isEmpty({x,y: y+1})){
         sparks.push({x,y: y+1});
       } //end if
-      if(sparks.length) ({x,y}=shuffle(sparks).pop());
+      if(sparks.length) ({x,y}=map.constructor.shuffle(sparks).pop());
     }while(cSize<sizeOfBornhardts&&sparks.length)
   } //end for
 
@@ -60,3 +58,4 @@ export function bornhardt(map){
     }
   });
 } //end function
+

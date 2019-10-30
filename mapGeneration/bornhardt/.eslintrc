@@ -263,4 +263,3 @@
     "yield-star-spacing": 0,         // require or disallow spacing around the * in yield* expressions
   }
 }
-

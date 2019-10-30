@@ -1,9 +1,11 @@
-import {Easel} from 'ion-cloud';
-import {bornhardt} from './bornhardtGeneration';
-import {Map} from './Map';
+import './index.styl';
+import {Easel,Map,Sector} from '@ion-cloud/core';
+import {bornhardt} from './bornhardt';
+export const easel = new Easel();
 
-const noscript = document.querySelector('noscript'),
-      easel = new Easel();
+// Launch application if easel was able to create a canvas,
+// if it wasn't then we know canvas isn't supported
+const noscript = document.querySelector('noscript');
 
 if(!easel.activated){
   noscript.innerHTML = `
@@ -14,9 +16,16 @@ if(!easel.activated){
     <span style="color:red;"><br/>Canvas isn't supported in your browser.</span>
   </p>`;
 }else{
-  const map = new Map(50,50);
+  noscript.style.display='none';
+  const map = new Map();
 
-  bornhardt(map); //perform pigeon hole generation
+  for(let y=0;y<map.height;y++){
+    map.sectors[y]=[];
+    for(let x=0;x<map.width;x++){
+      map.sectors[y][x]=new Sector({x,y,map});
+    } //end for
+  } //end for
+  bornhardt({map});
   easel.onDraw = function(){
     const rh = easel.viewport.h/map.height, rw = easel.viewport.w/map.width;
 
@@ -40,15 +49,13 @@ if(!easel.activated){
           easel.ctx.fillStyle='#563';
         }else if(sector.isFloor()){
           easel.ctx.fillStyle='#373';
-        }else if(sector.isVoid()){
-          easel.ctx.fillStyle='#111';
         }else{ //unknown
           easel.ctx.fillStyle='#f00';
         } //end if
 
         // the -0.4 & +0.8 is to remove sub-pixel issues
         // that might cause lines to appear between cells
-        easel.ctx.fillRect(x*rw-0.4,y*rh-0.4,rw+0.8,rh+0.8);
+        easel.ctx.fillRect(x*rw+0.4,y*rh+0.4,rw+0.8,rh+0.8);
       });
     });
   };
