@@ -1,16 +1,11 @@
-import {Noise} from 'noisejs';
-import {shuffle} from './shuffle';
-
-const noise = new Noise(Math.random());
-
-export function arroyo(map){
+export function arroyo({map}){
   const d = Math.random()<0.5,
         h = d?2:10,
         v = d?10:2;
 
   map.sectors.forEach(row=>{
     row.forEach(sector=>{
-      const n = (1+noise.simplex2(sector.x/map.width*h,sector.y/map.height*v))/2;
+      const n = (1+map.noise.simplex2(sector.x/map.width*h,sector.y/map.height*v))/2;
 
       if(n<0.4&&Math.random()<0.4){
         sector.setWall()
@@ -30,7 +25,7 @@ export function arroyo(map){
     sector=> sector.setWallSpecial()
   );
 
-  const terminalPositions = shuffle([
+  const terminalPositions = map.constructor.shuffle([
     {
       xmin: 0,
       xmax: 0,
@@ -130,3 +125,4 @@ function getValidTerminalPoint(map,{xmin,xmax,ymin,ymax}){
   }while(!map.isWalkable({x,y}))
   return {x,y};
 } //end getValidTerminalPoint()
+
