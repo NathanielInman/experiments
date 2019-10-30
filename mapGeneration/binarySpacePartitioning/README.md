@@ -1,4 +1,3 @@
-bsp
-===================
+# binarySpacePartitioning
 
-[![Build Status](https://travis-ci.org/Nathaniel Inman/bsp.svg?branch=master)](https://travis-ci.org/Nathaniel Inman/bsp) [![dependency Status](https://david-dm.org/Nathaniel Inman/bsp/status.svg?style=flat)](https://david-dm.org/Nathaniel Inman/bsp) [![devDependency Status](https://david-dm.org/Nathaniel Inman/bsp/dev-status.svg?style=flat)](https://david-dm.org/Nathaniel Inman/bsp#info=devDependencies)
+[![Build Status](https://travis-ci.org/NathanielInman/binarySpacePartitioning.svg?branch=master)](https://travis-ci.org/NathanielInman/binarySpacePartitioning) [![dependency Status](https://david-dm.org/NathanielInman/binarySpacePartitioning/status.svg?style=flat)](https://david-dm.org/NathanielInman/binarySpacePartitioning) [![devDependency Status](https://david-dm.org/NathanielInman/binarySpacePartitioning/dev-status.svg?style=flat)](https://david-dm.org/NathanielInman/binarySpacePartitioning#info=devDependencies)
