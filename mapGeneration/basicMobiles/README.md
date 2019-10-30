@@ -1,4 +1,4 @@
-v1
-===================
+# Basic Mobiles
 
-[![Build Status](https://travis-ci.org/Nathaniel Inman/v1.svg?branch=master)](https://travis-ci.org/Nathaniel Inman/v1) [![dependency Status](https://david-dm.org/Nathaniel Inman/v1/status.svg?style=flat)](https://david-dm.org/Nathaniel Inman/v1) [![devDependency Status](https://david-dm.org/Nathaniel Inman/v1/dev-status.svg?style=flat)](https://david-dm.org/Nathaniel Inman/v1#info=devDependencies)
+## Getting Started
+Ensure you have `npm` and `node.js` installed, and then `npm i` to install all of the project dependencies. To build the application and start listening for changes, merely `npm start`.
