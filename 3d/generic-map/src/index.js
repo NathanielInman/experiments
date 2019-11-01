@@ -32,7 +32,7 @@ function main(){
       timeDelta = (time-prevTime)/1000;
 
   if(!initialized) initialize();
-  if(controls.enabled){
+  if(controls.pointerLock.enabled){
     let geoSize = mapSize*10,
         controlClone = controls.pointerLock.getObject().clone();
 
