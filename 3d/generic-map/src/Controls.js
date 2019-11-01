@@ -34,7 +34,7 @@ export class Controls{
                 this.pointerLock.enabled = true;
                 instructions.style.display = 'none';
               } else {
-                this.pointerLockenabled = false;
+                this.pointerLock.enabled = false;
                 instructions.style.display = 'flex';
               } //end if
             },
@@ -119,23 +119,22 @@ export class PointerLockControls{
     this.yawObject.position.y = 10;
     this.yawObject.add(this.pitchObject);
     this.enabled = false;
-    this.onMouseMove = event=>{
-      if(!this.enabled) return;
-      const movementX = event.movementX||event.mozMovementX||event.webkitMovementX||0,
-            movementY = event.movementY||event.mozMovementY||event.webkitMovementY||0;
+    document.addEventListener(
+      'mousemove',
+      event=>{
+        if(!this.enabled) return;
+        const movementX = event.movementX||event.mozMovementX||event.webkitMovementX||0,
+              movementY = event.movementY||event.mozMovementY||event.webkitMovementY||0;
 
-      this.yawObject.rotation.y -= movementX * 0.002;
-      this.pitchObject.rotation.x -= movementY * 0.002;
-      this.pitchObject.rotation.x = Math.max(
-        -Math.PI/2,
-        Math.min(Math.PI/2,this.pitchObject.rotation.x)
-      );
-    };
-
-    document.addEventListener('mousemove',this.onMouseMove,false);
-  }
-  dispose(){
-    document.removeEventListener('mousemove',this.onMouseMove,false);
+        this.yawObject.rotation.y -= movementX * 0.002;
+        this.pitchObject.rotation.x -= movementY * 0.002;
+        this.pitchObject.rotation.x = Math.max(
+          -Math.PI/2,
+          Math.min(Math.PI/2,this.pitchObject.rotation.x)
+        );
+      },
+      false
+    );
   }
   getObject(){
     return this.yawObject;
