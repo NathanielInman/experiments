@@ -134,6 +134,7 @@ function initialize(){
   floorShape.lineTo(floorShapeWidth,0);
   floorShape.lineTo(0,0);
   floorGeometry = new THREE.ShapeBufferGeometry(floorShape);
+  console.log(geometry);
   for(let i=0,x,y,mx,my,face,floor,mesh,gx,gz,gw;i<geometry.faces.length;i++){
     face = geometry.faces[i].b;
     gx = geometry.vertices[face].x;
@@ -148,7 +149,7 @@ function initialize(){
     if(mx>=mapSize||my>=mapSize||Math.ceil(x/20)>=mapSize||Math.ceil(y/20)>=mapSize) continue;
     if(map.isWalkable({x:mx,y:my})){
       geometry.vertices[face].y=0;
-      mesh = new THREE.Mesh(floorGeometry,new THREE.MeshBasicMaterial({color:0x005555,wireframe:true}));
+      mesh = new THREE.Mesh(floorGeometry,new THREE.MeshStandardMaterial({color:0x005555,wireframe:true}));
       mesh.position.set(gx,1,gz);
       mesh.rotation.set(-Math.PI/2,0,0);
       mesh.scale.set(0.9,0.9,1);
@@ -160,13 +161,13 @@ function initialize(){
       controls.getObject().position.z = geometry.vertices[face].z;
     }else if(map.isWalkable({x:Math.ceil(x/20),y:Math.ceil(y/20)})){
       geometry.vertices[face].y=0;
-      mesh = new THREE.Mesh(floorGeometry,new THREE.MeshBasicMaterial({color:0x005555,wireframe:true}));
+      mesh = new THREE.Mesh(floorGeometry,new THREE.MeshStandardMaterial({color:0x005555,wireframe:true}));
       mesh.position.set(gx,1,gz);
       mesh.rotation.set(-Math.PI/2,0,0);
       mesh.scale.set(0.9,0.9,1);
       floors.add(mesh);
     }else{
-      geometry.vertices[face].y=50;
+      geometry.vertices[face].y=20;
     } //end if
   } //end for
   mesh = new THREE.Mesh(geometry,material);
