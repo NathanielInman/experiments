@@ -8,6 +8,8 @@ export class Controls{
     this.moveBackward = false;
     this.moveLeftward = false;
     this.moveRightward = false;
+    this.velocity = new THREE.Vector3();
+    this.timeStart = performance.now(); //used for velocity
 
     // establish pointer lock for FPS movement
     this.acquirePointerLock();
@@ -15,6 +17,40 @@ export class Controls{
 
     // provide all input listeners
     this.registerEvents();
+  }
+  processTick(map,sectorSize){
+    if(this.pointerLock.enabled){
+      const controls = this.pointerLock.getObject().clone(),
+            timeEnd = performance.now(),
+            timeDelta = (timeEnd-this.timeStart)/1000,
+            geoSize = map.sectors.length*10;
+
+      this.velocity.x -= this.velocity.x * 10.0 * timeDelta;
+      this.velocity.z -= this.velocity.z * 10.0 * timeDelta;
+      this.velocity.y -= 9.8 * 100.0 * timeDelta; // 100.0 = mass
+      if(this.moveLeftward) this.velocity.x -= 500.0 * timeDelta;
+      if(this.moveForward) this.velocity.z -= 500.0 * timeDelta;
+      if(this.moveBackward) this.velocity.z += 500.0 * timeDelta;
+      if(this.moveRightward) this.velocity.x += 500.0 * timeDelta;
+      controls.translateX(this.velocity.x*timeDelta);
+      controls.translateZ(this.velocity.z*timeDelta);
+      controls.translateY(this.velocity.y*timeDelta);
+      if(
+        map.isWalkable({
+          x: Math.floor(controls.position.x/sectorSize+0.5),
+          y: Math.floor(controls.position.z/sectorSize+0.5)
+        })
+      ){
+        this.pointerLock.getObject().translateX(this.velocity.x*timeDelta);
+        this.pointerLock.getObject().translateZ(this.velocity.z*timeDelta);
+        this.pointerLock.getObject().translateY(this.velocity.y*timeDelta);
+      } //end if
+      if(this.pointerLock.getObject().position.y<10){
+        this.velocity.y = 0;
+        this.pointerLock.getObject().position.y = 10;
+      } //end if
+      this.timeStart = timeEnd;
+    } //end if
   }
   acquirePointerLock(){
     const instructions = document.querySelector('#instructions');

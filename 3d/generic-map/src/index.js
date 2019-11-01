@@ -21,47 +21,13 @@ binarySpacePartitioning.generator({map});
 let camera,scene,
     controls = null,
     initialized = false,
-    renderer = new THREE.WebGLRenderer({antialias: true}),
-    prevTime = performance.now(), //used to determine moving velocity
-    velocity = new THREE.Vector3(); //helps with player movement
+    renderer = new THREE.WebGLRenderer({antialias: true});
 
 main();
 
 function main(){
-  let time = performance.now(),
-      timeDelta = (time-prevTime)/1000;
-
   if(!initialized) initialize();
-  if(controls.pointerLock.enabled){
-    let geoSize = mapSize*10,
-        controlClone = controls.pointerLock.getObject().clone();
-
-    velocity.x -= velocity.x * 10.0 * timeDelta;
-    velocity.z -= velocity.z * 10.0 * timeDelta;
-    velocity.y -= 9.8 * 100.0 * timeDelta; // 100.0 = mass
-    if(controls.moveLeftward) velocity.x -= 500.0 * timeDelta;
-    if(controls.moveForward) velocity.z -= 500.0 * timeDelta;
-    if(controls.moveBackward) velocity.z += 500.0 * timeDelta;
-    if(controls.moveRightward) velocity.x += 500.0 * timeDelta;
-    controlClone.translateX(velocity.x*timeDelta);
-    controlClone.translateZ(velocity.z*timeDelta);
-    controlClone.translateY(velocity.y*timeDelta);
-    if(
-      map.isWalkable({
-        x: Math.floor(controlClone.position.x/sectorSize+0.5),
-        y: Math.floor(controlClone.position.z/sectorSize+0.5)
-      })
-    ){
-      controls.pointerLock.getObject().translateX(velocity.x*timeDelta);
-      controls.pointerLock.getObject().translateZ(velocity.z*timeDelta);
-      controls.pointerLock.getObject().translateY(velocity.y*timeDelta);
-    } //end if
-    if(controls.pointerLock.getObject().position.y<10){
-      velocity.y = 0;
-      controls.pointerLock.getObject().position.y = 10;
-    } //end if
-    prevTime = time;
-  } //end if
+  controls.processTick(map,sectorSize);
   renderer.render(scene,camera);
   requestAnimationFrame(main);
 } //end main()
