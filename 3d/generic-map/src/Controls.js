@@ -22,8 +22,7 @@ export class Controls{
     if(this.pointerLock.enabled){
       const controls = this.pointerLock.getObject().clone(),
             timeEnd = performance.now(),
-            timeDelta = (timeEnd-this.timeStart)/1000,
-            geoSize = map.sectors.length*10;
+            timeDelta = (timeEnd-this.timeStart)/1000;
 
       this.velocity.x -= this.velocity.x * 10.0 * timeDelta;
       this.velocity.z -= this.velocity.z * 10.0 * timeDelta;
@@ -45,8 +44,8 @@ export class Controls{
         map.isWalkable({x: Math.floor(xDiff+0.05),y: Math.floor(zDiff-0.05)})
       ){
         this.pointerLock.getObject().translateX(this.velocity.x*timeDelta);
-        this.pointerLock.getObject().translateZ(this.velocity.z*timeDelta);
         this.pointerLock.getObject().translateY(this.velocity.y*timeDelta);
+        this.pointerLock.getObject().translateZ(this.velocity.z*timeDelta);
       } //end if
       if(this.pointerLock.getObject().position.y<10){
         this.velocity.y = 0;
