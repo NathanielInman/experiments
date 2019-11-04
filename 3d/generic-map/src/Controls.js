@@ -40,7 +40,9 @@ export class Controls{
 
       if(
         map.isWalkable({x: Math.floor(xDiff-0.05),y: Math.floor(zDiff-0.05)})&&
-        map.isWalkable({x: Math.floor(xDiff+0.05),y: Math.floor(zDiff+0.05)})
+        map.isWalkable({x: Math.floor(xDiff+0.05),y: Math.floor(zDiff+0.05)})&&
+        map.isWalkable({x: Math.floor(xDiff-0.05),y: Math.floor(zDiff+0.05)})&&
+        map.isWalkable({x: Math.floor(xDiff+0.05),y: Math.floor(zDiff-0.05)})
       ){
         this.pointerLock.getObject().translateX(this.velocity.x*timeDelta);
         this.pointerLock.getObject().translateZ(this.velocity.z*timeDelta);
