@@ -35,11 +35,12 @@ export class Controls{
       controls.translateX(this.velocity.x*timeDelta);
       controls.translateZ(this.velocity.z*timeDelta);
       controls.translateY(this.velocity.y*timeDelta);
+      const xDiff = controls.position.x/sectorSize+0.5,
+            zDiff = controls.position.z/sectorSize+0.5;
+
       if(
-        map.isWalkable({
-          x: Math.floor(controls.position.x/sectorSize+0.5),
-          y: Math.floor(controls.position.z/sectorSize+0.5)
-        })
+        map.isWalkable({x: Math.floor(xDiff-0.05),y: Math.floor(zDiff-0.05)})&&
+        map.isWalkable({x: Math.floor(xDiff+0.05),y: Math.floor(zDiff+0.05)})
       ){
         this.pointerLock.getObject().translateX(this.velocity.x*timeDelta);
         this.pointerLock.getObject().translateZ(this.velocity.z*timeDelta);

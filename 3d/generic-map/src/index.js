@@ -44,6 +44,8 @@ function initialize(){
   const material = new THREE.MeshPhysicalMaterial({color: 0x00FFFF,flatShading: true}),
         geometry = new THREE.BoxBufferGeometry(sectorSize,sectorHeight,sectorSize);
 
+  let playerPlaced = false;
+
   map.sectors.forEach((row,y)=>{
     row.forEach((sector,x)=>{
       if(!sector.isWalkable()){
@@ -61,8 +63,12 @@ function initialize(){
         entity.receiveShadow = true;
         entity.position.set(x*sectorSize,0,y*sectorSize);
         scene.add(entity);
-        controls.pointerLock.getObject().position.x = x*sectorSize;
-        controls.pointerLock.getObject().position.z = y*sectorSize;
+        if(!playerPlaced){
+          controls.pointerLock.getObject().position.x = x*sectorSize;
+          controls.pointerLock.getObject().position.z = y*sectorSize;
+          playerPlaced = true;
+          console.log('Player placed @',{x,y});
+        } //end if
       } //end if
     });
   })
