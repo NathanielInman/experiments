@@ -1,3 +1,6 @@
-# terrain-morph
+# Modern Roguelike 2019
 
-[![Build Status](https://travis-ci.org/Nathaniel Inman/terrain-morph.svg?branch=master)](https://travis-ci.org/Nathaniel Inman/terrain-morph) [![dependency Status](https://david-dm.org/Nathaniel Inman/terrain-morph/status.svg?style=flat)](https://david-dm.org/Nathaniel Inman/terrain-morph) [![devDependency Status](https://david-dm.org/Nathaniel Inman/terrain-morph/dev-status.svg?style=flat)](https://david-dm.org/Nathaniel Inman/terrain-morph#info=devDependencies)
+This experiment was created in conjunction with a blog post on www.theoestudio.com.
+
+## Getting Started
+Ensure you have `node` and `npm` installed and then merely `npm i` within the project. After all the dependencies are installed you can `npm start` to build the project and then start listening for changes.
