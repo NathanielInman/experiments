@@ -39,7 +39,7 @@ section.section(style='padding-top: 0')
             b-field.mb(label='Lock Level',:disabled="locationType=='manor'")
               b-slider(v-model='lockLevel',:min='50',:max='100',:step='1'
                 @input='updateCost')
-    .columns: .column: .card.mb(v-if='locationType=="manor"')
+    .columns(v-if='locationType=="manor"&&!isPublic'): .column: .card.mb
       .card-header: .card-header-title Henchmen
       .card-content
         b-switch.mb(v-model='henchmenAll',@input='upgradeHenchmenAll') Toggle All
@@ -266,37 +266,39 @@ export default {
       items += this.workbenchItems;
       this.diamonds += this.forgeItems * 500;
       items += this.forgeItems;
-      if(this.henchmenSanctuary) this.diamonds += 125;
-      if(this.henchmenHaste) this.diamonds += 100;
-      if(this.henchmenPhase) this.diamonds += 100;
-      if(this.henchmenProtection) this.diamonds += 50;
-      if(this.henchmenSneak) this.diamonds += 25;
-      if(this.henchmenFly) this.diamonds += 25;
-      if(this.henchmenInvisibility) this.diamonds += 25;
-      if(this.henchmenCriticalStrike) this.diamonds += 100;
-      if(this.henchmenCounter) this.diamonds += 100;
-      if(this.henchmenDirtKick) this.diamonds += 75;
-      if(this.henchmenDisarm) this.diamonds += 75;
-      if(this.henchmenBerserk) this.diamonds += 50;
-      if(this.henchmenBash) this.diamonds += 25;
-      if(this.henchmenTrip) this.diamonds += 10;
-      if(this.henchmenResistMonk) this.diamonds += 100;
-      if(this.henchmenResistMagic) this.diamonds += 100;
-      if(this.henchmenResistPierce) this.diamonds += 50;
-      if(this.henchmenResistSlash) this.diamonds += 50;
-      if(this.henchmenResistBash) this.diamonds += 50;
-      if(this.henchmenResistWood) this.diamonds += 25;
-      if(this.henchmenResistSilver) this.diamonds += 25;
-      if(this.henchmenResistIron) this.diamonds += 25;
-      if(this.henchmenResistLight) this.diamonds += 25;
-      if(this.henchmenResistPoison) this.diamonds += 25;
-      if(this.henchmenResistHoly) this.diamonds += 25;
-      if(this.henchmenResistEnergy) this.diamonds += 25;
-      if(this.henchmenResistDisease) this.diamonds += 25;
-      if(this.henchmenResistFire) this.diamonds += 25;
-      if(this.henchmenResistCold) this.diamonds += 25;
-      if(this.henchmenResistLightning) this.diamonds += 25;
-      if(this.henchmenResistAcid) this.diamonds += 25;
+      if(!this.isPublic){
+        if(this.henchmenSanctuary) this.diamonds += 125;
+        if(this.henchmenHaste) this.diamonds += 100;
+        if(this.henchmenPhase) this.diamonds += 100;
+        if(this.henchmenProtection) this.diamonds += 50;
+        if(this.henchmenSneak) this.diamonds += 25;
+        if(this.henchmenFly) this.diamonds += 25;
+        if(this.henchmenInvisibility) this.diamonds += 25;
+        if(this.henchmenCriticalStrike) this.diamonds += 100;
+        if(this.henchmenCounter) this.diamonds += 100;
+        if(this.henchmenDirtKick) this.diamonds += 75;
+        if(this.henchmenDisarm) this.diamonds += 75;
+        if(this.henchmenBerserk) this.diamonds += 50;
+        if(this.henchmenBash) this.diamonds += 25;
+        if(this.henchmenTrip) this.diamonds += 10;
+        if(this.henchmenResistMonk) this.diamonds += 100;
+        if(this.henchmenResistMagic) this.diamonds += 100;
+        if(this.henchmenResistPierce) this.diamonds += 50;
+        if(this.henchmenResistSlash) this.diamonds += 50;
+        if(this.henchmenResistBash) this.diamonds += 50;
+        if(this.henchmenResistWood) this.diamonds += 25;
+        if(this.henchmenResistSilver) this.diamonds += 25;
+        if(this.henchmenResistIron) this.diamonds += 25;
+        if(this.henchmenResistLight) this.diamonds += 25;
+        if(this.henchmenResistPoison) this.diamonds += 25;
+        if(this.henchmenResistHoly) this.diamonds += 25;
+        if(this.henchmenResistEnergy) this.diamonds += 25;
+        if(this.henchmenResistDisease) this.diamonds += 25;
+        if(this.henchmenResistFire) this.diamonds += 25;
+        if(this.henchmenResistCold) this.diamonds += 25;
+        if(this.henchmenResistLightning) this.diamonds += 25;
+        if(this.henchmenResistAcid) this.diamonds += 25;
+      } //end if
       this.gold = this.diamonds * 110;
       if(this.locationType==='house'&&items > 10) this.errors.push(`Total items (${items}) exceeds 10 for houses`);
       if(this.locationType==='manor'&&items > 15) this.errors.push(`Total items (${items}) exceeds 15 for manors`);
