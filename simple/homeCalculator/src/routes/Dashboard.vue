@@ -109,7 +109,11 @@ export default {
       if(this.locationType==='house'){
         this.diamonds += (this.healingRate - 100)/10*125;
       }else{
-        this.diamonds += (this.healingRate - 150)/10*125;
+        if(this.healingRate<150){
+          this.errors.push('Default healing rate for manor is 150');
+        }else{
+          this.diamonds += (this.healingRate - 150)/10*125;
+        } //end if
         this.doorLock = 0;
         this.doorType = 0;
         this.lockLevel = 50;
