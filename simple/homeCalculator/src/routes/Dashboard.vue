@@ -48,44 +48,44 @@ section.section(style='padding-top: 0')
         .columns.is-desktop
           .column
             .title General Upgrades
-            b-checkbox.mb.mr(v-model='henchmenSanctuary',@input='updateCost') Sanctuary
-            b-checkbox.mb.mr(v-model='henchmenHaste',@input='updateCost') Haste
-            b-checkbox.mb.mr(v-model='henchmenPhase',@input='updateCost') Phase
-            b-checkbox.mb.mr(v-model='henchmenProtection',@input='updateCost') Protection (either evil or good)
-            b-checkbox.mb.mr(v-model='henchmenSneak',@input='updateCost') Sneak
-            b-checkbox.mb.mr(v-model='henchmenFly',@input='updateCost') Fly
-            b-checkbox.mb(v-model='henchmenInvisibility',@input='updateCost') Invisibility
+            b-checkbox.mb.mr(v-model='sanctuary',@input='updateCost') Sanctuary
+            b-checkbox.mb.mr(v-model='haste',@input='updateCost') Haste
+            b-checkbox.mb.mr(v-model='phase',@input='updateCost') Phase
+            b-checkbox.mb.mr(v-model='protection',@input='updateCost') Protection (either evil or good)
+            b-checkbox.mb.mr(v-model='sneak',@input='updateCost') Sneak
+            b-checkbox.mb.mr(v-model='fly',@input='updateCost') Fly
+            b-checkbox.mb(v-model='invisibility',@input='updateCost') Invisibility
           .column
             .title Offensive Abilities
-            b-checkbox.mb.mr(v-model='henchmenCriticalStrike',@input='updateCost') Critical Strike
-            b-checkbox.mb.mr(v-model='henchmenCounter',@input='updateCost') Counter
-            b-checkbox.mb.mr(v-model='henchmenDirtKick',@input='updateCost') Dirt Kick
-            b-checkbox.mb.mr(v-model='henchmenDisarm',@input='updateCost') Disarm
-            b-checkbox.mb.mr(v-model='henchmenBerserk',@input='updateCost') Berserk
-            b-checkbox.mb.mr(v-model='henchmenBash',@input='updateCost') Bash
-            b-checkbox.mb(v-model='henchmenTrip',@input='updateCost') Trip
+            b-checkbox.mb.mr(v-model='criticalStrike',@input='updateCost') Critical Strike
+            b-checkbox.mb.mr(v-model='counter',@input='updateCost') Counter
+            b-checkbox.mb.mr(v-model='dirtKick',@input='updateCost') Dirt Kick
+            b-checkbox.mb.mr(v-model='disarm',@input='updateCost') Disarm
+            b-checkbox.mb.mr(v-model='berserk',@input='updateCost') Berserk
+            b-checkbox.mb.mr(v-model='bash',@input='updateCost') Bash
+            b-checkbox.mb(v-model='trip',@input='updateCost') Trip
         .columns.is-desktop
           .column
             .title Major Resistances
-            b-checkbox.mb.mr(v-model='henchmenResistMonk',@input='updateCost') Monk
-            b-checkbox.mb.mr(v-model='henchmenResistMagic',@input='updateCost') Magic
-            b-checkbox.mb.mr(v-model='henchmenResistPierce',@input='updateCost') Pierce
-            b-checkbox.mb.mr(v-model='henchmenResistSlash',@input='updateCost') Slash
-            b-checkbox.mb.mr(v-model='henchmenResistBash',@input='updateCost') Bash
+            b-checkbox.mb.mr(v-model='resistMonk',@input='updateCost') Monk
+            b-checkbox.mb.mr(v-model='resistMagic',@input='updateCost') Magic
+            b-checkbox.mb.mr(v-model='resistPierce',@input='updateCost') Pierce
+            b-checkbox.mb.mr(v-model='resistSlash',@input='updateCost') Slash
+            b-checkbox.mb.mr(v-model='resistBash',@input='updateCost') Bash
           .column
             .title Minor Resistances
-            b-checkbox.mb.mr(v-model='henchmenResistWood',@input='updateCost') Wood
-            b-checkbox.mb.mr(v-model='henchmenResistSilver',@input='updateCost') Silver
-            b-checkbox.mb.mr(v-model='henchmenResistIron',@input='updateCost') Iron
-            b-checkbox.mb.mr(v-model='henchmenResistLight',@input='updateCost') Light
-            b-checkbox.mb.mr(v-model='henchmenResistPoison',@input='updateCost') Poison
-            b-checkbox.mb.mr(v-model='henchmenResistHoly',@input='updateCost') Holy
-            b-checkbox.mb.mr(v-model='henchmenResistEnergy',@input='updateCost') Energy
-            b-checkbox.mb.mr(v-model='henchmenResistDisease',@input='updateCost') Disease
-            b-checkbox.mb.mr(v-model='henchmenResistFire',@input='updateCost') Fire
-            b-checkbox.mb.mr(v-model='henchmenResistCold',@input='updateCost') Cold
-            b-checkbox.mb.mr(v-model='henchmenResistLightning',@input='updateCost') Lightning
-            b-checkbox.mb(v-model='henchmenResistAcid',@input='updateCost') Acid
+            b-checkbox.mb.mr(v-model='resistWood',@input='updateCost') Wood
+            b-checkbox.mb.mr(v-model='resistSilver',@input='updateCost') Silver
+            b-checkbox.mb.mr(v-model='resistIron',@input='updateCost') Iron
+            b-checkbox.mb.mr(v-model='resistLight',@input='updateCost') Light
+            b-checkbox.mb.mr(v-model='resistPoison',@input='updateCost') Poison
+            b-checkbox.mb.mr(v-model='resistHoly',@input='updateCost') Holy
+            b-checkbox.mb.mr(v-model='resistEnergy',@input='updateCost') Energy
+            b-checkbox.mb.mr(v-model='resistDisease',@input='updateCost') Disease
+            b-checkbox.mb.mr(v-model='resistFire',@input='updateCost') Fire
+            b-checkbox.mb.mr(v-model='resistCold',@input='updateCost') Cold
+            b-checkbox.mb.mr(v-model='resistLightning',@input='updateCost') Lightning
+            b-checkbox.mb(v-model='resistAcid',@input='updateCost') Acid
     .columns.is-desktop
       .column
         .card.mb
@@ -131,6 +131,56 @@ export default {
   computed: {
     ...mapState('user',['name'])
   },
+  created(){
+    const {query} = this.$router.currentRoute;
+
+    this.locationType = query.locationType;
+    this.healingRate = +query.healingRate;
+    this.hasPortal = query.hasPortal==='true';
+    this.isPublic = query.isPublic==='true';
+    this.doorLock = +query.doorLock;
+    this.doorType = +query.doorType;
+    this.lockLevel = +query.lockLevel;
+    this.furnitureItems = +query.furnitureItems;
+    this.fireplaceItems = +query.fireplaceItems;
+    this.fountainItems = +query.fountainItems;
+    this.troughItems = +query.troughItems;
+    this.crucibleItems = +query.crucibleItems;
+    this.anvilItems = +query.anvilItems;
+    this.workbenchItems = +query.workbenchItems;
+    this.forgeItems = +query.forgeItems;
+    this.sanctuary = query.sanctuary==='true';
+    this.haste = query.haste==='true';
+    this.phase = query.phase==='true';
+    this.protection = query.protection==='true';
+    this.sneak = query.sneak==='true';
+    this.fly = query.fly==='true';
+    this.invisibility = query.invisibility==='true';
+    this.criticalStrike = query.criticalStrike==='true';
+    this.counter = query.counter==='true';
+    this.dirtKick = query.dirtKick==='true';
+    this.disarm = query.disarm==='true';
+    this.berserk = query.berserk==='true';
+    this.bash = query.bash==='true';
+    this.trip = query.trip==='true';
+    this.resistMonk = query.resistMonk==='true';
+    this.resistMagic = query.resistMagic==='true';
+    this.resistPierce = query.resistPierce==='true';
+    this.resistSlash = query.resistSlash==='true';
+    this.resistBash = query.resistBash==='true';
+    this.resistWood = query.resistWood==='true';
+    this.resistSilver = query.resistSilver==='true';
+    this.resistIron = query.resistIron==='true';
+    this.resistLight = query.resistLight==='true';
+    this.resistPoison = query.resistPoison==='true';
+    this.resistHoly = query.resistHoly==='true';
+    this.resistEnergy = query.resistEnergy==='true';
+    this.resistDisease = query.resistDisease==='true';
+    this.resistFire = query.resistFire==='true';
+    this.resistCold = query.resistCold==='true';
+    this.resistLightning = query.resistLightning==='true';
+    this.resistAcid = query.resistAcid==='true';
+  },
   data(){
     return {
       locationType: 'manor',
@@ -151,73 +201,73 @@ export default {
       workbenchItems: 0,
       forgeItems: 0,
       henchmenAll: false,
-      henchmenSanctuary: false,
-      henchmenHaste: false,
-      henchmenPhase: false,
-      henchmenProtection: false,
-      henchmenSneak: false,
-      henchmenFly: false,
-      henchmenInvisibility: false,
-      henchmenCriticalStrike: false,
-      henchmenCounter: false,
-      henchmenDirtKick: false,
-      henchmenDisarm: false,
-      henchmenBerserk: false,
-      henchmenBash: false,
-      henchmenTrip: false,
-      henchmenResistMonk: false,
-      henchmenResistMagic: false,
-      henchmenResistPierce: false,
-      henchmenResistSlash: false,
-      henchmenResistBash: false,
-      henchmenResistWood: false,
-      henchmenResistSilver: false,
-      henchmenResistIron: false,
-      henchmenResistLight: false,
-      henchmenResistPoison: false,
-      henchmenResistHoly: false,
-      henchmenResistEnergy: false,
-      henchmenResistDisease: false,
-      henchmenResistFire: false,
-      henchmenResistCold: false,
-      henchmenResistLightning: false,
-      henchmenResistAcid: false,
+      sanctuary: false,
+      haste: false,
+      phase: false,
+      protection: false,
+      sneak: false,
+      fly: false,
+      invisibility: false,
+      criticalStrike: false,
+      counter: false,
+      dirtKick: false,
+      disarm: false,
+      berserk: false,
+      bash: false,
+      trip: false,
+      resistMonk: false,
+      resistMagic: false,
+      resistPierce: false,
+      resistSlash: false,
+      resistBash: false,
+      resistWood: false,
+      resistSilver: false,
+      resistIron: false,
+      resistLight: false,
+      resistPoison: false,
+      resistHoly: false,
+      resistEnergy: false,
+      resistDisease: false,
+      resistFire: false,
+      resistCold: false,
+      resistLightning: false,
+      resistAcid: false,
       errors: []
     };
   },
   methods: {
     acquireHenchmenStatus(){
-      this.henchmenSanctuary = this.henchmenAll;
-      this.henchmenHaste = this.henchmenAll;
-      this.henchmenPhase = this.henchmenAll;
-      this.henchmenProtection = this.henchmenAll;
-      this.henchmenSneak = this.henchmenAll;
-      this.henchmenFly = this.henchmenAll;
-      this.henchmenInvisibility = this.henchmenAll;
-      this.henchmenCriticalStrike = this.henchmenAll;
-      this.henchmenCounter = this.henchmenAll;
-      this.henchmenDirtKick = this.henchmenAll;
-      this.henchmenDisarm = this.henchmenAll;
-      this.henchmenBerserk = this.henchmenAll;
-      this.henchmenBash = this.henchmenAll;
-      this.henchmenTrip = this.henchmenAll;
-      this.henchmenResistMonk = this.henchmenAll;
-      this.henchmenResistMagic = this.henchmenAll;
-      this.henchmenResistPierce = this.henchmenAll;
-      this.henchmenResistSlash = this.henchmenAll;
-      this.henchmenResistBash = this.henchmenAll;
-      this.henchmenResistWood = this.henchmenAll;
-      this.henchmenResistSilver = this.henchmenAll;
-      this.henchmenResistIron = this.henchmenAll;
-      this.henchmenResistLight = this.henchmenAll;
-      this.henchmenResistPoison = this.henchmenAll;
-      this.henchmenResistHoly = this.henchmenAll;
-      this.henchmenResistEnergy = this.henchmenAll;
-      this.henchmenResistDisease = this.henchmenAll;
-      this.henchmenResistFire = this.henchmenAll;
-      this.henchmenResistCold = this.henchmenAll;
-      this.henchmenResistLightning = this.henchmenAll;
-      this.henchmenResistAcid = this.henchmenAll;
+      this.sanctuary = this.henchmenAll;
+      this.haste = this.henchmenAll;
+      this.phase = this.henchmenAll;
+      this.protection = this.henchmenAll;
+      this.sneak = this.henchmenAll;
+      this.fly = this.henchmenAll;
+      this.invisibility = this.henchmenAll;
+      this.criticalStrike = this.henchmenAll;
+      this.counter = this.henchmenAll;
+      this.dirtKick = this.henchmenAll;
+      this.disarm = this.henchmenAll;
+      this.berserk = this.henchmenAll;
+      this.bash = this.henchmenAll;
+      this.trip = this.henchmenAll;
+      this.resistMonk = this.henchmenAll;
+      this.resistMagic = this.henchmenAll;
+      this.resistPierce = this.henchmenAll;
+      this.resistSlash = this.henchmenAll;
+      this.resistBash = this.henchmenAll;
+      this.resistWood = this.henchmenAll;
+      this.resistSilver = this.henchmenAll;
+      this.resistIron = this.henchmenAll;
+      this.resistLight = this.henchmenAll;
+      this.resistPoison = this.henchmenAll;
+      this.resistHoly = this.henchmenAll;
+      this.resistEnergy = this.henchmenAll;
+      this.resistDisease = this.henchmenAll;
+      this.resistFire = this.henchmenAll;
+      this.resistCold = this.henchmenAll;
+      this.resistLightning = this.henchmenAll;
+      this.resistAcid = this.henchmenAll;
     },
     upgradeHenchmenAll(){
       this.henchmenAll = !!this.henchmenAll;
@@ -267,41 +317,89 @@ export default {
       this.diamonds += this.forgeItems * 500;
       items += this.forgeItems;
       if(!this.isPublic){
-        if(this.henchmenSanctuary) this.diamonds += 125;
-        if(this.henchmenHaste) this.diamonds += 100;
-        if(this.henchmenPhase) this.diamonds += 100;
-        if(this.henchmenProtection) this.diamonds += 50;
-        if(this.henchmenSneak) this.diamonds += 25;
-        if(this.henchmenFly) this.diamonds += 25;
-        if(this.henchmenInvisibility) this.diamonds += 25;
-        if(this.henchmenCriticalStrike) this.diamonds += 100;
-        if(this.henchmenCounter) this.diamonds += 100;
-        if(this.henchmenDirtKick) this.diamonds += 75;
-        if(this.henchmenDisarm) this.diamonds += 75;
-        if(this.henchmenBerserk) this.diamonds += 50;
-        if(this.henchmenBash) this.diamonds += 25;
-        if(this.henchmenTrip) this.diamonds += 10;
-        if(this.henchmenResistMonk) this.diamonds += 100;
-        if(this.henchmenResistMagic) this.diamonds += 100;
-        if(this.henchmenResistPierce) this.diamonds += 50;
-        if(this.henchmenResistSlash) this.diamonds += 50;
-        if(this.henchmenResistBash) this.diamonds += 50;
-        if(this.henchmenResistWood) this.diamonds += 25;
-        if(this.henchmenResistSilver) this.diamonds += 25;
-        if(this.henchmenResistIron) this.diamonds += 25;
-        if(this.henchmenResistLight) this.diamonds += 25;
-        if(this.henchmenResistPoison) this.diamonds += 25;
-        if(this.henchmenResistHoly) this.diamonds += 25;
-        if(this.henchmenResistEnergy) this.diamonds += 25;
-        if(this.henchmenResistDisease) this.diamonds += 25;
-        if(this.henchmenResistFire) this.diamonds += 25;
-        if(this.henchmenResistCold) this.diamonds += 25;
-        if(this.henchmenResistLightning) this.diamonds += 25;
-        if(this.henchmenResistAcid) this.diamonds += 25;
+        if(this.sanctuary) this.diamonds += 125;
+        if(this.haste) this.diamonds += 100;
+        if(this.phase) this.diamonds += 100;
+        if(this.protection) this.diamonds += 50;
+        if(this.sneak) this.diamonds += 25;
+        if(this.fly) this.diamonds += 25;
+        if(this.invisibility) this.diamonds += 25;
+        if(this.criticalStrike) this.diamonds += 100;
+        if(this.counter) this.diamonds += 100;
+        if(this.dirtKick) this.diamonds += 75;
+        if(this.disarm) this.diamonds += 75;
+        if(this.berserk) this.diamonds += 50;
+        if(this.bash) this.diamonds += 25;
+        if(this.trip) this.diamonds += 10;
+        if(this.resistMonk) this.diamonds += 100;
+        if(this.resistMagic) this.diamonds += 100;
+        if(this.resistPierce) this.diamonds += 50;
+        if(this.resistSlash) this.diamonds += 50;
+        if(this.resistBash) this.diamonds += 50;
+        if(this.resistWood) this.diamonds += 25;
+        if(this.resistSilver) this.diamonds += 25;
+        if(this.resistIron) this.diamonds += 25;
+        if(this.resistLight) this.diamonds += 25;
+        if(this.resistPoison) this.diamonds += 25;
+        if(this.resistHoly) this.diamonds += 25;
+        if(this.resistEnergy) this.diamonds += 25;
+        if(this.resistDisease) this.diamonds += 25;
+        if(this.resistFire) this.diamonds += 25;
+        if(this.resistCold) this.diamonds += 25;
+        if(this.resistLightning) this.diamonds += 25;
+        if(this.resistAcid) this.diamonds += 25;
       } //end if
       this.gold = this.diamonds * 110;
       if(this.locationType==='house'&&items > 10) this.errors.push(`Total items (${items}) exceeds 10 for houses`);
       if(this.locationType==='manor'&&items > 15) this.errors.push(`Total items (${items}) exceeds 15 for manors`);
+      this.$router.push({query: {
+        locationType: this.locationType,
+        healingRate: this.healingRate,
+        hasPortal: this.hasPortal,
+        isPublic: this.isPublic,
+        doorLock: this.doorLock,
+        doorType: this.doorType,
+        lockLevel: this.lockLevel,
+        furnitureItems: this.furnitureItems,
+        fireplaceItems: this.fireplaceItems,
+        fountainItems: this.fountainItems,
+        troughItems: this.troughItems,
+        crucibleItems: this.crucibleItems,
+        anvilItems: this.anvilItems,
+        workbenchItems: this.workbenchItems,
+        forgeItems: this.forgeItems,
+        sanctuary: this.sanctuary,
+        haste: this.haste,
+        phase: this.phase,
+        protection: this.protection,
+        sneak: this.sneak,
+        fly: this.fly,
+        invisibility: this.invisibility,
+        criticalStrike: this.criticalStrike,
+        counter: this.counter,
+        dirtKick: this.dirtKick,
+        disarm: this.disarm,
+        berserk: this.berserk,
+        bash: this.bash,
+        trip: this.trip,
+        resistMonk: this.resistMonk,
+        resistMagic: this.resistMagic,
+        resistPierce: this.resistPierce,
+        resistSlash: this.resistSlash,
+        resistBash: this.resistBash,
+        resistWood: this.resistWood,
+        resistSilver: this.resistSilver,
+        resistIron: this.resistIron,
+        resistLight: this.resistLight,
+        resistPoison: this.resistPoison,
+        resistHoly: this.resistHoly,
+        resistEnergy: this.resistEnergy,
+        resistDisease: this.resistDisease,
+        resistFire: this.resistFire,
+        resistCold: this.resistCold,
+        resistLightning: this.resistLightning,
+        resistAcid: this.resistAcid
+      }});
     }
   }
 };
