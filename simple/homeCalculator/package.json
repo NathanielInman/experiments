@@ -15,8 +15,11 @@
     "url": "https://github.com/NathanielInman/homeCalculator/issues"
   },
   "scripts": {
+    "deploy": "./deploy.sh",
     "prestart": "rm -rf ./parcel",
-    "start": "NODE_ENV=development ./node_modules/parcel/bin/cli.js ./src/index.pug -d dist --cache-dir .parcel"
+    "build:development": "NODE_ENV=development ./node_modules/parcel/bin/cli.js ./src/index.pug -d dist --cache-dir .parcel",
+    "build:production": "NODE_ENV=production ./node_modules/parcel/bin/cli.js build ./src/index.pug -d dist --no-source-maps",
+    "start": "npm run build:development"
   },
   "devDependencies": {
     "@vue/component-compiler-utils": "^3.1.2",

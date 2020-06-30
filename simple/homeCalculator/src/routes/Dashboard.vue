@@ -23,20 +23,20 @@ section.section(style='padding-top: 0')
                 @input='updateCost')
       .column
         .card
-          .card-header: .card-header-title Door
+          .card-header: .card-header-title Door {{locationType=='manor'?'(house only)':''}}
           .card-content
-            b-select.mb(v-model='doorType',@input='updateCost')
+            b-select.mb(v-model='doorType',@input='updateCost',:disabled="locationType=='manor'")
               option(value='0') wood door
               option(value='50') stone door
               option(value='100') metal door
-            b-select.mb(v-model='doorLock',@input='updateCost')
+            b-select.mb(v-model='doorLock',@input='updateCost',:disabled="locationType=='manor'")
               option(value='0') easy difficulty lock
               option(value='200') regular difficulty lock
               option(value='400') hard difficulty lock
               option(value='600') implausible difficulty lock
               option(value='800') improbable difficulty lock
               option(value='1000') impossible difficulty lock
-            b-field.mb(label='Lock Level')
+            b-field.mb(label='Lock Level',:disabled="locationType=='manor'")
               b-slider(v-model='lockLevel',:min='50',:max='100',:step='1'
                 @input='updateCost')
     .columns.is-desktop
@@ -53,7 +53,7 @@ section.section(style='padding-top: 0')
       .column
         b-field.mb(label='Tradesguild Troughs')
           b-numberinput(v-model='troughItems',:min='0',:max='10',
-            @input='udpateCost')
+            @input='updateCost')
         b-field.mb(label='Tradesguild Crucibles')
           b-numberinput(v-model='crucibleItems',:min='0',:max='10',
             @input='updateCost')
@@ -110,12 +110,15 @@ export default {
         this.diamonds += (this.healingRate - 100)/10*125;
       }else{
         this.diamonds += (this.healingRate - 150)/10*125;
+        this.doorLock = 0;
+        this.doorType = 0;
+        this.lockLevel = 50;
       } //end if
       if(this.healingRate>300&&this.isPublic) this.errors.push('Public location may not have healing rate above 300%');
       if(this.healingRate>300&&this.locationType==='house') this.errors.push('House location may not have healing rate above 300%');
       if(this.hasPortal) this.diamonds += 400;
-      this.diamonds += this.doorLock;
-      this.diamonds += this.doorType;
+      this.diamonds += +this.doorLock;
+      this.diamonds += +this.doorType;
       this.diamonds += (this.lockLevel - 50) * 10;
       this.diamonds += this.furnitureItems * 25;
       items += this.furnitureItems;
