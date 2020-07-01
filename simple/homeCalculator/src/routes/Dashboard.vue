@@ -139,21 +139,21 @@ export default {
   created(){
     const {query} = this.$router.currentRoute;
 
-    this.locationType = query.locationType;
+    this.locationType = query.locationType||'manor';
     this.healingRate = +query.healingRate;
     this.hasPortal = query.hasPortal==='true';
     this.isPublic = query.isPublic==='true';
     this.doorLock = +query.doorLock;
     this.doorType = +query.doorType;
     this.lockLevel = +query.lockLevel;
-    this.furnitureItems = +query.furnitureItems;
-    this.fireplaceItems = +query.fireplaceItems;
-    this.fountainItems = +query.fountainItems;
-    this.troughItems = +query.troughItems;
-    this.crucibleItems = +query.crucibleItems;
-    this.anvilItems = +query.anvilItems;
-    this.workbenchItems = +query.workbenchItems;
-    this.forgeItems = +query.forgeItems;
+    this.furnitureItems = +query.furnitureItems||0;
+    this.fireplaceItems = +query.fireplaceItems||0;
+    this.fountainItems = +query.fountainItems||0;
+    this.troughItems = +query.troughItems||0;
+    this.crucibleItems = +query.crucibleItems||0;
+    this.anvilItems = +query.anvilItems||0;
+    this.workbenchItems = +query.workbenchItems||0;
+    this.forgeItems = +query.forgeItems||0;
     this.sanctuary = query.sanctuary==='true';
     this.haste = query.haste==='true';
     this.phase = query.phase==='true';
@@ -185,6 +185,7 @@ export default {
     this.resistCold = query.resistCold==='true';
     this.resistLightning = query.resistLightning==='true';
     this.resistAcid = query.resistAcid==='true';
+    console.log('this',this);
   },
   data(){
     return {
