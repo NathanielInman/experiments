@@ -1,6 +1,6 @@
 {
   "name": "homeCalculator",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "home calculator for adventures unlimited",
   "main": "config.babel.js",
   "author": {
