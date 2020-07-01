@@ -2,8 +2,13 @@
 section.section(style='padding-top: 0')
   .hero.is-primary.mb-2.mx-r
     .hero-body: .container
-      .title Diamonds: {{diamonds}}
-      .subtitle Gold: {{gold}}
+      .columns
+        .column
+          .title Diamonds: {{diamonds}}
+          .subtitle Gold: {{gold}}
+        .column.has-text-right
+          b-button(icon-left='content-copy',type='is-primary',inverted,
+            @click='copyURL') Share URL
   .hero.is-danger.mb-2.mx-r(v-if='errors.length')
     .hero-body: .container
       .subtitle(v-for='error in errors') {{error}}
@@ -236,6 +241,20 @@ export default {
     };
   },
   methods: {
+    copyURL(){
+      const inputEl = document.createElement('input');
+
+      inputEl.style.position = 'absolute';
+      inputEl.style.left = '-8000px';
+      document.body.appendChild(inputEl);
+      inputEl.value = location.href;
+      inputEl.select();
+      inputEl.select();
+      inputEl.setSelectionRange(0,99999);
+      document.execCommand('copy');
+      this.$buefy.toast.open('Copied URL to Clipboard!');
+      inputEl.remove();
+    },
     acquireHenchmenStatus(){
       this.sanctuary = this.henchmenAll;
       this.haste = this.henchmenAll;
