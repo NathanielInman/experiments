@@ -27,16 +27,13 @@ export class Map{
       } //end for
     } //end for
   }
-  getSector(x,y){ return this.sectors[y][x]; }
-  type(x,y){ return this.getSector(x,y).type; }
-  loc(x,y){ return this.getSector(x,y).loc; }
-  setLoc(x,y,loc){ return this.getSector(x,y).loc = loc; }
-  isEmpty(x,y){ return this.getSector(x,y).isEmpty(); }
-  setEmpty(x,y){ return this.getSector(x,y).setEmpty(); }
-  isFloor(x,y){ return this.getSector(x,y).isFloor(); }
-  setFloor(x,y){ return this.getSector(x,y).setFloor(); }
-  isWall(x,y){ return this.getSector(x,y).isWall(); }
-  setWall(x,y){ return this.getSector(x,y).setWall(); }
-  isWindow(x,y){ return this.getSector(x,y).isWindow(); }
-  setWindow(x,y){ return this.getSector(x,y).setWIndow(); }
+  getSector({x,y}){ return this.sectors[y][x]; }
+  isEmpty({x,y}){ return this.getSector({x,y}).isEmpty(); }
+  setEmpty({x,y}){ return this.getSector({x,y}).setEmpty(); }
+  isFloor({x,y}){ return this.getSector({x,y}).isFloor(); }
+  setFloor({x,y}){ return this.getSector({x,y}).setFloor(); }
+  isWall({x,y}){ return this.getSector({x,y}).isWall(); }
+  setWall({x,y}){ return this.getSector({x,y}).setWall(); }
+  isWindow({x,y}){ return this.getSector({x,y}).isWindow(); }
+  setWindow({x,y}){ return this.getSector({x,y}).setWIndow(); }
 }

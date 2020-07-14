@@ -70,6 +70,10 @@ if(!easel.activated){
           easel.ctx.fillStyle='#fff';
           easel.ctx.fillText('@',x*rw-0.4,y*rh-0.4);
         } //end if
+        if(map.player.visible.includes(`${x},${y}`)){
+          easel.ctx.fillStyle=`rgba(0,0,0,0.25)`;
+          easel.ctx.fillRect(x*rw-0.4,y*rh-0.4,rw+0.8,rh+.8);
+        } //end if
       });
     });
   }; //end function()

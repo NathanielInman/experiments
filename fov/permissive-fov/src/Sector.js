@@ -1,7 +1,6 @@
 export class Sector{
   constructor(){
     this.type = 0;
-    this.loc = 0;
   }
   isEmpty(){ return this.type === 0; }
   setEmpty(){ return this.type = 0; }
