@@ -10,4 +10,6 @@ export class Sector{
   setWall(){ return this.type = 2; }
   isWindow(){ return this.type === 3; }
   setWindow(){ return this.type = 3; }
+  isWalkable(){ return this.isFloor()||this.isEmpty(); }
+  isDoorClosed(){ return false; }
 }

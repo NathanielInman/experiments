@@ -22,22 +22,22 @@ if(!easel.activated){
   const template = [
           '####################',
           '#                  #',
-          '#  #  #%%%%%%#  #  #',
-          '#  %            %  #',
-          '#  %            %  #',
-          '#  %            %  #',
-          '#  %  #         %  #',
-          '#  %  %         %  #',
-          '#  %  %         %  #',
-          '#  %  %  @      %  #',
-          '#  %  %         %  #',
-          '#  %  %         %  #',
-          '#  %  #%%#      %  #',
-          '#  %            %  #',
-          '#  %            %  #',
-          '#  %            %  #',
-          '#  #  #%%%%%%#  #  #',
-          '#                  #',
+          '#     #%%%%%%#  #  #',
+          '#               %  #',
+          '#               %  #',
+          '#               %  #',
+          '#               %  #',
+          '#               %  #',
+          '#               %  #',
+          '#               %  #',
+          '#               %  #',
+          '#               %  #',
+          '#               %  #',
+          '#               %  #',
+          '#               %  #',
+          '#               %  #',
+          '##############  #  #',
+          '#@                 #',
           '####################'
         ],
         map = new Map(template);
@@ -70,8 +70,8 @@ if(!easel.activated){
           easel.ctx.fillStyle='#fff';
           easel.ctx.fillText('@',x*rw-0.4,y*rh-0.4);
         } //end if
-        if(map.player.visible.includes(`${x},${y}`)){
-          easel.ctx.fillStyle=`rgba(0,0,0,0.25)`;
+        if(map.player.visible.find(s=>s.x===x&&s.y===y)){
+          easel.ctx.fillStyle=`rgba(255,0,0,0.45)`;
           easel.ctx.fillRect(x*rw-0.4,y*rh-0.4,rw+0.8,rh+.8);
         } //end if
       });
