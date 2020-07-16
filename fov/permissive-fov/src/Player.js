@@ -3,17 +3,34 @@ export class Player{
     this.x = x;
     this.y = y;
     this.map = map;
-    this.facing = 'north';
-    this.visible = [];
+    this.facing = 'east';
+    this.visible = {};
     this.sight = 8;
   }
   computeFOV(){
     this.map.computeDirectionalFOV({
       x:this.x,y:this.y,radius:this.sight,direction:this.facing,
       setVisible:({x,y})=>{
-        this.visible.push({x,y});
+        this.visible[`${x},${y}`]=true;
       }
     });
+    Object.keys(this.visible)
+      .map(key=> key.split(',').map(s=>+s))
+      .forEach(([x,y])=>{
+        console.log(x,y);
+        if(this.map.isFloor({x,y})&&!(x===this.x&&y===this.y)){
+            this.map.getNeighbors({
+            x,y,orthogonal:false,
+            test:(sector)=>{
+              console.log('test',sector);
+              return !sector.isFloor()&&!this.visible[`${sector.x},${sector.y}`];
+            }
+          }).forEach(sector=>{
+            console.log('found',sector.x,sector.y);
+            this.visible[`${sector.x},${sector.y}`]=true;
+          });
+        } //end if
+      });
   }
   initialize(easel){
     document.body.addEventListener('keydown',e=>{
@@ -58,8 +75,8 @@ export class Player{
         } //end if
         this.facing = 'northwest';
       } //end if
-      this.visible.length = 0;
-      this.computeFOV({direction:this.facing});
+      this.visible = {};
+      this.computeFOV();
       easel.redraw();
     });
     this.computeFOV();

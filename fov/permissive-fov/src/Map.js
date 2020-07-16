@@ -13,7 +13,7 @@ export class Map{
     for(let y=0;y<this.height;y++){
       this.sectors[y]=[];
       for(let x=0;x<this.width;x++){
-        this.sectors[y][x]=new Sector();
+        this.sectors[y][x]=new Sector({x,y});
         if(this.template[y][x]==='#'){
           this.sectors[y][x].setWall();
         }else if(this.template[y][x]==='%'){
@@ -114,7 +114,7 @@ export class Map{
   computeFOV({
     x=null,y=null,
     radius=8,
-    accuracy=0.95, //higher accuracy required for higher radius
+    accuracy=0.99, //higher accuracy required for higher radius
     isTransparent=({x,y})=> this.isWalkable({x,y})||this.isEmpty({x,y}),
     setTransparent=({x,y,state})=> state.visible.push({x,y}),
     isTranslucent=({x,y})=> this.isWindow({x,y}),
@@ -151,7 +151,7 @@ export class Map{
     fieldOfViewDegrees=180,
     fieldOfViewRadians=fieldOfViewDegrees*Math.PI/180,
     radius=8,
-    accuracy=0.999, //higher accuracy required for higher radius
+    accuracy=0.97, //higher accuracy required for higher radius
     isTransparent=({x,y})=> this.isWalkable({x,y})||this.isEmpty({x,y}),
     setTransparent=({x,y,state})=> state.visible.push({x,y}),
     isTranslucent=({x,y})=> this.isWindow({x,y}),
@@ -203,5 +203,35 @@ export class Map{
         onSuccess: ({x,y,state})=> state.visible.push({x,y})
       });
     } //end for
+  }
+  // return the neighbors of a given sector that pass the `test` function.
+  // Can specify whether or not testing of orthogonal, cardinal or the
+  // originating sector. `size` will expand to not just nearby sectors
+  getNeighbors({
+    sector,x=sector.x,y=sector.y,size=1,
+    orthogonal=true,cardinal=true,self=false,
+    test=()=>true
+  }={}){
+    const list=[],
+          listAdd = loc=>{
+            if(this.isInbounds(loc)&&test(this.getSector(loc))){
+              list.push(this.getSector(loc));
+            } //end if
+          };
+
+    for(let cy=y-size;cy<=y+size;cy++){
+      for(let cx=x-size;cx<=x+size;cx++){
+        if(cx===x&&cy===y&&self){
+          listAdd({x: cx, y: cy});
+        }else if(cx===x&&cy===y&&!self){
+          continue;
+        }else if(cx===x&&cardinal||cy===y&&cardinal){ //cardinal
+          listAdd({x: cx, y: cy});
+        }else if(orthogonal){ //orthogonal
+          listAdd({x: cx, y: cy});
+        } //end if
+      } //end for
+    } //end for
+    return list;
   }
 }
