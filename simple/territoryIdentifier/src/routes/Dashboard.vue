@@ -159,7 +159,7 @@ export default {
     updateAreas(e){
       const text = e
         .split('\n')
-        .filter(line=>!line.includes('['))
+        .filter(line=>line.includes('['))
         .map(line=> line.replace(/\[.*]\s/g,''));
 
       this.areaOutput = areas.filter(area=>{
