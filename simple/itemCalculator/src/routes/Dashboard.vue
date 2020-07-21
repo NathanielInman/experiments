@@ -34,14 +34,12 @@ export default {
   data(){
     return {
       output: [],
-      items: []
+      items
     };
   },
   created(){
     const {query} = this.$router.currentRoute;
 
-    this.items = items.sort((a,b)=>a.score<b.score?1:-1)
-      .filter(i=>i.score>0||['pill','potion','scroll'].includes(i.itemType));
     this.load(query ? query.vnum : null);
   },
   methods: {
@@ -73,8 +71,8 @@ export default {
         } //end if
         this.drawString(`      {cValue : {Y${Math.floor(item.cost/100)} gold{c, {x${item.cost%100} silver`);
         this.drawString(' ');
-        str = `    {cCrafted : {CUnknown`;
-        this.drawString(`${str}${`{cCondition  : {x${'unknown'}`.padStart(57-str.length)}`);
+        str = `    {cCrafted : {C${item.oldowner.replace(' ','').length?item.oldowner:'Unknown'}`;
+        this.drawString(`${str}${`{cCondition  : {x${item.condition}`.padStart(57-str.length)}`);
         str = `     {cUnique : {C${item.totalAllowed!='unlimited'}`;
         console.log(item);
         this.drawString(`${str}${`{cQuality : {x${item.quality}`.padStart(57-str.length)}`);
@@ -94,6 +92,19 @@ export default {
           this.drawString(`{cDamage Type : {C${item.valueFlags[2].split(/\(|\)/g)[1]}`);
           str = item.valueFlags[3].split(/\(|\)/g)[1].split(',').join(' ');
           this.drawString(`      {cFlags : {C${!str.length?'none':str}`);
+        }else if(['pill','scroll','potion'].includes(item.itemType)){
+          this.drawString(' ');
+          const spell1 = item.valueFlags[1].split(/\(|\)/g)[1],
+                spell2 = item.valueFlags[2].split(/\(|\)/g)[1],
+                spell3 = item.valueFlags[3].split(/\(|\)/g)[1],
+                spell4 = item.valueFlags[4].split(/\(|\)/g)[1],
+                spells = [];
+
+          if(!spell1.includes('reserved')) spells.push(spell1);
+          if(!spell2.includes('reserved')) spells.push(spell2);
+          if(!spell3.includes('reserved')) spells.push(spell3);
+          if(!spell4.includes('reserved')) spells.push(spell4);
+          this.drawString(`{cLevel {x${item.valueFlags[0].split(/\(|\)/g)[1]} {cspells of: ${spells.join()}`);
         } //end if
         if(item.affects){
           this.drawString(' ');
