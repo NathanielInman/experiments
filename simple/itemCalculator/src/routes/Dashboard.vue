@@ -33,14 +33,16 @@ export default {
   },
   data(){
     return {
-      output: []
+      output: [],
+      items: []
     };
   },
   created(){
     const {query} = this.$router.currentRoute;
 
+    this.items = items.sort((a,b)=>a.score<b.score?1:-1)
+      .filter(i=>i.score>0||['pill','potion','scroll'].includes(i.itemType));
     this.load(query ? query.vnum : null);
-    console.log(items);
   },
   methods: {
     returnToIndex(){
@@ -49,46 +51,67 @@ export default {
       this.output.length = 0;
       if(vnum){
         this.$router.push({query: {vnum}});
-        const item = items.find(item=> item.vnum===vnum);
+        const item = this.items.find(item=> item.vnum===vnum);
 
-        this.drawString(`{D:------------------------[ {R${vnum}{D ]------------------------:`);
-        this.drawString(`{Dnames: {w${item.names.join()}`);
-        this.drawString(`{Dshort: {w${item.short}`);
-        this.drawString(`{Dlong: {w${item.long}`);
-        this.drawString(`{Ditem type: {w${item.itemType}`);
-        this.drawString(`{Dlevel: {w${item.level}`);
-        this.drawString(`{Drarity: {w${item.rarity}`);
-        this.drawString(`{Dmaterial: {w${item.material.join()}`);
-        this.drawString(`{Dsubmaterial: {w${item.submaterial.join()}`);
-        this.drawString(`{Dweight: {w${item.weight}`);
-        this.drawString(`{Dcost: {w${item.cost}`);
-        if(item.extraflags.length){
-          this.drawString(`{Dextra flags: {w${item.extraflags.join()}`);
-        }else{
-          this.drawString('{Dextra flags: {w-none-');
-        } //end if
-        this.drawString(`{Dtotal allowed: {w${item.totalAllowed}`);
-        this.drawString(`{Dtotal current: {w${item.totalCurrent}`);
+        let str;
+
+        this.drawString('{c*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*');
+        this.drawString(`       {cName : {C${item.short}`);
+        this.drawString(`     {cObject : {C${item.names.join(' ')}`);
+        this.drawString(`      {cLevel : {C${item.level}`);
+        str = `       {cType : {C${item.itemType}`;
+        this.drawString(`${str}${`{cWeight : {C${item.weight}`.padStart(57-str.length)}`);
         if(item.wearFlags.length){
-          this.drawString(`{Dwearable flags: {w${item.wearFlags.join()}`);
+          this.drawString(`       {cWear : {C${item.wearFlags.join(' ')}`);
         }else{
-          this.drawString('{Dwearable flags: {w-none-');
+          this.drawString(`       {cWear : {Cno`);
         } //end if
-        this.drawString('{Dfurniture flags: {w');
-        this.drawString(`{t{Dmax people: {w${item.furniture.maxPeople}`);
-        this.drawString(`{t{Dmax weight: {w${item.furniture.maxWeight}`);
-        this.drawString(`{t{Dheal bonus: {w${item.furniture.healBonus}`);
-        this.drawString(`{t{Dmana bonus: {w${item.furniture.manaBonus}`);
-        this.drawString(`{t{Dflags: {w${item.furniture.flags.join()}`);
+        if(item.extraflags.length){
+          this.drawString(`      {cFlags : {C${item.extraflags.join(' ')}`);
+        }else{
+          this.drawString(`      {cFlags : {Cnone`);
+        } //end if
+        this.drawString(`      {cValue : {Y${Math.floor(item.cost/100)} gold{c, {x${item.cost%100} silver`);
+        this.drawString(' ');
+        str = `    {cCrafted : {CUnknown`;
+        this.drawString(`${str}${`{cCondition  : {x${'unknown'}`.padStart(57-str.length)}`);
+        str = `     {cUnique : {C${item.totalAllowed!='unlimited'}`;
+        console.log(item);
+        this.drawString(`${str}${`{cQuality : {x${item.quality}`.padStart(57-str.length)}`);
+        str = `   {cMaterial : {x${item.material.join(' ')}`;
+        this.drawString(`${str}${`{cRarity : {x${item.rarity}`.padStart(57-str.length)}`);
+        this.drawString(`{cSubmaterial : {x${item.submaterial.join(' ')}`);
+        if(item.itemType==='armor'){
+          this.drawString(' ');
+          this.drawString(`{cArmor Class: {x${item.valueFlags[0].split(/\(|\)/g)[1]} {cpierce`);
+          this.drawString(`             {x${item.valueFlags[1].split(/\(|\)/g)[1]} {cbash`);
+          this.drawString(`             {x${item.valueFlags[2].split(/\(|\)/g)[1]} {cslash`);
+          this.drawString(`             {x${item.valueFlags[3].split(/\(|\)/g)[1]} {cvs magic`);
+        }else if(item.itemType==='weapon'){
+          this.drawString(' ');
+          this.drawString(`{cWeapon Type : {C${item.valueFlags[0].split(/\(|\)/g)[1]}`);
+          this.drawString(`     {cDamage : {C${item.valueFlags[1].split(/\(|\)/g)[1]}`);
+          this.drawString(`{cDamage Type : {C${item.valueFlags[2].split(/\(|\)/g)[1]}`);
+          str = item.valueFlags[3].split(/\(|\)/g)[1].split(',').join(' ');
+          this.drawString(`      {cFlags : {C${!str.length?'none':str}`);
+        } //end if
         if(item.affects){
-          this.drawString('{Daffects: ');
+          this.drawString(' ');
           item.affects.forEach(affect=>{
-            this.drawString(`{t{D${affect.name}: {w${affect.amount}`);
+            this.drawString(`    {cAffects : {C${affect.name}{c by {C${(affect.amount>0?'+':'-')+affect.amount}`);
           });
         } //end if
+
+        this.drawString('{c*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*');
+        /*
+        Weapon Type{C
+        Crafstmanship{x
+        Weapons Flags{C
+        */
       }else{
         this.$router.push({query:{}});
-        items.forEach(item=> this.drawItem(item));
+
+        this.items.forEach(item=> this.drawItem(item));
       } //end if
     },
     drawItem(item){
@@ -98,7 +121,7 @@ export default {
         this.output.push(item.stringified);
         return;
       };
-      item.stringified = this.drawString(item.short);
+      item.stringified = this.drawString(`${item.short} {G({g${item.score}{G)`);
       item.stringified.item = item; //recursive for function pointer
     },
     drawString(string){
@@ -158,6 +181,8 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
+span
+  white-space pre
 .cursor
   cursor pointer
 .bold
