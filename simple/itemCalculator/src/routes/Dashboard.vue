@@ -9,6 +9,14 @@ section.section(style='padding-top: 0')
   .has-text-right: b-button.top-button(icon-left='arrow-left-bold',
      type='is-primary',inverted,@click='load()',
      :disabled='!$router.currentRoute.query.vnum') Return
+  b-field(label='Armor Filter')
+    b-select.mb-1(placeholder='Filter By Armor Slot',v-model='armorFilter',
+      @input='load()')
+      option(v-for='option in armorSlotOptions',:value='option') {{option}}
+  b-field(label='Weapon Filter')
+    b-select.mb-1(placeholde='Filter By Weapon Type',v-model='weaponFilter',
+      @input='load()')
+      option(v-for='option in weaponTypeOptions',:value='option') {{option}}
   b-checkbox(v-model='showPills',@input='load()') Show Pills
   b-checkbox(v-model='showScrolls',@input='load()') Show Scrolls
   b-checkbox(v-model='showPotions',@input='load()') Show Potions
@@ -41,6 +49,16 @@ export default {
   data(){
     return {
       output: [],
+      armorSlotOptions: [
+        'none','finger','neck','body','head','legs','feet','hands','arms',
+        'shield','about','waist','wrist','wield','hold','float'
+      ],
+      armorFilter: 'none',
+      weaponTypeOptions: [
+        'none', 'sword','dagger','spear','mace','axe','flail','whip',
+        'polearm','staff'
+      ],
+      weaponFilter: 'none',
       levelRestriction: 100,
       showPills: true, showScrolls: true, showPotions: true,
       showArmor: true, showWeapons: true,
@@ -53,6 +71,7 @@ export default {
     const {query} = this.$router.currentRoute;
 
     this.load(query ? query.vnum : null);
+    console.log(this.items);
   },
   methods: {
     returnToIndex(){
@@ -95,8 +114,8 @@ export default {
         this.drawString(`      {cValue : {Y${Math.floor(item.cost/100)} gold{c, {x${item.cost%100} silver`);
         this.drawString(' ');
         this.drawString(`   {cMaterial : {x${item.material.join(' ')}`)
-        this.drawString(`     {cRarity : {x${item.rarity}`);
         this.drawString(`{cSubmaterial : {x${item.submaterial.join(' ')}`);
+        this.drawString(`     {cRarity : {x${item.rarity}`);
         if(item.itemType==='armor'){
           this.drawString(' ');
           this.drawString(`{cArmor Class: {x${item.valueFlags[0].split(/\(|\)/g)[1]} {cpierce`);
@@ -126,7 +145,7 @@ export default {
         if(item.affects){
           this.drawString(' ');
           item.affects.forEach(affect=>{
-            this.drawString(`    {cAffects : {C${affect.name}{c by {C${(affect.amount>0?'+':'-')+affect.amount}`);
+            this.drawString(`    {cAffects : {C${affect.name}{c by {C${(affect.amount>0?'+':'')+affect.amount}`);
           });
         } //end if
         this.drawString('{c*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*');
@@ -146,8 +165,14 @@ export default {
                   isOther = ['scroll','pill','potion'].includes(item.itemType);
 
             return item.level<=this.levelRestriction&&(
-              item.itemType==='armor'&&this.showArmor||
-              item.itemType==='weapon'&&this.showWeapons||
+              item.itemType==='armor'&&this.showArmor&&(
+                this.armorFilter==='none'||
+                item.wearFlags.includes(this.armorFilter)
+              )||
+              item.itemType==='weapon'&&this.showWeapons&&(
+                this.weaponFilter==='none'||
+                item.valueFlags[0].includes(this.weaponFilter)
+              )||
               item.itemType==='pill'&&this.showPills||
               item.itemType==='scroll'&&this.showScrolls||
               item.itemType==='potion'&&this.showPotions
@@ -240,6 +265,8 @@ span
   margin-top -1rem
 .mb-2
   margin-bottom 2rem
+.mb-1
+  margin-bottom 1rem
 .mx-r
   margin-left -1.5rem
   margin-right -1.5rem
