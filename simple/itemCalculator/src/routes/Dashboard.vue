@@ -5,28 +5,58 @@ section.section(style='padding-top: 0')
       .columns
         .column
           .title Item Calculator
-          .subtitle (DEMO VERSION for Durion)
-  .has-text-right: b-button.top-button(icon-left='arrow-left-bold',
-     type='is-primary',inverted,@click='load()',
-     :disabled='!$router.currentRoute.query.vnum') Return
-  b-field(label='Armor Filter')
-    b-select.mb-1(placeholder='Filter By Armor Slot',v-model='armorFilter',
-      @input='load()')
-      option(v-for='option in armorSlotOptions',:value='option') {{option}}
-  b-field(label='Weapon Filter')
-    b-select.mb-1(placeholde='Filter By Weapon Type',v-model='weaponFilter',
-      @input='load()')
-      option(v-for='option in weaponTypeOptions',:value='option') {{option}}
-  b-checkbox(v-model='showPills',@input='load()') Show Pills
-  b-checkbox(v-model='showScrolls',@input='load()') Show Scrolls
-  b-checkbox(v-model='showPotions',@input='load()') Show Potions
-  b-checkbox(v-model='showArmor',@input='load()') Show Armor
-  b-checkbox(v-model='showWeapons',@input='load()') Show Weapons
-  b-field(label='Level Restriction')
-    b-slider(v-model='levelRestriction',:min='0',:max='105',@input='load()')
+          .code
+            span.gray short string 
+            span.green-bold (
+            span.green SCORE
+            span.green-bold ) 
+            span.red-bold (
+            span.red LEVEL
+            span.red-bold )
+  .columns
+    .column
+      b-field(label='Armor Filter')
+        b-select.mb-1(placeholder='Filter By Armor Slot',v-model='armorFilter',
+          @input='change()')
+          option(v-for='option in armorSlotOptions',:value='option') {{option}}
+      b-field(label='Pill Filter')
+        b-select.mb-1(placeholder='Filter By Magic Type',v-model='pillFilter',
+          @input='change()')
+          option(v-for='option in pillTypeOptions',:value='option') {{option}}
+    .column
+      b-field(label='Weapon Filter')
+        b-select.mb-1(placeholder='Filter By Weapon Type',v-model='weaponFilter',
+          @input='change()')
+          option(v-for='option in weaponTypeOptions',:value='option') {{option}}
+      b-field(label='Potions Filter')
+        b-select.mb-1(placeholder='Filter By Magic Type',v-model='potionFilter',
+          @input='change()')
+          option(v-for='option in potionTypeOptions',:value='option') {{option}}
+    .column
+      b-field(label='Area Filter')
+        b-select.mb-1(placeholder='Filter By Area',v-model='areaFilter',
+          @input='change()')
+          option(v-for='option in areaOptions',:value='option') {{option}}
+      b-field(label='Scroll Filter')
+        b-select.mb-1(placeholder='Filter By Magic Type',v-model='scrollFilter',
+          @input='change()')
+          option(v-for='option in scrollTypeOptions',:value='option') {{option}}
+  .level
+    .level-item
+      b-checkbox(v-model='showPills',@input='change()') Show Pills
+      b-checkbox(v-model='showScrolls',@input='change()') Show Scrolls
+      b-checkbox(v-model='showPotions',@input='change()') Show Potions
+      b-checkbox(v-model='showArmor',@input='change()') Show Armor
+      b-checkbox(v-model='showWeapons',@input='change()') Show Weapons
+  b-field.has-text-centered(label='Level Restriction')
+    b-slider(v-model='levelRestriction',:min='0',:max='105',@input='change()')
   .code.has-text-left(v-if='output&&output.length')
+    .has-text-right: b-button.top-button(icon-left='arrow-left-bold',
+       type='is-primary',inverted,@click='change()',
+       style='position:absolute;margin-top:-0.4rem;right:2.2rem;',
+       :disabled='!$router.currentRoute.query.vnum') Return
     template(v-for='line in output')
-      .cursor(v-if='line.item',@click='load(line.item.vnum)')
+      .cursor(v-if='line.item',@click='change(line.item.vnum)')
         .line
           span(v-for='word in line',:class='word.class') {{word.text}}
       .line(v-if='!line.item')
@@ -53,15 +83,14 @@ export default {
         'none','finger','neck','body','head','legs','feet','hands','arms',
         'shield','about','waist','wrist','wield','hold','float'
       ],
-      armorFilter: 'none',
       weaponTypeOptions: [
         'none', 'sword','dagger','spear','mace','axe','flail','whip',
         'polearm','staff'
       ],
-      weaponFilter: 'none',
-      levelRestriction: 100,
-      showPills: true, showScrolls: true, showPotions: true,
-      showArmor: true, showWeapons: true,
+      pillTypeOptions: ['none'],
+      scrollTypeOptions: ['none'],
+      potionTypeOptions: ['none'],
+      areaOptions: ['none'],
       items: items
         .sort((a,b)=> +a.score<+b.score?1:+a.score>+b.score?-1:+a.level<+b.level?1:-1)
         .filter(o=>o.score<5000)
@@ -70,24 +99,111 @@ export default {
   created(){
     const {query} = this.$router.currentRoute;
 
-    this.load(query ? query.vnum : null);
-    console.log(this.items);
+    Object.keys(
+      this.items
+        .reduce((map,item)=>{
+          map[item.area]=true;
+          return map;
+        },{})
+    ).forEach(key=> this.areaOptions.push(key));
+    Object.keys(
+      this.items
+        .filter(i=> i.itemType==='pill')
+        .reduce((map,item)=>{
+          item.valueFlags.forEach(rawFlag=>{
+            const flag = rawFlag.split(/\(|\)/g)[1];
+
+            if(isNaN(+flag[0])) map[flag] = true;
+          });
+          return map;
+        },{})
+    ).forEach(key=> this.pillTypeOptions.push(key));
+    Object.keys(
+      this.items
+        .filter(i=> i.itemType==='potion')
+        .reduce((map,item)=>{
+          item.valueFlags.forEach(rawFlag=>{
+            const flag = rawFlag.split(/\(|\)/g)[1];
+
+            if(isNaN(+flag[0])) map[flag] = true;
+          });
+          return map;
+        },{})
+    ).forEach(key=> this.potionTypeOptions.push(key));
+    Object.keys(
+      this.items
+        .filter(i=> i.itemType==='scroll')
+        .reduce((map,item)=>{
+          item.valueFlags.forEach(rawFlag=>{
+            const flag = rawFlag.split(/\(|\)/g)[1];
+
+            if(isNaN(+flag[0])) map[flag] = true;
+          });
+          return map;
+        },{})
+    ).forEach(key=> this.scrollTypeOptions.push(key));
+    const levelRestriction = +query.levelRestriction;
+
+    if(isNaN(levelRestriction)||levelRestriction<0||levelRestriction>105){
+      this.levelRestriction = 100;
+    }else{
+      this.levelRestriction = levelRestriction;
+    } //end if
+    if(!query.hasOwnProperty('showPills')){
+      this.showPills = true;
+    }else{
+      this.showPills = query.showPills==='true';
+    } //end if
+    if(!query.hasOwnProperty('showScrolls')){
+      this.showScrolls = true;
+    }else{
+      this.showScrolls = query.showScrolls==='true';
+    } //end if
+    if(!query.hasOwnProperty('showPotions')){
+      this.showPotions = true;
+    }else{
+      this.showPotions = query.showPotions==='true';
+    } //end if
+    if(!query.hasOwnProperty('showArmor')){
+      this.showArmor = true;
+    }else{
+      this.showArmor = query.showArmor==='true';
+    } //end if
+    if(!query.hasOwnProperty('showWeapons')){
+      this.showWeapons = true;
+    }else{
+      this.showWeapons = query.showWeapons==='true';
+    } //end if
+    this.areaFilter = query.areaFilter || 'none';
+    this.potionFilter = query.potionFilter || 'none';
+    this.scrollFilter = query.scrollFilter || 'none';
+    this.pillFilter = query.pillFilter || 'none';
+    this.weaponFilter = query.weaponFilter || 'none';
+    this.armorFilter = query.armorFilter || 'none';
+    this.load(query&&query.vnum ? query.vnum : null);
   },
   methods: {
-    returnToIndex(){
+    change(vnum){
+      this.$router.push({query:{
+        vnum,
+        levelRestriction: this.levelRestriction,
+        showPills: this.showPills,
+        showScrolls: this.showScrolls,
+        showPotions: this.showPotions,
+        showArmor: this.showArmor,
+        showWeapons: this.showWeapons,
+        armorFilter: this.armorFilter,
+        weaponFilter: this.weaponFilter,
+        pillFilter: this.pillFilter,
+        potionFilter: this.potionFilter,
+        scrollFilter: this.scrollFilter,
+        areaFilter: this.areaFilter
+      }});
+      this.load(vnum);
     },
     load(vnum){
       this.output.length = 0;
       if(vnum){
-        this.$router.push({query:{
-          vnum,
-          levelRestriction: this.levelRestriction,
-          showPills: this.showPills,
-          showScrolls: this.showScrolls,
-          showPotions: this.showPotions,
-          showArmor: this.showArmor,
-          showWeapons: this.showWeapons
-        }});
         const item = this.items.find(item=> item.vnum===vnum);
 
         let str;
@@ -130,17 +246,29 @@ export default {
           this.drawString(`      {cFlags : {C${!str.length?'none':str}`);
         }else if(['pill','scroll','potion'].includes(item.itemType)){
           this.drawString(' ');
-          const spell1 = item.valueFlags[1].split(/\(|\)/g)[1],
-                spell2 = item.valueFlags[2].split(/\(|\)/g)[1],
-                spell3 = item.valueFlags[3].split(/\(|\)/g)[1],
-                spell4 = item.valueFlags[4].split(/\(|\)/g)[1],
-                spells = [];
+          const spells = [];
 
-          if(!spell1.includes('reserved')) spells.push(spell1);
-          if(!spell2.includes('reserved')) spells.push(spell2);
-          if(!spell3.includes('reserved')) spells.push(spell3);
-          if(!spell4.includes('reserved')) spells.push(spell4);
-          this.drawString(`{cLevel {x${item.valueFlags[0].split(/\(|\)/g)[1]} {cspells of: ${spells.join()}`);
+          if(item.valueFlags.length>1){
+            const spell = item.valueFlags[1].split(/\(|\)/g)[1];
+
+            if(!spell.includes('reserved')) spells.push(spell);
+          } //end if
+          if(item.valueFlags.length>2){
+            const spell = item.valueFlags[2].split(/\(|\)/g)[1];
+
+            if(!spell.includes('reserved')) spells.push(spell);
+          } //end if
+          if(item.valueFlags.length>3){
+            const spell = item.valueFlags[3].split(/\(|\)/g)[1];
+
+            if(!spell.includes('reserved')) spells.push(spell);
+          } //end if
+          if(item.valueFlags.length>4){
+            const spell = item.valueFlags[4].split(/\(|\)/g)[1];
+
+            if(!spell.includes('reserved')) spells.push(spell);
+          } //end if
+          this.drawString(`{cLevel {x${item.valueFlags[0].split(/\(|\)/g)[1]} {cspells of: ${spells.join(', ')}`);
         } //end if
         if(item.affects){
           this.drawString(' ');
@@ -150,21 +278,16 @@ export default {
         } //end if
         this.drawString('{c*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*');
       }else{
-        this.$router.push({query:{
-          levelRestriction: this.levelRestriction,
-          showPills: this.showPills,
-          showScrolls: this.showScrolls,
-          showPotions: this.showPotions,
-          showArmor: this.showArmor,
-          showWeapons: this.showWeapons
-        }});
-
         this.items
           .filter(item=>{
             const meetsLevel = item.level<=this.levelRestriction,
                   isOther = ['scroll','pill','potion'].includes(item.itemType);
 
-            return item.level<=this.levelRestriction&&(
+            return item.level<=this.levelRestriction&&
+              (
+                this.areaFilter==='none'||
+                item.area===this.areaFilter
+              )&&(
               item.itemType==='armor'&&this.showArmor&&(
                 this.armorFilter==='none'||
                 item.wearFlags.includes(this.armorFilter)
@@ -173,9 +296,18 @@ export default {
                 this.weaponFilter==='none'||
                 item.valueFlags[0].includes(this.weaponFilter)
               )||
-              item.itemType==='pill'&&this.showPills||
-              item.itemType==='scroll'&&this.showScrolls||
-              item.itemType==='potion'&&this.showPotions
+              item.itemType==='pill'&&this.showPills&&(
+                this.pillFilter==='none'||
+                item.valueFlags.find(o=>o.includes(this.pillFilter))
+              )||
+              item.itemType==='scroll'&&this.showScrolls&&(
+                this.scrollFilter==='none'||
+                item.valueFlags.find(o=>o.includes(this.scrollFilter))
+              )||
+              item.itemType==='potion'&&this.showPotions&&(
+                this.potionFilter==='none'||
+                item.valueFlags.find(o=>o.includes(this.potionFilter))
+              )
             );
           })
           .some((item,i)=>{
@@ -214,6 +346,7 @@ export default {
           W: colors.white,
           x: colors.white,
           X: colors.white,
+          k: colors.white,
           t: colors.tab,
           '#': colors.red
         },
@@ -233,7 +366,6 @@ export default {
         }else if(flipbit){
           flipbit = false;
           if(str.length){
-            if(!colorMap.hasOwnProperty(colorSwitch)) console.log('ERROR',colorSwitch)
             line.push(colorMap[colorSwitch](str));
             str = '';
             colorSwitch = char;
