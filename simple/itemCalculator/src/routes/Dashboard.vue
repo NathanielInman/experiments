@@ -45,7 +45,7 @@ export default {
       showPills: true, showScrolls: true, showPotions: true,
       showArmor: true, showWeapons: true,
       items: items
-        .sort((a,b)=> a.score<b.score?1:a.score>b.score?-1:a.level<b.level?1:-1)
+        .sort((a,b)=> +a.score<+b.score?1:+a.score>+b.score?-1:+a.level<+b.level?1:-1)
         .filter(o=>o.score<5000)
     };
   },
@@ -81,9 +81,11 @@ export default {
         str = `       {cType : {C${item.itemType}`;
         this.drawString(`${str}${`{cWeight : {C${item.weight}`.padStart(57-str.length)}`);
         if(item.wearFlags.length){
-          this.drawString(`       {cWear : {C${item.wearFlags.join(' ')}`);
+          str = `       {cWear : {C${item.wearFlags.join(' ')}`;
+          this.drawString(`${str}${`{cScore : {C${item.score}`.padStart(57-str.length)}`);
         }else{
-          this.drawString(`       {cWear : {Cno`);
+          str = `       {cWear : {Cno`;
+          this.drawString(`${str}${`{cScore : {C${item.score}`.padStart(57-str.length)}`);
         } //end if
         if(item.extraflags.length){
           this.drawString(`      {cFlags : {C${item.extraflags.join(' ')}`);
@@ -92,12 +94,8 @@ export default {
         } //end if
         this.drawString(`      {cValue : {Y${Math.floor(item.cost/100)} gold{c, {x${item.cost%100} silver`);
         this.drawString(' ');
-        str = `    {cCrafted : {C${item.oldowner.replace(' ','').length?item.oldowner:'Unknown'}`;
-        this.drawString(`${str}${`{cCondition  : {x${item.condition}`.padStart(57-str.length)}`);
-        str = `     {cUnique : {C${item.totalAllowed!='unlimited'}`;
-        this.drawString(`${str}${`{cQuality : {x${item.quality}`.padStart(57-str.length)}`);
-        str = `   {cMaterial : {x${item.material.join(' ')}`;
-        this.drawString(`${str}${`{cRarity : {x${item.rarity}`.padStart(57-str.length)}`);
+        this.drawString(`   {cMaterial : {x${item.material.join(' ')}`)
+        this.drawString(`     {cRarity : {x${item.rarity}`);
         this.drawString(`{cSubmaterial : {x${item.submaterial.join(' ')}`);
         if(item.itemType==='armor'){
           this.drawString(' ');
