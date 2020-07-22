@@ -9,6 +9,13 @@ section.section(style='padding-top: 0')
   .has-text-right: b-button.top-button(icon-left='arrow-left-bold',
      type='is-primary',inverted,@click='load()',
      :disabled='!$router.currentRoute.query.vnum') Return
+  b-checkbox(v-model='showPills',@input='load()') Show Pills
+  b-checkbox(v-model='showScrolls',@input='load()') Show Scrolls
+  b-checkbox(v-model='showPotions',@input='load()') Show Potions
+  b-checkbox(v-model='showArmor',@input='load()') Show Armor
+  b-checkbox(v-model='showWeapons',@input='load()') Show Weapons
+  b-field(label='Level Restriction')
+    b-slider(v-model='levelRestriction',:min='0',:max='105',@input='load()')
   .code.has-text-left(v-if='output&&output.length')
     template(v-for='line in output')
       .cursor(v-if='line.item',@click='load(line.item.vnum)')
@@ -21,7 +28,7 @@ section.section(style='padding-top: 0')
 
 import Vuex from 'vuex';
 import * as colors from '../colors';
-import {items} from '../items';
+import {items} from '../items/';
 
 const {mapActions,mapGetters,mapMutations,mapState} = Vuex;
 
@@ -34,7 +41,12 @@ export default {
   data(){
     return {
       output: [],
-      items
+      levelRestriction: 100,
+      showPills: true, showScrolls: true, showPotions: true,
+      showArmor: true, showWeapons: true,
+      items: items
+        .sort((a,b)=> a.score<b.score?1:a.score>b.score?-1:a.level<b.level?1:-1)
+        .filter(o=>o.score<5000)
     };
   },
   created(){
@@ -48,7 +60,15 @@ export default {
     load(vnum){
       this.output.length = 0;
       if(vnum){
-        this.$router.push({query: {vnum}});
+        this.$router.push({query:{
+          vnum,
+          levelRestriction: this.levelRestriction,
+          showPills: this.showPills,
+          showScrolls: this.showScrolls,
+          showPotions: this.showPotions,
+          showArmor: this.showArmor,
+          showWeapons: this.showWeapons
+        }});
         const item = this.items.find(item=> item.vnum===vnum);
 
         let str;
@@ -56,7 +76,8 @@ export default {
         this.drawString('{c*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*');
         this.drawString(`       {cName : {C${item.short}`);
         this.drawString(`     {cObject : {C${item.names.join(' ')}`);
-        this.drawString(`      {cLevel : {C${item.level}`);
+        str = `      {cLevel : {C${item.level}`;
+        this.drawString(`${str}${`{cArea : {C${item.area}`.padStart(57-str.length)}`);
         str = `       {cType : {C${item.itemType}`;
         this.drawString(`${str}${`{cWeight : {C${item.weight}`.padStart(57-str.length)}`);
         if(item.wearFlags.length){
@@ -74,7 +95,6 @@ export default {
         str = `    {cCrafted : {C${item.oldowner.replace(' ','').length?item.oldowner:'Unknown'}`;
         this.drawString(`${str}${`{cCondition  : {x${item.condition}`.padStart(57-str.length)}`);
         str = `     {cUnique : {C${item.totalAllowed!='unlimited'}`;
-        console.log(item);
         this.drawString(`${str}${`{cQuality : {x${item.quality}`.padStart(57-str.length)}`);
         str = `   {cMaterial : {x${item.material.join(' ')}`;
         this.drawString(`${str}${`{cRarity : {x${item.rarity}`.padStart(57-str.length)}`);
@@ -88,7 +108,6 @@ export default {
         }else if(item.itemType==='weapon'){
           this.drawString(' ');
           this.drawString(`{cWeapon Type : {C${item.valueFlags[0].split(/\(|\)/g)[1]}`);
-          this.drawString(`     {cDamage : {C${item.valueFlags[1].split(/\(|\)/g)[1]}`);
           this.drawString(`{cDamage Type : {C${item.valueFlags[2].split(/\(|\)/g)[1]}`);
           str = item.valueFlags[3].split(/\(|\)/g)[1].split(',').join(' ');
           this.drawString(`      {cFlags : {C${!str.length?'none':str}`);
@@ -112,17 +131,35 @@ export default {
             this.drawString(`    {cAffects : {C${affect.name}{c by {C${(affect.amount>0?'+':'-')+affect.amount}`);
           });
         } //end if
-
         this.drawString('{c*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*');
-        /*
-        Weapon Type{C
-        Crafstmanship{x
-        Weapons Flags{C
-        */
       }else{
-        this.$router.push({query:{}});
+        this.$router.push({query:{
+          levelRestriction: this.levelRestriction,
+          showPills: this.showPills,
+          showScrolls: this.showScrolls,
+          showPotions: this.showPotions,
+          showArmor: this.showArmor,
+          showWeapons: this.showWeapons
+        }});
 
-        this.items.forEach(item=> this.drawItem(item));
+        this.items
+          .filter(item=>{
+            const meetsLevel = item.level<=this.levelRestriction,
+                  isOther = ['scroll','pill','potion'].includes(item.itemType);
+
+            return item.level<=this.levelRestriction&&(
+              item.itemType==='armor'&&this.showArmor||
+              item.itemType==='weapon'&&this.showWeapons||
+              item.itemType==='pill'&&this.showPills||
+              item.itemType==='scroll'&&this.showScrolls||
+              item.itemType==='potion'&&this.showPotions
+            );
+          })
+          .some((item,i)=>{
+            this.drawItem(item);
+            if(i>20) this.drawString('{R---> {xmore than 20 results {R<--');
+            return i>20; //don't render more than 10
+          });
       } //end if
     },
     drawItem(item){
@@ -132,7 +169,7 @@ export default {
         this.output.push(item.stringified);
         return;
       };
-      item.stringified = this.drawString(`${item.short} {G({g${item.score}{G)`);
+      item.stringified = this.drawString(`${item.short} {G({g${item.score}{G) {R({r${item.level}{R)`);
       item.stringified.item = item; //recursive for function pointer
     },
     drawString(string){
@@ -153,6 +190,7 @@ export default {
           D: colors.black,
           W: colors.white,
           x: colors.white,
+          X: colors.white,
           t: colors.tab,
           '#': colors.red
         },
@@ -172,6 +210,7 @@ export default {
         }else if(flipbit){
           flipbit = false;
           if(str.length){
+            if(!colorMap.hasOwnProperty(colorSwitch)) console.log('ERROR',colorSwitch)
             line.push(colorMap[colorSwitch](str));
             str = '';
             colorSwitch = char;
