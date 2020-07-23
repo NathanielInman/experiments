@@ -142,7 +142,7 @@ export default {
     this.locationType = query.locationType||'manor';
 
     if(isNaN(+query.healingRate)||+query.healingRate<100||+query.healingRate>400){
-      if(locationType==='manor'){
+      if(this.locationType==='manor'){
         this.healingRate = 150;
       }else{
         this.healingrate = 100;
