@@ -140,7 +140,16 @@ export default {
     const {query} = this.$router.currentRoute;
 
     this.locationType = query.locationType||'manor';
-    this.healingRate = +query.healingRate;
+
+    if(isNaN(+query.healingRate)||+query.healingRate<100||+query.healingRate>400){
+      if(locationType==='manor'){
+        this.healingRate = 150;
+      }else{
+        this.healingrate = 100;
+      } //end if
+    }else{
+      this.healingRate = +query.healingRate;
+    } //end if
     this.hasPortal = query.hasPortal==='true';
     this.isPublic = query.isPublic==='true';
     this.doorLock = +query.doorLock;
