@@ -32,11 +32,15 @@ section.section(style='padding-top: 0')
         b-select.mb-1(placeholder='Filter By Magic Type',v-model='potionFilter',
           @input='change()')
           option(v-for='option in potionTypeOptions',:value='option') {{option}}
-    .column
       b-field(label='Area Filter')
         b-select.mb-1(placeholder='Filter By Area',v-model='areaFilter',
           @input='change()')
           option(v-for='option in areaOptions',:value='option') {{option}}
+    .column
+      b-field(label='Other Filter')
+        b-select.mb-1(placeholder='Filter By Other Type',v-model='otherFilter',
+          @input='change()')
+          option(v-for='option in otherTypeOptions',:value='option') {{option}}
       b-field(label='Scroll Filter')
         b-select.mb-1(placeholder='Filter By Magic Type',v-model='scrollFilter',
           @input='change()')
@@ -48,6 +52,7 @@ section.section(style='padding-top: 0')
       b-checkbox(v-model='showPotions',@input='change()') Show Potions
       b-checkbox(v-model='showArmor',@input='change()') Show Armor
       b-checkbox(v-model='showWeapons',@input='change()') Show Weapons
+      b-checkbox(v-model='showOther',@input='change()') Show Other
   b-field.has-text-centered(label='Level Restriction')
     b-slider(v-model='levelRestriction',:min='0',:max='105',@input='change()')
   .code.has-text-left(v-if='output&&output.length')
@@ -86,6 +91,11 @@ export default {
       weaponTypeOptions: [
         'none', 'sword','dagger','spear','mace','axe','flail','whip',
         'polearm','staff'
+      ],
+      otherTypeOptions: [
+        'none','container','drink','food','fountain','furniture','gem','jewelry','key',
+        'light','lockpick','map','pole','portal','staff','tool','trash',
+        'treasure','warp_stone'
       ],
       pillTypeOptions: ['none'],
       scrollTypeOptions: ['none'],
@@ -174,12 +184,18 @@ export default {
     }else{
       this.showWeapons = query.showWeapons==='true';
     } //end if
+    if(!query.hasOwnProperty('showOther')){
+      this.showOther = true;
+    }else{
+      this.showOther = query.showOther==='true';
+    } //end if
     this.areaFilter = query.areaFilter || 'none';
     this.potionFilter = query.potionFilter || 'none';
     this.scrollFilter = query.scrollFilter || 'none';
     this.pillFilter = query.pillFilter || 'none';
     this.weaponFilter = query.weaponFilter || 'none';
     this.armorFilter = query.armorFilter || 'none';
+    this.otherFilter = query.otherFilter || 'none';
     this.load(query&&query.vnum ? query.vnum : null);
   },
   methods: {
@@ -197,7 +213,8 @@ export default {
         pillFilter: this.pillFilter,
         potionFilter: this.potionFilter,
         scrollFilter: this.scrollFilter,
-        areaFilter: this.areaFilter
+        areaFilter: this.areaFilter,
+        otherFilter: this.otherFilter
       }});
       this.load(vnum);
     },
@@ -288,6 +305,10 @@ export default {
                 this.areaFilter==='none'||
                 item.area===this.areaFilter
               )&&(
+              this.otherTypeOptions.includes(item.itemType)&&this.showOther&&(
+                this.otherFilter==='none'||
+                this.item.itemType===this.otherFilter
+              )||
               item.itemType==='armor'&&this.showArmor&&(
                 this.armorFilter==='none'||
                 item.wearFlags.includes(this.armorFilter)
