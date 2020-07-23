@@ -208,6 +208,7 @@ export default {
         showPotions: this.showPotions,
         showArmor: this.showArmor,
         showWeapons: this.showWeapons,
+        showOther: this.showOther,
         armorFilter: this.armorFilter,
         weaponFilter: this.weaponFilter,
         pillFilter: this.pillFilter,
@@ -295,47 +296,48 @@ export default {
         } //end if
         this.drawString('{c*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*');
       }else{
-        this.items
-          .filter(item=>{
-            const meetsLevel = item.level<=this.levelRestriction,
-                  isOther = ['scroll','pill','potion'].includes(item.itemType);
+        const items = this.items.filter(item=>{
+          return item.level<=this.levelRestriction&&
+            (
+              this.areaFilter==='none'||
+              item.area===this.areaFilter
+            )&&(
+            this.otherTypeOptions.includes(item.itemType)&&this.showOther&&(
+              this.otherFilter==='none'||
+              item.itemType===this.otherFilter
+            )||
+            this.showArmor&&(
+              this.armorFilter==='none'&&item.itemType==='armor'||
+              item.wearFlags.includes(this.armorFilter)
+            )||
+            item.itemType==='weapon'&&this.showWeapons&&(
+              this.weaponFilter==='none'||
+              item.valueFlags[0].includes(this.weaponFilter)
+            )||
+            item.itemType==='pill'&&this.showPills&&(
+              this.pillFilter==='none'||
+              item.valueFlags.find(o=>o.includes(this.pillFilter))
+            )||
+            item.itemType==='scroll'&&this.showScrolls&&(
+              this.scrollFilter==='none'||
+              item.valueFlags.find(o=>o.includes(this.scrollFilter))
+            )||
+            item.itemType==='potion'&&this.showPotions&&(
+              this.potionFilter==='none'||
+              item.valueFlags.find(o=>o.includes(this.potionFilter))
+            )
+          );
+        });
 
-            return item.level<=this.levelRestriction&&
-              (
-                this.areaFilter==='none'||
-                item.area===this.areaFilter
-              )&&(
-              this.otherTypeOptions.includes(item.itemType)&&this.showOther&&(
-                this.otherFilter==='none'||
-                item.itemType===this.otherFilter
-              )||
-              item.itemType==='armor'&&this.showArmor&&(
-                this.armorFilter==='none'||
-                item.wearFlags.includes(this.armorFilter)
-              )||
-              item.itemType==='weapon'&&this.showWeapons&&(
-                this.weaponFilter==='none'||
-                item.valueFlags[0].includes(this.weaponFilter)
-              )||
-              item.itemType==='pill'&&this.showPills&&(
-                this.pillFilter==='none'||
-                item.valueFlags.find(o=>o.includes(this.pillFilter))
-              )||
-              item.itemType==='scroll'&&this.showScrolls&&(
-                this.scrollFilter==='none'||
-                item.valueFlags.find(o=>o.includes(this.scrollFilter))
-              )||
-              item.itemType==='potion'&&this.showPotions&&(
-                this.potionFilter==='none'||
-                item.valueFlags.find(o=>o.includes(this.potionFilter))
-              )
-            );
-          })
-          .some((item,i)=>{
+        if(!items.length){
+          this.drawString('{R---> {xNo Results {R<--');
+        }else{
+          items.some((item,i)=>{
             this.drawItem(item);
             if(i>20) this.drawString('{R---> {xmore than 20 results {R<--');
             return i>20; //don't render more than 10
           });
+        } //end if
       } //end if
     },
     drawItem(item){
