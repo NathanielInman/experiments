@@ -307,7 +307,7 @@ export default {
               )&&(
               this.otherTypeOptions.includes(item.itemType)&&this.showOther&&(
                 this.otherFilter==='none'||
-                this.item.itemType===this.otherFilter
+                item.itemType===this.otherFilter
               )||
               item.itemType==='armor'&&this.showArmor&&(
                 this.armorFilter==='none'||
