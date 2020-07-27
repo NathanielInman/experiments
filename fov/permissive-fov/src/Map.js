@@ -84,7 +84,9 @@ export class Map{
     onTest=()=>{return true;},
     onSuccess=()=>{},
     onFailure=()=>{},
+    onEach=()=>{},
     onFinish=()=>{},
+    exitOnFailure=true
   }={}){
     const dx = Math.abs(x2 - x1),
           dy = Math.abs(y2 - y1),
@@ -97,17 +99,19 @@ export class Map{
 
     onStart({x,y,x1,y1,x2,y2,state});
     do{
-      if(onTest({x,y,x1,y1,x2,y2,state})){
+      onEach({x,y,x1,y1,x2,y2,state});
+      if(!state.failing&&onTest({x,y,x1,y1,x2,y2,state})){
         onSuccess({x,y,x1,y1,x2,y2,state});
       }else{
-        onFailure({x,y,x1,y1,x2,y2,state});
         state.failing = true;
+        if(exitOnFailure) state.finished = true;
+        onFailure({x,y,x1,y1,x2,y2,state});
       } //end if
-      if(x==x2&&y==y2) state.failing = true;
+      if(x==x2&&y==y2) state.finished = true;
       error2 = 2 * error;
       if(error2 > -dy){ error -= dy; x += sx; }
       if(error2 < dx){ error += dx; y += sy; }
-    }while(!state.failing)
+    }while(!state.finished)
     onFinish({x,y,x1,y1,x2,y2,state});
     return state;
   }
@@ -116,7 +120,7 @@ export class Map{
     radius=8,
     accuracy=0.99, //higher accuracy required for higher radius
     isTransparent=({x,y})=> this.isWalkable({x,y})||this.isEmpty({x,y}),
-    setTransparent=({x,y,state})=> state.visible.push({x,y}),
+    setTransparent=({x,y,state})=> state.visible[`${x},${y}`]=true,
     isTranslucent=({x,y})=> this.isWindow({x,y}),
     setTranslucent=({x,y,state})=>{
       if(state.firstWindow){
@@ -144,6 +148,7 @@ export class Map{
       isOpaque,setVisible
     });
   }
+
   // ray-casting permissive
   computeDirectionalFOV({
     x=null,y=null,
@@ -153,7 +158,7 @@ export class Map{
     radius=8,
     accuracy=0.97, //higher accuracy required for higher radius
     isTransparent=({x,y})=> this.isWalkable({x,y})||this.isEmpty({x,y}),
-    setTransparent=({x,y,state})=> state.visible.push({x,y}),
+    setTransparent=({x,y,state})=> state.visible[`${x},${y}`]=true,
     isTranslucent=({x,y})=> this.isWindow({x,y}),
     setTranslucent=({x,y,state})=>{
       if(state.firstWindow){
@@ -163,7 +168,22 @@ export class Map{
       } //end if
     },
     isOpaque=({x,y,state})=> this.isWall({x,y})||this.isDoorClosed({x,y})||state.secondWindow,
-    setVisible=()=>{}
+    setVisible=()=>{},
+    onStart=({state})=>{ state.visible = {}; },
+    onSuccess=()=>{},
+    onFailure=()=>{},
+    onEach=()=>{},
+    onTest=({x,y,state})=>{
+      if(!this.isInbounds({x,y})) return false;
+      if(isTransparent({x,y,state})) setTransparent({x,y,state});
+      if(isTranslucent({x,y,state})) setTranslucent({x,y,state});
+      state.visible[`${x},${y}`]=true;
+      setVisible({x,y,state});
+      if(isOpaque({x,y,state})) return false;
+      return true;
+    },
+    onFinish=()=>{},
+    exitOnFailure=true
   }={}){
     if(x===null||y===null) throw new Error('computeDirectionalFOV: x & y required');
     const quadrants = {
@@ -188,22 +208,12 @@ export class Map{
             y2 = Math.round(y1 + radius * Math.sin(sigma + theta));
 
       this.bresenhamsLine({
-        x1,y1,x2,y2,
-        onStart: ({state})=>{
-          state.visible = [];
-        },
-        onTest: ({x,y,state})=>{
-          if(!this.isInbounds({x,y})) return false;
-          if(isTransparent({x,y,state})) setTransparent({x,y,state});
-          if(isTranslucent({x,y,state})) setTranslucent({x,y,state});
-          setVisible({x,y});
-          if(isOpaque({x,y,state})) return false;
-          return true;
-        },
-        onSuccess: ({x,y,state})=> state.visible.push({x,y})
+        x1,y1,x2,y2,exitOnFailure, onStart, onTest,
+        onSuccess, onFailure, onEach, onFinish
       });
     } //end for
   }
+
   // return the neighbors of a given sector that pass the `test` function.
   // Can specify whether or not testing of orthogonal, cardinal or the
   // originating sector. `size` will expand to not just nearby sectors
@@ -234,4 +244,5 @@ export class Map{
     } //end for
     return list;
   }
+
 }

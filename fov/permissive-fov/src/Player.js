@@ -8,22 +8,46 @@ export class Player{
     this.sight = 8;
   }
   computeFOV(){
+    const possible = {};
+
+    // pre-processing pass to get all possible
     this.map.computeDirectionalFOV({
       x:this.x,y:this.y,radius:this.sight,direction:this.facing,
-      setVisible:({x,y})=>{
-        this.visible[`${x},${y}`]=true;
+      exitOnFailure:false,accuracy:0.97,
+      onTest:({x,y,state})=>{
+        state.visible[`${x},${y}`]=true;
+        return true;
+      },
+      onEach:({x,y,state})=>{
+        possible[`${x},${y}`]=true;
       }
     });
+
+    // main pass to get all computed
+    this.map.computeDirectionalFOV({
+      x:this.x,y:this.y,radius:this.sight,direction:this.facing,
+      onStart:({state})=>{
+        state.visible = this.visible;
+      },
+      exitOnFailure:true,accuracy:0.97
+    });
+
+    // post-processing pass to ensure raycasted anomalies
+    // are fixed
     Object.keys(this.visible)
       .map(key=> key.split(',').map(s=>+s))
       .forEach(([x,y])=>{
-        console.log(x,y);
-        if(this.map.isFloor({x,y})&&!(x===this.x&&y===this.y)){
-            this.map.getNeighbors({
-            x,y,orthogonal:false,
+        if(
+          this.map.isFloor({x,y})
+        ){
+          this.map.getNeighbors({
+            x,y,
             test:(sector)=>{
-              console.log('test',sector);
-              return !sector.isFloor()&&!this.visible[`${sector.x},${sector.y}`];
+              const test =  !this.visible[`${sector.x},${sector.y}`]&&
+                !this.map.isFloor({x:sector.x,y:sector.y})&&
+                possible[`${sector.x},${sector.y}`]==true;
+
+              return test;
             }
           }).forEach(sector=>{
             console.log('found',sector.x,sector.y);
