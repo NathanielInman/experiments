@@ -115,38 +115,10 @@ export class Map{
     onFinish({x,y,x1,y1,x2,y2,state});
     return state;
   }
-  computeFOV({
-    x=null,y=null,
-    radius=8,
-    accuracy=0.99, //higher accuracy required for higher radius
-    isTransparent=({x,y})=> this.isWalkable({x,y})||this.isEmpty({x,y}),
-    setTransparent=({x,y,state})=> state.visible[`${x},${y}`]=true,
-    isTranslucent=({x,y})=> this.isWindow({x,y}),
-    setTranslucent=({x,y,state})=>{
-      if(state.firstWindow){
-        state.secondWindow = true;
-      } else {
-        state.firstWindow = true;
-      } //end if
-    },
-    isOpaque=({x,y,state})=> this.isWall({x,y})||state.secondWindow,
-    setVisible=()=>{}
-  }={}){
+  computeFOV({x=null,y=null,...args}={}){
     if(x===null||y===null) throw new Error('computeFOV: x & y required');
-    this.computeDirectionalFOV({
-      x,y,radius,accuracy,
-      direction:'east',
-      isTransparent,setTransparent,
-      isTranslucent,setTranslucent,
-      isOpaque,setVisible
-    });
-    this.computeDirectionalFOV({
-      x,y,radius,accuracy,
-      direction:'west',
-      isTransparent,setTransparent,
-      isTranslucent,setTranslucent,
-      isOpaque,setVisible
-    });
+    this.computeDirectionalFOV({x,y,direction:'east',...args});
+    this.computeDirectionalFOV({x,y,direction:'west',...args});
   }
 
   // ray-casting
@@ -170,9 +142,6 @@ export class Map{
     isOpaque=({x,y,state})=> this.isWall({x,y})||this.isDoorClosed({x,y})||state.secondWindow,
     setVisible=()=>{},
     onStart=({state})=>{ state.visible = {}; },
-    onSuccess=()=>{},
-    onFailure=()=>{},
-    onEach=()=>{},
     onTest=({x,y,state})=>{
       if(!this.isInbounds({x,y})) return false;
       if(isTransparent({x,y,state})) setTransparent({x,y,state});
@@ -182,8 +151,7 @@ export class Map{
       if(isOpaque({x,y,state})) return false;
       return true;
     },
-    onFinish=()=>{},
-    exitOnFailure=true
+    ...args
   }={}){
     if(x===null||y===null) throw new Error('computeDirectionalFOV: x & y required');
     const quadrants = {
@@ -207,10 +175,7 @@ export class Map{
             x2 = Math.round(x1 + radius * Math.cos(sigma + theta)),
             y2 = Math.round(y1 + radius * Math.sin(sigma + theta));
 
-      this.bresenhamsLine({
-        x1,y1,x2,y2,exitOnFailure, onStart, onTest,
-        onSuccess, onFailure, onEach, onFinish
-      });
+      this.bresenhamsLine({x1,y1,x2,y2,onStart,onTest, ...args});
     } //end for
   }
 
