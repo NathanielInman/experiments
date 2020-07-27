@@ -26,10 +26,10 @@ export class Player{
     // main pass to get all computed
     this.map.computeDirectionalFOV({
       x:this.x,y:this.y,radius:this.sight,direction:this.facing,
+      accuracy:0.97,
       onStart:({state})=>{
         state.visible = this.visible;
-      },
-      exitOnFailure:true,accuracy:0.97
+      }
     });
 
     // post-processing pass to ensure raycasted anomalies
@@ -37,20 +37,15 @@ export class Player{
     Object.keys(this.visible)
       .map(key=> key.split(',').map(s=>+s))
       .forEach(([x,y])=>{
-        if(
-          this.map.isFloor({x,y})
-        ){
+        if(this.map.isFloor({x,y})){
           this.map.getNeighbors({
             x,y,
             test:(sector)=>{
-              const test =  !this.visible[`${sector.x},${sector.y}`]&&
+              return !this.visible[`${sector.x},${sector.y}`]&&
                 !this.map.isFloor({x:sector.x,y:sector.y})&&
                 possible[`${sector.x},${sector.y}`]==true;
-
-              return test;
             }
           }).forEach(sector=>{
-            console.log('found',sector.x,sector.y);
             this.visible[`${sector.x},${sector.y}`]=true;
           });
         } //end if
