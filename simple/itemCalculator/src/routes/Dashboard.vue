@@ -23,6 +23,10 @@ section.section(style='padding-top: 0')
         b-select.mb-1(placeholder='Filter By Magic Type',v-model='pillFilter',
           @input='change()')
           option(v-for='option in pillTypeOptions',:value='option') {{option}}
+      b-field(label='Wand Filter')
+        b-select.mb-1(placeholder='Filter By Magic Type',v-model='wandFilter',
+          @input='change()')
+          option(v-for='option in wandTypeOptions',:value='option') {{option}}
     .column
       b-field(label='Weapon Filter')
         b-select.mb-1(placeholder='Filter By Weapon Type',v-model='weaponFilter',
@@ -45,11 +49,17 @@ section.section(style='padding-top: 0')
         b-select.mb-1(placeholder='Filter By Magic Type',v-model='scrollFilter',
           @input='change()')
           option(v-for='option in scrollTypeOptions',:value='option') {{option}}
+      b-field(label='Stave Filter')
+        b-select.mb-1(placeholder='Filter By Magic Type',v-model='staffFilter',
+          @input='change()')
+          option(v-for='option in staffTypeOptions',:value='option') {{option}}
   .level
     .level-item
       b-checkbox(v-model='showPills',@input='change()') Show Pills
       b-checkbox(v-model='showScrolls',@input='change()') Show Scrolls
       b-checkbox(v-model='showPotions',@input='change()') Show Potions
+      b-checkbox(v-model='showStaffs',@input='change()') Show Staves
+      b-checkbox(v-model='showWands',@input='change()') Show Wands
       b-checkbox(v-model='showArmor',@input='change()') Show Armor
       b-checkbox(v-model='showWeapons',@input='change()') Show Weapons
       b-checkbox(v-model='showOther',@input='change()') Show Other
@@ -100,6 +110,8 @@ export default {
       pillTypeOptions: ['none'],
       scrollTypeOptions: ['none'],
       potionTypeOptions: ['none'],
+      wandTypeOptions: ['none'],
+      staffTypeOptions: ['none'],
       areaOptions: ['none'],
       items: items
         .sort((a,b)=> +a.score<+b.score?1:+a.score>+b.score?-1:+a.level<+b.level?1:-1)
@@ -116,6 +128,30 @@ export default {
           return map;
         },{})
     ).forEach(key=> this.areaOptions.push(key));
+    Object.keys(
+      this.items
+        .filter(i=> i.itemType==='staff')
+        .reduce((map,item)=>{
+          item.valueFlags.forEach(rawFlag=>{
+            const flag = rawFlag.split(/\(|\)/g)[1];
+
+            if(isNaN(+flag[0])) map[flag] = true;
+          });
+          return map;
+        },{})
+    ).forEach(key=> this.staffTypeOptions.push(key));
+    Object.keys(
+      this.items
+        .filter(i=> i.itemType==='wand')
+        .reduce((map,item)=>{
+          item.valueFlags.forEach(rawFlag=>{
+            const flag = rawFlag.split(/\(|\)/g)[1];
+
+            if(isNaN(+flag[0])) map[flag] = true;
+          });
+          return map;
+        },{})
+    ).forEach(key=> this.wandTypeOptions.push(key));
     Object.keys(
       this.items
         .filter(i=> i.itemType==='pill')
@@ -159,6 +195,16 @@ export default {
     }else{
       this.levelRestriction = levelRestriction;
     } //end if
+    if(!query.hasOwnProperty('showStaffs')){
+      this.showStaffs = true;
+    }else{
+      this.showStaffs = query.showStaffs==='true';
+    } //end if
+    if(!query.hasOwnProperty('showWands')){
+      this.showWands = true;
+    }else{
+      this.showWands = query.showWands==='true';
+    } //end if
     if(!query.hasOwnProperty('showPills')){
       this.showPills = true;
     }else{
@@ -193,6 +239,8 @@ export default {
     this.potionFilter = query.potionFilter || 'none';
     this.scrollFilter = query.scrollFilter || 'none';
     this.pillFilter = query.pillFilter || 'none';
+    this.staffFilter = query.staffFilter || 'none';
+    this.wandFilter = query.wandFilter || 'none';
     this.weaponFilter = query.weaponFilter || 'none';
     this.armorFilter = query.armorFilter || 'none';
     this.otherFilter = query.otherFilter || 'none';
@@ -203,6 +251,8 @@ export default {
       this.$router.push({query:{
         vnum,
         levelRestriction: this.levelRestriction,
+        showStaffs: this.showStaffs,
+        showWands: this.showWands,
         showPills: this.showPills,
         showScrolls: this.showScrolls,
         showPotions: this.showPotions,
@@ -211,6 +261,8 @@ export default {
         showOther: this.showOther,
         armorFilter: this.armorFilter,
         weaponFilter: this.weaponFilter,
+        staffFilter: this.staffFilter,
+        wandFilter: this.wandFilter,
         pillFilter: this.pillFilter,
         potionFilter: this.potionFilter,
         scrollFilter: this.scrollFilter,
@@ -311,6 +363,14 @@ export default {
                   this.weaponFilter==='none'||
                   item.valueFlags[0].includes(this.weaponFilter)
                 ),
+                meetsWand = item.itemType==='wand'&&this.showWands&&(
+                  this.wandFilter==='none'||
+                  item.valueFlags.find(o=>o.includes(this.wandFilter))
+                ),
+                meetsStaff = item.itemType==='staff'&&this.showStaffs&&(
+                  this.staffFilter==='none'||
+                  item.valueFlags.find(o=>o.includes(this.staffFilter))
+                ),
                 meetsPill = item.itemType==='pill'&&this.showPills&&(
                   this.pillFilter==='none'||
                   item.valueFlags.find(o=>o.includes(this.pillFilter))
@@ -325,7 +385,7 @@ export default {
                 );
 
           return meetsLevel&&meetsArea&&(
-            meetsOther||meetsArmor||meetsWeapon||meetsPill||meetsScroll||meetsPotion
+            meetsOther||meetsArmor||meetsWeapon||meetsPill||meetsScroll||meetsPotion||meetsWand||meetsStaff
           );
         });
 
