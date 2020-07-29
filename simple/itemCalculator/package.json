@@ -1,7 +1,7 @@
 {
-  "name": "homeCalculator",
-  "version": "0.2.0",
-  "description": "home calculator for adventures unlimited",
+  "name": "itemCalculator",
+  "version": "0.2.1",
+  "description": "item calculator for adventures unlimited",
   "main": "config.babel.js",
   "author": {
     "name": "Nathaniel Inman",
@@ -9,10 +9,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/NathanielInman/homeCalculator.git"
+    "url": "git://github.com/NathanielInman/itemCalculator.git"
   },
   "bugs": {
-    "url": "https://github.com/NathanielInman/homeCalculator/issues"
+    "url": "https://github.com/NathanielInman/itemCalculator/issues"
   },
   "scripts": {
     "deploy": "./deploy.sh",
@@ -40,5 +40,5 @@
     "vuex": "^3.5.1"
   },
   "readmeFilename": "README.md",
-  "homepage": "https://github.com/NathanielInman/homeCalculator"
+  "itempage": "https://github.com/NathanielInman/itemCalculator"
 }
