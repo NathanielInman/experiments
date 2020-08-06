@@ -3,8 +3,9 @@ import {Noise} from 'noisejs';
 const noise = new Noise(Math.random());
 
 export function mesa(map){
-  map.sectors.forEach(row=>{
-    row.forEach(sector=>{
+  map.fillRoom({
+    x1:map.startX,y1:map.startY,x2:map.width-1,y2:map.height-1,
+    draw(sector){
       const n1 = noise.perlin2(sector.x/map.width*12,sector.y/map.height*10),
             n2 = noise.perlin2(sector.x/map.width*6,sector.y/map.height*6),
             n = (n1+n2)/2;
@@ -18,8 +19,8 @@ export function mesa(map){
       }else{
         sector.setWall();
       } //end if
-    });
-  });
+    }
+  })
 
   // clip all non-walkable parts of the map away
   map.clipOrphaned({

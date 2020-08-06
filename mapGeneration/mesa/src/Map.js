@@ -2,41 +2,56 @@ import {Sector} from './Sector';
 import Heap from 'collections/heap';
 import {Noise} from 'noisejs';
 
+class SectorMap{
+  constructor(){
+    this.list = {};
+  }
+  get({x=0,y=0}={}){
+    const key = `x${x}y${y}`;
+
+    if(!this.list.hasOwnProperty(key)) this.list[key] = new Sector({x,y});
+    return this.list[key];
+  }
+  getAll(){
+    const sectors = Object.keys(this.list).map(key=> this.list[key]);
+    return sectors;
+  }
+  reset(){
+    this.list = {};
+  }
+  clone(){
+    return Object.keys(this.list).reduce((sectors,key)=>{
+      sectors[key] = this.sectors[key].clone();
+      return sectors;
+    },{});
+  }
+}
+
 export class Map{
-  constructor({width=50,height=50,sectors=[],initialize=true}={}){
+  constructor({width=50,height=50,startX=0,startY=0,sectors=[],initialize=true}={}){
     this.width = width;
     this.height = height;
+    this.startX = startX;
+    this.startY = startY;
     this.noise = new Noise(Math.random());
-    this.sectors = sectors;
-    if(initialize) this.initialize();
-  }
-  initialize(){
-    for(let y=0;y<=this.height;y++){
-      this.sectors[y]=[];
-      for(let x=0;x<=this.width;x++){
-        this.sectors[y][x]=new Sector({x,y});
-      } //end for
-    } //end for
+    this.sectors = new SectorMap();
   }
   clone(){
     return new Map({
       width: this.width,
       height: this.height,
-      sectors: this.sectors.map(row=>{
-        return row.map(sector=>{
-          return sector.clone();
-        });
-      }),
+      sectors: this.sectors.clone(),
       initialize: false
     });
   }
   reset(){
-    this.sectors.forEach(row=>{
-      row.forEach(sector=> sector.setEmpty());
-    });
+    this.sectors.reset();
   }
   getSector({x=0,y=0}={}){
-    return this.sectors[y][x];
+    return this.sectors.get({x,y});
+  }
+  getSectors(){
+    return this.sectors.getAll();
   }
   isEmpty({x=0,y=0}={}){
     return this.isInbounds({x,y})&&
@@ -120,7 +135,8 @@ export class Map{
       this.getSector({x: x2,y: y2}).roomNumber;
   }
   isInbounds({x=0,y=0}={}){
-    return x>=0&&x<=this.width-1&&y>=0&&y<=this.height-1;
+    return x>=this.startX&&x<=this.width-1-this.startX
+      &&y>=this.startY&&y<=this.height-1-this.startY;
   }
 
   // uses bresenhams line algorithm to acquire an array of points
@@ -369,69 +385,66 @@ export class Map{
 
     // we have to start by removing roomNumbers if they exist because
     // we run this function more than once
-    this.sectors.forEach(row=>{
-
-      //eslint-disable-next-line no-return-assign
-      row.forEach(sector=> sector.roomNumber = 0);
+    this.getSectors().forEach(sector=>{
+      sector.roomNumber = 0;
     });
-    this.sectors.forEach((row,sectorY)=>{
-      row.forEach((sector,sectorX)=>{
-        if(test(sector)&&!sector.roomNumber){
-          locStats.cur++; locStats.val = 1; //init new room
-          let newLoc = {x:sectorX,y:sectorY,id: locStats.cur},
-              x, y;
+    this.getSectors().forEach(sector=>{
+      const sectorY = sector.y,
+            sectorX = sector.x;
 
-          do{
-            ({x,y}=newLoc);
-            if(
-              this.isInbounds({x: x-1,y})&&!this.getRoom({x: x-1,y})&&
-              test(this.getSector({x: x-1,y}))
-            ){
-              unmapped.push({x: x-1, y});
-              this.setRoom({x: x-1,y,id: -1});
-            } //end if
-            if(
-              this.isInbounds({x,y: y-1})&&!this.getRoom({x,y: y-1})&&
-              test(this.getSector({x,y: y-1}))
-            ){
-              unmapped.push({x,y: y-1});
-              this.setRoom({x,y: y-1,id: -1});
-            } //end if
-            if(
-              this.isInbounds({x: x+1,y})&&!this.getRoom({x: x+1,y})&&
-              test(this.getSector({x: x+1,y}))
-            ){
-              unmapped.push({x: x+1, y});
-              this.setRoom({x: x+1,y,id: -1});
-            } //end if
-            if(
-              this.isInbounds({x,y: y+1})&&!this.getRoom({x,y: y+1})&&
-              test(this.getSector({x,y: y+1}))
-            ){
-              unmapped.push({x,y: y+1});
-              this.setRoom({x,y: y+1,id: -1});
-            } //end if
-            this.setRoom({x,y,id: locStats.cur});
-            locStats.val++;
-            if(locStats.val>locStats.max){
-              locStats.max=locStats.val;
-              locStats.num=locStats.cur;
-            } //end manage maximum mass
-            newLoc = unmapped.pop();
-          }while(newLoc!==undefined)
-        } //end if
-      });
+      if(test(sector)&&!sector.roomNumber){
+        locStats.cur++; locStats.val = 1; //init new room
+        let newLoc = {x:sectorX,y:sectorY,id: locStats.cur},
+            x, y;
+
+        do{
+          ({x,y}=newLoc);
+          if(
+            this.isInbounds({x: x-1,y})&&!this.getRoom({x: x-1,y})&&
+            test(this.getSector({x: x-1,y}))
+          ){
+            unmapped.push({x: x-1, y});
+            this.setRoom({x: x-1,y,id: -1});
+          } //end if
+          if(
+            this.isInbounds({x,y: y-1})&&!this.getRoom({x,y: y-1})&&
+            test(this.getSector({x,y: y-1}))
+          ){
+            unmapped.push({x,y: y-1});
+            this.setRoom({x,y: y-1,id: -1});
+          } //end if
+          if(
+            this.isInbounds({x: x+1,y})&&!this.getRoom({x: x+1,y})&&
+            test(this.getSector({x: x+1,y}))
+          ){
+            unmapped.push({x: x+1, y});
+            this.setRoom({x: x+1,y,id: -1});
+          } //end if
+          if(
+            this.isInbounds({x,y: y+1})&&!this.getRoom({x,y: y+1})&&
+            test(this.getSector({x,y: y+1}))
+          ){
+            unmapped.push({x,y: y+1});
+            this.setRoom({x,y: y+1,id: -1});
+          } //end if
+          this.setRoom({x,y,id: locStats.cur});
+          locStats.val++;
+          if(locStats.val>locStats.max){
+            locStats.max=locStats.val;
+            locStats.num=locStats.cur;
+          } //end manage maximum mass
+          newLoc = unmapped.pop();
+        }while(newLoc!==undefined)
+      } //end if
     });
-    this.sectors.forEach(row=>{
-      row.forEach(sector=>{
-        if(test(sector)&&sector.roomNumber!==locStats.num){
-          failure(sector);
-        }else if(test(sector)&&sector.roomNumber===locStats.num){
-          success(sector);
-        }else if(hardFailure){
-          hardFailure(sector);
-        } //end if
-      });
+    this.getSectors().forEach(sector=>{
+      if(test(sector)&&sector.roomNumber!==locStats.num){
+        failure(sector);
+      }else if(test(sector)&&sector.roomNumber===locStats.num){
+        success(sector);
+      }else if(hardFailure){
+        hardFailure(sector);
+      } //end if
     });
   }
 }
