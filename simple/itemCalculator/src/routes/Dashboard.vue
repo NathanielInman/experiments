@@ -504,12 +504,6 @@ export default {
       } //end if
     },
     drawItem(item){
-
-      // only need to do this once on an item, for speed
-      if(item.stringified) {
-        this.output.push(item.stringified);
-        return;
-      };
       item.stringified = this.drawString(`${item.short} {G({g${this.customizeScore?item.customScore:item.score}{G) {R({r${item.level}{R)`);
       item.stringified.item = item; //recursive for function pointer
     },
