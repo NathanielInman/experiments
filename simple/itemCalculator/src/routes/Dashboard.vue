@@ -311,7 +311,7 @@ export default {
               'wisdom','constitution','hitroll','damroll',
               'health','mana','move'
             ].includes(affect.name)
-          ) item.customScore+=parseInt(this.weights[affect.name]||0);
+          ) item.customScore+=parseInt(this.weights[affect.name]||0)*parseInt(affect.amount);
         });
       });
       this.items = this.items.sort((a,b)=> a.customScore<b.customScore?1:a.customScore>b.customScore?-1:+a.level<+b.level?1:-1);
