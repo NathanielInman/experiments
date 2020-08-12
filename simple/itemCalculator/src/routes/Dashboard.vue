@@ -64,7 +64,7 @@ section.section(style='padding-top: 0')
       b-checkbox(v-model='showWeapons',@input='change()') Show Weapons
       b-checkbox(v-model='showOther',@input='change()') Show Other
   b-field.has-text-centered(label='Level Restriction')
-    b-slider(v-model='levelRestriction',:min='0',:max='105',@input='change()')
+    b-slider(v-model='levelRestriction',:min='0',:max='105',@change='change()')
   .code.has-text-left(v-if='output&&output.length')
     .has-text-right: b-button.top-button(icon-left='arrow-left-bold',
        type='is-primary',inverted,@click='change()',
@@ -244,7 +244,7 @@ export default {
     this.weaponFilter = query.weaponFilter || 'none';
     this.armorFilter = query.armorFilter || 'none';
     this.otherFilter = query.otherFilter || 'none';
-    this.load(query&&query.vnum ? query.vnum : null);
+    this.change(query&&query.vnum ? query.vnum : null);
   },
   methods: {
     change(vnum){
