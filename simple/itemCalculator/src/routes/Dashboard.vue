@@ -4,7 +4,12 @@ section.section(style='padding-top: 0')
     .hero-body: .container
       .columns
         .column
-          .title Item Calculator
+          .level
+            .level-left
+              .title Item Calculator
+            .level-right
+              b-button(icon-left='content-copy',type='is-primary',inverted,
+                @click='copyURL') Share URL
           .code
             span.gray short string 
             span.green-bold (
@@ -247,6 +252,27 @@ export default {
     this.change(query&&query.vnum ? query.vnum : null);
   },
   methods: {
+    copyURL(){
+      const inputEl = document.createElement('input');
+
+      inputEl.style.position = 'absolute';
+      inputEl.style.left = '-8000px';
+      document.body.appendChild(inputEl);
+      if(location.href.includes('vnum')){
+        const split = location.href.split('?'),
+              vnumString = split[1].split('&').find(s=>s.includes('vnum'));
+
+        inputEl.value = `${split[0]}?${vnumString}`;
+      }else{
+        inputEl.value = location.href;
+      } //end if
+      inputEl.select();
+      inputEl.select();
+      inputEl.setSelectionRange(0,99999);
+      document.execCommand('copy');
+      this.$buefy.toast.open('Copied URL to Clipboard!');
+      inputEl.remove();
+    },
     change(vnum){
       this.$router.push({query:{
         vnum,
