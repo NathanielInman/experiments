@@ -575,12 +575,12 @@ export default {
         }else if(flipbit){
           flipbit = false;
           if(str.length){
-            if(!colorMap.hasOwnProperty(colorSwitch)) console.log('error',colorSwitch);
+            if(!colorMap.hasOwnProperty(colorSwitch)) colorSwitch = 'x';
             line.push(colorMap[colorSwitch](str));
             str = '';
             colorSwitch = char;
           }else if(char==='t'){
-            if(!colorMap.hasOwnProperty(char)) console.log('error2',colorSwitch);
+            if(!colorMap.hasOwnProperty(char)) colorSwitch = 'x';
             line.push(colorMap[char](' '));
           }else{
             colorSwitch = char;
