@@ -106,16 +106,25 @@ section.section(style='padding-top: 0')
   b-field.has-text-centered(label='Level Restriction')
     b-slider(v-model='levelRestriction',:min='0',:max='105',@change='change()')
   .code.has-text-left(v-if='output&&output.length')
-    .has-text-right: b-button.top-button(icon-left='arrow-left-bold',
+    .has-text-right
+      b-button.top-button(icon-left='arrow-left-bold',
        type='is-primary',inverted,@click='change()',
        style='position:absolute;margin-top:-0.4rem;right:2.2rem;',
-       :disabled='!$router.currentRoute.query.vnum') Return
+       v-if='$router.currentRoute.query.vnum') Return
     template(v-for='line in output')
       .cursor(v-if='line.item',@click='change(line.item.vnum)')
         .line
           span(v-for='word in line',:class='word.class') {{word.text}}
       .line(v-if='!line.item')
         span(v-for='word in line',:class='word.class') {{word.text}}
+    b-button.bottom-button(icon-left='arrow-left',:disabled='page==0',
+      type='is-secondary',inverted,@click='previousPage',
+      v-if='!$router.currentRoute.query.vnum',
+      style='position:absolute;margin-top:-1.9rem;right:5rem')
+    b-button.bottom-button(icon-left='arrow-right',:disabled='page==pages-1',
+      type='is-secondary',inverted,@click='nextPage',
+      v-if='!$router.currentRoute.query.vnum',
+      style='position:absolute;margin-top:-1.9rem;right:2.2rem')
 </template>
 <script>
 
@@ -134,6 +143,9 @@ export default {
   data(){
     return {
       output: [],
+      page: 0,
+      pages: 0,
+      itemsPerPage: 20,
       customizeScore: false,
       weights: {
         strength: 7,
@@ -300,6 +312,14 @@ export default {
     this.change(query&&query.vnum ? query.vnum : null);
   },
   methods: {
+    previousPage(){
+      this.page--;
+      this.load();
+    },
+    nextPage(){
+      this.page++;
+      this.load();
+    },
     changeScore(){
       if(!this.customizeScore) return; //short-circuit. ignore changes
       this.items.forEach(item=>{
@@ -342,6 +362,7 @@ export default {
       inputEl.remove();
     },
     change(vnum){
+      this.page = 0;
       this.$router.push({query:{
         vnum,
         levelRestriction: this.levelRestriction,
@@ -443,7 +464,7 @@ export default {
         this.drawString('{c*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*');
       }else{
         const items = this.items.filter(item=>{
-          
+
           const meetsLevel = +item.level>=this.levelRestriction[0]&&
                  +item.level<=this.levelRestriction[1],
                 meetsArea = this.areaFilter==='none'||item.area===this.areaFilter,
@@ -488,26 +509,26 @@ export default {
         if(!items.length){
           this.drawString('{R---> {xNo Results {R<--');
         }else if(this.customizeScore){
-          items
-            .sort((a,b)=> a.customScore<b.customScore?1:a.customScore>b.customScore?-1:+a.level<+b.level?1:-1)
-            .some((item,i)=>{
-              this.drawItem(item);
-              if(i>20) this.drawString('{R---> {xmore than 20 results {R<--');
-              return i>20; //don't render more than 10
-            });
+          const sortedItems = items
+            .sort((a,b)=> a.customScore<b.customScore?1:a.customScore>b.customScore?-1:+a.level<+b.level?1:-1);
+
+          this.pages = Math.floor(sortedItems.length/this.itemsPerPage);
+          for(let i=this.page*this.itemsPerPage;i<(this.page+1)*this.itemsPerPage&&i<sortedItems.length;i++){
+            this.drawItem(items[i],i+1);
+          } //end for
         }else{
-          items
-            .sort((a,b)=> +a.score<+b.score?1:+a.score>+b.score?-1:+a.level<+b.level?1:-1)
-            .some((item,i)=>{
-              this.drawItem(item);
-              if(i>20) this.drawString('{R---> {xmore than 20 results {R<--');
-              return i>20; //don't render more than 10
-            });
+          const sortedItems = items
+            .sort((a,b)=> +a.score<+b.score?1:+a.score>+b.score?-1:+a.level<+b.level?1:-1);
+
+          this.pages = Math.floor(sortedItems.length/this.itemsPerPage);
+          for(let i=this.page*this.itemsPerPage;i<(this.page+1)*this.itemsPerPage&&i<sortedItems.length;i++){
+            this.drawItem(items[i],i+1);
+          } //end for
         } //end if
       } //end if
     },
-    drawItem(item){
-      item.stringified = this.drawString(`${item.short} {G({g${this.customizeScore?item.customScore:item.score}{G) {R({r${item.level}{R)`);
+    drawItem(item,number){
+      item.stringified = this.drawString(`${number?`{D${number}. {x`:''}${item.short} {G({g${this.customizeScore?item.customScore:item.score}{G) {R({r${item.level}{R)`);
       item.stringified.item = item; //recursive for function pointer
     },
     drawString(string){
@@ -525,6 +546,7 @@ export default {
           Y: colors.yellowBold,
           y: colors.yellow,
           w: colors.grayBold,
+          d: colors.black,
           D: colors.black,
           W: colors.white,
           x: colors.white,
@@ -549,10 +571,12 @@ export default {
         }else if(flipbit){
           flipbit = false;
           if(str.length){
+            if(!colorMap.hasOwnProperty(colorSwitch)) console.log('error',colorSwitch);
             line.push(colorMap[colorSwitch](str));
             str = '';
             colorSwitch = char;
           }else if(char==='t'){
+            if(!colorMap.hasOwnProperty(char)) console.log('error2',colorSwitch);
             line.push(colorMap[char](' '));
           }else{
             colorSwitch = char;
