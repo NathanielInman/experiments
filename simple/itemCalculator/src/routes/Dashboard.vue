@@ -108,7 +108,7 @@ section.section(style='padding-top: 0')
   .code.has-text-left(v-if='output&&output.length')
     .has-text-right
       b-button.top-button(icon-left='arrow-left-bold',
-       type='is-primary',inverted,@click='load()',
+       type='is-primary',inverted,@click='change(null)',
        style='position:absolute;margin-top:-0.4rem;right:2.2rem;',
        v-if='$router.currentRoute.query.vnum') Return
     template(v-for='line in output')
@@ -362,9 +362,7 @@ export default {
       inputEl.remove();
     },
     change(vnum){
-      if(!vnum) this.page = 0;
-      this.$router.push({query:{
-        vnum,
+      const query = {
         levelRestriction: this.levelRestriction,
         showStaffs: this.showStaffs,
         showWands: this.showWands,
@@ -383,7 +381,13 @@ export default {
         scrollFilter: this.scrollFilter,
         areaFilter: this.areaFilter,
         otherFilter: this.otherFilter
-      }});
+      };
+      if(vnum===undefined){
+        this.page = 0;
+      }else{
+        query.vnum = vnum;
+      } //end if
+      this.$router.push({query});
       this.load(vnum);
     },
     load(vnum){
