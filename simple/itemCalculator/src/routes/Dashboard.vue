@@ -243,11 +243,11 @@ export default {
     ).forEach(key=> this.scrollTypeOptions.push(key));
     const levelRestriction = +query.levelRestriction;
 
-    if(isNaN(levelRestriction)||levelRestriction<0||levelRestriction>105){
-      this.levelRestriction = 100;
+    if(!Array.isArray(query.levelRestriction)){
+      this.levelRestriction = [50,100];
     }else{
-      this.levelRestriction = levelRestriction;
-    } //end if
+      this.levelRestriction = query.levelRestriction.map(n=>+n);
+    }
     if(!query.hasOwnProperty('showStaffs')){
       this.showStaffs = true;
     }else{
@@ -442,7 +442,9 @@ export default {
         this.drawString('{c*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*');
       }else{
         const items = this.items.filter(item=>{
-          const meetsLevel = +item.level<=this.levelRestriction,
+          
+          const meetsLevel = +item.level>=this.levelRestriction[0]&&
+                 +item.level<=this.levelRestriction[1],
                 meetsArea = this.areaFilter==='none'||item.area===this.areaFilter,
                 meetsOther = this.otherTypeOptions.includes(item.itemType)&&this.showOther&&(
                   this.otherFilter==='none'||
