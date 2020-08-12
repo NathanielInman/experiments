@@ -18,46 +18,81 @@ section.section(style='padding-top: 0')
             span.red-bold (
             span.red LEVEL
             span.red-bold )
-  .columns
-    .column
-      b-field(label='Armor Filter')
-        b-select.mb-1(placeholder='Filter By Armor Slot',v-model='armorFilter',
-          @input='change()')
-          option(v-for='option in armorSlotOptions',:value='option') {{option}}
-      b-field(label='Pill Filter')
-        b-select.mb-1(placeholder='Filter By Magic Type',v-model='pillFilter',
-          @input='change()')
-          option(v-for='option in pillTypeOptions',:value='option') {{option}}
-      b-field(label='Wand Filter')
-        b-select.mb-1(placeholder='Filter By Magic Type',v-model='wandFilter',
-          @input='change()')
-          option(v-for='option in wandTypeOptions',:value='option') {{option}}
-    .column
-      b-field(label='Weapon Filter')
-        b-select.mb-1(placeholder='Filter By Weapon Type',v-model='weaponFilter',
-          @input='change()')
-          option(v-for='option in weaponTypeOptions',:value='option') {{option}}
-      b-field(label='Potions Filter')
-        b-select.mb-1(placeholder='Filter By Magic Type',v-model='potionFilter',
-          @input='change()')
-          option(v-for='option in potionTypeOptions',:value='option') {{option}}
-      b-field(label='Area Filter')
-        b-select.mb-1(placeholder='Filter By Area',v-model='areaFilter',
-          @input='change()')
-          option(v-for='option in areaOptions',:value='option') {{option}}
-    .column
-      b-field(label='Other Filter')
-        b-select.mb-1(placeholder='Filter By Other Type',v-model='otherFilter',
-          @input='change()')
-          option(v-for='option in otherTypeOptions',:value='option') {{option}}
-      b-field(label='Scroll Filter')
-        b-select.mb-1(placeholder='Filter By Magic Type',v-model='scrollFilter',
-          @input='change()')
-          option(v-for='option in scrollTypeOptions',:value='option') {{option}}
-      b-field(label='Stave Filter')
-        b-select.mb-1(placeholder='Filter By Magic Type',v-model='staffFilter',
-          @input='change()')
-          option(v-for='option in staffTypeOptions',:value='option') {{option}}
+  b-collapse.card.mb-2(animation='slide',:open='false')
+    .card-header(slot='trigger',slot-scope='props',role='button')
+      p.card-header-title Score Configuration (Advanced)
+      a.card-header-icon: b-icon(:icon='props.open?"menu-down":"menu-up"')
+    .card-content: .content
+      b-checkbox(v-model='customizeScore',@input='changeScore') Customize Score
+      .columns
+        .column
+          b-field(label='Strength')
+            b-input(v-model='weights.strength',type='number',@input='changeScore')
+          b-field(label='Dexterity')
+            b-input(v-model='weights.dexterity',type='number',@input='changeScore')
+          b-field(label='Intelligence')
+            b-input(v-model='weights.intelligence',type='number',@input='changeScore')
+          b-field(label='Wisdom')
+            b-input(v-model='weights.wisdom',type='number',@input='changeScore')
+          b-field(label='Constitution')
+            b-input(v-model='weights.constitution',type='number',@input='changeScore')
+        .column
+          b-field(label='Hitroll')
+            b-input(v-model='weights.hitroll',type='number',@input='changeScore')
+          b-field(label='Damroll')
+            b-input(v-model='weights.damroll',type='number',@input='changeScore')
+        .column
+          b-field(label='Mana')
+            b-input(v-model='weights.health',type='number',@input='changeScore')
+          b-field(label='Health')
+            b-input(v-model='weights.mana',type='number',@input='changeScore')
+          b-field(label='Move')
+            b-input(v-model='weights.move',type='number',@input='changeScore')
+  b-collapse.card.mb-2(animation='slide',:open='false')
+    .card-header(slot='trigger',slot-scope='props',role='button')
+      p.card-header-title Filters
+      a.card-header-icon: b-icon(:icon='props.open?"menu-down":"menu-up"')
+    .card-content: .content
+      .columns
+        .column
+          b-field(label='Armor Filter')
+            b-select.mb-1(placeholder='Filter By Armor Slot',v-model='armorFilter',
+              @input='change()')
+              option(v-for='option in armorSlotOptions',:value='option') {{option}}
+          b-field(label='Pill Filter')
+            b-select.mb-1(placeholder='Filter By Magic Type',v-model='pillFilter',
+              @input='change()')
+              option(v-for='option in pillTypeOptions',:value='option') {{option}}
+          b-field(label='Wand Filter')
+            b-select.mb-1(placeholder='Filter By Magic Type',v-model='wandFilter',
+              @input='change()')
+              option(v-for='option in wandTypeOptions',:value='option') {{option}}
+        .column
+          b-field(label='Weapon Filter')
+            b-select.mb-1(placeholder='Filter By Weapon Type',v-model='weaponFilter',
+              @input='change()')
+              option(v-for='option in weaponTypeOptions',:value='option') {{option}}
+          b-field(label='Potions Filter')
+            b-select.mb-1(placeholder='Filter By Magic Type',v-model='potionFilter',
+              @input='change()')
+              option(v-for='option in potionTypeOptions',:value='option') {{option}}
+          b-field(label='Area Filter')
+            b-select.mb-1(placeholder='Filter By Area',v-model='areaFilter',
+              @input='change()')
+              option(v-for='option in areaOptions',:value='option') {{option}}
+        .column
+          b-field(label='Other Filter')
+            b-select.mb-1(placeholder='Filter By Other Type',v-model='otherFilter',
+              @input='change()')
+              option(v-for='option in otherTypeOptions',:value='option') {{option}}
+          b-field(label='Scroll Filter')
+            b-select.mb-1(placeholder='Filter By Magic Type',v-model='scrollFilter',
+              @input='change()')
+              option(v-for='option in scrollTypeOptions',:value='option') {{option}}
+          b-field(label='Stave Filter')
+            b-select.mb-1(placeholder='Filter By Magic Type',v-model='staffFilter',
+              @input='change()')
+              option(v-for='option in staffTypeOptions',:value='option') {{option}}
   .level
     .level-item
       b-checkbox(v-model='showPills',@input='change()') Show Pills
@@ -99,6 +134,19 @@ export default {
   data(){
     return {
       output: [],
+      customizeScore: false,
+      weights: {
+        strength: 7,
+        dexterity: 7,
+        intelligence: 7,
+        wisdom: 7,
+        constitution: 7,
+        hitroll: 4,
+        damroll: 7,
+        health: 1,
+        mana: 1,
+        move: 0
+      },
       armorSlotOptions: [
         'none','finger','neck','body','head','legs','feet','hands','arms',
         'shield','about','waist','wrist','wield','hold','float'
@@ -252,6 +300,25 @@ export default {
     this.change(query&&query.vnum ? query.vnum : null);
   },
   methods: {
+    changeScore(){
+      if(!this.customizeScore) return; //short-circuit. ignore changes
+      this.items.forEach(item=>{
+        item.customScore=0;
+        (item.affects||[]).forEach(affect=>{
+          if(
+            [
+              'strength','dexterity','intelligence',
+              'wisdom','constitution','hitroll','damroll',
+              'health','mana','move'
+            ].includes(affect.name)
+          ) item.customScore+=parseInt(this.weights[affect.name]);
+        });
+      });
+      this.items = this.items.sort((a,b)=> a.customScore<b.customScore?1:a.customScore>b.customScore?-1:+a.level<+b.level?1:-1);
+      const {query} = this.$router.currentRoute;
+
+      this.change(query&&query.vnum?query.vnum:null);
+    },
     copyURL(){
       const inputEl = document.createElement('input');
 
@@ -417,6 +484,14 @@ export default {
 
         if(!items.length){
           this.drawString('{R---> {xNo Results {R<--');
+        }else if(this.customizeScore){
+          items
+            .sort((a,b)=> a.customScore<b.customScore?1:a.customScore>b.customScore?-1:+a.level<+b.level?1:-1)
+            .some((item,i)=>{
+              this.drawItem(item);
+              if(i>20) this.drawString('{R---> {xmore than 20 results {R<--');
+              return i>20; //don't render more than 10
+            });
         }else{
           items
             .sort((a,b)=> +a.score<+b.score?1:+a.score>+b.score?-1:+a.level<+b.level?1:-1)
