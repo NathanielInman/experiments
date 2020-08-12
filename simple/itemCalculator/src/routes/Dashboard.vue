@@ -325,10 +325,11 @@ export default {
       inputEl.style.position = 'absolute';
       inputEl.style.left = '-8000px';
       document.body.appendChild(inputEl);
-      if(location.href.includes('vnum')){
-        const split = location.href.split('?'),
-              vnumString = split[1].split('&').find(s=>s.includes('vnum'));
+      const split = location.href.split('?'),
+            vnumString = split[1].split('&').find(s=>s.includes('vnum')),
+            hasVnum = vnumString&&vnumString.includes('=');
 
+      if(hasVnum){
         inputEl.value = `${split[0]}?${vnumString}`;
       }else{
         inputEl.value = location.href;
