@@ -510,7 +510,7 @@ export default {
         this.output.push(item.stringified);
         return;
       };
-      item.stringified = this.drawString(`${item.short} {G({g${item.score}{G) {R({r${item.level}{R)`);
+      item.stringified = this.drawString(`${item.short} {G({g${this.customizeScore?item.customScore:item.score}{G) {R({r${item.level}{R)`);
       item.stringified.item = item; //recursive for function pointer
     },
     drawString(string){
