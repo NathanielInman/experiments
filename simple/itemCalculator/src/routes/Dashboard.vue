@@ -108,7 +108,7 @@ section.section(style='padding-top: 0')
   .code.has-text-left(v-if='output&&output.length')
     .has-text-right
       b-button.top-button(icon-left='arrow-left-bold',
-       type='is-primary',inverted,@click='change()',
+       type='is-primary',inverted,@click='load()',
        style='position:absolute;margin-top:-0.4rem;right:2.2rem;',
        v-if='$router.currentRoute.query.vnum') Return
     template(v-for='line in output')
@@ -362,7 +362,7 @@ export default {
       inputEl.remove();
     },
     change(vnum){
-      this.page = 0;
+      if(!vnum) this.page = 0;
       this.$router.push({query:{
         vnum,
         levelRestriction: this.levelRestriction,
