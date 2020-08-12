@@ -1,6 +1,6 @@
 {
   "name": "itemCalculator",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "item calculator for adventures unlimited",
   "main": "config.babel.js",
   "author": {
