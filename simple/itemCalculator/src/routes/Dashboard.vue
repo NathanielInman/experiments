@@ -212,7 +212,8 @@ export default {
           item.valueFlags.forEach(rawFlag=>{
             const flag = rawFlag.replace(/'/g,'').split(/\(|\)/g)[1];
 
-            if(isNaN(+flag[0])) map[flag] = true;
+            // B is a deprecated flag
+            if(isNaN(+flag[0])&&flag[0]!=='B') map[flag] = true;
           });
           return map;
         },{})
