@@ -198,7 +198,7 @@ export default {
         .filter(i=> i.itemType==='staff')
         .reduce((map,item)=>{
           item.valueFlags.forEach(rawFlag=>{
-            const flag = rawFlag.split(/\(|\)/g)[1];
+            const flag = rawFlag.replace(/'/g,'').split(/\(|\)/g)[1];
 
             if(isNaN(+flag[0])) map[flag] = true;
           });
@@ -210,7 +210,7 @@ export default {
         .filter(i=> i.itemType==='wand')
         .reduce((map,item)=>{
           item.valueFlags.forEach(rawFlag=>{
-            const flag = rawFlag.split(/\(|\)/g)[1];
+            const flag = rawFlag.replace(/'/g,'').split(/\(|\)/g)[1];
 
             if(isNaN(+flag[0])) map[flag] = true;
           });
@@ -433,6 +433,13 @@ export default {
           this.drawString(`{cDamage Type : {C${item.valueFlags[2].split(/\(|\)/g)[1]}`);
           str = item.valueFlags[3].split(/\(|\)/g)[1].split(',').join(' ');
           this.drawString(`      {cFlags : {C${!str.length?'none':str}`);
+        }else if (['staff','wand'].includes(item.itemType)){
+          this.drawString(' ');
+          item.valueFlags.forEach(flag=>{
+            const [title,value] = flag.replace(/:\s|'/g,'').split(/\(|\)/g);
+
+            this.drawString(`{c${title.padStart(13)} : {x${value}`);
+          })
         }else if(['pill','scroll','potion'].includes(item.itemType)){
           this.drawString(' ');
           const spells = [];
