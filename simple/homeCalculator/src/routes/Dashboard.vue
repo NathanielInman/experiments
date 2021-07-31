@@ -47,6 +47,12 @@ section.section(style='padding-top: 0')
     .columns(v-if='locationType=="manor"&&!isPublic'): .column: .card.mb
       .card-header: .card-header-title Henchmen
       .card-content
+        b-field.mb(label='Henchmen Number')
+          b-numberinput(v-model='henchmenNumber',:min='2',:max='6',
+            @input='updateCost')
+        b-field.mb(label='Henchmen Level')
+          b-numberinput(v-model='henchmenLevel',:min='75',:max='110',:step='5'
+            @input='updateCost')
         b-switch.mb(v-model='henchmenAll',@input='upgradeHenchmenAll') Toggle All
         p.mb.
           Starting abilities: dark vision, regeneration, detect invisibility, detect hidden, dodge, parry, kick. Weapons are free.
@@ -150,6 +156,8 @@ export default {
     }else{
       this.healingRate = +query.healingRate;
     } //end if
+    this.henchmenNumber = +query.henchmenNumber||2;
+    this.henchmenLevel = +query.henchmenLevel||75;
     this.hasPortal = query.hasPortal==='true';
     this.isPublic = query.isPublic==='true';
     this.doorLock = +query.doorLock;
@@ -300,42 +308,48 @@ export default {
       this.diamonds += this.forgeItems * 500;
       items += this.forgeItems;
       if(!this.isPublic){
-        if(this.sanctuary) this.diamonds += 125;
-        if(this.haste) this.diamonds += 100;
-        if(this.phase) this.diamonds += 100;
-        if(this.protection) this.diamonds += 50;
-        if(this.sneak) this.diamonds += 25;
-        if(this.fly) this.diamonds += 25;
-        if(this.invisibility) this.diamonds += 25;
-        if(this.criticalStrike) this.diamonds += 100;
-        if(this.counter) this.diamonds += 100;
-        if(this.dirtKick) this.diamonds += 75;
-        if(this.disarm) this.diamonds += 75;
-        if(this.berserk) this.diamonds += 50;
-        if(this.bash) this.diamonds += 25;
-        if(this.trip) this.diamonds += 10;
-        if(this.resistMonk) this.diamonds += 100;
-        if(this.resistMagic) this.diamonds += 100;
-        if(this.resistPierce) this.diamonds += 50;
-        if(this.resistSlash) this.diamonds += 50;
-        if(this.resistBash) this.diamonds += 50;
-        if(this.resistWood) this.diamonds += 25;
-        if(this.resistSilver) this.diamonds += 25;
-        if(this.resistIron) this.diamonds += 25;
-        if(this.resistLight) this.diamonds += 25;
-        if(this.resistPoison) this.diamonds += 25;
-        if(this.resistHoly) this.diamonds += 25;
-        if(this.resistEnergy) this.diamonds += 25;
-        if(this.resistDisease) this.diamonds += 25;
-        if(this.resistFire) this.diamonds += 25;
-        if(this.resistCold) this.diamonds += 25;
-        if(this.resistLightning) this.diamonds += 25;
-        if(this.resistAcid) this.diamonds += 25;
+        let henchmenDiamonds = 0;
+        if(this.sanctuary) henchmenDiamonds += 125;
+        if(this.haste) henchmenDiamonds += 100;
+        if(this.phase) henchmenDiamonds += 100;
+        if(this.protection) henchmenDiamonds += 50;
+        if(this.sneak) henchmenDiamonds += 25;
+        if(this.fly) henchmenDiamonds += 25;
+        if(this.invisibility) henchmenDiamonds += 25;
+        if(this.criticalStrike) henchmenDiamonds += 100;
+        if(this.counter) henchmenDiamonds += 100;
+        if(this.dirtKick) henchmenDiamonds += 75;
+        if(this.disarm) henchmenDiamonds += 75;
+        if(this.berserk) henchmenDiamonds += 50;
+        if(this.bash) henchmenDiamonds += 25;
+        if(this.trip) henchmenDiamonds += 10;
+        if(this.resistMonk) henchmenDiamonds += 100;
+        if(this.resistMagic) henchmenDiamonds += 100;
+        if(this.resistPierce) henchmenDiamonds += 50;
+        if(this.resistSlash) henchmenDiamonds += 50;
+        if(this.resistBash) henchmenDiamonds += 50;
+        if(this.resistWood) henchmenDiamonds += 25;
+        if(this.resistSilver) henchmenDiamonds += 25;
+        if(this.resistIron) henchmenDiamonds += 25;
+        if(this.resistLight) henchmenDiamonds += 25;
+        if(this.resistPoison) henchmenDiamonds += 25;
+        if(this.resistHoly) henchmenDiamonds += 25;
+        if(this.resistEnergy) henchmenDiamonds += 25;
+        if(this.resistDisease) henchmenDiamonds += 25;
+        if(this.resistFire) henchmenDiamonds += 25;
+        if(this.resistCold) henchmenDiamonds += 25;
+        if(this.resistLightning) henchmenDiamonds += 25;
+        if(this.resistAcid) henchmenDiamonds += 25;
+        this.diamonds += this.henchmenNumber * henchmenDiamonds;
+        if(this.henchmenNumber > 2) this.diamonds += 200 * (this.henchmenNumber - 2);
+        if(this.henchmenLevel > 75) this.diamonds += 100 * (this.henchmenLevel - 75)/5;
       } //end if
       this.gold = this.diamonds * 110;
       if(this.locationType==='house'&&items > 10) this.errors.push(`Total items (${items}) exceeds 10 for houses`);
       if(this.locationType==='manor'&&items > 15) this.errors.push(`Total items (${items}) exceeds 15 for manors`);
       this.$router.push({query: {
+        henchmenNumber: this.henchmenNumber,
+        henchmenLevel: this.henchmenLevel,
         locationType: this.locationType,
         healingRate: this.healingRate,
         hasPortal: this.hasPortal,
