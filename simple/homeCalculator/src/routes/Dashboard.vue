@@ -1,6 +1,6 @@
 <template lang="pug">
 section.section(style='padding-top: 0')
-  .hero.is-primary.mb-2.mx-r
+  .hero.is-primary.mb-6.mx-r
     .hero-body: .container
       .columns
         .column
@@ -17,7 +17,7 @@ section.section(style='padding-top: 0')
         .card.mb
           .card-header: .card-header-title Basic {{locationType}}
           .card-content.p-fluid
-            .mb Toggle Type
+            .mb-2 Toggle Type
             InputSwitch.mb(v-model='locationTypeValue',@click='locationTypeClick',
               @change='updateCost') {{locationType}}
             br
@@ -188,23 +188,23 @@ section.section(style='padding-top: 0')
           .card-header: .card-header-title Tradesguild Furniture
           .card-content.p-fluid
             .p-field
-              label(for='tradesguild-troughs') Tradesguild Troughs
+              label(for='tradesguild-troughs') Troughs
               InputNumber#tradesguild-troughs(v-model='troughItems',:min='0',:max='10',
                 :showButtons='true',buttonLayout='horizontal',@change='updateCost')
             .p-field
-              label(for='tradesguild-crucibles') Tradesguild Crucibles
+              label(for='tradesguild-crucibles') Crucibles
               InputNumber#tradesguild-crucibles(v-model='crucibleItems',:min='0',:max='10',
                 :showButtons='true',buttonLayout='horizontal',@change='updateCost')
             .p-field
-              label(for='tradesguild-anvils') Tradesguild Anvils
+              label(for='tradesguild-anvils') Anvils
               InputNumber#tradesguild-anvils(v-model='anvilItems',:min='0',:max='10',
                 :showButtons='true',buttonLayout='horizontal',@change='updateCost')
             .p-field
-              label(for='tradesguild-workbenches') Tradesguild Workbenches
+              label(for='tradesguild-workbenches') Workbenches
               InputNumber#tradesguild-workbenches(v-model='workbenchItems',:min='0',:max='10',
                 :showButtons='true',buttonLayout='horizontal',@change='updateCost')
             .p-field
-              label(for='tradesguild-forges') Tradesguild Forges
+              label(for='tradesguild-forges') Forges
               InputNumber#tradesguild-forges(v-model='forgeItems',:min='0',:max='10',
                 :showButtons='true',buttonLayout='horizontal',@change='updateCost')
 </template>
@@ -497,17 +497,7 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-.bold
-  font-weight bold
-.mb
-  margin-bottom 1rem
-.mr
-  margin-right 1rem
-.mb-2
-  margin-bottom 2rem
 .mx-r
-  margin-left -1.5rem
-  margin-right -1.5rem
-.b-slider
-  padding 0 1rem
+  margin-left -3rem
+  margin-right -3rem
 </style>
