@@ -7,8 +7,7 @@ section.section(style='padding-top: 0')
           .title Diamonds: {{diamonds}}
           .subtitle Gold: {{gold}}
         .column.has-text-right
-          b-button(icon-left='content-copy',type='is-primary',inverted,
-            @click='copyURL') Share URL
+          Button Share URL
   .hero.is-danger.mb-2.mx-r(v-if='errors.length')
     .hero-body: .container
       .subtitle(v-for='error in errors') {{error}}
@@ -16,120 +15,198 @@ section.section(style='padding-top: 0')
     .columns.is-desktop
       .column
         .card.mb
-          .card-header: .card-header-title Basic
-          .card-content
-            b-switch.mb(v-model='locationType',true-value='house',
-              false-value='manor',@input='updateCost') {{locationType}}
+          .card-header: .card-header-title Basic {{locationType}}
+          .card-content.p-fluid
+            .mb Toggle Type
+            InputSwitch.mb(v-model='locationTypeValue',@click='locationTypeClick',
+              @change='updateCost') {{locationType}}
             br
-            b-checkbox.mb(v-model='isPublic',@input='updateCost') is public
-            b-checkbox.mb(v-model='hasPortal',@input='updateCost') has portal
-            b-field.mb(label='Healing Rate')
-              b-slider(v-model='healingRate',:min='100',:max='400',:step='10',
-                @input='updateCost')
+            .p-field-checkbox
+              Checkbox#is-public(v-model='isPublic',@change='updateCost',:binary='true')
+              label(for='is-public') is public
+            .p-field-checkbox
+              Checkbox#has-portal(v-model='hasPortal',@change='updateCost',:binary='true')
+              label(for='has-portal') has portal
+            .p-field
+              label(for='healing-rate') Healing Rate
+              Slider#healing-rate(v-model='healingRate',:min='100',:max='400',:step='10',
+                @change='updateCost')
       .column(v-if='locationType=="house"')
         .card.mb
           .card-header: .card-header-title Door
-          .card-content
-            b-select.mb(v-model='doorType',@input='updateCost',:disabled="locationType=='manor'")
-              option(value='0') wood door
-              option(value='50') stone door
-              option(value='100') metal door
-            b-select.mb(v-model='doorLock',@input='updateCost',:disabled="locationType=='manor'")
-              option(value='0') easy difficulty lock
-              option(value='200') regular difficulty lock
-              option(value='400') hard difficulty lock
-              option(value='600') implausible difficulty lock
-              option(value='800') improbable difficulty lock
-              option(value='1000') impossible difficulty lock
-            b-field.mb(label='Lock Level',:disabled="locationType=='manor'")
-              b-slider(v-model='lockLevel',:min='50',:max='100',:step='1'
-                @input='updateCost')
+          .card-content.p-fluid
+            .p-field
+              label(for='door-type') Door Type
+              Dropdown#door-type(v-model='doorType',:options='doorTypes',optionLabel='name',optionValue='value',
+                @change='updateCost')
+            .p-field
+              label(for='lock-type') Lock Type
+              Dropdown(v-model='doorLock',:options='lockTypes',optionLabel='name',optionValue='value',
+                @change='updateCost')
+            .p-field
+              label(for='lock-level') Lock Level {{lockLevel}}
+              Slider(v-model='lockLevel',:step='1',:min='50',:max='100',@change='updateCost')
     .columns(v-if='locationType=="manor"&&!isPublic'): .column: .card.mb
       .card-header: .card-header-title Henchmen
-      .card-content
-        b-field.mb(label='Number')
-          b-numberinput(v-model='henchmenNumber',:min='2',:max='6',
-            @input='updateCost')
-        b-field.mb(label='Level')
-          b-numberinput(v-model='henchmenLevel',:min='75',:max='110',:step='5'
-            @input='updateCost')
-        b-switch.mb(v-model='henchmenAll',@input='upgradeHenchmenAll') Toggle All
+      .card-content.p-fluid
+        .p-field
+          label(for='henchmen-number') Number
+          InputNumber#henchmen-number(v-model='henchmenNumber',:min='2',:max='6',
+            :showButtons='true',buttonLayout='horizontal',@change='updateCost')
+        .p-field
+          label(for='henchmen-level') Level {{henchmenLevel}}
+          Slider#henchmen-level(v-model='henchmenLevel',:step='5',:min='75',:max='110',
+            @change='updateCost')
+        .p-field
+          .mb Toggle All
+          InputSwitch#toggle-all-henchmen(v-model='henchmenAll',
+            @click='upgradeHenchmenAll')
         p.mb.
           Starting abilities: dark vision, regeneration, detect invisibility, detect hidden, dodge, parry, kick. Weapons are free.
         .columns.is-desktop
           .column
             .title General Upgrades
-            b-checkbox.mb.mr(v-model='sanctuary',@input='updateCost') Sanctuary
-            b-checkbox.mb.mr(v-model='haste',@input='updateCost') Haste
-            b-checkbox.mb.mr(v-model='phase',@input='updateCost') Phase
-            b-checkbox.mb.mr(v-model='protection',@input='updateCost') Protection (either evil or good)
-            b-checkbox.mb.mr(v-model='sneak',@input='updateCost') Sneak
-            b-checkbox.mb.mr(v-model='fly',@input='updateCost') Fly
-            b-checkbox.mb(v-model='invisibility',@input='updateCost') Invisibility
+            .p-field-checkbox
+              Checkbox#sanctuary(v-model='sanctuary',@change='updateCost',:binary='true')
+              label(for='sanctuary') Sanctuary
+            .p-field-checkbox
+              Checkbox#haste(v-model='haste',@change='updateCost',:binary='true')
+              label(for='haste') Haste
+            .p-field-checkbox
+              Checkbox#phase(v-model='phase',@change='updateCost',:binary='true')
+              label(for='phase') Phase
+            .p-field-checkbox
+              Checkbox#protection(v-model='protection',@change='updateCost',:binary='true')
+              label(for='protection') Protection (either evil or good)
+            .p-field-checkbox
+              Checkbox#sneak(v-model='sneak',@change='updateCost',:binary='true')
+              label(for='sneak') Sneak
+            .p-field-checkbox
+              Checkbox#fly(v-model='fly',@change='updateCost',:binary='true')
+              label(for='fly') Fly
+            .p-field-checkbox
+              Checkbox#invisibility(v-model='invisibility',@change='updateCost',:binary='true')
+              label(for='invisibility') Invisibility
           .column
             .title Offensive Abilities
-            b-checkbox.mb.mr(v-model='criticalStrike',@input='updateCost') Critical Strike
-            b-checkbox.mb.mr(v-model='counter',@input='updateCost') Counter
-            b-checkbox.mb.mr(v-model='dirtKick',@input='updateCost') Dirt Kick
-            b-checkbox.mb.mr(v-model='disarm',@input='updateCost') Disarm
-            b-checkbox.mb.mr(v-model='berserk',@input='updateCost') Berserk
-            b-checkbox.mb.mr(v-model='bash',@input='updateCost') Bash
-            b-checkbox.mb(v-model='trip',@input='updateCost') Trip
+            .p-field-checkbox
+              Checkbox#critical-strike(v-model='criticalStrike',@change='updateCost',:binary='true')
+              label(for='critical-strike') Critical Strike
+            .p-field-checkbox
+              Checkbox#counter(v-model='counter',@change='updateCost',:binary='true')
+              label(for='counter') Counter
+            .p-field-checkbox
+              Checkbox#dirt-kick(v-model='dirtKick',@change='updateCost',:binary='true')
+              label(for='dirt-kick') Dirt Kick
+            .p-field-checkbox
+              Checkbox#disarm(v-model='disarm',@change='updateCost',:binary='true')
+              label(for='disarm') Disarm
+            .p-field-checkbox
+              Checkbox#berserk(v-model='berserk',@change='updateCost',:binary='true')
+              label(for='berserk') Berserk
+            .p-field-checkbox
+              Checkbox#bash(v-model='bash',@change='updateCost',:binary='true')
+              label(for='bash') Bash
+            .p-field-checkbox
+              Checkbox#trip(v-model='trip',@change='updateCost',:binary='true')
+              label(for='trip') Trip
         .columns.is-desktop
           .column
             .title Major Resistances
-            b-checkbox.mb.mr(v-model='resistMonk',@input='updateCost') Monk
-            b-checkbox.mb.mr(v-model='resistMagic',@input='updateCost') Magic
-            b-checkbox.mb.mr(v-model='resistPierce',@input='updateCost') Pierce
-            b-checkbox.mb.mr(v-model='resistSlash',@input='updateCost') Slash
-            b-checkbox.mb.mr(v-model='resistBash',@input='updateCost') Bash
+            .p-field-checkbox
+              Checkbox#monk(v-model='resistMonk',@change='updateCost',:binary='true')
+              label(for='monk') Monk
+            .p-field-checkbox
+              Checkbox#magic(v-model='resistMagic',@change='updateCost',:binary='true')
+              label(for='magic') Magic
+            .p-field-checkbox
+              Checkbox#pierce(v-model='resistPierce',@change='updateCost',:binary='true')
+              label(for='pierce') Pierce
+            .p-field-checkbox
+              Checkbox#slash(v-model='resistSlash',@change='updateCost',:binary='true')
+              label(for='slash') Slash
+            .p-field-checkbox
+              Checkbox#bash(v-model='resistBash',@change='updateCost',:binary='true')
+              label(for='bash') Bash
           .column
             .title Minor Resistances
-            b-checkbox.mb.mr(v-model='resistWood',@input='updateCost') Wood
-            b-checkbox.mb.mr(v-model='resistSilver',@input='updateCost') Silver
-            b-checkbox.mb.mr(v-model='resistIron',@input='updateCost') Iron
-            b-checkbox.mb.mr(v-model='resistLight',@input='updateCost') Light
-            b-checkbox.mb.mr(v-model='resistPoison',@input='updateCost') Poison
-            b-checkbox.mb.mr(v-model='resistHoly',@input='updateCost') Holy
-            b-checkbox.mb.mr(v-model='resistEnergy',@input='updateCost') Energy
-            b-checkbox.mb.mr(v-model='resistDisease',@input='updateCost') Disease
-            b-checkbox.mb.mr(v-model='resistFire',@input='updateCost') Fire
-            b-checkbox.mb.mr(v-model='resistCold',@input='updateCost') Cold
-            b-checkbox.mb.mr(v-model='resistLightning',@input='updateCost') Lightning
-            b-checkbox.mb(v-model='resistAcid',@input='updateCost') Acid
+            .p-field-checkbox
+              Checkbox#wood(v-model='resistWood',@change='updateCost',:binary='true')
+              label(for='wood') Wood
+            .p-field-checkbox
+              Checkbox#silver(v-model='resistSilver',@change='updateCost',:binary='true')
+              label(for='silver') Silver
+            .p-field-checkbox
+              Checkbox#iron(v-model='resistIron',@change='updateCost',:binary='true')
+              label(for='iron') Iron
+            .p-field-checkbox
+              Checkbox#light(v-model='resistLight',@change='updateCost',:binary='true')
+              label(for='light') Light
+            .p-field-checkbox
+              Checkbox#poison(v-model='resistPoison',@change='updateCost',:binary='true')
+              label(for='poison') Poison
+            .p-field-checkbox
+              Checkbox#holy(v-model='resistHoly',@change='updateCost',:binary='true')
+              label(for='holy') Holy
+            .p-field-checkbox
+              Checkbox#energy(v-model='resistEnergy',@change='updateCost',:binary='true')
+              label(for='energy') Energy
+            .p-field-checkbox
+              Checkbox#disease(v-model='resistDisease',@change='updateCost',:binary='true')
+              label(for='disease') Disease
+            .p-field-checkbox
+              Checkbox#fire(v-model='resistFire',@change='updateCost',:binary='true')
+              label(for='fire') Fire
+            .p-field-checkbox
+              Checkbox#cold(v-model='resistCold',@change='updateCost',:binary='true')
+              label(for='cold') Cold
+            .p-field-checkbox
+              Checkbox#lightning(v-model='resistLightning',@change='updateCost',:binary='true')
+              label(for='lightning') Lightning
+            .p-field-checkbox
+              Checkbox#acid(v-model='resistAcid',@change='updateCost',:binary='true')
+              label(for='acid') Acid
     .columns.is-desktop
       .column
         .card.mb
           .card-header: .card-header-title Basic Furniture
-          .card-content
-            b-field.mb(label='Furniture Pieces')
-              b-numberinput(v-model='furnitureItems',:min='0',:max='10',
-                @input='updateCost')
-            b-field.mb(label='Fireplaces')
-              b-numberinput(v-model='fireplaceItems',:min='0',:max='10',
-                @input='updateCost')
-            b-field.mb(label='Fountains')
-              b-numberinput(v-model='fountainItems',:min='0',:max='10',
-                @input='updateCost')
+          .card-content.p-fluid
+            .p-field
+              label(for='furniture-pieces') Furniture Pieces
+              InputNumber#furniture-items(v-model='furnitureItems',:min='0',:max='10',
+                :showButtons='true',buttonLayout='horizontal',@change='updateCost')
+            .p-field
+              label(for='fireplaces') Fireplaces
+              InputNumber#fireplaces(v-model='fireplaceItems',:min='0',:max='10',
+                :showButtons='true',buttonLayout='horizontal',@change='updateCost')
+            .p-field
+              label(for='fountains') Fountains
+              InputNumber#fountains(v-model='fountainItems',:min='0',:max='10',
+                :showButtons='true',buttonLayout='horizontal',@change='updateCost')
       .column
         .card.mb
           .card-header: .card-header-title Tradesguild Furniture
-          .card-content
-            b-field.mb(label='Tradesguild Troughs')
-              b-numberinput(v-model='troughItems',:min='0',:max='10',
-                @input='updateCost')
-            b-field.mb(label='Tradesguild Crucibles')
-              b-numberinput(v-model='crucibleItems',:min='0',:max='10',
-                @input='updateCost')
-            b-field.mb(label='Tradesguild Anvils')
-              b-numberinput(v-model='anvilItems',:min='0',:max='10',
-                @input='updateCost')
-            b-field.mb(label='Tradesguild Workbenches')
-              b-numberinput(v-model='workbenchItems',:min='0',:max='10',
-                @input='updateCost')
-            b-field.mb(label='Tradesguild Forges')
-              b-numberinput(v-model='forgeItems',:min='0',:max='10',
-                @input='updateCost')
+          .card-content.p-fluid
+            .p-field
+              label(for='tradesguild-troughs') Tradesguild Troughs
+              InputNumber#tradesguild-troughs(v-model='troughItems',:min='0',:max='10',
+                :showButtons='true',buttonLayout='horizontal',@change='updateCost')
+            .p-field
+              label(for='tradesguild-crucibles') Tradesguild Crucibles
+              InputNumber#tradesguild-crucibles(v-model='crucibleItems',:min='0',:max='10',
+                :showButtons='true',buttonLayout='horizontal',@change='updateCost')
+            .p-field
+              label(for='tradesguild-anvils') Tradesguild Anvils
+              InputNumber#tradesguild-anvils(v-model='anvilItems',:min='0',:max='10',
+                :showButtons='true',buttonLayout='horizontal',@change='updateCost')
+            .p-field
+              label(for='tradesguild-workbenches') Tradesguild Workbenches
+              InputNumber#tradesguild-workbenches(v-model='workbenchItems',:min='0',:max='10',
+                :showButtons='true',buttonLayout='horizontal',@change='updateCost')
+            .p-field
+              label(for='tradesguild-forges') Tradesguild Forges
+              InputNumber#tradesguild-forges(v-model='forgeItems',:min='0',:max='10',
+                :showButtons='true',buttonLayout='horizontal',@change='updateCost')
 </template>
 <script>
 import Vuex from 'vuex';
@@ -143,9 +220,10 @@ export default {
     ...mapState('user',['name'])
   },
   created(){
-    const {query} = this.$router.currentRoute;
+    const {query} = this.$router.currentRoute.value;
 
     this.locationType = query.locationType||'manor';
+    this.locationTypeValue = false;
 
     if(isNaN(+query.healingRate)||+query.healingRate<100||+query.healingRate>400){
       if(this.locationType==='manor'){
@@ -156,6 +234,7 @@ export default {
     }else{
       this.healingRate = +query.healingRate;
     } //end if
+    this.henchmenAll = false;
     this.henchmenNumber = +query.henchmenNumber||2;
     this.henchmenLevel = +query.henchmenLevel||75;
     this.hasPortal = query.hasPortal==='true';
@@ -202,17 +281,33 @@ export default {
     this.resistCold = query.resistCold==='true';
     this.resistLightning = query.resistLightning==='true';
     this.resistAcid = query.resistAcid==='true';
-    console.log('this',this);
+    this.updateCost();
   },
   data(){
     return {
       diamonds: 0,
       gold: 0,
-      henchmenAll: false,
-      errors: []
+      errors: [],
+      doorTypes: [
+        { name: 'wood door', value: 0 },
+        { name: 'stone door', value: 50 },
+        { name: 'metal door', value: 100 }
+      ],
+      lockTypes: [
+        { name: 'easy difficulty lock', value: 0 },
+        { name: 'regular difficulty lock', value: 200 },
+        { name: 'hard difficulty lock', value: 400 },
+        { name: 'implausible difficulty lock', value: 600 },
+        { name: 'improbable difficulty lock', value: 800 },
+        { name: 'impossible difficulty lock', value: 1000 }
+      ]
     };
   },
   methods: {
+    locationTypeClick(){
+      this.locationTypeValue = !!this.locationTypeValue;
+      this.locationType = this.locationTypeValue ? 'manor' : 'house';
+    },
     copyURL(){
       const inputEl = document.createElement('input');
 
@@ -261,7 +356,7 @@ export default {
       this.resistAcid = this.henchmenAll;
     },
     upgradeHenchmenAll(){
-      this.henchmenAll = !!this.henchmenAll;
+      this.henchmenAll = !this.henchmenAll;
       this.acquireHenchmenStatus();
       this.$forceUpdate();
       this.updateCost();
@@ -342,7 +437,7 @@ export default {
         if(this.resistAcid) henchmenDiamonds += 25;
         this.diamonds += this.henchmenNumber * henchmenDiamonds;
         if(this.henchmenNumber > 2) this.diamonds += 200 * (this.henchmenNumber - 2);
-        if(this.henchmenLevel > 75) this.diamonds += 100 * (this.henchmenLevel - 75)/5;
+        if(this.henchmenLevel > 75) this.diamonds += 100 * (this.henchmenLevel - 75)/5 *this.henchmenNumber;
       } //end if
       this.gold = this.diamonds * 110;
       if(this.locationType==='house'&&items > 10) this.errors.push(`Total items (${items}) exceeds 10 for houses`);

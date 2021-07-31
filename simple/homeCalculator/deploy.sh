@@ -6,7 +6,7 @@ VERSION=$(awk '/version/{gsub(/("|",)/,"",$2);print $2};' package.json)
 HASH=$(git rev-parse head)
 TODAY=$(date)
 USER=$(whoami)
-KEY="/Users/$USER/.ssh/id_rsa"
+KEY="/home/$USER/.ssh/id_rsa"
 
 # Now package and move to server
 echo "Cleaning distribution folder..."

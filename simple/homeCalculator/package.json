@@ -17,27 +17,26 @@
   "scripts": {
     "deploy": "./deploy.sh",
     "prestart": "rm -rf ./parcel",
-    "build:development": "NODE_ENV=development ./node_modules/parcel/bin/cli.js ./src/index.pug -d dist --cache-dir .parcel",
-    "build:production": "NODE_ENV=production ./node_modules/parcel/bin/cli.js build ./src/index.pug -d dist --no-source-maps",
+    "build:development": "NODE_ENV=development node ./node_modules/parcel/lib/cli.js ./src/index.pug --dist-dir dist --cache-dir .parcel",
+    "build:production": "NODE_ENV=production ./node_modules/parcel/lib/cli.js build ./src/index.pug --dist-dir dist --no-source-maps",
     "start": "npm run build:development"
   },
   "devDependencies": {
-    "@vue/component-compiler-utils": "^3.2.2",
-    "babel-core": "^6.26.3",
-    "babel-plugin-transform-regenerator": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "eslint-plugin-vue": "^7.15.0",
-    "parcel": "1.12.3",
-    "pug": "^3.0.2",
-    "stylus": "^0.54.8",
-    "vue-template-compiler": "^2.6.14"
+    "@parcel/transformer-pug": "^2.0.0-beta.2",
+    "@parcel/transformer-stylus": "^2.0.0-beta.2",
+    "@parcel/transformer-vue": "^2.0.0-beta.2",
+    "parcel": "^2.0.0-beta.2"
   },
   "dependencies": {
     "buefy": "^0.9.8",
-    "vue": "^2.6.14",
+    "core-js": "^3.16.0",
+    "primeflex": "^2.0.0",
+    "primeicons": "^4.1.0",
+    "primevue": "^3.6.0",
+    "vue": "^3.1.5",
     "vue-hot-reload-api": "^2.3.4",
-    "vue-router": "^3.5.2",
-    "vuex": "^3.6.2"
+    "vue-router": "^4.0.10",
+    "vuex": "^4.0.2"
   },
   "readmeFilename": "README.md",
   "homepage": "https://github.com/NathanielInman/homeCalculator"

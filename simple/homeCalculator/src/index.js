@@ -1,30 +1,28 @@
-import '@babel/polyfill';
+import 'core-js/stable';
 import './index.styl';
-import 'buefy/dist/buefy.min.css'
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import Buefy from 'buefy';
-import {routes} from './routes';
-import {store} from './store/';
+import 'primeflex/primeflex.css';
+import 'buefy/dist/buefy.min.css';
+import { createApp } from 'vue';
+import PrimeVue from 'primevue/config';
+import Button from 'primevue/button';
+import Checkbox from 'primevue/checkbox';
+import Dropdown from 'primevue/dropdown';
+import InputNumber from 'primevue/inputnumber';
+import InputSwitch from 'primevue/inputswitch';
+import Slider from 'primevue/slider';
+import { router } from './routes';
+import { store } from './store/';
 import App from './App.vue';
 
-// Ensure production gets no vue messages and dev gets correct ones
-Vue.config.devtools = false;
-if(process.env.NODE_ENV==='production'){
-  Vue.config.silent = true;
-  Vue.config.productionTip = false;
-} //end if
-
-// Ensure that we're using the official vue router
-Vue.use(VueRouter);
-Vue.use(Buefy);
-
-// initialize the routes
-const router = new VueRouter({routes});
-
 // initialize the application
-new Vue({
-  el: 'app',
-  router, store,
-  render: h=> h(App)
-});
+createApp(App)
+  .use(PrimeVue)
+  .use(store)
+  .use(router)
+  .component('Button', Button)
+  .component('Checkbox', Checkbox)
+  .component('Dropdown', Dropdown)
+  .component('InputNumber', InputNumber)
+  .component('InputSwitch', InputSwitch)
+  .component('Slider', Slider)
+  .mount('app');
