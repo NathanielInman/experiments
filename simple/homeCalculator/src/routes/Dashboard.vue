@@ -47,10 +47,10 @@ section.section(style='padding-top: 0')
     .columns(v-if='locationType=="manor"&&!isPublic'): .column: .card.mb
       .card-header: .card-header-title Henchmen
       .card-content
-        b-field.mb(label='Henchmen Number')
+        b-field.mb(label='Number')
           b-numberinput(v-model='henchmenNumber',:min='2',:max='6',
             @input='updateCost')
-        b-field.mb(label='Henchmen Level')
+        b-field.mb(label='Level')
           b-numberinput(v-model='henchmenLevel',:min='75',:max='110',:step='5'
             @input='updateCost')
         b-switch.mb(v-model='henchmenAll',@input='upgradeHenchmenAll') Toggle All
