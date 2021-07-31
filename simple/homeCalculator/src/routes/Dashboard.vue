@@ -52,7 +52,7 @@ section.section(style='padding-top: 0')
         .p-field
           label(for='henchmen-number') Number
           InputNumber#henchmen-number(v-model='henchmenNumber',:min='2',:max='6',
-            :showButtons='true',buttonLayout='horizontal',@change='updateCost')
+            :showButtons='true',buttonLayout='horizontal',@input='updateCost')
         .p-field
           label(for='henchmen-level') Level {{henchmenLevel}}
           Slider#henchmen-level(v-model='henchmenLevel',:step='5',:min='75',:max='110',
@@ -63,7 +63,7 @@ section.section(style='padding-top: 0')
             @click='upgradeHenchmenAll')
         p.mb.
           Starting abilities: dark vision, regeneration, detect invisibility, detect hidden, dodge, parry, kick. Weapons are free.
-        .columns.is-desktop
+        .columns.is-desktop.pt-6
           .column
             .title General Upgrades
             .p-field-checkbox
@@ -174,15 +174,15 @@ section.section(style='padding-top: 0')
             .p-field
               label(for='furniture-pieces') Furniture Pieces
               InputNumber#furniture-items(v-model='furnitureItems',:min='0',:max='10',
-                :showButtons='true',buttonLayout='horizontal',@change='updateCost')
+                :showButtons='true',buttonLayout='horizontal',@input='updateCost')
             .p-field
               label(for='fireplaces') Fireplaces
               InputNumber#fireplaces(v-model='fireplaceItems',:min='0',:max='10',
-                :showButtons='true',buttonLayout='horizontal',@change='updateCost')
+                :showButtons='true',buttonLayout='horizontal',@input='updateCost')
             .p-field
               label(for='fountains') Fountains
               InputNumber#fountains(v-model='fountainItems',:min='0',:max='10',
-                :showButtons='true',buttonLayout='horizontal',@change='updateCost')
+                :showButtons='true',buttonLayout='horizontal',@input='updateCost')
       .column
         .card.mb
           .card-header: .card-header-title Tradesguild Furniture
@@ -190,23 +190,23 @@ section.section(style='padding-top: 0')
             .p-field
               label(for='tradesguild-troughs') Troughs
               InputNumber#tradesguild-troughs(v-model='troughItems',:min='0',:max='10',
-                :showButtons='true',buttonLayout='horizontal',@change='updateCost')
+                :showButtons='true',buttonLayout='horizontal',@input='updateCost')
             .p-field
               label(for='tradesguild-crucibles') Crucibles
               InputNumber#tradesguild-crucibles(v-model='crucibleItems',:min='0',:max='10',
-                :showButtons='true',buttonLayout='horizontal',@change='updateCost')
+                :showButtons='true',buttonLayout='horizontal',@input='updateCost')
             .p-field
               label(for='tradesguild-anvils') Anvils
               InputNumber#tradesguild-anvils(v-model='anvilItems',:min='0',:max='10',
-                :showButtons='true',buttonLayout='horizontal',@change='updateCost')
+                :showButtons='true',buttonLayout='horizontal',@input='updateCost')
             .p-field
               label(for='tradesguild-workbenches') Workbenches
               InputNumber#tradesguild-workbenches(v-model='workbenchItems',:min='0',:max='10',
-                :showButtons='true',buttonLayout='horizontal',@change='updateCost')
+                :showButtons='true',buttonLayout='horizontal',@input='updateCost')
             .p-field
               label(for='tradesguild-forges') Forges
               InputNumber#tradesguild-forges(v-model='forgeItems',:min='0',:max='10',
-                :showButtons='true',buttonLayout='horizontal',@change='updateCost')
+                :showButtons='true',buttonLayout='horizontal',@input='updateCost')
 </template>
 <script>
 import Vuex from 'vuex';

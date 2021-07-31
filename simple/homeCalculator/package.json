@@ -2,7 +2,6 @@
   "name": "homeCalculator",
   "version": "0.2.0",
   "description": "home calculator for adventures unlimited",
-  "main": "config.babel.js",
   "author": {
     "name": "Nathaniel Inman",
     "email": "nate@theoestudio.com"
@@ -18,7 +17,7 @@
     "deploy": "./deploy.sh",
     "prestart": "rm -rf ./parcel",
     "build:development": "NODE_ENV=development node ./node_modules/parcel/lib/cli.js ./src/index.pug --dist-dir dist --cache-dir .parcel",
-    "build:production": "NODE_ENV=production ./node_modules/parcel/lib/cli.js build ./src/index.pug --dist-dir dist --no-source-maps",
+    "build:production": "NODE_ENV=production node ./node_modules/parcel/lib/cli.js build ./src/index.pug --dist-dir dist --no-source-maps --no-scope-hoist",
     "start": "npm run build:development"
   },
   "devDependencies": {
