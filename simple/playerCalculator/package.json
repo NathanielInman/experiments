@@ -49,7 +49,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
-    "buefy": "^0.6.7",
+    "buefy": "^0.7.2",
     "ion-cloud": "^1.13.11",
     "vue": "^2.5.17"
   },
