@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css?family=Anonymous+Pro');
+
+html,body
+  background #2e3440
+  color #d8dee9
+  h1.title
+    color #81a1c1
+
+
+.footer
+  background #000
+  strong
+    color #0087bd
+// Optimize kerning of all text rendered
+body, input, textarea, select, button
+  text-rendering optimizeLegibility
+  -webkit-font-smoothing antialiased !important
+
+.b-tabs .tab-content
+  overflow visible
+
+section.tab-content
+  background #fff
+  padding 1rem
+  border-right 1px solid #dbdbdb
+  border-left 1px solid #dbdbdb
+  border-bottom 1px solid #dbdbdb
+.b-tabs .tabs
+  margin-bottom 0
+
+.margin-bottom
+  margin-bottom 2rem
+
+pre
+  max-height 30rem
+  overflow-y scroll
+  &.code
+    background-color #111
+    color #999
+    border-radius 1rem
+    ol
+      margin-left 2rem
+.code
+  font-family 'Anonymous Pro', monospace
+  max-height 50rem
+  overflow-y scroll
+  background-color #111
+  color #aaa
+  border-radius 1rem
+  padding 1rem
+  .red-bold
+    color #bf616a //#f00
+    font-weight bold
+  .red
+    color #bf616a //#a00
+  .green-bold
+    color #a3be8c //#0f0
+    font-weight bold
+  .green
+    color #a3be8c //#0a0
+  .blue-bold
+    color #81a1c1 //#58f
+    font-weight bold
+  .blue
+    color #81a1c1 //#36a
+  .cyan-bold
+    color #8fbcbb //#0ff
+    font-weight bold
+  .cyan
+    color #88c0d0 //#0aa
+  .magenta-bold
+    color #b48ead //#f0f
+    font-weight bold
+  .magenta
+    color #b48ead //#a0a
+  .yellow-bold
+    color #ebcb8b //#ff0
+    font-weight bold
+  .yellow
+    color #ebcb8b //#aa0
+  .black
+    color #3b4252 //#000
+  .white
+    color #fff //#fff
+    font-weight bold
+  .gray-bold
+    color #e5e9f0 //#ccc
+    font-weight bold
+  .gray
+    color #4c566a //#aaa
+
+body > main // main containing div
+  display flex
+  min-height 100vh
+  flex-direction column
+  > main // main content div
+    flex 1
