@@ -4,8 +4,8 @@ import Dashboard from './routes/Dashboard';
 
 const routes = [
   ...helpRoute,
-  {path: '/dashboard', name: 'Dashboard', component: Dashboard},
-  {path: '/:catchAll(.*)', redirect: '/dashboard'}
+  {path: '/', name: 'Dashboard', component: Dashboard},
+  {path: '/:catchAll(.*)', redirect: '/'}
 ];
 
 export const router = createRouter({

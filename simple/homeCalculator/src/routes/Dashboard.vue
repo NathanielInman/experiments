@@ -7,7 +7,7 @@ section.section(style='padding-top: 0')
           .title Diamonds: {{diamonds}}
           .subtitle Gold: {{gold}}
         .column.has-text-right
-          Button Share URL
+          Button(@click='copyURL()') Share URL
   .hero.is-danger.mb-2.mx-r(v-if='errors.length')
     .hero-body: .container
       .subtitle(v-for='error in errors') {{error}}
