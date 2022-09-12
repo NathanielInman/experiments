@@ -22,7 +22,7 @@
   "readmeFilename": "README.md",
   "homepage": "https://github.com/Nathaniel Inman/node_machine",
   "devDependencies": {
-    "serve": "^1.4.0"
+    "serve": "^11.3.2"
   },
   "jspm": {
     "directories": {
