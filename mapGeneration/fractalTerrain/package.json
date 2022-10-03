@@ -22,7 +22,7 @@
     "start": "node ./node_modules/webpack/bin/webpack.js --config ./config.babel.js"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.9",
+    "autoprefixer": "^10.4.12",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.3",
