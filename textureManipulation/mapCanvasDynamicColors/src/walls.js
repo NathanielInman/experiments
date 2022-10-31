@@ -84,4 +84,4 @@ export const walls = [
     character: '~',
     color: '#b38080'
   }
-]
+];

@@ -252,4 +252,4 @@ export const environments = [
     ],
     description: 'composed prediminately of coniferous trees like larch, spruce, fire, and pine, this area is high in altitude.'
   }
-]
+];

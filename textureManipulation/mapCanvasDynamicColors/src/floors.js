@@ -83,4 +83,4 @@ export const floors = [
     character: '+',
     color: '#1b1b32'
   }
-]
+];
