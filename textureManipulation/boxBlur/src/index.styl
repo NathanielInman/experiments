@@ -1,3 +1,28 @@
+// Base Colors
+base-color  = #E6E9ED
+light-color = base-color + #666
+dark-color  = base-color - #666
+error-color = #C33
+light-blue = #C4CDD9
+dark-blue = #34383F
+white = #fff
+
+// Optimize kerning of all text rendered
+body, input, textarea, select, button
+  text-rendering optimizeLegibility
+  -webkit-font-smoothing antialiased !important
+
+svg
+  display inline-block
+  vertical-align middle
+
+// Make sure placeholder text is held over specific rules
+::placeholder
+  color colorBright !important
+
+a
+  text-decoration none
+
 .loader
   &,&:before,&:after
     background #000
