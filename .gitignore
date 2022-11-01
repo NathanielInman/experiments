@@ -1,5 +1,6 @@
 # Project-releated
 .parcel/
+.parcel-cache/
 
 # General javascript
 node_modules
