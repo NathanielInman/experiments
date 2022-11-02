@@ -1,4 +1,3 @@
-bsp
-===================
+# fractalTerrain
 
-[![Build Status](https://travis-ci.org/Nathaniel Inman/bsp.svg?branch=master)](https://travis-ci.org/Nathaniel Inman/bsp) [![dependency Status](https://david-dm.org/Nathaniel Inman/bsp/status.svg?style=flat)](https://david-dm.org/Nathaniel Inman/bsp) [![devDependency Status](https://david-dm.org/Nathaniel Inman/bsp/dev-status.svg?style=flat)](https://david-dm.org/Nathaniel Inman/bsp#info=devDependencies)
+[![Build Status](https://travis-ci.org/nathanielinman/fractalTerrain.svg?branch=master)](https://travis-ci.org/nathanielinman/fractalTerrain) [![dependency Status](https://david-dm.org/nathanielinman/fractalTerrain/status.svg?style=flat)](https://david-dm.org/nathanielinman/fractalTerrain) [![devDependency Status](https://david-dm.org/nathanielinman/fractalTerrain/dev-status.svg?style=flat)](https://david-dm.org/nathanielinman/fractalTerrain#info=devDependencies)
