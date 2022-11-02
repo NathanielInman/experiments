@@ -1,36 +1,58 @@
-@import url('https://fonts.googleapis.com/css?family=Anonymous+Pro');
-
 html,body
-  background #2e3440
-  color #d8dee9
-  h1.title
-    color #81a1c1
+  background #eee
+  height 100%
+  font-family proxima-nova, Roboto, sans-serif !important
+  font-style normal
+  font-weight 100
+  overflow hidden !important
 
+a[href], a[href]:visited
+  color #3fb1f2
+  text-decoration underline
 
-.footer
-  background #000
-  strong
-    color #0087bd
+app,main
+  position absolute
+  width 100%
+  height 100%
+  top 0
+
+.vertical-left
+  border-left 1px solid white
+  padding-left 1rem
+  margin-left 1rem
+  &.thin
+    padding-left 0.5rem
+    margin-left 0.5rem
+  &.black
+    border-color black
+
 // Optimize kerning of all text rendered
 body, input, textarea, select, button
   text-rendering optimizeLegibility
   -webkit-font-smoothing antialiased !important
 
-.b-tabs .tab-content
-  overflow visible
+// overwrites for PrimeVUE
+.p-component
+  font-family proxima-nova, Roboto, sans-serif !important
+.p-accordion
+  .p-accordion-header-text
+    text-transform capitalize
+  .p-accordion-tab
+    margin-bottom 1rem !important
+  .p-accordion-header:not(.p-disabled).p-highlight .p-accordion-header-link
+    background white !important
+    color #555 !important
+    border-color #c8c8c8 !important
+  .p-accordion-content
+    background #f0f0f0 !important
+.p-card .p-card-title
+  color #3a4b63 !important
 
-section.tab-content
-  background #fff
-  padding 1rem
-  border-right 1px solid #dbdbdb
-  border-left 1px solid #dbdbdb
-  border-bottom 1px solid #dbdbdb
-.b-tabs .tabs
-  margin-bottom 0
-
-.margin-bottom
-  margin-bottom 2rem
-
+hr
+  border none
+  height 1px
+  background-image linear-gradient(to right, transparent, black, transparent)
+  margin 1rem 0
 pre
   max-height 30rem
   overflow-y scroll
@@ -48,6 +70,7 @@ pre
   color #aaa
   border-radius 1rem
   padding 1rem
+  overflow hidden
   .red-bold
     color #bf616a //#f00
     font-weight bold
