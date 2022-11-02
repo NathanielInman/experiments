@@ -1,4 +1,4 @@
-let module = {};
+const module = {};
 
 /* eslint-disable */
 (function(global){
