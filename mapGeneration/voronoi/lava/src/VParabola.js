@@ -1,5 +1,5 @@
-export class VParabola{
-  constructor(s){
+export class VParabola {
+  constructor (s) {
     this.cEvent = null;
     this.parent = null;
     this._left = null;
@@ -7,17 +7,21 @@ export class VParabola{
     this.site = s;
     this.isLeaf = (this.site != null);
   }
-  get left(){
+
+  get left () {
     return this._left;
   }
-  get right(){
+
+  get right () {
     return this._right;
   }
-  set left(p){
+
+  set left (p) {
     this._left = p;
     p.parent = this;
   }
-  set right(p){
+
+  set right (p) {
     this._right = p;
     p.parent = this;
   }
