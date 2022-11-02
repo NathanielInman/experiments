@@ -1,5 +1,5 @@
 import {types} from './grammerTypes';
-import {lexicon} from './grammerLexicon/';
+import {lexicon} from './grammerLexicon';
 import {dictionary} from './dictionary/';
 
 export class DeepLinguisticProcessor{

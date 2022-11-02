@@ -10,15 +10,8 @@ html(lang='en')
     meta(name='description',content='n/a')
   body
     app
-    script(async,src='https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXXX-XX')
-    script.
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){ dataLayer.push(arguments); }
-      gtag('js', new Date());
-      gtag('config', 'UA-XXXXXXXX-XX');
     noscript
       | JavaScript is disabled in your browser.
       a(href='http://www.enable-javascript.com/',target='_blank') Here
       | is how to enable it.
-    script(src='index.js')
-
+    script(type='module',src='./index.js')
