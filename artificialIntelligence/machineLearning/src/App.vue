@@ -34,6 +34,12 @@ export default {
     sendCommand(e){
       this.engine.process(e.target.value);
       e.target.value = '';
+      setTimeout(()=> {
+        document.querySelector('.code').scrollTo(
+          0,
+          document.querySelector('.code').scrollHeight
+        );
+      }, 10)
     }
   }
 };
@@ -46,8 +52,8 @@ export default {
   input#cmd
     position absolute
     left 0; bottom 0
-    width 90%
-    height 25px
+    width calc(100vw - 140px)
+    height 23px
     border 2px solid #333
     background #111
     color #fff
@@ -67,7 +73,7 @@ export default {
       background #444
 .code
   font-family 'Share Tech Mono', monospace
-  height 100%
+  height calc(100vh - 50px)
   overflow-y scroll
   background-color #111
   color #aaa
