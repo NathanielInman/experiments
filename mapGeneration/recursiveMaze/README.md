@@ -1,5 +1,3 @@
-# Recursive Maze Generator
-This is an environmental map generator.
+# recursiveMaze
 
-## Setup
-Merely `npm install` the dependencies then `npm start` to start the project locally.
+[![Build Status](https://travis-ci.org/nathanielinman/recursiveMaze.svg?branch=master)](https://travis-ci.org/nathanielinman/recursiveMaze) [![dependency Status](https://david-dm.org/nathanielinman/recursiveMaze/status.svg?style=flat)](https://david-dm.org/nathanielinman/recursiveMaze) [![devDependency Status](https://david-dm.org/nathanielinman/recursiveMaze/dev-status.svg?style=flat)](https://david-dm.org/nathanielinman/recursiveMaze#info=devDependencies)

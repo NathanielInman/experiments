@@ -1,11 +1,12 @@
-export class Sector{
-  constructor({x=0,y=0,type='empty',roomNumber=0}={}){
+export class Sector {
+  constructor ({ x = 0, y = 0, type = 'empty', roomNumber = 0 } = {}) {
     this.x = x;
     this.y = y;
     this.type = type;
     this.roomNumber = roomNumber;
   }
-  clone(){
+
+  clone () {
     return new Sector({
       x: this.x,
       y: this.y,
@@ -13,80 +14,102 @@ export class Sector{
       roomNumber: this.roomNumber
     });
   }
-  isEmpty(){
+
+  isEmpty () {
     return this.type === 'empty';
   }
-  setEmpty(){
+
+  setEmpty () {
     this.type = 'empty';
   }
-  isVoid(){
+
+  isVoid () {
     return this.type === 'void';
   }
-  setVoid(){
+
+  setVoid () {
     this.type = 'void';
   }
-  isRemoved(){
+
+  isRemoved () {
     return this.type === 'removed';
   }
-  setRemoved(){
+
+  setRemoved () {
     this.type = 'removed';
   }
-  isDoor(){
+
+  isDoor () {
     return this.type === 'door';
   }
-  setDoor(){
+
+  setDoor () {
     this.type = 'door';
   }
-  isFloor(){
+
+  isFloor () {
     return this.type === 'floor' || this.type === 'floorSpecial';
   }
-  setFloor(){
+
+  setFloor () {
     this.type = 'floor';
   }
-  isFloorSpecial(){
+
+  isFloorSpecial () {
     return this.type === 'floorSpecial';
   }
-  setFloorSpecial(){
+
+  setFloorSpecial () {
     this.type = 'floorSpecial';
   }
-  isWater(){
+
+  isWater () {
     return this.type === 'water' || this.type === 'waterSpecial';
   }
-  setWater(){
+
+  setWater () {
     this.type = 'water';
   }
-  isWaterSpecial(){
+
+  isWaterSpecial () {
     return this.type === 'waterSpecial';
   }
-  setWaterSpecial(){
+
+  setWaterSpecial () {
     this.type = 'waterSpecial';
   }
-  isWall(){
+
+  isWall () {
     return this.type === 'wall' || this.type === 'wallSpecial';
   }
-  setWall(){
+
+  setWall () {
     this.type = 'wall';
   }
-  isWallSpecial(){
+
+  isWallSpecial () {
     return this.type === 'wallSpecial';
   }
-  setWallSpecial(){
+
+  setWallSpecial () {
     this.type = 'wallSpecial';
   }
-  isWalkableOrEmpty(){
+
+  isWalkableOrEmpty () {
     let result = false;
 
     result = this.isWalkable();
-    if(this.isEmpty()) result = true;
+    if (this.isEmpty()) result = true;
     return result;
   }
-  isWalkable(){
+
+  isWalkable () {
     let walkable = false;
 
-    if(this.isFloor()) walkable = true;
-    if(this.isFloorSpecial()) walkable = true;
-    if(this.isDoor()) walkable = true;
-    if(this.isWater()) walkable = true;
+    if (this.isFloor()) walkable = true;
+    if (this.isFloorSpecial()) walkable = true;
+    if (this.isDoor()) walkable = true;
+    if (this.isWater()) walkable = true;
     return walkable;
   }
 }
