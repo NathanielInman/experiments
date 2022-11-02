@@ -1,41 +1,41 @@
 {
-  "name": "BasicRandomMapGeneration",
+  "name": "basic",
   "version": "0.1.0",
-  "description": "Map generation experiment.",
-  "main": "Gulpfile.js",
+  "description": "basic",
+  "main": "index.html",
   "author": {
     "name": "Nathaniel Inman",
     "email": "nate@theoestudio.com"
   },
-  "scripts": {
-    "start": "./node_modules/gulp/bin/gulp.js"
-  },
   "repository": {
     "type": "git",
-    "url": "git://github.com/NathanielInman/experiments.git"
+    "url": "git://github.com/nathanielinman/basic.git"
   },
   "bugs": {
-    "url": "https://github.com/NathanielInman/experiments/issues"
+    "url": "https://github.com/nathanielinman/basic/issues"
+  },
+  "scripts": {
+    "preview": "vite preview",
+    "build": "vite build",
+    "lint": "eslint --ext .js ./",
+    "start": "vite serve --mode development --cors"
   },
   "devDependencies": {
-    "gulp": "^3.8.11"
+    "@babel/cli": "^7.18.10",
+    "@babel/core": "^7.19.0",
+    "@babel/plugin-transform-regenerator": "^7.18.6",
+    "@babel/preset-env": "^7.19.0",
+    "eslint": "^8.23.1",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.5",
+    "eslint-plugin-promise": "^6.0.1",
+    "stylus": "^0.59.0",
+    "vite": "^3.1.0"
+  },
+  "dependencies": {
+    "@ion-cloud/core": "^2.8.1"
   },
   "readmeFilename": "README.md",
-  "homepage": "https://github.com/NathanielInman/experiments",
-  "dependencies": {
-    "browser-sync": "^2.2.1",
-    "gulp-babel": "^4.0.0",
-    "gulp-add-src": "^0.2.0",
-    "gulp-concat": "^2.5.2",
-    "gulp-order": "^1.1.1",
-    "gulp-jade": "^1.0.0",
-    "gulp-jshint": "^1.9.2",
-    "gulp-minify-css": "^0.5.1",
-    "gulp-notify": "^2.2.0",
-    "gulp-rename": "^1.2.0",
-    "gulp-stylus": "^2.0.1",
-    "gulp-uglify": "^1.1.0",
-    "jshint-stylish": "^1.0.1",
-    "kouto-swiss": "^0.11.8"
-  }
+  "homepage": "Https://github.com/nathanielinman/basic"
 }
