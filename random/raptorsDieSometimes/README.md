@@ -1,4 +1,3 @@
-raptorsDieSometimes
-===================
+# raptorsDieSometimes
 
-[![Build Status](https://travis-ci.org/Nathaniel Inman/raptorsDieSometimes.svg?branch=master)](https://travis-ci.org/Nathaniel Inman/raptorsDieSometimes) [![dependency Status](https://david-dm.org/Nathaniel Inman/raptorsDieSometimes/status.svg?style=flat)](https://david-dm.org/Nathaniel Inman/raptorsDieSometimes) [![devDependency Status](https://david-dm.org/Nathaniel Inman/raptorsDieSometimes/dev-status.svg?style=flat)](https://david-dm.org/Nathaniel Inman/raptorsDieSometimes#info=devDependencies)
+[![Build Status](https://travis-ci.org/nathanielinman/raptorsDieSometimes.svg?branch=master)](https://travis-ci.org/nathanielinman/raptorsDieSometimes) [![dependency Status](https://david-dm.org/nathanielinman/raptorsDieSometimes/status.svg?style=flat)](https://david-dm.org/nathanielinman/raptorsDieSometimes) [![devDependency Status](https://david-dm.org/nathanielinman/raptorsDieSometimes/dev-status.svg?style=flat)](https://david-dm.org/nathanielinman/raptorsDieSometimes#info=devDependencies)
